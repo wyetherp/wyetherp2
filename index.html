@@ -37,7 +37,7 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-size: clamp(2rem, 6vw, 4rem);
             font-weight: bold;
             margin-bottom: 2rem;
             background: linear-gradient(135deg, #64ffda, #7c3aed);
@@ -56,12 +56,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: float 6s ease-in-out infinite;
         }
 
         .stick-figure {
             font-size: 4rem;
             color: #64ffda;
             text-shadow: 0 0 20px #64ffda;
+            animation: pulse 4s ease-in-out infinite;
         }
 
         .hero p {
@@ -69,6 +71,38 @@
             max-width: 600px;
             margin: 2rem auto;
             opacity: 0.9;
+        }
+
+        /* Floating orbs animation */
+        .cosmic-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(100, 255, 218, 0.3), rgba(124, 58, 237, 0.1));
+            animation: orbit 15s linear infinite;
+        }
+
+        .orb-1 {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 40px;
+            height: 40px;
+            top: 15%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 30px;
+            height: 30px;
+            bottom: 25%;
+            left: 20%;
+            animation-delay: -10s;
         }
 
         /* Section Styles */
@@ -114,10 +148,10 @@
 
         .image-placeholder {
             background: rgba(100, 255, 218, 0.1);
-            border: 2px dashed rgba(100, 255, 218, 0.3);
+            border: 2px solid rgba(100, 255, 218, 0.3);
             border-radius: 15px;
-            padding: 2rem;
-            height: 200px;
+            padding: 1.5rem;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -128,42 +162,31 @@
         .image-placeholder:hover {
             background: rgba(100, 255, 218, 0.2);
             border-color: rgba(100, 255, 218, 0.5);
+            transform: translateY(-5px);
         }
 
-        .placeholder-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #64ffda, #7c3aed);
-            border-radius: 50%;
+        .image-placeholder img {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            border-radius: 10px;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
+        .image-placeholder h3 {
+            margin-bottom: 0.5rem;
+            color: #64ffda;
+            font-size: 1.1rem;
+        }
 
-
-.image-placeholder img {
-    width: 100%;
-    max-width: 250px;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    object-fit: cover;
-}
-
-.image-placeholder h3 {
-    margin-bottom: 0.5rem;
-    color: #64ffda;
-    font-size: 1.1rem;
-}
-
-.image-placeholder p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
+        .image-placeholder p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
 
         .btn {
             display: inline-block;
@@ -205,11 +228,6 @@
             animation: twinkle 3s infinite;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
         /* Scroll Indicator */
         .scroll-indicator {
             position: absolute;
@@ -223,10 +241,49 @@
             animation: bounce 2s infinite;
         }
 
+        /* Animations */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
             40% { transform: translateX(-50%) translateY(-10px); }
             60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px #64ffda;
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 30px #64ffda, 0 0 40px #7c3aed;
+            }
+        }
+
+        @keyframes orbit {
+            0% { 
+                transform: rotate(0deg) translateX(100px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { opacity: 0.8; }
+            50% { 
+                transform: rotate(180deg) translateX(100px) rotate(-180deg);
+                opacity: 0.5;
+            }
+            75% { opacity: 0.8; }
+            100% { 
+                transform: rotate(360deg) translateX(100px) rotate(-360deg);
+                opacity: 0.3;
+            }
         }
 
         /* Responsive */
@@ -239,6 +296,14 @@
             .crumb-images {
                 grid-template-columns: 1fr;
             }
+
+            .image-placeholder img {
+                max-width: 150px;
+            }
+
+            .cosmic-orb {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -248,8 +313,13 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <!-- Cosmic orbs -->
+        <div class="cosmic-orb orb-1"></div>
+        <div class="cosmic-orb orb-2"></div>
+        <div class="cosmic-orb orb-3"></div>
+        
         <div class="container">
-            <h1>Welcome to my website! Future tools are right around the corner bear with me! </h1>
+            <h1>Welcome to my website! Future tools are right around the corner bear with me!</h1>
             
             <div class="constellation">
                 <div class="stick-figure">🧑‍🚀</div>
@@ -281,19 +351,19 @@
                 <p>An AI companion designed for people who experience the world differently.</p>
                 <p>Built with Raspberry Pi, local-first privacy, and a philosophy that technology should love you back.</p>
                 
-  <div class="crumb-images">
-    <div class="image-placeholder">
-        <img src="IMG_0340.PNG" alt="CRUMB hardware prototype showing Raspberry Pi setup with touchscreen">
-        <h3>CRUMB Prototype - Hardware</h3>
-        <p>Raspberry Pi setup with integrated touchscreen and LED system</p>
-    </div>
-    
-    <div class="image-placeholder">
-        <img src="IMG_0341.PNG" alt="CRUMB interface demo showing breathing light patterns">
-        <h3>CRUMB Interface Demo</h3>
-        <p>Touchscreen interface with breathing light patterns in action</p>
-    </div>
-</div>
+                <div class="crumb-images">
+                    <div class="image-placeholder">
+                        <img src="IMG_0340.PNG" alt="CRUMB hardware prototype showing Raspberry Pi setup with touchscreen">
+                        <h3>CRUMB Prototype - Hardware</h3>
+                        <p>Raspberry Pi setup with integrated touchscreen and LED system</p>
+                    </div>
+                    
+                    <div class="image-placeholder">
+                        <img src="IMG_0341.PNG" alt="CRUMB interface demo showing breathing light patterns">
+                        <h3>CRUMB Interface Demo</h3>
+                        <p>Touchscreen interface with breathing light patterns in action</p>
+                    </div>
+                </div>
                 
                 <a href="#" class="btn">Learn More</a>
             </div>
