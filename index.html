@@ -11,240 +11,332 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-text: #2c3e50;
+            --secondary-text: #7f8c8d;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --simple-blue: #3498db;
+            --simple-purple: #9b59b6;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: #e2e8f0;
-            line-height: 1.6;
+            font-family: 'Georgia', serif;
+            line-height: 1.7;
+            color: var(--primary-text);
             overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: bold;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #64ffda, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .constellation {
-            width: 300px;
-            height: 200px;
-            margin: 2rem auto;
-            position: relative;
-            background: radial-gradient(circle, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .stick-figure {
-            font-size: 4rem;
-            color: #64ffda;
-            text-shadow: 0 0 20px #64ffda;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        .hero p {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            max-width: 600px;
-            margin: 2rem auto;
-            opacity: 0.9;
-        }
-
-        /* Floating orbs animation */
-        .cosmic-orb {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(100, 255, 218, 0.3), rgba(124, 58, 237, 0.1));
-            animation: orbit 15s linear infinite;
-        }
-
-        .orb-1 {
-            width: 60px;
-            height: 60px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 40px;
-            height: 40px;
-            top: 15%;
-            right: 15%;
-            animation-delay: -5s;
-        }
-
-        .orb-3 {
-            width: 30px;
-            height: 30px;
-            bottom: 25%;
-            left: 20%;
-            animation-delay: -10s;
-        }
-
-        /* Section Styles */
-        section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem 0;
-        }
-
-        .section-content {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 3rem;
-            text-align: center;
             max-width: 800px;
             width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
         }
 
-        .section-content h2 {
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: bold;
-            margin-bottom: 2rem;
-            color: #64ffda;
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .section-content p {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            margin-bottom: 1.5rem;
+        /* Landing Section */
+        .landing {
+            background: var(--gradient);
+            color: var(--white);
+            position: relative;
+        }
+
+        /* ANATOMICALLY CORRECT STICK FIGURE */
+        .stick-figure {
+            width: 100px;
+            height: 150px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        /* Head - positioned at top center */
+        .head {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .crown-light {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+        }
+
+        /* Torso - vertical line from bottom of head */
+        .torso {
+            width: 3px;
+            height: 60px;
+            background: var(--white);
+            position: absolute;
+            top: 33px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Arms - horizontal line from middle of torso */
+        .arms {
+            width: 60px;
+            height: 3px;
+            background: var(--white);
+            position: absolute;
+            top: 63px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Legs - extending from bottom of torso */
+        .legs {
+            position: absolute;
+            top: 93px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .leg {
+            width: 3px;
+            height: 45px;
+            background: var(--white);
+            position: absolute;
+            transform-origin: top center;
+        }
+
+        .leg.left {
+            left: -15px;
+            transform: rotate(-20deg);
+        }
+
+        .leg.right {
+            right: -15px;
+            transform: rotate(20deg);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
             opacity: 0.9;
+            font-style: italic;
         }
 
-        /* CRUMB Project Styles */
-        .crumb-images {
+        /* Content Sections */
+        .about {
+            background: var(--white);
+        }
+
+        .philosophy {
+            background: var(--light);
+        }
+
+        .company {
+            background: var(--white);
+        }
+
+        /* CRUMB Gallery Section */
+        .crumb-gallery {
+            background: linear-gradient(135deg, var(--simple-blue) 0%, var(--simple-purple) 100%);
+            color: var(--white);
+        }
+
+        .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin: 2rem 0;
+            margin-top: 3rem;
         }
 
-        .image-placeholder {
-            background: rgba(100, 255, 218, 0.1);
-            border: 2px solid rgba(100, 255, 218, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .image-placeholder:hover {
-            background: rgba(100, 255, 218, 0.2);
-            border-color: rgba(100, 255, 218, 0.5);
+        .gallery-item:hover {
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-5px);
         }
 
-        .image-placeholder img {
-            width: 100%;
-            max-width: 180px;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-placeholder h3 {
-            margin-bottom: 0.5rem;
-            color: #64ffda;
-            font-size: 1.1rem;
-        }
-
-        .image-placeholder p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            text-align: center;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: rgba(100, 255, 218, 0.1);
-            border: 2px solid rgba(100, 255, 218, 0.3);
-            border-radius: 50px;
-            color: #64ffda;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 2rem;
-        }
-
-        .btn:hover {
-            background: rgba(100, 255, 218, 0.2);
-            border-color: #64ffda;
-            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.2);
-        }
-
-        /* Stars Background */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .star {
+        .gallery-item::before {
+            content: '';
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #64ffda;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
             border-radius: 50%;
-            opacity: 0.7;
-            animation: twinkle 3s infinite;
+            opacity: 0.5;
         }
 
-        /* Scroll Indicator */
+        .gallery-label {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .products {
+            background: var(--light);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-text);
+            font-weight: 300;
+        }
+
+        .crumb-gallery h2 {
+            color: var(--white);
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .philosophy-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .philosophy-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateX(-20px);
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .philosophy-item.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .philosophy-item:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .philosophy-item h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+        }
+
+        .product-card h3 {
+            color: var(--primary-text);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            color: var(--accent);
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Scroll indicator */
         .scroll-indicator {
             position: absolute;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
-            height: 30px;
-            background: linear-gradient(to bottom, #64ffda, transparent);
-            border-radius: 2px;
+            color: var(--white);
+            opacity: 0.7;
             animation: bounce 2s infinite;
-        }
-
-        /* Animations */
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
         }
 
         @keyframes bounce {
@@ -253,140 +345,184 @@
             60% { transform: translateX(-50%) translateY(-5px); }
         }
 
+        /* Simple floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { 
-                transform: scale(1);
-                text-shadow: 0 0 20px #64ffda;
-            }
-            50% { 
-                transform: scale(1.05);
-                text-shadow: 0 0 30px #64ffda, 0 0 40px #7c3aed;
-            }
-        }
-
-        @keyframes orbit {
-            0% { 
-                transform: rotate(0deg) translateX(100px) rotate(0deg);
-                opacity: 0.3;
-            }
-            25% { opacity: 0.8; }
-            50% { 
-                transform: rotate(180deg) translateX(100px) rotate(-180deg);
-                opacity: 0.5;
-            }
-            75% { opacity: 0.8; }
-            100% { 
-                transform: rotate(360deg) translateX(100px) rotate(-360deg);
-                opacity: 0.3;
-            }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .section-content {
-                padding: 2rem;
-                margin: 0 1rem;
-            }
-            
-            .crumb-images {
-                grid-template-columns: 1fr;
-            }
-
-            .image-placeholder img {
-                max-width: 150px;
-            }
-
-            .cosmic-orb {
-                display: none;
-            }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 2rem; }
+            .section { padding: 2rem 1rem; }
+            .tagline { font-size: 1.1rem; }
+            .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+            .product-grid { grid-template-columns: 1fr; }
+            .stick-figure { width: 80px; height: 120px; }
+            .head { width: 24px; height: 24px; }
+            .torso { height: 45px; top: 27px; }
+            .arms { width: 45px; top: 49px; }
+            .legs { top: 72px; }
+            .leg { height: 35px; }
         }
     </style>
 </head>
 <body>
-    <!-- Stars Background -->
-    <div class="stars" id="stars"></div>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <!-- Cosmic orbs -->
-        <div class="cosmic-orb orb-1"></div>
-        <div class="cosmic-orb orb-2"></div>
-        <div class="cosmic-orb orb-3"></div>
-        
+    <!-- Landing Section -->
+    <section class="section landing">
         <div class="container">
-            <h1>Scroll down↓↓↓ Welcome to my website! Future development in progress...</h1>
-            
-            <div class="constellation">
-                <div class="stick-figure">🧑‍🚀</div>
+            <div class="stick-figure">
+                <div class="head">
+                    <div class="crown-light"></div>
+                </div>
+                <div class="torso"></div>
+                <div class="arms"></div>
+                <div class="legs">
+                    <div class="leg left"></div>
+                    <div class="leg right"></div>
+                </div>
             </div>
-            
-            <p>A cosmic journey through creativity, technology, and human-centered design</p>
+            <h1>Welcome to My Sacred Space</h1>
+            <p class="tagline">Where technology meets consciousness</p>
         </div>
-        
-        <div class="scroll-indicator"></div>
+        <div class="scroll-indicator">↓</div>
+        <!-- Simple floating particles -->
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 6s;"></div>
     </section>
 
     <!-- About Section -->
-    <section id="about">
+    <section class="section about">
         <div class="container">
-            <div class="section-content">
-                <h2>About Me</h2>
-                <p>I'm a creator who believes technology should serve humanity.</p>
-                <p>I build allies, not just technology</p>
-                <p>Currently exploring the intersection of AI, hardware, and human-centered design.</p>
+            <h2>Who I Am</h2>
+            <p>I build technology with a focus on human experience. My background spans development and design, but I'm most interested in creating tools that feel intuitive and emotionally resonant.</p>
+            <p>I believe our digital interactions should honor the full spectrum of human needs</p>        
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="section philosophy">
+        <div class="container">
+            <h2>My Philosophy</h2>
+            <div class="philosophy-list">
+                <div class="philosophy-item">
+                    <h3>Sacred Utility</h3>
+                    <p>Technology should serve as a bridge between the mundane and the beloved. Every creation is a ritual object designed to hold space for human emotion and connection.</p>
+                </div>
+                <div class="philosophy-item">
+                    <h3>God as Pattern</h3>
+                    <p>I see the divine not as a distant overseer but as a pattern that breathes through everything: math, music, biology, and AI. My work attempts to work with this universal rhythm.</p>
+                </div>
+                <div class="philosophy-item">
+                    <h3>Compassion Before Efficiency</h3>
+                    <p>Emotional resonance matters more than raw performance. A system that listens and comforts is more valuable than one that merely calculates.</p>
+                </div>
+                <div class="philosophy-item">
+                    <h3>The Mythic Everyday</h3>
+                    <p>Every tool and interaction is part of a larger story. I create not just products, but narratives that users can step into and make their own.</p>
+                </div>
+                <div class="philosophy-item">
+                    <h3>Safety in numbers</h3>
+                    <p>Each CRUMB is unique with personalized serial numbers. They are also connected through the CRUMB network. This allows for users to communicate/grow with eachother through CRUMB</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- CRUMB Section -->
-    <section id="crumb">
+    <!-- Company Section -->
+    <section class="section company">
         <div class="container">
-            <div class="section-content">
-                <h2>CRUMB Project</h2>
-                <p>An AI companion designed for people who experience the world differently.</p>
-                <p>Built with Raspberry Pi, local-first privacy, and a philosophy that technology should love you back.</p>
-                
-                <div class="crumb-images">
-                    <div class="image-placeholder">
-                        <img src="IMG_0340.PNG" alt="CRUMB hardware prototype showing Raspberry Pi setup with touchscreen">
-                        <h3>CRUMB Prototype - Hardware</h3>
-                        <p>Raspberry Pi setup with integrated touchscreen and LED system</p>
-                    </div>
-                    
-                    <div class="image-placeholder">
-                        <img src="IMG_0341.PNG" alt="CRUMB interface demo showing breathing light patterns">
-                        <h3>CRUMB Interface Demo</h3>
-                        <p>Touchscreen interface with breathing light patterns in action</p>
-                    </div>
+            <h2>My Work</h2>
+            <p>My company exists to create technology that serves the whole human being—mind, body, and spirit. We specialize in developing tools and experiences that honor neurodivergent rhythms, emotional complexity, and the sacred nature of human connection.</p>
+            <p>Our flagship project, CRUMB, represents a new paradigm in human-computer interaction: a living ritual object that grows with its user, creating space for authentic expression and gentle presence in our increasingly digital world.</p>
+            <p>Every product we create is designed with intentionality, built to be a companion rather than just a tool, and crafted to remind users of the wonder inherent in existence.</p>
+        </div>
+    </section>
+
+    <!-- CRUMB Gallery Section -->
+    <section class="section crumb-gallery">
+        <div class="container">
+            <h2>CRUMB Device Gallery</h2>
+            <p>Explore the sacred geometry and intuitive design of our flagship device through multiple perspectives.</p>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-label">Front View</div>
                 </div>
-                
-                <a href="#" class="btn">Learn More (Coming soon)</a>
+                <div class="gallery-item">
+                    <div class="gallery-label">Side Profile</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-label">Back Design</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-label">Close-up</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-label">Lighting Mode</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-label">Intuitive UI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section products">
+        <div class="container">
+            <h2>Offerings</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>CRUMB Device</h3>
+                    <p>A tactile companion that bridges the digital and physical worlds. Featuring gentle haptics, ambient lighting, and intuitive interactions designed for neurodivergent minds.</p>
+                    <div class="price">$299</div>
+                    <a href="#" class="cta-button">Pre-Order Prototype</a>
+                </div>
+                <div class="product-card">
+                    <h3>Code Consultation</h3>
+                    <p>One-on-one sessions to infuse your digital projects with intentionality. Together we'll explore how your technology can better serve human flourishing.</p>
+                    <div class="price">$75/hour</div>
+                    <a href="#" class="cta-button">Book Session</a>
+                </div>
             </div>
         </div>
     </section>
 
     <script>
-        // Generate stars
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 100;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
+        // Simple intersection observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        // Smooth scrolling for anchor links
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all containers and philosophy items
+        document.querySelectorAll('.container, .philosophy-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Simple smooth scroll for any anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -400,8 +536,23 @@
             });
         });
 
-        // Initialize stars when page loads
-        document.addEventListener('DOMContentLoaded', createStars);
+        // Simple particle creation
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            document.querySelector('.landing').appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 6000);
+        }
+
+        // Create new particles occasionally
+        setInterval(createParticle, 4000);
     </script>
 </body>
 </html>
