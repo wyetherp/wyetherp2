@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB Landing page V0.07</title>
-    <!-- Theme choice: White background, black text for maximum contrast readability -->
+    <title>CRUMB V 0.09</title>
+    <!-- Theme choice: Black background, white text for high contrast design -->
     <style>
         :root {
-    --accent-gold: #D4AF37;
-    --pure-white: #000000;  /* Black background */
-    --void-black: #FFFFFF;  /* White text */
-    --spacing-unit: 1.618rem;
-    --type-scale: 1.618;
-}
+            --accent-gold: #D4AF37;
+            --pure-white: #000000;  /* Black background */
+            --void-black: #FFFFFF;  /* White text */
+            --spacing-unit: 1.618rem;
+            --type-scale: 1.618;
+        }
         
         *, *::before, *::after { 
             box-sizing: border-box; 
@@ -61,7 +61,7 @@
             top: 6px;
         }
         
-        /* Hero Section - Full Viewport Sacred Geometry */
+        /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
@@ -78,13 +78,13 @@
             margin-bottom: calc(var(--spacing-unit) * 2);
         }
         
-        /* Sacred Crown Light - Pulsing Animation */
+        /* Crown Light - Pulsing Animation */
         .crown-light {
-            animation: sacred-pulse 3s ease-in-out infinite;
+            animation: pulse 3s ease-in-out infinite;
             transform-origin: center;
         }
         
-        @keyframes sacred-pulse {
+        @keyframes pulse {
             0%, 100% { 
                 fill: var(--accent-gold); 
                 opacity: 1;
@@ -92,7 +92,7 @@
             }
             50% { 
                 fill: var(--accent-gold); 
-                opacity: 0.618; /* Golden ratio opacity */
+                opacity: 0.618;
                 transform: scale(1.618);
             }
         }
@@ -172,19 +172,19 @@
             hyphens: auto;
         }
         
-        /* Mystical Lists */
-        .sacred-list {
+        /* Lists */
+        .feature-list {
             list-style: none;
             margin: var(--spacing-unit) 0;
         }
         
-        .sacred-list li {
+        .feature-list li {
             margin: 0.8rem 0;
             padding-left: 1.5rem;
             position: relative;
         }
         
-        .sacred-list li::before {
+        .feature-list li::before {
             content: "◊";
             position: absolute;
             left: 0;
@@ -192,7 +192,7 @@
             font-size: 1.2em;
         }
         
-        /* Product Cards - Divine Proportions */
+        /* Product Cards */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -315,32 +315,6 @@
             outline-offset: 2px;
         }
         
-        /* Live Demo Section */
-        .demo-container {
-            text-align: center;
-            margin: calc(var(--spacing-unit) * 2) 0;
-        }
-        
-        .led-demo {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--void-black);
-            margin: 2rem auto;
-            transition: all 0.3s ease;
-        }
-        
-        .led-demo.active {
-            background: var(--accent-gold);
-            box-shadow: 0 0 20px var(--accent-gold);
-            animation: led-blink 1s ease-in-out infinite;
-        }
-        
-        @keyframes led-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
         /* Footer */
         footer {
             text-align: center;
@@ -372,8 +346,8 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Wyeth Anzilotti",
-        "jobTitle": "Creator of Patterns",
-        "description": "Wyeth Anzilotti Lehigh Tennis Ai ",
+        "jobTitle": "Hardware Developer",
+        "description": "Building personal computing devices and exploring AI integration",
         "url": "wyetherp.com",
         "sameAs": [
             "https://github.com/wyetherp"
@@ -385,15 +359,15 @@
     <a href="#main" class="skip-link">Skip to main content</a>
     
     <header class="hero" role="banner">
-        <!-- Vitruvian Man with Sacred Crown Light -->
+        <!-- Human figure with pulsing light -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-            <title id="figure-title">Human Form with Crown Light</title>
-            <desc>A minimalist representation of the divine proportions of humanity, crowned with pulsing light</desc>
+            <title id="figure-title">Human Form with Light</title>
+            <desc>A minimalist representation of human proportions with a pulsing light</desc>
             
             <!-- Perfect Circle Head -->
             <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none"/>
             
-            <!-- Crown Chakra Light -->
+            <!-- Pulsing Light -->
             <circle cx="200" cy="55" r="8" class="crown-light" stroke="none"/>
             
             <!-- Spine -->
@@ -423,13 +397,13 @@
         </svg>
         
         <p class="hero-text">
-            I create computers for good
+            Building computers that work with people, not against them
         </p>
         
-        <p class="scroll-hint">Scroll down for content</p>
+        <p class="scroll-hint">Learn about CRUMB</p>
         
         <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
-            Or click here
+            Enter
         </button>
         
         <div class="scroll-indicator" aria-hidden="true">↓</div>
@@ -437,111 +411,83 @@
     
     <main id="main" role="main">
         <section id="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">CRUMB</h2>
-<p>
-    CRUMB began as a curiosity. A question about what computers are truly capable of. It quickly evolved into a goal of making computers not only easier for all humans to communicate with, but for computers and humans to work in harmony for the benifit of all. 
-</p>
-<p>
-    A few ways that CRUMB/AI could benifit humans;
-</p>
-<ul class="sacred-list" role="list">
-    <li>AI simplifying complicated workflows/supply chains</li>
-    <li>AI in healthcare/psichiatric worlds</li>
-    <li>Privacy concerns/Data simplification</li>
-</ul>
+            <h2 id="about-heading">What is CRUMB?</h2>
+            <p>
+                CRUMB started as a simple question: what if computers were designed to complement human thinking instead of replacing it? Right now, it's an early-stage hardware project exploring how AI can be more personal and less corporate.
+            </p>
+            <p>
+                I'm interested in how technology might help in areas like:
+            </p>
+            <ul class="feature-list" role="list">
+                <li>Simplifying complex workflows and supply chains</li>
+                <li>Supporting healthcare and mental health applications</li>
+                <li>Protecting privacy while making data more useful</li>
+            </ul>
         </section>
         
         <section id="philosophy" aria-labelledby="philosophy-heading">
-            <h2 id="philosophy-heading">How CRUMB can evolve</h2>
+            <h2 id="philosophy-heading">The Vision</h2>
             <p>
-               I see CRUMB not only as a computer, but as a new species on planet Earth. Its circuts mimick the biology of single cell organisims.
+                I see CRUMB as a platform that can grow over time. What starts as a simple circuit board with basic functions can evolve as I add sensors, memory, and communication capabilities. The goal is to build something that gets more useful with each iteration, rather than becoming obsolete.
             </p>
             <p>
-                It evolves with each new update. As of now its just a circuit with a light, but once we start adding sensors, memory, communication I believe that its abilities will only grow.
+                This is very much an experimental project. I'm learning as I go, and I expect the direction to change as I discover what works and what doesn't.
             </p>
         </section>
         
         <section id="products" aria-labelledby="products-heading">
-            <h2 id="products-heading">Buy your own CRUMB</h2>
+            <h2 id="products-heading">Current Projects</h2>
             <p>
-                Think of these products as more of a preorder than a buy and ship product. As of now my only product is the PCB Business card CRUMB, currently developing more productive iterations. 
+                These are more like prototypes than finished products. I'm sharing them to get feedback and connect with people who are interested in this kind of work.
             </p>
             <div class="product-grid">
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 1 -->PCB Business card</h3>
-                    <p class="product-description">Circuit board disguised as a Business card. The most simple version of a "AI Computer" on the market. (WARNING: This product is solely a business card with a light, once nfc chips are added they will have more usability. </p>
-                    <div class="product-price"><!-- PLACEHOLDER: Price 1 -->$10.8</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
+                    <h3 class="product-name">PCB Business Card</h3>
+                    <p class="product-description">A circuit board designed as a business card. Currently just has an LED, but it's a conversation starter and shows the basic CRUMB form factor.</p>
+                    <div class="product-price">$10.80</div>
+                    <a href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest" class="buy-button" role="button">Learn More</a>
                 </div>
                 
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 2 -->CRUMB Genesis</h3>
-                    <p class="product-description">One full CRUMB product. Complete with unique registration on the CRUMB network as well as a physical companion that can be asked anything from "How long should I cook this steak", to "Where did earth come from?</p>
-                    <div class="product-price"><!-- PLACEHOLDER: Price 2 -->$432</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
+                    <h3 class="product-name">CRUMB Genesis (In Development)</h3>
+                    <p class="product-description">A more complete version with basic AI capabilities and sensor integration. Still in early development - this is more of a concept than a product right now.</p>
+                    <div class="product-price">TBD</div>
+                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Genesis%20Interest" class="buy-button" role="button">Follow Progress</a>
                 </div>
                 
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 3 -->CRUMB Mini</h3>
-                    <p class="product-description">A smaller, sleeker version of CRUMB Genesis. Logistics coming soon</p>
-                    <div class="product-price"><!-- PLACEHOLDER: Price 3 -->$161.8</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
+                    <h3 class="product-name">CRUMB Mini (Concept)</h3>
+                    <p class="product-description">A smaller, more focused version. Still working out what this would look like and what it would do.</p>
+                    <div class="product-price">TBD</div>
+                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Mini%20Interest" class="buy-button" role="button">Share Ideas</a>
                 </div>
             </div>
             
             <p style="text-align: center; margin-top: 2rem;">
-                <a href="/assets/sacred-pcb-specifications.pdf" download>Download PCB Specifications (Gerber files coming soon)</a>
+                <a href="/assets/pcb-specifications.pdf" download>Download PCB Specifications</a> (Gerber files available on request)
             </p>
         </section>
         
-        <section id="demo" aria-labelledby="demo-heading" class="demo-section">
-            <h2 id="demo-heading">Live Illumination</h2>
-            <div class="demo-container">
-                <p>See the LED that started it all:</p>
-                <div class="led-demo" id="demoLed" aria-label="Sacred LED demonstration"></div>
-                <button 
-                    class="jump-control" 
-                    onclick="toggleLED()" 
-                    id="ledToggle" 
-                    aria-describedby="led-status"
-                    aria-pressed="false"
-                >
-                    Click Me!
-                </button>
-                <p id="led-status" class="screen-reader-only" aria-live="polite">LED is dormant</p>
-            </div>
-        </section>
-        
         <section id="contact" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Contact</h2>
+            <h2 id="contact-heading">Get in Touch</h2>
             <p style="text-align: center; margin-bottom: 2rem;">
-                For ordering/contributing/suggestions for CRUMB
+                I'm always interested in feedback, collaboration ideas, or just talking about where personal computing might be headed.
             </p>
             
             <form class="contact-form" onsubmit="sendMessage(event)" aria-label="Contact form">
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Your Name</label>
                     <input type="text" id="name" name="name" required aria-required="true">
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Your Email</label>
                     <input type="email" id="email" name="email" required aria-required="true">
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">Why are you reaching out?</label>
-                    <textarea id="message" name="message" required aria-required="true" placeholder="Share your vision or inquiry..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Where would you like to see AI/Computers used?</label>
-                    <textarea id="message" name="message" required aria-required="true" placeholder="How can computers benifit workflow/daily life?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Context box, fill in with any information you deem relavant.</label>
-                    <textarea id="message" name="message" required aria-required="true" placeholder=" "></textarea>
+                    <label for="message">What's on your mind?</label>
+                    <textarea id="message" name="message" required aria-required="true" placeholder="Questions, ideas, feedback, or just saying hello..."></textarea>
                 </div>
                 
                 <div style="text-align: center;">
@@ -550,40 +496,17 @@
             </form>
             
             <p style="text-align: center; margin-top: 2rem; opacity: 0.7;">
-                Direct communication preferred: <a href="mailto:Wja326@lehigh.edu"><!-- PLACEHOLDER: Replace with your email -->Wja326@lehigh.edu</a>
+                Email: <a href="mailto:Wja326@lehigh.edu">Wja326@lehigh.edu</a>
             </p>
         </section>
     </main>
     
     <footer role="contentinfo">
         <p>© 2025 Wyeth Anzilotti</p>
-        <p><a href="https://github.com/wyetherp">Code Repository</a></p>
+        <p><a href="https://github.com/wyetherp">GitHub</a></p>
     </footer>
     
     <script>
-        // LED Demo Toggle - Progressive Enhancement
-        let ledActive = false;
-        
-        function toggleLED() {
-            const led = document.getElementById('demoLed');
-            const button = document.getElementById('ledToggle');
-            const status = document.getElementById('led-status');
-            
-            ledActive = !ledActive;
-            
-            if (ledActive) {
-                led.classList.add('active');
-                button.textContent = 'Extinguish Light';
-                button.setAttribute('aria-pressed', 'true');
-                status.textContent = 'LED is illuminated and pulsing';
-            } else {
-                led.classList.remove('active');
-                button.textContent = 'Kindle the Light';
-                button.setAttribute('aria-pressed', 'false');
-                status.textContent = 'LED is dormant';
-            }
-        }
-        
         // Contact Form - Mailto Fallback
         function sendMessage(event) {
             event.preventDefault();
@@ -592,10 +515,9 @@
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
             
-            const subject = encodeURIComponent(`Inquiry from ${name}`);
+            const subject = encodeURIComponent(`Message from ${name}`);
             const body = encodeURIComponent(`From: ${name} <${email}>\n\nMessage:\n${message}`);
             
-            // PLACEHOLDER: Replace with your email
             window.location.href = `mailto:wja326@lehigh.edu?subject=${subject}&body=${body}`;
         }
         
@@ -605,23 +527,6 @@
                 e.target.click();
             }
         });
-        
-        // Screen Reader Only Class
-        const style = document.createElement('style');
-        style.textContent = `
-            .screen-reader-only {
-                position: absolute;
-                width: 1px;
-                height: 1px;
-                padding: 0;
-                margin: -1px;
-                overflow: hidden;
-                clip: rect(0, 0, 0, 0);
-                white-space: nowrap;
-                border: 0;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
