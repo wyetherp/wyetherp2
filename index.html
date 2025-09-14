@@ -1,4 +1,4 @@
-
+<!-- Edit line 15 to change accent color | Edit email placeholder on line 298 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -429,7 +429,7 @@
         <p class="scroll-hint">Scroll down for content</p>
         
         <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
-            Enter
+            Or click here
         </button>
         
         <div class="scroll-indicator" aria-hidden="true">↓</div>
@@ -437,44 +437,53 @@
     
     <main id="main" role="main">
         <section id="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">About my Work</h2>
+            <h2 id="about-heading">CRUMB</h2>
 <p>
-    I'm fascinated by how patterns show up everywhere in technology and nature. I'm still learning, but I try to build things that feel more human-centered and thoughtful.
+    CRUMB began as a curiosity. A question about what computers are truly capable of. It quickly evolved into a goal of making computers not only easier for all humans to communicate with, but for computers and humans to work in harmony for the benifit of all. 
+</p>
+<p>
+    A few ways that CRUMB/AI could benifit humans;
 </p>
 <ul class="sacred-list" role="list">
-    <li>Building small computers and experimenting with hardware design</li>
-    <li>Trying to make interfaces that feel intuitive and considerate</li>
-    <li>Exploring how technology can be more intentional and less intrusive</li>
+    <li>AI simplifying complicated workflows/supply chains</li>
+    <li>AI in healthcare/psichiatric worlds</li>
+    <li>Privacy concerns/Data simplification</li>
 </ul>
         </section>
         
         <section id="philosophy" aria-labelledby="philosophy-heading">
-            <h2 id="philosophy-heading">The Pattern Speaks</h2>
+            <h2 id="philosophy-heading">How CRUMB can evolve</h2>
             <p>
-                What began as a single LED blinking in darkness has grown into a philosophy of technology, A vision for how I see AI integrating into humanity. 
+               I see CRUMB not only as a computer, but as a new species on planet Earth. Its circuts mimick the biology of single cell organisims.
+            </p>
+            <p>
+                It evolves with each new update. As of now its just a circuit with a light, but once we start adding sensors, memory, communication I believe that its abilities will only grow.
             </p>
         </section>
         
         <section id="products" aria-labelledby="products-heading">
-            <h2 id="products-heading">Offerings</h2>
+            <h2 id="products-heading">Buy your own CRUMB</h2>
+            <p>
+                Think of these products as more of a preorder than a buy and ship product. As of now my only product is the PCB Business card CRUMB, currently developing more productive iterations. 
+            </p>
             <div class="product-grid">
                 <div class="product-card" role="article">
                     <h3 class="product-name"><!-- PLACEHOLDER: Product Name 1 -->PCB Business card</h3>
-                    <p class="product-description">Circuit board disguised as a Business card. Increases hireability/Great talking point</p>
+                    <p class="product-description">Circuit board disguised as a Business card. The most simple version of a "AI Computer" on the market. (WARNING: This product is solely a business card with a light, once nfc chips are added they will have more usability. </p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 1 -->$10.8</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
                 
                 <div class="product-card" role="article">
                     <h3 class="product-name"><!-- PLACEHOLDER: Product Name 2 -->CRUMB Genesis</h3>
-                    <p class="product-description">An AI companion built for you. In development but imagine a phone with AI capabilities.</p>
+                    <p class="product-description">One full CRUMB product. Complete with unique registration on the CRUMB network as well as a physical companion that can be asked anything from "How long should I cook this steak", to "Where did earth come from?</p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 2 -->$432</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
                 
                 <div class="product-card" role="article">
                     <h3 class="product-name"><!-- PLACEHOLDER: Product Name 3 -->CRUMB Mini</h3>
-                    <p class="product-description">A smaller, sleeker version of CRUMB Genesis</p>
+                    <p class="product-description">A smaller, sleeker version of CRUMB Genesis. Logistics coming soon</p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 3 -->$161.8</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
@@ -497,7 +506,7 @@
                     aria-describedby="led-status"
                     aria-pressed="false"
                 >
-                    Kindle the Light
+                    Click Me!
                 </button>
                 <p id="led-status" class="screen-reader-only" aria-live="polite">LED is dormant</p>
             </div>
@@ -506,7 +515,7 @@
         <section id="contact" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Contact</h2>
             <p style="text-align: center; margin-bottom: 2rem;">
-                Inquiries
+                For ordering/contributing/suggestions for CRUMB
             </p>
             
             <form class="contact-form" onsubmit="sendMessage(event)" aria-label="Contact form">
@@ -523,6 +532,16 @@
                 <div class="form-group">
                     <label for="message">Why are you reaching out?</label>
                     <textarea id="message" name="message" required aria-required="true" placeholder="Share your vision or inquiry..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Where would you like to see AI/Computers used?</label>
+                    <textarea id="message" name="message" required aria-required="true" placeholder="How can computers benifit workflow/daily life?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Context box, fill in with any information you deem relavant.</label>
+                    <textarea id="message" name="message" required aria-required="true" placeholder=" "></textarea>
                 </div>
                 
                 <div style="text-align: center;">
