@@ -1,19 +1,19 @@
-<!-- Edit line 15 to change accent color | Edit email placeholder on line 298 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB Landing page V0.05</title>
+    <title>CRUMB Landing page V0.07</title>
     <!-- Theme choice: White background, black text for maximum contrast readability -->
     <style>
         :root {
-            --accent-gold: #D4AF37; /* Sacred golden ratio color */
-            --pure-white: #FFFFFF;
-            --void-black: #000000;
-            --spacing-unit: 1.618rem; /* Golden ratio spacing */
-            --type-scale: 1.618; /* Golden ratio typography */
-        }
+    --accent-gold: #D4AF37;
+    --pure-white: #000000;  /* Black background */
+    --void-black: #FFFFFF;  /* White text */
+    --spacing-unit: 1.618rem;
+    --type-scale: 1.618;
+}
         
         *, *::before, *::after { 
             box-sizing: border-box; 
@@ -387,54 +387,46 @@
     <header class="hero" role="banner">
         <!-- Vitruvian Man with Sacred Crown Light -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-            <title id="figure-title">Sacred Human Form with Crown Light</title>
-            <desc>A minimalist representation of the divine proportions of humanity, crowned with pulsing sacred light</desc>
+            <title id="figure-title">Human Form with Crown Light</title>
+            <desc>A minimalist representation of the divine proportions of humanity, crowned with pulsing light</desc>
             
             <!-- Perfect Circle Head -->
-            <circle cx="200" cy="80" r="25" stroke="black" stroke-width="2" fill="none"/>
+            <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none"/>
             
             <!-- Crown Chakra Light -->
             <circle cx="200" cy="55" r="8" class="crown-light" stroke="none"/>
             
             <!-- Spine -->
-            <line x1="200" y1="105" x2="200" y2="240" stroke="black" stroke-width="2"/>
+            <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2"/>
             
             <!-- Arms -->
-            <line x1="200" y1="140" x2="120" y2="180" stroke="black" stroke-width="2"/>
-            <line x1="200" y1="140" x2="280" y2="180" stroke="black" stroke-width="2"/>
+            <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2"/>
+            <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2"/>
             
             <!-- Shoulder joints -->
-            <circle cx="200" cy="140" r="3" fill="black"/>
-            
-            <!-- Forearms -->
-            <line x1="120" y1="180" x2="100" y2="220" stroke="black" stroke-width="2"/>
-            <line x1="280" y1="180" x2="300" y2="220" stroke="black" stroke-width="2"/>
+            <circle cx="200" cy="140" r="3" fill="white"/>
             
             <!-- Elbow joints -->
-            <circle cx="120" cy="180" r="3" fill="black"/>
-            <circle cx="280" cy="180" r="3" fill="black"/>
+            <circle cx="120" cy="180" r="3" fill="white"/>
+            <circle cx="280" cy="180" r="3" fill="white"/>
             
             <!-- Hip joint -->
-            <circle cx="200" cy="240" r="3" fill="black"/>
+            <circle cx="200" cy="240" r="3" fill="white"/>
             
             <!-- Legs -->
-            <line x1="200" y1="240" x2="160" y2="320" stroke="black" stroke-width="2"/>
-            <line x1="200" y1="240" x2="240" y2="320" stroke="black" stroke-width="2"/>
-            
-            <!-- Lower legs -->
-            <line x1="160" y1="320" x2="140" y2="380" stroke="black" stroke-width="2"/>
-            <line x1="240" y1="320" x2="260" y2="380" stroke="black" stroke-width="2"/>
+            <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2"/>
+            <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2"/>
             
             <!-- Knee joints -->
-            <circle cx="160" cy="320" r="3" fill="black"/>
-            <circle cx="240" cy="320" r="3" fill="black"/>
+            <circle cx="160" cy="320" r="3" fill="white"/>
+            <circle cx="240" cy="320" r="3" fill="white"/>
         </svg>
         
-        <p class="hero-text">>
-            Technology for all
+        <p class="hero-text">
+            I create computers for good
         </p>
         
-        <p class="scroll-hint">Explore</p>
+        <p class="scroll-hint">Scroll down for content</p>
         
         <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
             Enter
@@ -445,57 +437,58 @@
     
     <main id="main" role="main">
         <section id="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">About the Work</h2>
-            <p>
-                In this age of tech and algorithims, I pursue the ancient practice of discovering the hidden patterns that governs all. Each creation is a prayer written in copper and code.
-            </p>
-            <ul class="sacred-list" role="list">
-                <li>Engineering micro-computers that pulse with natural rhythms</li>
-                <li>Designing interfaces that honor both human intuition and digital precision</li>
-                <li>Bridging the humane and mechanical through circuits set with intention</li>
-            </ul>
+            <h2 id="about-heading">About my Work</h2>
+<p>
+    I'm fascinated by how patterns show up everywhere in technology and nature. I'm still learning, but I try to build things that feel more human-centered and thoughtful.
+</p>
+<ul class="sacred-list" role="list">
+    <li>Building small computers and experimenting with hardware design</li>
+    <li>Trying to make interfaces that feel intuitive and considerate</li>
+    <li>Exploring how technology can be more intentional and less intrusive</li>
+</ul>
         </section>
         
         <section id="philosophy" aria-labelledby="philosophy-heading">
             <h2 id="philosophy-heading">The Pattern Speaks</h2>
             <p>
-                What began as a single LED blinking in darkness has turned into a vision on how I believe tech can be used for good. 
+                What began as a single LED blinking in darkness has grown into a philosophy of technology, A vision for how I see AI integrating into humanity. 
+            </p>
         </section>
         
         <section id="products" aria-labelledby="products-heading">
-            <h2 id="products-heading">Sacred Offerings</h2>
+            <h2 id="products-heading">Offerings</h2>
             <div class="product-grid">
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 1 -->Lumina Circuit</h3>
-                    <p class="product-description">A circut disguised as a business card, the most simple version of a computer. Increase hireability/great talking point(price varies for more complex designs)</p>
+                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 1 -->PCB Business card</h3>
+                    <p class="product-description">Circuit board disguised as a Business card. Increases hireability/Great talking point</p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 1 -->$10.8</div>
-                    <a href="mailto:contact@example.com?subject=Lumina%20Circuit%20Inquiry" class="buy-button" role="button">Acquire</a>
+                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
                 
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 2 -->CRUMB</h3>
-                    <p class="product-description">In development. Visioned as a phone like device with AI capabilities. Personalized, private, and built with you not for you</p>
+                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 2 -->CRUMB Genesis</h3>
+                    <p class="product-description">An AI companion built for you. In development but imagine a phone with AI capabilities.</p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 2 -->$432</div>
-                    <a href="mailto:contact@example.com?subject=Quantum%20Rosary%20Inquiry" class="buy-button" role="button">Acquire</a>
+                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
                 
                 <div class="product-card" role="article">
-                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 3 -->CRUMB MINI</h3>
-                    <p class="product-description">A simpler version of CRUMB. The micro to the macro</p>
+                    <h3 class="product-name"><!-- PLACEHOLDER: Product Name 3 -->CRUMB Mini</h3>
+                    <p class="product-description">A smaller, sleeker version of CRUMB Genesis</p>
                     <div class="product-price"><!-- PLACEHOLDER: Price 3 -->$161.8</div>
-                    <a href="mailto:contact@example.com?subject=Divine%20Engine%20Inquiry" class="buy-button" role="button">Acquire</a>
+                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB" class="buy-button" role="button">Acquire</a>
                 </div>
             </div>
             
             <p style="text-align: center; margin-top: 2rem;">
-                <a href="/assets/sacred-pcb-specifications.pdf" download>Download Sacred PCB Specifications(Gerber files available upon request, will add download to website soon)</a>
+                <a href="/assets/sacred-pcb-specifications.pdf" download>Download PCB Specifications (Gerber files coming soon)</a>
             </p>
         </section>
         
         <section id="demo" aria-labelledby="demo-heading" class="demo-section">
             <h2 id="demo-heading">Live Illumination</h2>
             <div class="demo-container">
-                <p>Witness the first light that sparked this sacred journey:</p>
+                <p>See the LED that started it all:</p>
                 <div class="led-demo" id="demoLed" aria-label="Sacred LED demonstration"></div>
                 <button 
                     class="jump-control" 
@@ -511,34 +504,34 @@
         </section>
         
         <section id="contact" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Sacred Correspondence</h2>
+            <h2 id="contact-heading">Contact</h2>
             <p style="text-align: center; margin-bottom: 2rem;">
-                For inquiries, talks, or requests. 
+                Inquiries
             </p>
             
             <form class="contact-form" onsubmit="sendMessage(event)" aria-label="Contact form">
                 <div class="form-group">
-                    <label for="name">Wyeth Anzilotti</label>
+                    <label for="name">Name</label>
                     <input type="text" id="name" name="name" required aria-required="true">
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">wja326@lehigh.edul</label>
+                    <label for="email">Email</label>
                     <input type="email" id="email" name="email" required aria-required="true">
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">Share your vision</label>
+                    <label for="message">Why are you reaching out?</label>
                     <textarea id="message" name="message" required aria-required="true" placeholder="Share your vision or inquiry..."></textarea>
                 </div>
                 
                 <div style="text-align: center;">
-                    <button type="submit" class="submit-button">Send</button>
+                    <button type="submit" class="submit-button">Send Message</button>
                 </div>
             </form>
             
             <p style="text-align: center; margin-top: 2rem; opacity: 0.7;">
-                Direct conversation preferred: <a href="mailto:Wja326@lehigh.edu"><!-- PLACEHOLDER: Replace with your email -->Wja326@lehigh.edu</a>
+                Direct communication preferred: <a href="mailto:Wja326@lehigh.edu"><!-- PLACEHOLDER: Replace with your email -->Wja326@lehigh.edu</a>
             </p>
         </section>
     </main>
@@ -580,7 +573,7 @@
             const email = document.getElementById('email').value;
             const message = document.getElementById('message').value;
             
-            const subject = encodeURIComponent(`Sacred Inquiry from ${name}`);
+            const subject = encodeURIComponent(`Inquiry from ${name}`);
             const body = encodeURIComponent(`From: ${name} <${email}>\n\nMessage:\n${message}`);
             
             // PLACEHOLDER: Replace with your email
