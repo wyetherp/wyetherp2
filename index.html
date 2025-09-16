@@ -1,10 +1,10 @@
-<!-- Edit line 15 to change accent color | Edit email placeholder on line 298 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB V0.1</title>
+    <title>CRUMB V0.11</title>
     <!-- Theme choice: Black background, white text for high contrast design -->
     <style>
         :root {
@@ -400,45 +400,74 @@
             Building computers that work with people, not against them
         </p>
         
-        <p class="scroll-hint">Learn about CRUMB</p>
+        <p class="scroll-hint">Wyeth Anzilotti</p>
         
         <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
-            Click Me!
+            Click Me for content!
         </button>
         
         <div class="scroll-indicator" aria-hidden="true">↓</div>
     </header>
     
-    <main id="main" role="main">
-        <section id="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">What is CRUMB?</h2>
-            <p>
-                CRUMB started as a simple question: what if computers were designed to complement human thinking instead of replacing it? Right now, it's an early-stage hardware project exploring how AI can be more personal and less corporate.
-            </p>
-            <p>
-                I'm interested in how technology might help in areas like:
-            </p>
-            <ul class="feature-list" role="list">
-                <li>Simplifying complex workflows and supply chains</li>
-                <li>Supporting healthcare and mental health applications</li>
-                <li>Protecting privacy while making data more useful</li>
-            </ul>
-        </section>
-        
-        <section id="philosophy" aria-labelledby="philosophy-heading">
-            <h2 id="philosophy-heading">The Vision</h2>
-            <p>
-                I see CRUMB as a platform that can grow over time. What starts as a simple circuit board with basic functions can evolve as I add sensors, memory, and communication capabilities. The goal is to build something that gets more useful with each iteration, rather than becoming obsolete.
-            </p>
-            <p>
-                This is very much an experimental project. I'm learning as I go, and I expect the direction to change as I discover what works and what doesn't.
-            </p>
-        </section>
+    <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
+    Click Me for content!
+</button>
+
+<div class="scroll-indicator" aria-hidden="true">↓</div>
+</header>
+
+<section id="about-me" aria-labelledby="about-me-heading">
+    <h2 id="about-me-heading">About Me</h2>
+    <p>
+        I’m Wyeth Anzilotti — a builder, designer, and AI innovator. My work blends hardware and software to create technology that feels human-centered and alive. 
+    </p>
+    <p>
+        I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
+    </p>
+    <p>
+        Skills: Hardware design (PCB, Raspberry Pi), Software design(java, python, sql), Privacy first approach. 
+    </p>
+</section>
+
+
+<main id="main" role="main">
+    <section id="about" aria-labelledby="about-heading">
+        <h2 id="about-heading">Current Projects</h2>
+        <p>
+            <strong>CRUMB — An AI Companion for All Minds</strong>
+        </p>
+        <p>
+            CRUMB started with something close to me... watching someone I love struggle with technology not because of glitches or buggy code, but because modern tech interfaces calculate more than they listen. 
+        </p>
+        This led me to ask the question; How could I design computers that work with human rhythms rather than fight them. 
+        <p>
+            My goal with CRUMB is to make technology feel like a friend, not just a tool. It should be easy to use, caring in design, and built to respect people.
+        </p>
+        <h3>What CRUMB Can Do</h3>
+        <ul class="feature-list" role="list">
+            <li>Allows for easier communication with both tech and other humans</li>
+            <li>Supports physical and mental health</li>
+            <li>Keeps privacy safe while still turning data into something useful</li>
+        </ul>
+    </section>
+
+<section id="philosophy" aria-labelledby="philosophy-heading">
+    <h2 id="philosophy-heading">The Vision</h2>
+    <p>
+        CRUMB is built to grow. It began as a small circuit board with just an LED, and now I’m adding sensors, memory, and ways for it to connect with the world. With each step, it becomes more useful, more personal, and more alive.
+    </p>
+    <p>
+        CRUMB is also a journey. I learn as I build, and I expect the design to keep changing. My focus is simple: create technology that puts people first, and let it evolve with their needs.
+    </p>
+</section>
+</main>
+
+
         
         <section id="products" aria-labelledby="products-heading">
             <h2 id="products-heading">Current Projects</h2>
             <p>
-                These are more like prototypes than finished products. I'm sharing them to get feedback and connect with people who are interested in this kind of work.
+                My products range from single circut LED PCB boards to personalized computers.
             </p>
             <div class="product-grid">
                 <div class="product-card" role="article">
@@ -450,50 +479,25 @@
                 
                 <div class="product-card" role="article">
                     <h3 class="product-name">CRUMB Genesis (In Development)</h3>
-                    <p class="product-description">A more complete version with basic AI capabilities and sensor integration. Still in early development - this is more of a concept than a product right now.</p>
+                    <p class="product-description">Still evolving into it's final form. Currently a RasPad display powered by a Rasberry Pi. More useful features to come</p>
                     <div class="product-price">TBD</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Genesis%20Interest" class="buy-button" role="button">Follow Progress</a>
                 </div>
                 
                 <div class="product-card" role="article">
-                    <h3 class="product-name">CRUMB Mini (Concept)</h3>
-                    <p class="product-description">A smaller, more focused version. Still working out what this would look like and what it would do.</p>
+                    <h3 class="product-name">CRUMB Mini</h3>
+                    <p class="product-description">A smaller, more focused version of CRUMB Genisis</p>
                     <div class="product-price">TBD</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Mini%20Interest" class="buy-button" role="button">Share Ideas</a>
                 </div>
             </div>
-            
-            <p style="text-align: center; margin-top: 2rem;">
-                <a href="/assets/pcb-specifications.pdf" download>Download PCB Specifications</a> (Gerber files available on request)
-            </p>
-        </section>
+    
         
         <section id="contact" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Get in Touch</h2>
-            <p style="text-align: center; margin-bottom: 2rem;">
-                I'm always interested in feedback, collaboration ideas, or just talking about where personal computing might be headed.
+            <p>
+                Direct contact through Email preferred. Response time 24-48 hours. 
             </p>
-            
-            <form class="contact-form" onsubmit="sendMessage(event)" aria-label="Contact form">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" required aria-required="true">
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Your Email</label>
-                    <input type="email" id="email" name="email" required aria-required="true">
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">What's on your mind?</label>
-                    <textarea id="message" name="message" required aria-required="true" placeholder="Questions, ideas, feedback, or just saying hello..."></textarea>
-                </div>
-                
-                <div style="text-align: center;">
-                    <button type="submit" class="submit-button">Email WJA326@Lehigh.edu for contact, Getting web based communication up and running. </button>
-                </div>
-            </form>
             
             <p style="text-align: center; margin-top: 2rem; opacity: 0.7;">
                 Email: <a href="mailto:Wja326@lehigh.edu">Wja326@lehigh.edu</a>
@@ -502,8 +506,9 @@
     </main>
     
     <footer role="contentinfo">
-        <p>© 2025 Wyeth Anzilotti</p>
         <p><a href="https://github.com/wyetherp">GitHub</a></p>
+        <p><a href="https://www.linkedin.com/in/wyetherp/">Linkedin</a></p>
+        <p>© 2025 Wyeth Anzilotti</p>
     </footer>
     
     <script>
