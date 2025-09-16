@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB V0.11</title>
+    <title>CRUMB V0.12</title>
     <!-- Theme choice: Black background, white text for high contrast design -->
     <style>
         :root {
@@ -45,6 +45,16 @@
             line-height: var(--type-scale);
             font-weight: 400;
         }
+
+        .content-section {
+  padding: 2rem 1rem; /* adds breathing room */
+}
+
+.content-container {
+  max-width: 800px;  /* keeps line length readable */
+  margin: 0 auto;    /* centers horizontally */
+}
+
         
         .skip-link {
             position: absolute;
@@ -416,18 +426,21 @@
 <div class="scroll-indicator" aria-hidden="true">↓</div>
 </header>
 
-<section id="about-me" aria-labelledby="about-me-heading">
-    <h2 id="about-me-heading">About Me</h2>
-    <p>
-        I’m Wyeth Anzilotti — a builder, designer, and AI innovator. My work blends hardware and software to create technology that feels human-centered and alive. 
-    </p>
-    <p>
-        I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
-    </p>
-    <p>
-        Skills: Hardware design (PCB, Raspberry Pi), Software design(java, python, sql), Privacy first approach. 
-    </p>
+<section id="about-me" aria-labelledby="about-me-heading" class="content-section">
+    <div class="content-container">
+        <h2 id="about-me-heading">About Me</h2>
+        <p>
+            I’m Wyeth Anzilotti — a builder, designer, and AI innovator. My work blends hardware and software to create technology that feels human-centered and alive. 
+        </p>
+        <p>
+            I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
+        </p>
+        <p>
+            Skills: Hardware design (PCB, Raspberry Pi), Software design (Java, Python, SQL), Privacy-first approach.
+        </p>
+    </div>
 </section>
+
 
 
 <main id="main" role="main">
