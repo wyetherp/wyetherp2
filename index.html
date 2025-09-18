@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB V0.13</title>
+    <title>CRUMB V0.14</title>
     <!-- Theme choice: Black background, white text for high contrast design -->
     <style>
         :root {
@@ -93,6 +93,52 @@
             animation: pulse 3s ease-in-out infinite;
             transform-origin: center;
         }
+
+        /* Sacred Circle */
+.mandala-ring {
+  stroke: rgba(255,255,255,0.3);
+  stroke-width: 1.5;
+  fill: none;
+  animation: slow-spin 30s linear infinite;
+}
+
+@keyframes slow-spin {
+  from { transform: rotate(0deg); transform-origin: 200px 200px; }
+  to { transform: rotate(360deg); transform-origin: 200px 200px; }
+}
+
+/* Crown Glow */
+.crown-light {
+  fill: var(--accent-gold);
+  filter: drop-shadow(0 0 8px var(--accent-gold));
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.6); }
+}
+
+/* Particle Sparks */
+.particles circle {
+  fill: var(--accent-gold);
+  opacity: 0.8;
+  animation: float-up 4s ease-in-out infinite;
+}
+
+.particles circle:nth-child(2) {
+  animation-delay: 1s;
+}
+.particles circle:nth-child(3) {
+  animation-delay: 2s;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  70% { opacity: 1; }
+  100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+}
+
         
         @keyframes pulse {
             0%, 100% { 
@@ -371,46 +417,44 @@
     <header class="hero" role="banner">
         <!-- Human figure with pulsing light -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-            <title id="figure-title">Human Form with Light</title>
-            <desc>A minimalist representation of human proportions with a pulsing light</desc>
-            
-            <!-- Perfect Circle Head -->
-            <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none"/>
-            
-            <!-- Pulsing Light -->
-            <circle cx="200" cy="55" r="8" class="crown-light" stroke="none"/>
-            
-            <!-- Spine -->
-            <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2"/>
-            
-            <!-- Arms -->
-            <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2"/>
-            <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2"/>
-            
-            <!-- Shoulder joints -->
-            <circle cx="200" cy="140" r="3" fill="white"/>
-            
-            <!-- Elbow joints -->
-            <circle cx="120" cy="180" r="3" fill="white"/>
-            <circle cx="280" cy="180" r="3" fill="white"/>
-            
-            <!-- Hip joint -->
-            <circle cx="200" cy="240" r="3" fill="white"/>
-            
-            <!-- Legs -->
-            <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2"/>
-            <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2"/>
-            
-            <!-- Knee joints -->
-            <circle cx="160" cy="320" r="3" fill="white"/>
-            <circle cx="240" cy="320" r="3" fill="white"/>
-        </svg>
+  <title id="figure-title">Human Form with Crown Light</title>
+  <desc>A minimalist human stick figure with a pulsing golden crown light</desc>
+
+  <!-- Head -->
+  <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none" />
+
+  <!-- Crown Light (animated with CSS .crown-light) -->
+  <circle class="crown-light" cx="200" cy="40" r="10" fill="#D4AF37" />
+
+  <!-- Spine -->
+  <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2" />
+
+  <!-- Arms -->
+  <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2" />
+  <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2" />
+
+  <!-- Joints -->
+  <circle cx="200" cy="140" r="3" fill="white" /> <!-- Shoulder -->
+  <circle cx="120" cy="180" r="3" fill="white" /> <!-- Left elbow -->
+  <circle cx="280" cy="180" r="3" fill="white" /> <!-- Right elbow -->
+  <circle cx="200" cy="240" r="3" fill="white" /> <!-- Hip -->
+
+  <!-- Legs -->
+  <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2" />
+  <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2" />
+
+  <!-- Knees -->
+  <circle cx="160" cy="320" r="3" fill="white" />
+  <circle cx="240" cy="320" r="3" fill="white" />
+</svg>
+
         
         <p class="hero-text">
             Building computers that work with people, not against them
         </p>
         
         <p class="scroll-hint">Wyeth Anzilotti</p>
+        <p class="scroll-hint">Seeking full time employment for Fall 2026</p>
         
         <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
             Click Me for content!
@@ -433,7 +477,7 @@
             I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
         </p>
         <p>
-            Skills: Hardware design (PCB, Raspberry Pi), Software design (Java, Python, SQL), Privacy-first approach.
+            Skills: Hardware design (PCB, Raspberry Pi), Software design (Java, Python, SQL), Privacy-first approach. Turning unstructured healthcare notes into actionable intelligence
         </p>
     </div>
 </section>
@@ -442,7 +486,7 @@
 
 <main id="main" role="main">
     <section id="about" aria-labelledby="about-heading">
-        <h2 id="about-heading">Current Projects</h2>
+        <h2 id="about-heading">Building CRUMB</h2>
         <p>
             <strong>CRUMB — An AI Companion for All Minds</strong>
         </p>
@@ -477,7 +521,7 @@
         <section id="products" aria-labelledby="products-heading">
             <h2 id="products-heading">Current Projects</h2>
             <p>
-                My products range from single circut LED PCB boards to personalized computers.
+                My products range from single circuit LED PCB boards to personalized computers.
             </p>
             <div class="product-grid">
                 <div class="product-card" role="article">
@@ -490,13 +534,13 @@
                 <div class="product-card" role="article">
                     <h3 class="product-name">CRUMB Genesis</h3>
                     <p class="product-description">Still evolving into it's final form. Currently a RasPad display powered by a Rasberry Pi. More useful features to come</p>
-                    <div class="product-price">TBD</div>
+                    <div class="product-price">TBD - In Development</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Genesis%20Interest" class="buy-button" role="button">Email for inquiries</a>
                 </div>
                 
                 <div class="product-card" role="article">
                     <h3 class="product-name">CRUMB Mini</h3>
-                    <p class="product-description">A smaller, more focused version of CRUMB Genisis</p>
+                    <p class="product-description">A smaller, more focused version of CRUMB Genesis</p>
                     <div class="product-price">TBD</div>
                     <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Mini%20Interest" class="buy-button" role="button">Learn More</a>
                 </div>
