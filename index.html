@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB V0.14</title>
-    <!-- Theme choice: Black background, white text for high contrast design -->
+    <title>Crumb V0.2</title>
     <style>
         :root {
             --accent-gold: #D4AF37;
@@ -46,15 +44,63 @@
             font-weight: 400;
         }
 
+        /* Fixed Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--accent-gold);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--void-black);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
         .content-section {
-  padding: 2rem 1rem; /* adds breathing room */
-}
+            padding: 4rem 1rem;
+            scroll-margin-top: 5rem;
+        }
 
-.content-container {
-  max-width: 800px;  /* keeps line length readable */
-  margin: 0 auto;    /* centers horizontally */
-}
-
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
         
         .skip-link {
             position: absolute;
@@ -80,93 +126,67 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            padding-top: 5rem;
         }
         
         .vitruvian-figure {
-            width: min(60vmin, 400px);
-            height: min(60vmin, 400px);
-            margin-bottom: calc(var(--spacing-unit) * 2);
+            width: min(50vmin, 350px);
+            height: min(50vmin, 350px);
+            margin-bottom: calc(var(--spacing-unit) * 1.5);
         }
         
         /* Crown Light - Pulsing Animation */
         .crown-light {
+            fill: var(--accent-gold);
+            filter: drop-shadow(0 0 8px var(--accent-gold));
             animation: pulse 3s ease-in-out infinite;
-            transform-origin: center;
         }
 
-        /* Sacred Circle */
-.mandala-ring {
-  stroke: rgba(255,255,255,0.3);
-  stroke-width: 1.5;
-  fill: none;
-  animation: slow-spin 30s linear infinite;
-}
-
-@keyframes slow-spin {
-  from { transform: rotate(0deg); transform-origin: 200px 200px; }
-  to { transform: rotate(360deg); transform-origin: 200px 200px; }
-}
-
-/* Crown Glow */
-.crown-light {
-  fill: var(--accent-gold);
-  filter: drop-shadow(0 0 8px var(--accent-gold));
-  animation: pulse 3s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.6); }
-}
-
-/* Particle Sparks */
-.particles circle {
-  fill: var(--accent-gold);
-  opacity: 0.8;
-  animation: float-up 4s ease-in-out infinite;
-}
-
-.particles circle:nth-child(2) {
-  animation-delay: 1s;
-}
-.particles circle:nth-child(3) {
-  animation-delay: 2s;
-}
-
-@keyframes float-up {
-  0% { transform: translateY(0) scale(1); opacity: 0.8; }
-  70% { opacity: 1; }
-  100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
-}
-
-        
         @keyframes pulse {
             0%, 100% { 
-                fill: var(--accent-gold); 
-                opacity: 1;
-                transform: scale(1);
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
             }
             50% { 
-                fill: var(--accent-gold); 
-                opacity: 0.618;
-                transform: scale(1.618);
+                opacity: 0.618; 
+                transform: translateX(-8px) scale(1.2); 
             }
+        }
+        
+        .hero-title {
+            font-size: calc(1rem * var(--type-scale) * var(--type-scale));
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        .hero-role {
+            font-size: calc(1rem * var(--type-scale));
+            color: var(--accent-gold);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            text-align: center;
         }
         
         .hero-text {
             font-size: calc(1rem * var(--type-scale));
             font-style: italic;
-            opacity: 0.618;
+            opacity: 0.8;
             text-align: center;
             max-width: 600px;
             margin-bottom: var(--spacing-unit);
         }
         
-        .scroll-hint {
-            font-size: 0.8rem;
-            opacity: 0.5;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+        .employment-status {
+            font-size: 1rem;
+            background: var(--accent-gold);
+            color: var(--pure-white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 0;
+            letter-spacing: 0.1em;
+            font-weight: 500;
             margin-bottom: var(--spacing-unit);
         }
         
@@ -176,6 +196,7 @@
             left: 50%;
             transform: translateX(-50%);
             animation: gentle-bounce 2s ease-in-out infinite;
+            color: var(--accent-gold);
         }
         
         @keyframes gentle-bounce {
@@ -183,49 +204,68 @@
             50% { transform: translateX(-50%) translateY(10px); }
         }
         
-        /* Jump Control */
-        .jump-control {
-            background: transparent;
-            border: 1px solid var(--void-black);
-            color: var(--void-black);
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-family: inherit;
-            letter-spacing: 0.1em;
-            transition: all 0.2s ease;
-        }
-        
-        .jump-control:hover, .jump-control:focus {
-            background: var(--void-black);
-            color: var(--pure-white);
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 2px;
-        }
-        
-        /* Main Content Sections */
-        main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        section {
-            margin: calc(var(--spacing-unit) * 4) 0;
-            scroll-margin-top: 2rem;
-        }
-        
-        h2 {
+        /* Section Headers */
+        .section-header {
             font-size: calc(1rem * var(--type-scale) * var(--type-scale));
-            font-weight: 400;
+            font-weight: 600;
             margin-bottom: calc(var(--spacing-unit) * 2);
             text-align: center;
             letter-spacing: 0.05em;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--accent-gold);
         }
         
         p {
             margin-bottom: var(--spacing-unit);
             text-align: justify;
             hyphens: auto;
+        }
+
+        /* Skills Grid */
+        .skills-section {
+            margin: calc(var(--spacing-unit) * 3) 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .skill-category {
+            border: 1px solid var(--void-black);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .skill-title {
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .skill-items {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
         /* Lists */
@@ -248,39 +288,58 @@
             font-size: 1.2em;
         }
         
-        /* Product Cards */
-        .product-grid {
+        /* Portfolio Cards */
+        .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: calc(var(--spacing-unit) * 2);
             margin: calc(var(--spacing-unit) * 2) 0;
         }
         
-        .product-card {
+        .portfolio-card {
             border: 1px solid var(--void-black);
             padding: calc(var(--spacing-unit) * 1.5);
             text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .portfolio-card:hover::before {
+            left: 100%;
         }
         
-        .product-name {
+        .portfolio-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+        
+        .project-name {
             font-size: calc(1rem * var(--type-scale));
             font-weight: 600;
             margin-bottom: 1rem;
-        }
-        
-        .product-description {
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-        
-        .product-price {
-            font-size: calc(1rem * var(--type-scale));
-            margin-bottom: 1.5rem;
             color: var(--accent-gold);
-            font-weight: 600;
         }
         
-        .buy-button {
+        .project-description {
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        .project-link {
             background: transparent;
             border: 2px solid var(--void-black);
             color: var(--void-black);
@@ -294,104 +353,130 @@
             text-transform: uppercase;
         }
         
-        .buy-button:hover, .buy-button:focus {
+        .project-link:hover, .project-link:focus {
             background: var(--void-black);
             color: var(--pure-white);
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 2px;
+            border-color: var(--accent-gold);
         }
         
-        /* Contact Form */
-        .contact-form {
-            max-width: 500px;
-            margin: 0 auto;
+        /* Contact Section */
+        .contact-section {
+            text-align: center;
         }
-        
-        .form-group {
-            margin-bottom: var(--spacing-unit);
+
+        .contact-info {
+            margin: 2rem 0;
         }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--void-black);
-            background: var(--pure-white);
-            color: var(--void-black);
-            font-family: inherit;
-            font-size: 1rem;
-        }
-        
-        input:focus, textarea:focus {
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 2px;
-        }
-        
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-        
-        .submit-button {
-            background: var(--void-black);
-            color: var(--pure-white);
-            border: 2px solid var(--void-black);
+
+        .contact-email {
+            font-size: calc(1rem * var(--type-scale));
+            color: var(--accent-gold);
+            text-decoration: none;
+            border: 2px solid var(--accent-gold);
             padding: 1rem 2rem;
-            cursor: pointer;
-            font-family: inherit;
+            display: inline-block;
             letter-spacing: 0.1em;
-            text-transform: uppercase;
             transition: all 0.3s ease;
         }
-        
-        .submit-button:hover, .submit-button:focus {
-            background: transparent;
-            color: var(--void-black);
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 2px;
+
+        .contact-email:hover {
+            background: var(--accent-gold);
+            color: var(--pure-white);
         }
-        
-        /* Links */
-        a {
-            color: var(--void-black);
-            text-decoration: underline;
-            text-decoration-color: var(--accent-gold);
-            text-underline-offset: 3px;
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
         }
-        
-        a:hover, a:focus {
+
+        .social-link {
+            color: var(--void-black);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--void-black);
+            transition: all 0.3s ease;
+            letter-spacing: 0.05em;
+        }
+
+        .social-link:hover {
             color: var(--accent-gold);
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 2px;
+            border-color: var(--accent-gold);
         }
         
         /* Footer */
-        footer {
+        .footer-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--accent-gold);
             text-align: center;
-            padding: calc(var(--spacing-unit) * 4) 2rem;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: var(--void-black);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-gold);
+            opacity: 1;
+        }
+
+        .copyright {
             opacity: 0.618;
             font-size: 0.9rem;
         }
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .product-grid {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .portfolio-grid {
                 grid-template-columns: 1fr;
             }
             
-            .hero-text {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-role {
                 font-size: 1.2rem;
-                padding: 0 1rem;
             }
             
-            h2 {
+            .section-header {
                 font-size: 1.8rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
     </style>
@@ -402,11 +487,12 @@
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Wyeth Anzilotti",
-        "jobTitle": "Hardware Developer",
+        "jobTitle": "Hardware + AI Developer",
         "description": "Building personal computing devices and exploring AI integration",
         "url": "wyetherp.com",
         "sameAs": [
-            "https://github.com/wyetherp"
+            "https://github.com/wyetherp",
+            "https://www.linkedin.com/in/wyetherp/"
         ]
     }
     </script>
@@ -414,177 +500,205 @@
 <body>
     <a href="#main" class="skip-link">Skip to main content</a>
     
+    <!-- Fixed Navigation -->
+    <nav class="nav-bar" role="navigation">
+        <div class="nav-container">
+            <div class="nav-brand">Wyeth Anzilotti</div>
+            <ul class="nav-links">
+                <li><a href="#about-me">About</a></li>
+                <li><a href="#crumb">CRUMB</a></li>
+                <li><a href="#vision">Vision</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
     <header class="hero" role="banner">
         <!-- Human figure with pulsing light -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-  <title id="figure-title">Human Form with Crown Light</title>
-  <desc>A minimalist human stick figure with a pulsing golden crown light</desc>
+            <title id="figure-title">Human Form with Crown Light</title>
+            <desc>A minimalist human stick figure with a pulsing golden crown light</desc>
 
-  <!-- Head -->
-  <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none" />
+            <!-- Head -->
+            <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none" />
 
-  <!-- Crown Light (animated with CSS .crown-light) -->
-  <circle class="crown-light" cx="200" cy="40" r="10" fill="#D4AF37" />
+            <!-- Crown Light (animated with CSS .crown-light) -->
+            <circle class="crown-light" cx="200" cy="40" r="10" fill="#D4AF37" />
 
-  <!-- Spine -->
-  <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2" />
+            <!-- Spine -->
+            <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2" />
 
-  <!-- Arms -->
-  <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2" />
-  <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2" />
+            <!-- Arms -->
+            <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2" />
+            <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2" />
 
-  <!-- Joints -->
-  <circle cx="200" cy="140" r="3" fill="white" /> <!-- Shoulder -->
-  <circle cx="120" cy="180" r="3" fill="white" /> <!-- Left elbow -->
-  <circle cx="280" cy="180" r="3" fill="white" /> <!-- Right elbow -->
-  <circle cx="200" cy="240" r="3" fill="white" /> <!-- Hip -->
+            <!-- Joints -->
+            <circle cx="200" cy="140" r="3" fill="white" /> <!-- Shoulder -->
+            <circle cx="120" cy="180" r="3" fill="white" /> <!-- Left elbow -->
+            <circle cx="280" cy="180" r="3" fill="white" /> <!-- Right elbow -->
+            <circle cx="200" cy="240" r="3" fill="white" /> <!-- Hip -->
 
-  <!-- Legs -->
-  <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2" />
-  <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2" />
+            <!-- Legs -->
+            <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2" />
+            <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2" />
 
-  <!-- Knees -->
-  <circle cx="160" cy="320" r="3" fill="white" />
-  <circle cx="240" cy="320" r="3" fill="white" />
-</svg>
+            <!-- Knees -->
+            <circle cx="160" cy="320" r="3" fill="white" />
+            <circle cx="240" cy="320" r="3" fill="white" />
+        </svg>
 
+        <h1 class="hero-title">Wyeth Anzilotti</h1>
+        <h2 class="hero-role">Hardware + AI Developer</h2>
         
         <p class="hero-text">
             Building computers that work with people, not against them
         </p>
         
-        <p class="scroll-hint">Wyeth Anzilotti</p>
-        <p class="scroll-hint">Seeking full time employment for Fall 2026</p>
-        
-        <button class="jump-control" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" aria-label="Jump to About section">
-            Click Me for content!
-        </button>
+        <div class="employment-status">Seeking Full-Time Employment • Fall 2026</div>
         
         <div class="scroll-indicator" aria-hidden="true">↓</div>
     </header>
-    
 
-<div class="scroll-indicator" aria-hidden="true">↓</div>
-</header>
+    <main id="main" role="main">
+        <section id="about-me" aria-labelledby="about-me-heading" class="content-section">
+            <div class="content-container">
+                <h2 id="about-me-heading" class="section-header">About Me</h2>
+                <p>
+                    I'm Wyeth Anzilotti — a builder, designer, and AI innovator. My work blends hardware and software to create technology that feels human-centered and alive. 
+                </p>
+                <p>
+                    I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
+                </p>
 
-<section id="about-me" aria-labelledby="about-me-heading" class="content-section">
-    <div class="content-container">
-        <h2 id="about-me-heading">About Me</h2>
-        <p>
-            I’m Wyeth Anzilotti — a builder, designer, and AI innovator. My work blends hardware and software to create technology that feels human-centered and alive. 
-        </p>
-        <p>
-            I focus on making computers that adapt to people, not the other way around. From circuit board prototypes to AI companions, my projects aim to spark curiosity while solving real-world problems. 
-        </p>
-        <p>
-            Skills: Hardware design (PCB, Raspberry Pi), Software design (Java, Python, SQL), Privacy-first approach. Turning unstructured healthcare notes into actionable intelligence
-        </p>
-    </div>
-</section>
-
-
-
-<main id="main" role="main">
-    <section id="about" aria-labelledby="about-heading">
-        <h2 id="about-heading">Building CRUMB</h2>
-        <p>
-            <strong>CRUMB — An AI Companion for All Minds</strong>
-        </p>
-        <p>
-            CRUMB started with something close to me... watching someone I love struggle with technology not because of glitches or buggy code, but because modern tech interfaces calculate more than they listen. 
-        </p>
-        This led me to ask the question; How could I design computers that work with human rhythms rather than fight them. 
-        <p>
-            My goal with CRUMB is to make technology feel like a friend, not just a tool. It should be easy to use, caring in design, and built to respect people.
-        </p>
-        <h3>What CRUMB Can Do</h3>
-        <ul class="feature-list" role="list">
-            <li>Allows for easier communication with both tech and other humans</li>
-            <li>Supports physical and mental health</li>
-            <li>Keeps privacy safe while still turning data into something useful</li>
-        </ul>
-    </section>
-
-<section id="philosophy" aria-labelledby="philosophy-heading">
-    <h2 id="philosophy-heading">The Vision</h2>
-    <p>
-        CRUMB is built to grow. It began as a small circuit board with just an LED, and now I’m adding sensors, memory, and ways for it to connect with the world. With each step, it becomes more useful, more personal, and more alive.
-    </p>
-    <p>
-        CRUMB is also a journey. I learn as I build, and I expect the design to keep changing. My focus is simple: create technology that puts people first, and let it evolve with their needs.
-    </p>
-</section>
-</main>
-
-
-        
-        <section id="products" aria-labelledby="products-heading">
-            <h2 id="products-heading">Current Projects</h2>
-            <p>
-                My products range from single circuit LED PCB boards to personalized computers.
-            </p>
-            <div class="product-grid">
-                <div class="product-card" role="article">
-                    <h3 class="product-name">PCB Business Card</h3>
-                    <p class="product-description">A circuit board designed as a business card. Currently just has an LED, but it's a conversation starter and shows the basic CRUMB form factor.</p>
-                    <div class="product-price">$10.80</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest" class="buy-button" role="button">Learn More</a>
-                </div>
-                
-                <div class="product-card" role="article">
-                    <h3 class="product-name">CRUMB Genesis</h3>
-                    <p class="product-description">Still evolving into it's final form. Currently a RasPad display powered by a Rasberry Pi. More useful features to come</p>
-                    <div class="product-price">TBD - In Development</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Genesis%20Interest" class="buy-button" role="button">Email for inquiries</a>
-                </div>
-                
-                <div class="product-card" role="article">
-                    <h3 class="product-name">CRUMB Mini</h3>
-                    <p class="product-description">A smaller, more focused version of CRUMB Genesis</p>
-                    <div class="product-price">TBD</div>
-                    <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Mini%20Interest" class="buy-button" role="button">Learn More</a>
+                <div class="skills-section">
+                    <h3 class="section-header">Skills & Tools</h3>
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <div class="skill-title">Hardware Design</div>
+                            <div class="skill-items">PCB, Raspberry Pi</div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-title">Software Design</div>
+                            <div class="skill-items">Java, Python, SQL</div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-title">Specialization</div>
+                            <div class="skill-items">Privacy-first approach, Healthcare data intelligence</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-    
+        </section>
+
+        <section id="crumb" aria-labelledby="crumb-heading" class="content-section">
+            <div class="content-container">
+                <h2 id="crumb-heading" class="section-header">Building CRUMB</h2>
+                <p>
+                    <strong>CRUMB — An AI Companion for All Minds</strong>
+                </p>
+                <p>
+                    CRUMB started with something close to me... watching someone I love struggle with technology not because of glitches or buggy code, but because modern tech interfaces calculate more than they listen. 
+                </p>
+                This led me to ask the question; How could I design computers that work with human rhythms rather than fight them. 
+                <p>
+                    My goal with CRUMB is to make technology feel like a friend, not just a tool. It should be easy to use, caring in design, and built to respect people.
+                </p>
+                <h3>What CRUMB Can Do</h3>
+                <ul class="feature-list" role="list">
+                    <li>Allows for easier communication with both tech and other humans</li>
+                    <li>Supports physical and mental health</li>
+                    <li>Keeps privacy safe while still turning data into something useful</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="vision" aria-labelledby="vision-heading" class="content-section">
+            <div class="content-container">
+                <h2 id="vision-heading" class="section-header">The Vision</h2>
+                <p>
+                    CRUMB is built to grow. It began as a small circuit board with just an LED, and now I'm adding sensors, memory, and ways for it to connect with the world. With each step, it becomes more useful, more personal, and more alive.
+                </p>
+                <p>
+                    CRUMB is also a journey. I learn as I build, and I expect the design to keep changing. My focus is simple: create technology that puts people first, and let it evolve with their needs.
+                </p>
+            </div>
+        </section>
         
-        <section id="contact" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Get in Touch</h2>
-            <p>
-                Direct contact through Email preferred. Response time 24-48 hours. 
-            </p>
-            
-            <p style="text-align: center; margin-top: 2rem; opacity: 0.7;">
-                Email: <a href="mailto:Wja326@lehigh.edu">Wja326@lehigh.edu</a>
-            </p>
+        <section id="projects" aria-labelledby="projects-heading" class="content-section">
+            <div class="content-container">
+                <h2 id="projects-heading" class="section-header">Current Projects</h2>
+                <p>
+                    My products range from single circuit LED PCB boards to personalized computers.
+                </p>
+                <div class="portfolio-grid">
+                    <div class="portfolio-card" role="article">
+                        <h3 class="project-name">PCB Business Card</h3>
+                        <p class="project-description">A circuit board designed as a business card. Currently just has an LED, but it's a conversation starter and shows the basic CRUMB form factor.</p>
+                        <a href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest" class="project-link" role="button">Learn More</a>
+                    </div>
+                    
+                    <div class="portfolio-card" role="article">
+                        <h3 class="project-name">CRUMB Genesis</h3>
+                        <p class="project-description">Still evolving into it's final form. Currently a RasPad display powered by a Rasberry Pi. More useful features to come</p>
+                        <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Genesis%20Interest" class="project-link" role="button">View Project</a>
+                    </div>
+                    
+                    <div class="portfolio-card" role="article">
+                        <h3 class="project-name">CRUMB Mini</h3>
+                        <p class="project-description">A smaller, more focused version of CRUMB Genesis</p>
+                        <a href="mailto:Wja326@lehigh.edu?subject=CRUMB%20Mini%20Interest" class="project-link" role="button">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" aria-labelledby="contact-heading" class="content-section">
+            <div class="content-container">
+                <h2 id="contact-heading" class="section-header">Get in Touch</h2>
+                <div class="contact-section">
+                    <p>
+                        Direct contact through Email preferred. Response time 24-48 hours. 
+                    </p>
+                    
+                    <div class="contact-info">
+                        <a href="mailto:Wja326@lehigh.edu" class="contact-email">Wja326@lehigh.edu</a>
+                    </div>
+
+                </div>
+            </div>
         </section>
     </main>
     
-    <footer role="contentinfo">
-        <p><a href="https://github.com/wyetherp">GitHub</a></p>
-        <p><a href="https://www.linkedin.com/in/wyetherp/">Linkedin</a></p>
-        <p>© 2025 Wyeth Anzilotti</p>
+    <footer class="footer-bar" role="contentinfo">
+        <div class="footer-links">
+            <a href="https://github.com/wyetherp" class="footer-link">GitHub</a>
+            <a href="https://www.linkedin.com/in/wyetherp/" class="footer-link">LinkedIn</a>
+        </div>
+        <p class="copyright">© 2025 Wyeth Anzilotti</p>
     </footer>
     
     <script>
-        // Contact Form - Mailto Fallback
-        function sendMessage(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            
-            const subject = encodeURIComponent(`Message from ${name}`);
-            const body = encodeURIComponent(`From: ${name} <${email}>\n\nMessage:\n${message}`);
-            
-            window.location.href = `mailto:wja326@lehigh.edu?subject=${subject}&body=${body}`;
-        }
-        
         // Keyboard Navigation Enhancement
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.classList.contains('jump-control')) {
+            if (e.key === 'Enter' && e.target.classList.contains('project-link')) {
                 e.target.click();
             }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
