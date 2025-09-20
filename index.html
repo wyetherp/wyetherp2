@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crumb V0.2</title>
+    <title>CRUMB V0.21</title>
     <style>
         :root {
             --accent-gold: #D4AF37;
@@ -92,6 +92,11 @@
             border-bottom-color: var(--accent-gold);
         }
 
+        .nav-links a.active {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
         .content-section {
             padding: 4rem 1rem;
             scroll-margin-top: 5rem;
@@ -149,7 +154,7 @@
             }
             50% { 
                 opacity: 0.618; 
-                transform: translateX(-8px) scale(1.2); 
+                transform: translateY(-8px) scale(1.2); 
             }
         }
         
@@ -665,6 +670,10 @@
                         <a href="mailto:Wja326@lehigh.edu" class="contact-email">Wja326@lehigh.edu</a>
                     </div>
 
+                    <div class="social-links">
+                        <a href="https://github.com/wyetherp" class="social-link">GitHub</a>
+                        <a href="https://www.linkedin.com/in/wyetherp/" class="social-link">LinkedIn</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -700,6 +709,34 @@
                 }
             });
         });
+
+        // Active navigation highlighting on scroll
+        function updateActiveNavigation() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200; // Offset for fixed nav
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Listen for scroll events
+        window.addEventListener('scroll', updateActiveNavigation);
+        window.addEventListener('load', updateActiveNavigation);
     </script>
 </body>
 </html>
