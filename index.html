@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUMB V0.21</title>
+    <title>CRUMB V0.22</title>
     <style>
         :root {
             --accent-gold: #D4AF37;
@@ -520,37 +520,81 @@
     </nav>
     
     <header class="hero" role="banner">
-        <!-- Human figure with pulsing light -->
+        <!-- Sacred Human Figure with Crown Light -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-            <title id="figure-title">Human Form with Crown Light</title>
-            <desc>A minimalist human stick figure with a pulsing golden crown light</desc>
+            <title id="figure-title">Sacred Human Form with Crown Chakra</title>
+            <desc>A sacred geometric human figure with radiating crown chakra light</desc>
 
-            <!-- Head -->
-            <circle cx="200" cy="80" r="25" stroke="white" stroke-width="2" fill="none" />
+            <!-- Sacred Geometry Background Circle -->
+            <circle cx="200" cy="200" r="180" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none" 
+                    stroke-dasharray="3,6" class="sacred-circle"/>
+            
+            <!-- Inner Sacred Circle -->
+            <circle cx="200" cy="200" r="120" stroke="rgba(212,175,55,0.2)" stroke-width="1" fill="none" 
+                    stroke-dasharray="2,4" class="inner-circle"/>
 
-            <!-- Crown Light (animated with CSS .crown-light) -->
-            <circle class="crown-light" cx="200" cy="40" r="10" fill="#D4AF37" />
+            <!-- Crown Chakra - Centered on spine -->
+            <g class="crown-chakra" style="transform-origin: 200px 200px;">
+                <!-- Outer radiating light -->
+                <circle cx="200" cy="40" r="20" fill="none" stroke="var(--accent-gold)" stroke-width="0.5" opacity="0.3" class="crown-aura"/>
+                <circle cx="200" cy="40" r="15" fill="none" stroke="var(--accent-gold)" stroke-width="0.8" opacity="0.5" class="crown-aura"/>
+                
+                <!-- Main crown light -->
+                <circle class="crown-light" cx="200" cy="40" r="8" fill="#D4AF37" style="animation: none !important; transform: none !important;"/>
+                
+                <!-- Sacred rays -->
+                <g class="crown-rays">
+                    <line x1="200" y1="25" x2="200" y2="15" stroke="var(--accent-gold)" stroke-width="2" opacity="0.8"/>
+                    <line x1="185" y1="27" x2="180" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="215" y1="27" x2="220" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="175" y1="35" x2="165" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
+                    <line x1="225" y1="35" x2="235" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
+                </g>
+            </g>
 
-            <!-- Spine -->
-            <line x1="200" y1="105" x2="200" y2="240" stroke="white" stroke-width="2" />
+            <!-- Head with sacred proportions -->
+            <circle cx="200" cy="80" r="28" stroke="white" stroke-width="2.5" fill="none" opacity="0.9"/>
+            <circle cx="200" cy="80" r="20" stroke="rgba(212,175,55,0.3)" stroke-width="1" fill="none"/>
 
-            <!-- Arms -->
-            <line x1="200" y1="140" x2="120" y2="180" stroke="white" stroke-width="2" />
-            <line x1="200" y1="140" x2="280" y2="180" stroke="white" stroke-width="2" />
+            <!-- Third eye -->
+            <circle cx="200" cy="72" r="2" fill="var(--accent-gold)" opacity="0.7"/>
 
-            <!-- Joints -->
-            <circle cx="200" cy="140" r="3" fill="white" /> <!-- Shoulder -->
-            <circle cx="120" cy="180" r="3" fill="white" /> <!-- Left elbow -->
-            <circle cx="280" cy="180" r="3" fill="white" /> <!-- Right elbow -->
-            <circle cx="200" cy="240" r="3" fill="white" /> <!-- Hip -->
+            <!-- Spine - Central axis -->
+            <line x1="200" y1="108" x2="200" y2="260" stroke="white" stroke-width="3" opacity="0.9"/>
+            <line x1="200" y1="108" x2="200" y2="260" stroke="var(--accent-gold)" stroke-width="1" opacity="0.5"/>
 
-            <!-- Legs -->
-            <line x1="200" y1="240" x2="160" y2="320" stroke="white" stroke-width="2" />
-            <line x1="200" y1="240" x2="240" y2="320" stroke="white" stroke-width="2" />
+            <!-- Chakra points along spine -->
+            <circle cx="200" cy="130" r="3" fill="rgba(138,43,226,0.6)"/> <!-- Throat -->
+            <circle cx="200" cy="160" r="3" fill="rgba(0,255,0,0.6)"/>   <!-- Heart -->
+            <circle cx="200" cy="190" r="3" fill="rgba(255,255,0,0.6)"/> <!-- Solar Plexus -->
+            <circle cx="200" cy="220" r="3" fill="rgba(255,165,0,0.6)"/> <!-- Sacral -->
+            <circle cx="200" cy="250" r="3" fill="rgba(255,0,0,0.6)"/>   <!-- Root -->
 
-            <!-- Knees -->
-            <circle cx="160" cy="320" r="3" fill="white" />
-            <circle cx="240" cy="320" r="3" fill="white" />
+            <!-- Arms in sacred proportion -->
+            <g class="arms">
+                <line x1="200" y1="150" x2="130" y2="190" stroke="white" stroke-width="2.5"/>
+                <line x1="200" y1="150" x2="270" y2="190" stroke="white" stroke-width="2.5"/>
+                
+                <!-- Sacred joints -->
+                <circle cx="200" cy="150" r="4" fill="var(--accent-gold)" opacity="0.8"/> <!-- Shoulders -->
+                <circle cx="130" cy="190" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Left hand -->
+                <circle cx="270" cy="190" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Right hand -->
+            </g>
+
+            <!-- Legs in divine proportion -->
+            <g class="legs">
+                <line x1="200" y1="260" x2="170" y2="330" stroke="white" stroke-width="2.5"/>
+                <line x1="200" y1="260" x2="230" y2="330" stroke="white" stroke-width="2.5"/>
+                
+                <!-- Sacred joints -->
+                <circle cx="200" cy="260" r="4" fill="var(--accent-gold)" opacity="0.8"/> <!-- Hips -->
+                <circle cx="170" cy="330" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Left foot -->
+                <circle cx="230" cy="330" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Right foot -->
+            </g>
+
+            <!-- Energy field around figure -->
+            <ellipse cx="200" cy="220" rx="100" ry="160" stroke="rgba(212,175,55,0.1)" stroke-width="1" 
+                     fill="none" stroke-dasharray="1,3" class="energy-field"/>
         </svg>
 
         <h1 class="hero-title">Wyeth Anzilotti</h1>
