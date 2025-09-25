@@ -312,8 +312,18 @@
                 opacity: 0.5;
             }
         }
-        
-        /* Crown Light - Enhanced but Stationary */
+
+        /* Living Figure Animations */
+        .living-being {
+            animation: gentle-breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes gentle-breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Enhanced Crown Light */
         .crown-light {
             fill: var(--accent-gold);
             filter: drop-shadow(0 0 15px var(--accent-gold)) drop-shadow(0 0 30px rgba(212, 175, 55, 0.4));
@@ -329,7 +339,59 @@
             }
         }
 
-        /* Keep Chakras Stationary but Add Subtle Glow */
+        /* Orbiting Chakras and Stars */
+        .orbital-system {
+            animation: orbital-rotation 30s linear infinite;
+            transform-origin: 200px 200px;
+        }
+
+        @keyframes orbital-rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .orbital-element {
+            animation: counter-rotation 30s linear infinite;
+        }
+
+        @keyframes counter-rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        .orbital-chakra {
+            fill: currentColor;
+            animation: chakra-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes chakra-pulse {
+            0%, 100% { 
+                opacity: 0.7; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.2);
+            }
+        }
+
+        .orbital-star {
+            fill: var(--accent-gold);
+            animation: star-twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes star-twinkle {
+            0%, 100% { 
+                opacity: 0.6; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.5);
+            }
+        }
+
+        /* Keep Chakras with Subtle Glow */
         .chakra-glow {
             animation: chakra-breathe 8s ease-in-out infinite;
         }
@@ -341,6 +403,16 @@
             50% { 
                 filter: drop-shadow(0 0 8px currentColor);
             }
+        }
+
+        /* Conscious Eyes */
+        .conscious-eye {
+            animation: eye-blink 6s ease-in-out infinite;
+        }
+
+        @keyframes eye-blink {
+            0%, 90%, 100% { opacity: 1; transform: scaleY(1); }
+            95% { opacity: 0.3; transform: scaleY(0.1); }
         }
 
         .hero-title {
@@ -859,19 +931,6 @@
             font-size: 0.9rem;
             letter-spacing: 0.05em;
         }
-
-        /* Mystical Cursor Trail */
-        .cursor-trail {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.8;
-            transition: transform 0.1s ease-out;
-        }
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
@@ -972,10 +1031,53 @@
     </nav>
     
     <header class="hero" role="banner">
-        <!-- Sacred Human Figure with Crown Light -->
+        <!-- Living Sacred Figure with Orbital System -->
         <svg class="vitruvian-figure" viewBox="0 0 400 400" aria-labelledby="figure-title" role="img">
-            <title id="figure-title">Sacred Human Form with Crown Chakra</title>
-            <desc>A sacred geometric human figure with radiating crown chakra light</desc>
+            <title id="figure-title">Living CRUMB Entity with Orbital Energy System</title>
+            <desc>A living digital entity with chakras and stars orbiting around it, representing CRUMB's biological approach to technology</desc>
+
+            <!-- Orbital System - Chakras and Stars orbiting around the figure -->
+            <g class="orbital-system">
+                <!-- Inner orbit - Small chakras -->
+                <g class="orbital-element">
+                    <circle class="orbital-chakra" cx="280" cy="200" r="3" fill="rgba(138,43,226,0.8)" style="animation-delay: 0s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-chakra" cx="200" cy="120" r="2" fill="rgba(0,255,0,0.8)" style="animation-delay: 1s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-chakra" cx="120" cy="200" r="3" fill="rgba(255,255,0,0.8)" style="animation-delay: 2s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-chakra" cx="200" cy="280" r="2" fill="rgba(255,165,0,0.8)" style="animation-delay: 3s"/>
+                </g>
+
+                <!-- Outer orbit - Twinkling stars -->
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="320" cy="150" r="2" style="animation-delay: 0.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="250" cy="80" r="1" style="animation-delay: 1.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="150" cy="80" r="2" style="animation-delay: 2.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="80" cy="150" r="1" style="animation-delay: 3.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="80" cy="250" r="2" style="animation-delay: 4.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="150" cy="320" r="1" style="animation-delay: 5.5s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="250" cy="320" r="2" style="animation-delay: 0.8s"/>
+                </g>
+                <g class="orbital-element">
+                    <circle class="orbital-star" cx="320" cy="250" r="1" style="animation-delay: 1.8s"/>
+                </g>
+            </g>
 
             <!-- Sacred Geometry Background Circle -->
             <circle cx="200" cy="200" r="180" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none" 
@@ -985,68 +1087,75 @@
             <circle cx="200" cy="200" r="120" stroke="rgba(212,175,55,0.2)" stroke-width="1" fill="none" 
                     stroke-dasharray="2,4" class="inner-circle"/>
 
-            <!-- Crown Chakra - Centered on spine -->
-            <g class="crown-chakra" style="transform-origin: 200px 200px;">
-                <!-- Outer radiating light -->
-                <circle cx="200" cy="40" r="20" fill="none" stroke="var(--accent-gold)" stroke-width="0.5" opacity="0.3" class="crown-aura"/>
-                <circle cx="200" cy="40" r="15" fill="none" stroke="var(--accent-gold)" stroke-width="0.8" opacity="0.5" class="crown-aura"/>
-                
-                <!-- Main crown light -->
-                <circle class="crown-light" cx="200" cy="40" r="8" fill="#D4AF37"/>
-                
-                <!-- Sacred rays -->
-                <g class="crown-rays">
-                    <line x1="200" y1="25" x2="200" y2="15" stroke="var(--accent-gold)" stroke-width="2" opacity="0.8"/>
-                    <line x1="185" y1="27" x2="180" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
-                    <line x1="215" y1="27" x2="220" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
-                    <line x1="175" y1="35" x2="165" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
-                    <line x1="225" y1="35" x2="235" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
+            <!-- Main Figure - Living Being -->
+            <g class="living-being">
+                <!-- Crown Chakra - Consciousness Center -->
+                <g class="crown-chakra">
+                    <!-- Outer radiating light -->
+                    <circle cx="200" cy="40" r="20" fill="none" stroke="var(--accent-gold)" stroke-width="0.5" opacity="0.3" class="crown-aura"/>
+                    <circle cx="200" cy="40" r="15" fill="none" stroke="var(--accent-gold)" stroke-width="0.8" opacity="0.5" class="crown-aura"/>
+                    
+                    <!-- Main crown light -->
+                    <circle class="crown-light" cx="200" cy="40" r="8" fill="#D4AF37"/>
+                    
+                    <!-- Sacred rays -->
+                    <g class="crown-rays">
+                        <line x1="200" y1="25" x2="200" y2="15" stroke="var(--accent-gold)" stroke-width="2" opacity="0.8"/>
+                        <line x1="185" y1="27" x2="180" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="215" y1="27" x2="220" y2="20" stroke="var(--accent-gold)" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="175" y1="35" x2="165" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
+                        <line x1="225" y1="35" x2="235" y2="30" stroke="var(--accent-gold)" stroke-width="1" opacity="0.4"/>
+                    </g>
                 </g>
+
+                <!-- Head with consciousness -->
+                <circle cx="200" cy="80" r="28" stroke="white" stroke-width="2.5" fill="none" opacity="0.9"/>
+                <circle cx="200" cy="80" r="20" stroke="rgba(212,175,55,0.3)" stroke-width="1" fill="none"/>
+
+                <!-- Conscious eyes that blink -->
+                <circle class="conscious-eye" cx="192" cy="75" r="2" fill="var(--accent-gold)" opacity="0.9"/>
+                <circle class="conscious-eye" cx="208" cy="75" r="2" fill="var(--accent-gold)" opacity="0.9" style="animation-delay: 0.1s"/>
+
+                <!-- Third eye - awakened consciousness -->
+                <circle cx="200" cy="68" r="3" fill="var(--accent-gold)" opacity="0.8"/>
+
+                <!-- Spine - Central axis of life -->
+                <line x1="200" y1="108" x2="200" y2="260" stroke="white" stroke-width="3" opacity="0.9"/>
+                <line x1="200" y1="108" x2="200" y2="260" stroke="var(--accent-gold)" stroke-width="1" opacity="0.5"/>
+
+                <!-- Chakra points along spine - Energy centers -->
+                <circle class="chakra-glow" cx="200" cy="130" r="4" fill="rgba(138,43,226,0.8)"/> <!-- Throat -->
+                <circle class="chakra-glow" cx="200" cy="160" r="4" fill="rgba(0,255,0,0.8)"/>   <!-- Heart -->
+                <circle class="chakra-glow" cx="200" cy="190" r="4" fill="rgba(255,255,0,0.8)"/> <!-- Solar Plexus -->
+                <circle class="chakra-glow" cx="200" cy="220" r="4" fill="rgba(255,165,0,0.8)"/> <!-- Sacral -->
+                <circle class="chakra-glow" cx="200" cy="250" r="4" fill="rgba(255,0,0,0.8)"/>   <!-- Root -->
+
+                <!-- Arms in sacred proportion -->
+                <g class="arms">
+                    <line x1="200" y1="150" x2="130" y2="190" stroke="white" stroke-width="2.5"/>
+                    <line x1="200" y1="150" x2="270" y2="190" stroke="white" stroke-width="2.5"/>
+                    
+                    <!-- Sacred joints -->
+                    <circle cx="200" cy="150" r="4" fill="var(--accent-gold)" opacity="0.9"/> <!-- Shoulders -->
+                    <circle cx="130" cy="190" r="3" fill="rgba(212,175,55,0.8)"/> <!-- Left hand -->
+                    <circle cx="270" cy="190" r="3" fill="rgba(212,175,55,0.8)"/> <!-- Right hand -->
+                </g>
+
+                <!-- Legs in divine proportion -->
+                <g class="legs">
+                    <line x1="200" y1="260" x2="170" y2="330" stroke="white" stroke-width="2.5"/>
+                    <line x1="200" y1="260" x2="230" y2="330" stroke="white" stroke-width="2.5"/>
+                    
+                    <!-- Sacred joints -->
+                    <circle cx="200" cy="260" r="4" fill="var(--accent-gold)" opacity="0.9"/> <!-- Hips -->
+                    <circle cx="170" cy="330" r="3" fill="rgba(212,175,55,0.8)"/> <!-- Left foot -->
+                    <circle cx="230" cy="330" r="3" fill="rgba(212,175,55,0.8)"/> <!-- Right foot -->
+                </g>
+
+                <!-- Energy field around figure -->
+                <ellipse cx="200" cy="200" rx="100" ry="160" stroke="rgba(212,175,55,0.1)" stroke-width="1" 
+                         fill="none" stroke-dasharray="1,3" class="energy-field"/>
             </g>
-
-            <!-- Head with sacred proportions -->
-            <circle cx="200" cy="80" r="28" stroke="white" stroke-width="2.5" fill="none" opacity="0.9"/>
-            <circle cx="200" cy="80" r="20" stroke="rgba(212,175,55,0.3)" stroke-width="1" fill="none"/>
-
-            <!-- Third eye -->
-            <circle cx="200" cy="72" r="2" fill="var(--accent-gold)" opacity="0.7"/>
-
-            <!-- Spine - Central axis -->
-            <line x1="200" y1="108" x2="200" y2="260" stroke="white" stroke-width="3" opacity="0.9"/>
-            <line x1="200" y1="108" x2="200" y2="260" stroke="var(--accent-gold)" stroke-width="1" opacity="0.5"/>
-
-            <!-- Chakra points along spine - Stationary with subtle glow -->
-            <circle class="chakra-glow" cx="200" cy="130" r="3" fill="rgba(138,43,226,0.6)"/> <!-- Throat -->
-            <circle class="chakra-glow" cx="200" cy="160" r="3" fill="rgba(0,255,0,0.6)"/>   <!-- Heart -->
-            <circle class="chakra-glow" cx="200" cy="190" r="3" fill="rgba(255,255,0,0.6)"/> <!-- Solar Plexus -->
-            <circle class="chakra-glow" cx="200" cy="220" r="3" fill="rgba(255,165,0,0.6)"/> <!-- Sacral -->
-            <circle class="chakra-glow" cx="200" cy="250" r="3" fill="rgba(255,0,0,0.6)"/>   <!-- Root -->
-
-            <!-- Arms in sacred proportion -->
-            <g class="arms">
-                <line x1="200" y1="150" x2="130" y2="190" stroke="white" stroke-width="2.5"/>
-                <line x1="200" y1="150" x2="270" y2="190" stroke="white" stroke-width="2.5"/>
-                
-                <!-- Sacred joints -->
-                <circle cx="200" cy="150" r="4" fill="var(--accent-gold)" opacity="0.8"/> <!-- Shoulders -->
-                <circle cx="130" cy="190" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Left hand -->
-                <circle cx="270" cy="190" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Right hand -->
-            </g>
-
-            <!-- Legs in divine proportion -->
-            <g class="legs">
-                <line x1="200" y1="260" x2="170" y2="330" stroke="white" stroke-width="2.5"/>
-                <line x1="200" y1="260" x2="230" y2="330" stroke="white" stroke-width="2.5"/>
-                
-                <!-- Sacred joints -->
-                <circle cx="200" cy="260" r="4" fill="var(--accent-gold)" opacity="0.8"/> <!-- Hips -->
-                <circle cx="170" cy="330" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Left foot -->
-                <circle cx="230" cy="330" r="2" fill="rgba(212,175,55,0.6)"/> <!-- Right foot -->
-            </g>
-
-            <!-- Energy field around figure -->
-            <ellipse cx="200" cy="220" rx="100" ry="160" stroke="rgba(212,175,55,0.1)" stroke-width="1" 
-                     fill="none" stroke-dasharray="1,3" class="energy-field"/>
         </svg>
 
         <h1 class="hero-title">Wyeth Anzilotti</h1>
@@ -1225,15 +1334,12 @@
         const animationObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    // Add staggered animation delays
                     setTimeout(() => {
                         entry.target.classList.add('animate-in');
                         
-                        // Special handling for sections
                         if (entry.target.classList.contains('content-section')) {
                             entry.target.classList.add('in-view');
                             
-                            // Animate child elements with stagger
                             const children = entry.target.querySelectorAll('p, .skill-category, .portfolio-card, .feature-list li');
                             children.forEach((child, childIndex) => {
                                 setTimeout(() => {
@@ -1249,7 +1355,6 @@
             rootMargin: '0px 0px -50px 0px'
         });
 
-        // Observe all animatable elements
         document.addEventListener('DOMContentLoaded', () => {
             const animatableElements = document.querySelectorAll(
                 '.section-header, p, .skill-category, .portfolio-card, .feature-list li, .content-section'
@@ -1260,49 +1365,12 @@
             });
         });
 
-        // Mystical cursor trail effect
-        let mouseTrails = [];
-        let mouseX = 0, mouseY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Create trail element
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.left = mouseX + 'px';
-            trail.style.top = mouseY + 'px';
-            document.body.appendChild(trail);
-            
-            mouseTrails.push(trail);
-            
-            // Remove old trails
-            if (mouseTrails.length > 10) {
-                const oldTrail = mouseTrails.shift();
-                oldTrail.remove();
-            }
-            
-            // Fade out trails
-            setTimeout(() => {
-                trail.style.opacity = '0';
-                trail.style.transform = 'scale(0.1)';
-                setTimeout(() => {
-                    if (trail.parentNode) {
-                        trail.remove();
-                    }
-                }, 300);
-            }, 100);
-        });
-
-        // Enhanced keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && e.target.classList.contains('project-link')) {
                 e.target.click();
             }
         });
 
-        // Smooth scroll for navigation links
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1314,7 +1382,6 @@
                         block: 'start'
                     });
                     
-                    // Add a gentle pulse effect to the target section
                     targetSection.style.transform = 'scale(1.01)';
                     setTimeout(() => {
                         targetSection.style.transform = 'scale(1)';
@@ -1323,7 +1390,6 @@
             });
         });
 
-        // Enhanced active navigation highlighting
         function updateActiveNavigation() {
             const sections = document.querySelectorAll('section[id]');
             const navLinks = document.querySelectorAll('.nav-links a');
@@ -1347,7 +1413,6 @@
             });
         }
 
-        // Parallax effect for hero elements
         window.addEventListener('scroll', () => {
             updateActiveNavigation();
             
@@ -1363,11 +1428,9 @@
             }
         });
 
-        // Initialize on load
         window.addEventListener('load', () => {
             updateActiveNavigation();
             
-            // Add entrance animation to hero elements
             const heroElements = document.querySelectorAll('.hero-title, .hero-role, .hero-text, .employment-status');
             heroElements.forEach((el, index) => {
                 setTimeout(() => {
