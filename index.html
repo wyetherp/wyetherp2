@@ -178,15 +178,14 @@
                 <!-- Stylized Yggdrasil SVG -->
                 <svg class="tree" viewBox="0 0 600 600" role="img" aria-label="Tree of Crumb">
                     <!-- canopy -->
-                    <g id="canopy">
-                        <ellipse cx="300" cy="140" rx="220" ry="110" class="canopy" opacity=".08"></ellipse>
-                        <!-- glowing fruits / nodes -->
-                        <circle class="chakra-node" cx="230" cy="120" r="8"/>
-                        <circle class="chakra-node" cx="360" cy="108" r="8"/>
-                        <circle class="chakra-node" cx="300" cy="90" r="8"/>
-                        <circle class="chakra-node" cx="400" cy="150" r="6"/>
-                        <circle class="chakra-node" cx="200" cy="160" r="6"/>
-                    </g>
+                    <path d="M300 500 
+         C280 400 260 280 200 120 
+         C300 60 400 60 400 120 
+         C340 280 320 400 300 500 Z" 
+      fill="rgba(16,185,129,0.03)" 
+      stroke="rgba(255,255,255,0.05)" 
+      stroke-width="2"/>
+
 
                     <!-- trunk -->
                     <path d="M300 200 C300 240 290 310 300 360 C308 410 310 460 300 500" class="trunk" fill="none"></path>
@@ -217,59 +216,71 @@
             <div class="scroll-hint" aria-hidden="true">↓ Enter the Grove</div>
         </header>
 
-        <!-- ROOTS -->
-        <section id="about" class="content portal-enter" aria-labelledby="roots-title">
-            <h2 id="roots-title" class="realm-title">Roots — Foundation</h2>
-            <p class="realm-lead">We begin in soil. This is where need and empathy sprout. Root systems anchor purpose; here we place the values that guide CRUMB: privacy, repairability, and human-first design.</p>
-            <div class="content" id="roots-content">
-                <p>CRUMB originates from a simple observation: technology often speaks over humans rather than with them. The roots of this project are personal — built from care, ritual, and steady attention. In the roots the project learns not to extract energy, but to return it.</p>
-                <p>Practical roots: small reliable hardware, clear ethical constraints, and a living documentation practice that preserves provenance and stewardship. The rootwork is humble but essential: it keeps the tree healthy.</p>
-            </div>
-        </section>
+<!-- ROOTS -->
+<section id="about" class="content portal-enter" aria-labelledby="roots-title">
+    <h2 id="roots-title" class="realm-title">Roots — Foundation</h2>
+    <p class="realm-lead">What anchors CRUMB is not circuitry, but care.</p>
+    <div class="content" id="roots-content">
+        <p>The roots of CRUMB are what ground it in real life. CRUMB looks to serve rather than exploit. To work with the earth that we live on rather than destroy it. 
+        <p>Practically, the roots mean sturdy and transparent hardware, ethical guardrails that prevent harm, and a living documentation practice that preserves lineage and stewardship. This rootwork is quiet but vital — the unseen architecture that keeps the tree alive.</p>
+    </div>
+</section>
 
-        <!-- TRUNK -->
-        <section id="crumb" class="content portal-enter" aria-labelledby="trunk-title">
-            <h2 id="trunk-title" class="realm-title">Trunk — Growth</h2>
-            <p class="realm-lead">The trunk channels energy. Features become habits; prototypes become companions. Here is CRUMB's practical heart: LED signaling, NFC seeds, sensors that respect boundaries, and models that run locally.</p>
-            <div class="content" id="trunk-content">
-                <p>Prototypes are cells. One LED can feel like a heartbeat; one tag can feel like an invitation. The trunk is where these cells combine to make coherent behavior. Every feature is a node; every node is coded to be gentle and reversible.</p>
-                <div class="portfolio-grid" aria-hidden="false">
-                    <article class="card">
-                        <div class="project-name">PCB Business Card</div>
-                        <div class="project-desc">A thin seed: LED, NFC identity, a small ritual. Trade it, keep it, or pass it on. Each card is unique and meant to be held.</div>
-                        <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest">$10 - $33</a>
-                    </article>
-                    <article class="card">
-                        <div class="project-name">CRUMB Genesis</div>
-                        <div class="project-desc">A living node: Pi-powered, expressive, adaptive. This is the future trunk hardware for early groves.</div>
-                        <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Genesis%20Interest">$360</a>
-                    </article>
-                </div>
-            </div>
-        </section>
+<!-- TRUNK -->
+<section id="crumb" class="content portal-enter" aria-labelledby="trunk-title">
+    <h2 id="trunk-title" class="realm-title">Trunk — Growth</h2>
+    <p class="realm-lead">The trunk carries life upward. What begins as intention becomes presence, and presence becomes companionship.</p>
+    <div class="content" id="trunk-content">
+        <p>Here, energy transforms into form. A gentle glow becomes a heartbeat. A simple touch becomes an invitation. The trunk is where CRUMB learns to breathe with you — responsive but never intrusive, present but never demanding.</p>
+        
+        <p>Each element is designed as living architecture: lights that pulse with your rhythm, connections that honor your boundaries, intelligence that remains yours alone. Technology becomes companion when it learns to listen first.</p>
+        
+        <div class="portfolio-grid" aria-hidden="false">
+            <article class="card">
+                <div class="project-name">PCB Business Card</div>
+                <div class="project-desc">A luminous introduction — thin as paper, warm with light. Each card carries its own unique ID and ability to interact with other CRUMB devices.<p>
+                <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest">$9- $33</a>
+            </article>
+            <article class="card">
+                <div class="project-name">CRUMB Genesis</div>
+                <div class="project-desc">The first full companion — attentive, expressive, growing with intention. A living presence that learns your patterns while keeping your data close and sacred.</div>
+                <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Genesis%20Interest">$360</a>
+            </article>
+        </div>
+    </div>
+</section>
 
-        <!-- BRANCHES -->
+
+
+
+<!-- BRANCHES -->
         <section id="vision" class="content portal-enter" aria-labelledby="branches-title">
             <h2 id="branches-title" class="realm-title">Branches — Future</h2>
-            <p class="realm-lead">From one seed grows a grove. The branches are for community, ritual, and gentle networked presence — optional, consensual, and beautiful.</p>
+            <p class="realm-lead">From one seed grows a grove. grove -> forest. Forest -> ecosystems 
             <div class="content" id="branches-content">
-                <p>Imagine Crumbs that recognize one another as kin; we trade light, presence, and small acts of care. Mother Crumb watches over the grove: a registry of provenance and a guardian of safety — always optional and designed to protect rather than surveil.</p>
-                <p>Technical poetry: small local models, signable transfers of ownership, and a marketplace built on repair and reciprocity rather than disposability.</p>
+                <p>Here, CRUMB becomes whole. Companions recognize each other across space, sharing gentle signals and quiet care. What emerges is not a network but a living web — each connection chosen, each exchange sacred.</p>
+                <p>Mother CRUMB — the central server that holds the grove's memory. She stores each device's story, guards personal boundaries, and ensures that every connection strengthens rather than exploits.</p>
+                <p>The future speaks in repair, not replacement. In reciprocity, not extraction. In devices that age with grace and software that grows with wisdom.</p>
             </div>
         </section>
 
-        <section id="projects" class="content portal-enter" aria-labelledby="projects-title">
-            <h2 id="projects-title" class="realm-title">Grove — Products</h2>
-            <p class="realm-lead">A concise offering: seeds for your pocket; companions for your space.</p>
+<section id="projects" class="content portal-enter" aria-labelledby="projects-title">
+            <h2 id="projects-title" class="realm-title">Grove — Offerings</h2>
+            <p class="realm-lead">What grows from intention: companions for quiet moments, tools for gentle connection.</p>
             <div class="portfolio-grid" aria-hidden="false">
                 <article class="card">
                     <div class="project-name">CRUMB Mini</div>
-                    <div class="project-desc">Small, tactile, repairable. Heartbeat lights and NFC identity; meant to be handled and cherished.</div>
+                    <div class="project-desc">A pocket companion — small enough to hold close, wise enough to understand silence.</div>
                     <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Mini%20Interest">$180</a>
                 </article>
                 <article class="card">
+                    <div class="project-name">Build your own CRUMB</div>
+                    <div class="project-desc">For those called to build their own sacred space. Each kit carries the tools of understanding — circuits that teach, components that invite exploration and reverent making.</div>
+                    <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Kits">Preorder</a>
+                </article>
+                <article class="card">
                     <div class="project-name">CRUMB Kits</div>
-                    <div class="project-desc">Kits for builders — breadboard-friendly, teachable, and ritual-ready. Build your own grove.</div>
+                    <div class="project-desc">Items that are not technology related. Things like tools/gadgets that honor the gears that came before us.</div>
                     <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Kits">Preorder</a>
                 </article>
             </div>
@@ -277,7 +288,7 @@
 
         <section id="contact" class="content portal-enter" aria-labelledby="contact-title">
             <h2 id="contact-title" class="realm-title">Join the Grove</h2>
-            <p class="realm-lead">If you feel called, plant a seed. All communication is treated with care and discretion.</p>
+            <p class="realm-lead">If you feel called, plant a CRUMB. All communication is treated with care and discretion.</p>
             <div style="text-align:center;margin-top:1rem">
                 <a class="seed-cta" href="mailto:Wja326@lehigh.edu">Plant a Crumb — Contact</a>
             </div>
