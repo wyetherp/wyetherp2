@@ -3,468 +3,449 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CRUMB — Living Mythos (Wyeth Anzilotti)</title>
+<title>CRUMB V.95</title>
 <style>
     :root{
-        --midnight-1:#051026; /* deep sky/space */
-        --midnight-2:#07162b;
+        --midnight:#051026;
         --accent-gold:#D4AF37;
         --moon-ice:#E8F2FF;
         --leaf-green:#10B981;
-        --serpent-red:#D94B4B;
-        --serene-blue:#3B82F6;
         --text-light:#F6F5F3;
-        --muted-ink:rgba(255,255,255,0.06);
-        --spacing:1.618rem;
-        --type-scale:1.618;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:clamp(16px,2.2vw,22px);scroll-behavior:smooth}
-    body{
-        background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.02), transparent),
-                    linear-gradient(180deg,var(--midnight-1),var(--midnight-2));
+    html,body{
+        width:100%;height:100%;overflow:hidden;
+        background:radial-gradient(circle at center, #07162b 0%, #051026 100%);
         color:var(--text-light);
         font-family: Georgia, 'Times New Roman', serif;
-        -webkit-font-smoothing:antialiased;
-        -moz-osx-font-smoothing:grayscale;
-        line-height:1.45;
-        overflow-x:hidden;
-        transition:background 0.8s ease;
     }
 
-    /* Realm mood changes */
-    body[data-realm="roots"]{ background: linear-gradient(180deg,#020416,#071026);}
-    body[data-realm="trunk"]{ background: linear-gradient(180deg,#04102a,#0b1630);}
-    body[data-realm="branches"]{ background: linear-gradient(180deg,#081B2F,#0f2540);}
-
-    a{color:inherit;text-decoration:none}
-    
-    /* Top nav */
-    .nav-bar{
-        position:fixed;left:0;right:0;top:0;z-index:1200;
+    .cell-container{
+        width:100vw;height:100vh;
         display:flex;align-items:center;justify-content:center;
-        padding:1rem;
-        background:linear-gradient(180deg,rgba(2,6,14,0.35),rgba(2,6,14,0.12));
-        border-bottom:1px solid rgba(212,175,55,0.08);
-        backdrop-filter: blur(6px);
-    }
-    .nav-inner{width:1200px;display:flex;align-items:center;justify-content:space-between;padding:0 .75rem}
-    .brand{color:var(--accent-gold);font-weight:700;letter-spacing:.12em}
-    .nav-links{display:flex;gap:1rem;list-style:none}
-    .nav-links a{padding:.5rem .9rem;border-radius:999px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.85);font-weight:500;transition:all 0.3s ease}
-    .nav-links a:hover,.nav-links a.active{background:rgba(212,175,55,0.06);border-color:rgba(212,175,55,0.08);color:var(--accent-gold)}
-
-    /* Cosmic particle layer (subtle) */
-    .cosmic{
-        position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:0.7;
-        background-image:
-            radial-gradient(circle at 10% 15%, rgba(212,175,55,0.06) 0px, transparent 2px),
-            radial-gradient(circle at 70% 30%, rgba(138,43,226,0.03) 0px, transparent 2px),
-            radial-gradient(circle at 50% 70%, rgba(59,130,246,0.02) 0px, transparent 2px);
-        background-size: 140px 140px;
-        animation: drift 120s linear infinite;
-    }
-    @keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(-120px,-80px)}}
-
-    main{margin-top:84px}
-
-    /* HERO - central spine */
-    .hero{
-        min-height:calc(100vh - 84px);
-        display:flex;flex-direction:column;align-items:center;justify-content:center;
-        padding:3rem 1rem 6rem;position:relative;overflow:visible;
+        position:relative;
     }
 
-    /* The living tree container */
-    .tree-wrap{position:relative;width:min(66vmin,700px);height:min(66vmin,700px);display:grid;place-items:center;z-index:8}
-    
-    /* Halo navigation - ring of links around tree */
-    .halo{
-        position:absolute;inset:0;display:block;pointer-events:auto;z-index:9;
+    /* Central tree nucleus */
+    .nucleus{
+        position:absolute;
+        width:min(35vmin,400px);height:min(35vmin,400px);
+        display:grid;place-items:center;
+        z-index:100;
+        pointer-events:none;
     }
-    .halo .node{
-        position:absolute;width:44px;height:44px;border-radius:50%;
-        display:flex;align-items:center;justify-content:center;
-        background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(59,130,246,0.03));
-        border:1px solid rgba(255,255,255,0.05);
-        color:var(--text-light);font-size:14px;font-weight:600;
-        text-decoration:none;backdrop-filter:blur(4px);
-        transition:transform .35s ease, box-shadow .35s ease;
-    }
-    .halo .node:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 12px 30px rgba(59,130,246,0.06)}
 
-    /* Tree SVG styling */
     svg.tree{
         width:100%;height:100%;
-        filter: drop-shadow(0 30px 60px rgba(2,6,14,0.6));
+        filter:drop-shadow(0 20px 40px rgba(2,6,14,0.8));
     }
-    /* trunk + bark glow */
-    .trunk{stroke:rgba(255,255,255,0.06);stroke-width:6;stroke-linecap:round}
-    .canopy{fill:rgba(16,185,129,0.06);stroke:rgba(16,185,129,0.08)}
-    .rootline{stroke:rgba(255,255,255,0.03);stroke-width:2}
-    .fruit{fill:var(--accent-gold);stroke:rgba(255,255,255,0.06);opacity:0.95}
-    .chakra-node{fill:var(--moon-ice);stroke:var(--accent-gold);stroke-width:0.8;filter:drop-shadow(0 4px 10px rgba(212,175,55,0.08))}
 
-    /* Serpent animation - use stroke dash */
-    .serpent{stroke:var(--serpent-red);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
-    .serpent.anim{stroke-dasharray:12 6;animation:slither 3s linear infinite}
-    @keyframes slither{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-18}}
+    /* Orbital navigation nodes */
+    .orbit-ring{
+        position:absolute;
+        width:min(70vmin,800px);height:min(70vmin,800px);
+        border-radius:50%;
+        border:1px solid rgba(212,175,55,0.08);
+        pointer-events:none;
+    }
 
-    /* Hero text */
-    .hero-title{font-size:clamp(28px,4.2vw,48px);font-weight:700;color:var(--text-light);margin-top:1rem;text-align:center;letter-spacing:.02em;text-shadow:0 12px 30px rgba(2,6,14,0.6)}
-    .hero-sub{color:rgba(255,255,255,0.85);margin-top:.6rem;max-width:820px;text-align:center;font-style:italic}
-    .seed-cta{
-        margin-top:1.2rem;padding:.9rem 1.6rem;border-radius:999px;
+    .nav-node{
+        position:absolute;
+        width:80px;height:80px;
+        border-radius:50%;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(59,130,246,0.06));
+        border:2px solid rgba(255,255,255,0.1);
+        backdrop-filter:blur(8px);
+        cursor:pointer;
+        transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        pointer-events:auto;
+        text-align:center;
+    }
+
+    .nav-node:hover{
+        transform:scale(1.15);
+        box-shadow:0 12px 40px rgba(212,175,55,0.2);
+        border-color:var(--accent-gold);
+    }
+
+    .nav-node.active{
+        background:linear-gradient(135deg,rgba(212,175,55,0.25),rgba(59,130,246,0.15));
+        border-color:var(--accent-gold);
+        box-shadow:0 0 30px rgba(212,175,55,0.3);
+    }
+
+    .nav-node .icon{font-size:24px;margin-bottom:4px}
+    .nav-node .label{font-size:11px;font-weight:600;letter-spacing:0.05em}
+
+    /* Content panels - slide in from edges */
+    .content-panel{
+        position:absolute;
+        width:min(40vw,500px);
+        max-height:70vh;
+        padding:2rem;
+        background:linear-gradient(135deg,rgba(5,16,38,0.95),rgba(7,22,43,0.95));
+        border:1px solid rgba(212,175,55,0.15);
+        border-radius:16px;
+        backdrop-filter:blur(12px);
+        opacity:0;
+        pointer-events:none;
+        transition:all 0.6s cubic-bezier(0.16,1,0.3,1);
+        overflow-y:auto;
+        box-shadow:0 20px 60px rgba(2,6,14,0.9);
+    }
+
+    .content-panel.active{
+        opacity:1;
+        pointer-events:auto;
+    }
+
+    .content-panel h2{
+        color:var(--accent-gold);
+        font-size:clamp(20px,3vw,28px);
+        margin-bottom:1rem;
+        border-bottom:1px solid rgba(212,175,55,0.2);
+        padding-bottom:0.5rem;
+    }
+
+    .content-panel p{
+        margin-bottom:1rem;
+        line-height:1.6;
+        opacity:0.95;
+    }
+
+    /* Panel positioning */
+    .panel-top{top:5vh;left:50%;transform:translateX(-50%) translateY(-20px)}
+    .panel-top.active{transform:translateX(-50%) translateY(0)}
+
+    .panel-right{top:50%;right:5vw;transform:translateY(-50%) translateX(20px)}
+    .panel-right.active{transform:translateY(-50%) translateX(0)}
+
+    .panel-bottom{bottom:5vh;left:50%;transform:translateX(-50%) translateY(20px)}
+    .panel-bottom.active{transform:translateX(-50%) translateY(0)}
+
+    .panel-left{top:50%;left:5vw;transform:translateY(-50%) translateX(-20px)}
+    .panel-left.active{transform:translateY(-50%) translateX(0)}
+
+    .panel-center{top:50%;left:50%;transform:translate(-50%,-50%) scale(0.95)}
+    .panel-center.active{transform:translate(-50%,-50%) scale(1)}
+
+    .product-grid{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:1rem;
+        margin-top:1rem;
+    }
+
+    .product-card{
+        background:rgba(255,255,255,0.03);
+        padding:1rem;
+        border-radius:8px;
+        border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .product-name{
+        color:var(--accent-gold);
+        font-weight:700;
+        margin-bottom:0.5rem;
+    }
+
+    .cta-btn{
+        display:inline-block;
+        margin-top:0.5rem;
+        padding:0.5rem 1rem;
         background:linear-gradient(90deg,var(--accent-gold),#B8860B);
-        color:#041226;font-weight:700;border:none;cursor:pointer;box-shadow:0 18px 60px rgba(212,175,55,0.12);
-        display:inline-block;text-decoration:none;transition:all 0.3s ease;
+        color:#041226;
+        font-weight:700;
+        border-radius:999px;
+        text-decoration:none;
+        font-size:12px;
+        transition:transform 0.3s ease;
     }
-    .seed-cta:hover{transform:translateY(-2px);box-shadow:0 24px 80px rgba(212,175,55,0.18)}
 
-    .scroll-hint{position:absolute;bottom:2.2rem;color:rgba(212,175,55,0.9);font-weight:700;z-index:10;filter:drop-shadow(0 6px 16px rgba(212,175,55,0.06))}
+    .cta-btn:hover{transform:translateY(-2px)}
 
-    /* Section visuals: root/trunk/branch moods */
-    section.content{padding:6rem 1rem;max-width:980px;margin:0 auto;color:var(--text-light)}
-    .realm-title{font-size:clamp(20px,3vw,34px);font-weight:700;text-align:center;margin-bottom:1rem;color:var(--accent-gold)}
-    .realm-lead{max-width:780px;margin:0 auto 2rem;text-align:center;opacity:.95}
+    /* Cosmic particles */
+    .cosmic{
+        position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.4;
+        background-image:
+            radial-gradient(circle at 20% 30%, rgba(212,175,55,0.05) 0px, transparent 2px),
+            radial-gradient(circle at 80% 60%, rgba(59,130,246,0.04) 0px, transparent 2px);
+        background-size:120px 120px;
+        animation:drift 100s linear infinite;
+    }
+    @keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(-100px,-100px)}}
 
-    /* transitions - portal effects */
-    .portal-enter{opacity:0;transform:translateY(18px) scale(.995);filter:blur(3px)}
-    .portal-active{opacity:1;transform:none;filter:none;transition:all .9s cubic-bezier(.16,.85,.24,1)}
+    /* Center title */
+    .center-title{
+        position:absolute;
+        bottom:calc(50% - min(17.5vmin,200px) - 40px);
+        left:50%;
+        transform:translateX(-50%);
+        text-align:center;
+        z-index:101;
+        pointer-events:none;
+    }
 
-    /* portfolio card styles (muted) */
-    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.4rem;margin-top:2rem}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:1.4rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,14,0.6);transition:transform 0.3s ease}
-    .card:hover{transform:translateY(-4px)}
-    .project-name{color:var(--accent-gold);font-weight:700;margin-bottom:.4rem}
-    .project-desc{opacity:.9;margin-bottom:.8rem}
+    .center-title h1{
+        font-size:clamp(20px,3vw,32px);
+        color:var(--text-light);
+        margin-bottom:0.3rem;
+        text-shadow:0 8px 20px rgba(2,6,14,0.8);
+    }
 
-    footer{padding:3rem 1rem;text-align:center;color:rgba(255,255,255,0.65);border-top:1px solid rgba(255,255,255,0.02);margin-top:4rem}
+    .center-title p{
+        font-size:clamp(12px,1.5vw,16px);
+        color:rgba(255,255,255,0.7);
+        font-style:italic;
+    }
 
-    /* small screens */
-    @media (max-width:720px){
-        .tree-wrap{width:90vmin;height:90vmin}
-        .nav-links{display:none}
-        .brand{font-size:14px}
+    @media (max-width:900px){
+        .content-panel{width:85vw;max-height:60vh}
+        .nav-node{width:60px;height:60px}
+        .nav-node .label{font-size:9px}
+        .orbit-ring{width:min(80vmin,600px);height:min(80vmin,600px)}
     }
 </style>
 </head>
-<body data-realm="roots">
-    <div class="nav-bar" role="navigation" aria-label="Main Navigation">
-        <div class="nav-inner">
-            <div class="brand">Wyeth • CRUMB</div>
-            <ul class="nav-links" role="menubar">
-                <li><a href="#about" role="menuitem">Grove</a></li>
-                <li><a href="#crumb" role="menuitem">Trunk</a></li>
-                <li><a href="#vision" role="menuitem">Branches</a></li>
-                <li><a href="#projects" role="menuitem">Roots</a></li>
-                <li><a href="#contact" role="menuitem">Join</a></li>
+<body>
+    <div class="cosmic"></div>
+    
+    <div class="cell-container">
+        <!-- Central nucleus with tree -->
+        <div class="nucleus">
+            <svg class="tree" viewBox="0 0 600 600">
+                <defs>
+                    <radialGradient id="trunkGlow" cx="50%" cy="50%">
+                        <stop offset="0%" stop-color="rgba(139,69,19,0.4)"/>
+                        <stop offset="100%" stop-color="rgba(101,67,33,0.2)"/>
+                    </radialGradient>
+                    <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#10B981"/>
+                        <stop offset="100%" stop-color="#059669"/>
+                    </linearGradient>
+                </defs>
+                
+                <g id="roots" opacity="0.7">
+                    <path d="M300 520 C280 540 220 560 180 580" stroke="rgba(139,69,19,0.3)" stroke-width="3" fill="none"/>
+                    <path d="M300 520 C320 540 380 560 420 580" stroke="rgba(139,69,19,0.3)" stroke-width="3" fill="none"/>
+                    <path d="M300 520 L300 580" stroke="rgba(139,69,19,0.4)" stroke-width="4" fill="none"/>
+                </g>
+                
+                <path d="M300 520 C298 480 302 440 300 400 C299 360 301 320 300 280 C299 240 301 200 300 160" 
+                      stroke="url(#trunkGlow)" stroke-width="12" fill="none" stroke-linecap="round">
+                    <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+                </path>
+                
+                <g id="canopy" opacity="0.8">
+                    <path d="M300 180 C280 160 240 140 200 130" stroke="url(#leafGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <path d="M300 180 C320 160 360 140 400 130" stroke="url(#leafGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <path d="M300 240 C270 220 220 200 170 195" stroke="url(#leafGradient)" stroke-width="7" fill="none" stroke-linecap="round"/>
+                    <path d="M300 240 C330 220 380 200 430 195" stroke="url(#leafGradient)" stroke-width="7" fill="none" stroke-linecap="round"/>
+                    
+                    <circle cx="220" cy="145" r="25" fill="url(#leafGradient)" opacity="0.4">
+                        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="380" cy="145" r="25" fill="url(#leafGradient)" opacity="0.4">
+                        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="3.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="190" cy="205" r="30" fill="url(#leafGradient)" opacity="0.35">
+                        <animate attributeName="opacity" values="0.35;0.55;0.35" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="410" cy="205" r="30" fill="url(#leafGradient)" opacity="0.35">
+                        <animate attributeName="opacity" values="0.35;0.55;0.35" dur="3.8s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+
+                <circle cx="300" cy="200" r="5" fill="#FFD700" opacity="0.9" filter="url(#glow)">
+                    <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="280" r="4" fill="#FFA500" opacity="0.85">
+                    <animate attributeName="r" values="4;6;4" dur="2.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="360" r="4" fill="#FF6347" opacity="0.85">
+                    <animate attributeName="r" values="4;6;4" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="440" r="4" fill="#9370DB" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="2.8s" repeatCount="indefinite"/>
+                </circle>
+
+                <g transform="translate(300,520)">
+                    <circle r="16" fill="#D4AF37" opacity="0.9">
+                        <animate attributeName="r" values="16;18;16" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle r="10" fill="rgba(255,215,0,0.5)">
+                        <animate attributeName="r" values="10;12;10" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle r="5" fill="#FFD700">
+                        <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+
+                <path d="M300 200 C315 235 285 270 300 305 C315 340 285 375 300 410 C310 435 295 460 300 485" 
+                      stroke="#FF4500" stroke-width="3" fill="none" opacity="0.7" stroke-linecap="round">
+                    <animate attributeName="stroke-dasharray" values="0 1000;1000 0" dur="5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.7;0.4;0.7" dur="3s" repeatCount="indefinite"/>
+                </path>
+
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </svg>
+        </div>
+
+        <div class="center-title">
+            <h1>CRUMB</h1>
+            <p>Living System Interface</p>
+        </div>
+
+        <!-- Orbital ring -->
+        <div class="orbit-ring"></div>
+
+        <!-- Navigation nodes positioned around orbit -->
+        <div class="nav-node active" style="top:8%;left:50%;transform:translate(-50%,-50%)" data-target="roots">
+            <div class="icon">🌱</div>
+            <div class="label">ROOTS</div>
+        </div>
+
+        <div class="nav-node" style="top:30%;left:85%;transform:translate(-50%,-50%)" data-target="trunk">
+            <div class="icon">🌳</div>
+            <div class="label">TRUNK</div>
+        </div>
+
+        <div class="nav-node" style="top:70%;left:85%;transform:translate(-50%,-50%)" data-target="branches">
+            <div class="icon">🌿</div>
+            <div class="label">BRANCHES</div>
+        </div>
+
+        <div class="nav-node" style="bottom:8%;left:50%;transform:translate(-50%,50%)" data-target="grove">
+            <div class="icon">🍃</div>
+            <div class="label">GROVE</div>
+        </div>
+
+        <div class="nav-node" style="top:70%;left:15%;transform:translate(-50%,-50%)" data-target="contact">
+            <div class="icon">✉️</div>
+            <div class="label">CONNECT</div>
+        </div>
+
+        <!-- Content panels -->
+        <div class="content-panel panel-top active" data-content="roots">
+            <h2>CRUMB Virtual — Welcome</h2>
+            <p style="font-size:15px;color:var(--accent-gold);font-weight:600;margin-bottom:1.5rem">You're inside the living interface — a virtual reflection of CRUMB's physical form.</p>
+            
+            <p><strong>How to Navigate:</strong></p>
+            <ul style="margin-left:1.5rem;margin-bottom:1rem;line-height:1.8">
+                <li><strong>Click the orbital nodes</strong> around the tree to explore different realms</li>
+                <li><strong>Use keyboard shortcuts</strong> (1-5) for quick navigation</li>
+                <li><strong>Watch the tree breathe</strong> — it responds to the active section</li>
             </ul>
+
+            <p><strong>The Five Realms:</strong></p>
+            <ul style="margin-left:1.5rem;margin-bottom:1rem;line-height:1.8">
+                <li><strong>🌱 Roots:</strong> You are here — understanding the interface</li>
+                <li><strong>🌳 Trunk:</strong> Core products and what CRUMB does</li>
+                <li><strong>🌿 Branches:</strong> Vision for the future and Mother CRUMB</li>
+                <li><strong>🍃 Grove:</strong> Full product catalog and offerings</li>
+                <li><strong>✉️ Connect:</strong> Join the network and plant your CRUMB</li>
+            </ul>
+
+            <p style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(212,175,55,0.2)">
+                <em>This interface mirrors CRUMB's design philosophy: circular, organic, alive. Everything exists in one space, just like everything in CRUMB exists in one harmonious system.</em>
+            </p>
+        </div>
+
+        <div class="content-panel panel-right" data-content="trunk">
+            <h2>Trunk — Growth</h2>
+            <p>The trunk carries life upward. What begins as intention becomes presence, and presence becomes companionship.</p>
+            <p>Each element is designed as living architecture: lights that pulse with your rhythm, connections that honor your boundaries, intelligence that remains yours alone.</p>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-name">PCB Business Card</div>
+                    <p style="font-size:14px;opacity:0.9">A luminous introduction — thin as paper, warm with light.</p>
+                    <a class="cta-btn" href="mailto:Wja326@lehigh.edu?subject=PCB%20Card">$9 - $33</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">CRUMB Genesis</div>
+                    <p style="font-size:14px;opacity:0.9">The first full companion — attentive, expressive, growing with intention.</p>
+                    <a class="cta-btn" href="mailto:Wja326@lehigh.edu?subject=Genesis">$360</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-panel panel-left" data-content="branches">
+            <h2>Branches — Future</h2>
+            <p>From one seed grows a grove. Individual presence becomes shared wisdom, technology serves the bonds between us.</p>
+            <p>Mother CRUMB — the central server that holds the grove's memory — keeps the lineage sacred. She stores each device's story, guards personal boundaries, and ensures that every connection strengthens rather than exploits.</p>
+            <p>The future speaks in repair, not replacement. In reciprocity, not extraction.</p>
+        </div>
+
+        <div class="content-panel panel-bottom" data-content="grove">
+            <h2>Grove — Offerings</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-name">CRUMB Mini</div>
+                    <p style="font-size:14px;opacity:0.9">A pocket companion — small enough to hold close, wise enough to understand silence.</p>
+                    <a class="cta-btn" href="mailto:Wja326@lehigh.edu?subject=Mini">$180</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">Build Your Own</div>
+                    <p style="font-size:14px;opacity:0.9">For those called to build their own sacred space.</p>
+                    <a class="cta-btn" href="mailto:Wja326@lehigh.edu?subject=Kit">Preorder</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">CRUMB Heritage</div>
+                    <p style="font-size:14px;opacity:0.9">Tools that honor craft traditions — mechanical instruments and tactile wonders.</p>
+                    <a class="cta-btn" href="mailto:Wja326@lehigh.edu?subject=Heritage">Preorder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-panel panel-center" data-content="contact">
+            <h2>Join the Grove</h2>
+            <p>If you feel called, plant a CRUMB. All communication is treated with care and discretion.</p>
+            <div style="text-align:center;margin-top:1.5rem">
+                <a class="cta-btn" href="mailto:Wja326@lehigh.edu" style="padding:0.8rem 1.5rem;font-size:14px">Plant a Crumb</a>
+            </div>
+            <p style="margin-top:1.5rem;text-align:center;color:rgba(255,255,255,0.5);font-size:14px">
+                © 2025 Wyeth Anzilotti — A living experiment
+            </p>
         </div>
     </div>
 
-    <div class="cosmic" aria-hidden="true"></div>
-
-    <main>
-        <!-- HERO -->
-        <header class="hero" role="banner" aria-labelledby="site-title">
-            <div class="tree-wrap" aria-hidden="false">
-                <!-- Halo nav: circular nodes positioned manually -->
-                <div class="halo" aria-hidden="true">
-                    <a class="node" href="#about" style="top:6%;left:50%;transform:translate(-50%,-50%)">Grove</a>
-                    <a class="node" href="#crumb" style="top:24%;left:85%;transform:translate(-50%,-50%)">Trunk</a>
-                    <a class="node" href="#vision" style="top:70%;left:86%;transform:translate(-50%,-50%)">Branches</a>
-                    <a class="node" href="#projects" style="top:94%;left:50%;transform:translate(-50%,-50%)">Roots</a>
-                    <a class="node" href="#contact" style="top:70%;left:14%;transform:translate(-50%,-50%)">Join</a>
-                </div>
-
-                <!-- Stylized Yggdrasil SVG - More Natural/Hermetic Design -->
-                <svg class="tree" viewBox="0 0 600 600" role="img" aria-label="Tree of Crumb">
-                    <!-- Root system - spreading wide underground -->
-                    <g id="roots" opacity="0.6">
-                        <path class="rootline" d="M300 520 C280 540 220 560 180 580 C160 590 120 595 80 600"/>
-                        <path class="rootline" d="M300 520 C320 540 380 560 420 580 C440 590 480 595 520 600"/>
-                        <path class="rootline" d="M300 520 C290 545 260 570 220 585"/>
-                        <path class="rootline" d="M300 520 C310 545 340 570 380 585"/>
-                        <path class="rootline" d="M300 520 C285 530 240 550 200 570"/>
-                        <path class="rootline" d="M300 520 C315 530 360 550 400 570"/>
-                        <!-- Central taproot -->
-                        <path class="rootline" stroke-width="3" d="M300 520 L300 580" opacity="0.8"/>
-                    </g>
-
-                    <!-- Main trunk - more organic curve -->
-                    <path d="M300 520 C298 480 302 440 300 400 C299 360 301 320 300 280 C299 240 301 200 300 160" 
-                          class="trunk" stroke-width="8" opacity="0.7"/>
-                    
-                    <!-- Secondary trunk texture lines -->
-                    <path d="M295 500 C297 460 293 420 295 380 C296 340 294 300 295 260" 
-                          class="trunk" stroke-width="2" opacity="0.3"/>
-                    <path d="M305 500 C303 460 307 420 305 380 C304 340 306 300 305 260" 
-                          class="trunk" stroke-width="2" opacity="0.3"/>
-
-                    <!-- Main canopy - fuller, more natural branches -->
-                    <g id="canopy" opacity="0.4">
-                        <!-- Upper branches -->
-                        <path d="M300 180 C280 160 240 140 200 130 C180 125 160 125 150 130" 
-                              stroke="rgba(16,185,129,0.3)" stroke-width="4" fill="none"/>
-                        <path d="M300 180 C320 160 360 140 400 130 C420 125 440 125 450 130" 
-                              stroke="rgba(16,185,129,0.3)" stroke-width="4" fill="none"/>
-                        
-                        <!-- Mid-level branches -->
-                        <path d="M300 240 C270 220 220 200 170 195 C140 192 110 195 90 200" 
-                              stroke="rgba(16,185,129,0.25)" stroke-width="5" fill="none"/>
-                        <path d="M300 240 C330 220 380 200 430 195 C460 192 490 195 510 200" 
-                              stroke="rgba(16,185,129,0.25)" stroke-width="5" fill="none"/>
-                        
-                        <!-- Lower branches -->
-                        <path d="M300 320 C260 300 200 280 140 275 C100 272 60 275 30 280" 
-                              stroke="rgba(16,185,129,0.2)" stroke-width="6" fill="none"/>
-                        <path d="M300 320 C340 300 400 280 460 275 C500 272 540 275 570 280" 
-                              stroke="rgba(16,185,129,0.2)" stroke-width="6" fill="none"/>
-                        
-                        <!-- Smaller branch details -->
-                        <path d="M280 200 C260 190 240 185 220 182" stroke="rgba(16,185,129,0.2)" stroke-width="2" fill="none"/>
-                        <path d="M320 200 C340 190 360 185 380 182" stroke="rgba(16,185,129,0.2)" stroke-width="2" fill="none"/>
-                        <path d="M270 260 C250 250 230 245 210 242" stroke="rgba(16,185,129,0.2)" stroke-width="2" fill="none"/>
-                        <path d="M330 260 C350 250 370 245 390 242" stroke="rgba(16,185,129,0.2)" stroke-width="2" fill="none"/>
-                    </g>
-
-                    <!-- Mystical elements - subtle energy flows -->
-                    <g id="mystical-elements" opacity="0.3">
-                        <!-- Energy currents flowing up the trunk -->
-                        <circle cx="295" cy="480" r="2" fill="var(--accent-gold)" opacity="0.6">
-                            <animate attributeName="cy" values="480;200;480" dur="8s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="8s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="305" cy="460" r="1.5" fill="var(--moon-ice)" opacity="0.4">
-                            <animate attributeName="cy" values="460;180;460" dur="10s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" values="0.4;0.1;0.4" dur="10s" repeatCount="indefinite"/>
-                        </circle>
-                        
-                        <!-- Chakra points along the trunk -->
-                        <circle cx="300" cy="200" r="4" class="chakra-node" opacity="0.8"/>
-                        <circle cx="300" cy="280" r="3" class="chakra-node" opacity="0.7"/>
-                        <circle cx="300" cy="360" r="3" class="chakra-node" opacity="0.7"/>
-                        <circle cx="300" cy="440" r="3" class="chakra-node" opacity="0.7"/>
-                    </g>
-
-                    <!-- Central seed/fruit at base (CTA) - enhanced -->
-                    <g id="seed" transform="translate(300,520)" style="cursor:pointer" onclick="location.href='mailto:Wja326@lehigh.edu?subject=Plant%20a%20Crumb'">
-                        <circle r="15" class="fruit" opacity="0.9"/>
-                        <circle r="8" fill="rgba(255,255,255,0.2)" opacity="0.6"/>
-                        <circle r="4" fill="var(--accent-gold)" opacity="0.8">
-                            <animate attributeName="r" values="4;6;4" dur="3s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
-                        </circle>
-                        <title>Plant a Crumb</title>
-                    </g>
-
-                    <!-- Enhanced serpent - more organic spiral -->
-                    <path id="serpentPath" 
-                          d="M300 200 C320 240 280 280 300 320 C320 360 280 400 300 440 C320 480 285 500 300 520" 
-                          class="serpent anim" stroke-width="3" opacity="0.7"/>
-                    
-                    <!-- Crown/cosmic connection at top -->
-                    <g id="crown" transform="translate(300,160)" opacity="0.5">
-                        <circle r="6" fill="none" stroke="var(--accent-gold)" stroke-width="1">
-                            <animate attributeName="r" values="6;12;6" dur="6s" repeatCount="indefinite"/>
-                            <animate attributeName="opacity" values="0.8;0.2;0.8" dur="6s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle r="3" fill="var(--moon-ice)" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="4s" repeatCount="indefinite"/>
-                        </circle>
-                    </g>
-                </svg>
-            </div>
-
-            <h1 id="site-title" class="hero-title">Wyeth Anzilotti</h1>
-            <p class="hero-sub">Building computers that work with people, not against them — a living-system approach to personal technology</p>
-
-            <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Plant%20a%20Crumb" role="button">Plant a Crumb</a>
-
-            <div class="scroll-hint" aria-hidden="true">↓ Enter the Grove</div>
-        </header>
-
-        <!-- ROOTS -->
-        <section id="about" class="content portal-enter" aria-labelledby="roots-title">
-            <h2 id="roots-title" class="realm-title">Roots — Foundation</h2>
-            <p class="realm-lead">What anchors CRUMB is not circuitry, but care.</p>
-            <div class="content" id="roots-content">
-                <p>The roots of CRUMB are what ground it in real life. CRUMB looks to serve rather than exploit. To work with the earth that we live on rather than destroy it.</p>
-                <p>Practically, the roots mean sturdy and transparent hardware, ethical guardrails that prevent harm, and a living documentation practice that preserves lineage and stewardship. This rootwork is quiet but vital — the unseen architecture that keeps the tree alive.</p>
-            </div>
-        </section>
-
-        <!-- TRUNK -->
-        <section id="crumb" class="content portal-enter" aria-labelledby="trunk-title">
-            <h2 id="trunk-title" class="realm-title">Trunk — Growth</h2>
-            <p class="realm-lead">The trunk carries life upward. What begins as intention becomes presence, and presence becomes companionship.</p>
-            <div class="content" id="trunk-content">
-                <p>Here, energy transforms into form. A gentle glow becomes a heartbeat. A simple touch becomes an invitation. The trunk is where CRUMB learns to breathe with you — responsive but never intrusive, present but never demanding.</p>
-                
-                <p>Each element is designed as living architecture: lights that pulse with your rhythm, connections that honor your boundaries, intelligence that remains yours alone. Technology becomes companion when it learns to listen first.</p>
-                
-                <div class="portfolio-grid" aria-hidden="false">
-                    <article class="card">
-                        <div class="project-name">PCB Business Card</div>
-                        <div class="project-desc">A luminous introduction — thin as paper, warm with light. Each card carries its own unique ID and ability to interact with other CRUMB devices.</div>
-                        <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=PCB%20Business%20Card%20Interest">$9 - $33</a>
-                    </article>
-                    <article class="card">
-                        <div class="project-name">CRUMB Genesis</div>
-                        <div class="project-desc">The first full companion — attentive, expressive, growing with intention. A living presence that learns your patterns while keeping your data close and sacred.</div>
-                        <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Genesis%20Interest">$360</a>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- BRANCHES -->
-        <section id="vision" class="content portal-enter" aria-labelledby="branches-title">
-            <h2 id="branches-title" class="realm-title">Branches — Future</h2>
-            <p class="realm-lead">From one seed grows a grove. Individual presence becomes shared wisdom, technology serves the bonds between us.</p>
-            <div class="content" id="branches-content">
-                <p>Here, CRUMB becomes whole. Companions recognize each other across space, sharing gentle signals and quiet care. What emerges is not a network but a living web — each connection chosen, each exchange sacred.</p>
-                <p>Mother CRUMB — the central server that holds the grove's memory — keeps the lineage sacred. She stores each device's story, guards personal boundaries, and ensures that every connection strengthens rather than exploits. Always consensual, always protective — a living archive that serves the community while keeping your data yours.</p>
-                <p>The future speaks in repair, not replacement. In reciprocity, not extraction. In devices that age with grace and software that grows with wisdom.</p>
-            </div>
-        </section>
-
-        <section id="projects" class="content portal-enter" aria-labelledby="projects-title">
-            <h2 id="projects-title" class="realm-title">Grove — Offerings</h2>
-            <p class="realm-lead">What grows from intention: companions for quiet moments, tools for gentle connection.</p>
-            <div class="portfolio-grid" aria-hidden="false">
-                <article class="card">
-                    <div class="project-name">CRUMB Mini</div>
-                    <div class="project-desc">A pocket companion — small enough to hold close, wise enough to understand silence. Responds to touch with warmth, carries your presence like a quiet prayer.</div>
-                    <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Mini%20Interest">$180</a>
-                </article>
-                <article class="card">
-                    <div class="project-name">Build your own CRUMB</div>
-                    <div class="project-desc">For those called to build their own sacred space. Each kit carries the seeds of understanding — circuits that teach, components that invite exploration and reverent making.</div>
-                    <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Kits">Preorder</a>
-                </article>
-                <article class="card">
-                    <div class="project-name">CRUMB Heritage</div>
-                    <div class="project-desc">Tools and artifacts that honor the craft traditions that came before us — mechanical instruments, analog companions, and tactile wonders that connect us to deeper rhythms.</div>
-                    <a class="seed-cta" href="mailto:Wja326@lehigh.edu?subject=Crumb%20Heritage">Preorder</a>
-                </article>
-            </div>
-        </section>
-
-        <section id="contact" class="content portal-enter" aria-labelledby="contact-title">
-            <h2 id="contact-title" class="realm-title">Join the Grove</h2>
-            <p class="realm-lead">If you feel called, plant a CRUMB. All communication is treated with care and discretion.</p>
-            <div style="text-align:center;margin-top:1rem">
-                <a class="seed-cta" href="mailto:Wja326@lehigh.edu">Plant a Crumb — Contact</a>
-            </div>
-            <div style="margin-top:2rem;text-align:center;color:rgba(255,255,255,0.6)">GitHub • LinkedIn • Email</div>
-        </section>
-    </main>
-
-    <footer role="contentinfo">
-        © <span id="year"></span> Wyeth Anzilotti — CRUMB • A living experiment in technology and care
-    </footer>
-
 <script>
-    // small helpers
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const nodes = document.querySelectorAll('.nav-node');
+    const panels = document.querySelectorAll('.content-panel');
 
-    // Intersection observer to toggle portal animations and body realm
-    const sections = document.querySelectorAll('section');
-    const opts = {threshold:0.25, rootMargin:'0px 0px -20% 0px'};
-    const realmMap = {
-        about: 'roots',
-        crumb: 'trunk',
-        vision: 'branches',
-        projects: 'branches',
-        contact: 'branches'
-    };
-
-    const io = new IntersectionObserver((entries)=>{
-        entries.forEach(entry=>{
-            if(entry.isIntersecting){
-                entry.target.classList.remove('portal-enter');
-                entry.target.classList.add('portal-active');
-                const id = entry.target.id;
-                const realm = realmMap[id] || 'trunk';
-                document.body.setAttribute('data-realm', realm);
-            } else {
-                // allow re-entry effect
-                entry.target.classList.remove('portal-active');
-                entry.target.classList.add('portal-enter');
-            }
-        });
-    }, opts);
-
-    document.querySelectorAll('section').forEach(s=>io.observe(s));
-
-    // navigation active state
-    function updateNavActive(){
-        let current = 'about';
-        sections.forEach(s=>{
-            const rect = s.getBoundingClientRect();
-            if(rect.top <= window.innerHeight*0.45 && rect.bottom >= window.innerHeight*0.25){
-                current = s.id;
-            }
-        });
-        document.querySelectorAll('.nav-links a').forEach(a=>{
-            a.classList.toggle('active', a.getAttribute('href') === '#'+current);
-        });
-    }
-    window.addEventListener('scroll', updateNavActive);
-    window.addEventListener('load', updateNavActive);
-
-    // simple hover tooltips for chakra nodes (progressive enhancement)
-    document.querySelectorAll('.chakra-node').forEach((node, i)=>{
-        node.addEventListener('mouseenter', (event)=> {
-            const tip = document.createElement('div');
-            tip.className = 'node-tip';
-            tip.innerText = ['Intuition','Connection','Presence','Play','Ground'][i%5];
-            tip.style.position='fixed';
-            tip.style.background='rgba(2,8,18,0.7)';
-            tip.style.padding='6px 10px';
-            tip.style.borderRadius='8px';
-            tip.style.color='white';
-            tip.style.top=(event.clientY+12)+'px';
-            tip.style.left=(event.clientX+12)+'px';
-            tip.style.zIndex=9999;
-            tip.style.pointerEvents='none';
-            document.body.appendChild(tip);
-            node._tip=tip;
-        });
-        node.addEventListener('mouseleave', ()=> {
-            if(node._tip) node._tip.remove();
+    nodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const target = node.getAttribute('data-target');
+            
+            nodes.forEach(n => n.classList.remove('active'));
+            node.classList.add('active');
+            
+            panels.forEach(panel => {
+                if(panel.getAttribute('data-content') === target){
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
         });
     });
 
-    // clicking the seed gently pulses the tree as ritual feedback
-    const seed = document.getElementById('seed');
-    seed.addEventListener('click', ()=>{
-        const tree = document.querySelector('.tree');
-        tree.style.transform='scale(1.02)';
-        setTimeout(()=>tree.style.transform='scale(1)',380);
-    });
-
-    // keyboard nav: numbers to quick-navigate sections (1:roots,2:trunk,3:branches)
-    window.addEventListener('keydown', e=>{
-        if(e.key === '1') document.querySelector('#about').scrollIntoView({behavior:'smooth'});
-        if(e.key === '2') document.querySelector('#crumb').scrollIntoView({behavior:'smooth'});
-        if(e.key === '3') document.querySelector('#vision').scrollIntoView({behavior:'smooth'});
-        if(e.key === '4') document.querySelector('#projects').scrollIntoView({behavior:'smooth'});
-        if(e.key === '5') document.querySelector('#contact').scrollIntoView({behavior:'smooth'});
-    });
-
-    // smooth halo node interactions
-    document.querySelectorAll('.halo .node').forEach(node => {
-        node.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = node.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-            if(targetSection) {
-                targetSection.scrollIntoView({behavior:'smooth'});
-            }
-        });
+    // Keyboard navigation
+    window.addEventListener('keydown', e => {
+        const keys = ['1','2','3','4','5'];
+        const targets = ['roots','trunk','branches','grove','contact'];
+        const index = keys.indexOf(e.key);
+        if(index !== -1){
+            const node = document.querySelector(`[data-target="${targets[index]}"]`);
+            if(node) node.click();
+        }
     });
 </script>
 </body>
