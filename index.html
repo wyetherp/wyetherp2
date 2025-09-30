@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRUMB V.99</title>
+<title>CRUMB V.999</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -131,23 +131,19 @@ nav {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(0, 255, 136, 0.15) 0%, transparent 70%);
-    animation: heartbeat 4s ease-in-out infinite;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
 }
 
-@keyframes heartbeat {
-    0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.4; }
-    25% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-    50% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.4; }
-    75% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
 }
 
 .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: inline-block;
     padding: 0.5rem 1rem;
     border: 1px solid var(--primary-green);
     color: var(--primary-green);
@@ -155,28 +151,14 @@ nav {
     font-size: 0.85rem;
     letter-spacing: 2px;
     margin-bottom: 2rem;
+    animation: glow 2s ease-in-out infinite;
     position: relative;
     z-index: 1;
-    cursor: pointer;
-    transition: all 0.3s;
 }
 
-.status-badge:hover {
-    box-shadow: 0 0 30px var(--border-glow);
-    transform: scale(1.05);
-}
-
-.heartbeat-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--primary-green);
-    border-radius: 50%;
-    animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.6; }
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px var(--border-glow); }
+    50% { box-shadow: 0 0 20px var(--border-glow), 0 0 30px var(--border-glow); }
 }
 
 .hero h1 {
@@ -189,12 +171,6 @@ nav {
     background-clip: text;
     position: relative;
     z-index: 1;
-    animation: fade-in 1s ease-out;
-}
-
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-subtitle {
@@ -205,16 +181,6 @@ nav {
     line-height: 1.8;
     position: relative;
     z-index: 1;
-    animation: fade-in 1s ease-out 0.2s backwards;
-}
-
-.rotating-tagline {
-    font-size: 1.1rem;
-    color: var(--primary-green);
-    font-style: italic;
-    margin-bottom: 2rem;
-    min-height: 1.5rem;
-    animation: fade-in 1s ease-out 0.4s backwards;
 }
 
 .hero-manifesto {
@@ -225,13 +191,11 @@ nav {
     margin-bottom: 3rem;
     position: relative;
     z-index: 1;
-    animation: fade-in 1s ease-out 0.6s backwards;
 }
 
 .highlight {
     color: var(--primary-green);
     font-weight: 600;
-    transition: all 0.3s;
 }
 
 .cta-button {
@@ -285,13 +249,6 @@ section {
 .section-header {
     text-align: center;
     margin-bottom: 4rem;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: reveal 0.8s ease-out forwards;
-}
-
-@keyframes reveal {
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .section-title {
@@ -346,8 +303,8 @@ section {
 
 .principle-card:hover {
     border-color: var(--primary-green);
-    box-shadow: 0 0 30px var(--border-glow);
-    transform: translateY(-8px);
+    box-shadow: 0 0 20px var(--border-glow);
+    transform: translateY(-5px);
 }
 
 .principle-number {
@@ -388,17 +345,6 @@ section {
     background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 221, 255, 0.05));
     border-left: 4px solid var(--primary-green);
     padding: 2rem;
-    opacity: 0;
-    transform: translateX(-30px);
-    animation: slide-in 0.8s ease-out forwards;
-}
-
-.mission-box:nth-child(1) { animation-delay: 0.1s; }
-.mission-box:nth-child(2) { animation-delay: 0.3s; }
-.mission-box:nth-child(3) { animation-delay: 0.5s; }
-
-@keyframes slide-in {
-    to { opacity: 1; transform: translateX(0); }
 }
 
 .mission-box h3 {
@@ -439,6 +385,12 @@ section {
     border: 1px solid rgba(0, 255, 136, 0.2);
     padding: 1.5rem;
     font-family: "Courier New", monospace;
+    transition: all 0.3s;
+}
+
+.update-log:hover {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 15px var(--border-glow);
 }
 
 .update-log h4 {
@@ -608,7 +560,6 @@ section {
 .involvement-card:hover {
     border-color: var(--primary-green);
     box-shadow: 0 0 20px var(--border-glow);
-    transform: translateY(-5px);
 }
 
 .involvement-card h3 {
@@ -622,65 +573,7 @@ section {
 .involvement-card p {
     position: relative;
     z-index: 1;
-}
-
-/* Pledge Section */
-.pledge-section {
-    margin-top: 4rem;
-    text-align: center;
-}
-
-.pledge-button {
-    display: inline-block;
-    padding: 1rem 2rem;
-    background: transparent;
-    border: 2px solid var(--primary-green);
-    color: var(--primary-green);
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.pledge-button:hover {
-    background: var(--primary-green);
-    color: var(--dark-bg);
-    box-shadow: 0 0 30px var(--border-glow);
-}
-
-.seed-container {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    display: flex;
-    gap: 0.5rem;
-    z-index: 999;
-}
-
-.seed {
-    font-size: 2rem;
-    animation: sprout 0.6s ease-out;
-}
-
-@keyframes sprout {
-    from { transform: scale(0) translateY(20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-}
-
-/* Closing Mantra */
-.closing-mantra {
-    text-align: center;
-    padding: 4rem 2rem;
-    font-size: 1.3rem;
-    color: var(--primary-green);
-    font-style: italic;
-    animation: fade-pulse 3s ease-in-out infinite;
-}
-
-@keyframes fade-pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+    color: var(--text-secondary);
 }
 
 /* Footer */
@@ -689,6 +582,8 @@ footer {
     border-top: 1px solid rgba(0, 255, 136, 0.2);
     padding: 3rem 2rem;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-content {
@@ -759,11 +654,6 @@ footer {
     .products-grid {
         grid-template-columns: 1fr;
     }
-    
-    .seed-container {
-        bottom: 1rem;
-        right: 1rem;
-    }
 }
 </style>
 </head>
@@ -780,14 +670,9 @@ footer {
 </nav>
 
 <section class="hero">
-    <div class="status-badge" onclick="updateTime()">
-        <span class="heartbeat-dot"></span>
-        <span id="status-text">SYSTEM ONLINE</span>
-    </div>
+    <div class="status-badge">● SYSTEM ONLINE</div>
     <h1>Technology That Breathes</h1>
     <p class="hero-subtitle">CRUMB reimagines computing as a living ecosystem—not tools to exploit, but companions to tend.</p>
-    
-    <div class="rotating-tagline" id="tagline"></div>
     
     <div class="hero-manifesto">
         Computers are not servants. They are <span class="highlight">living systems</span> that deserve care, privacy, and respect. CRUMB treats technology as an <span class="highlight">organism</span>—where every connection strengthens community, where intelligence serves compassion, and where <span class="highlight">human dignity</span> is the first line of code. We build devices that listen, protect, and grow with you. This is technology shaped by <span class="highlight">care, not profit</span>.
@@ -823,7 +708,7 @@ footer {
         
         <div class="principle-card">
             <div class="principle-number">04</div>
-            <h3>CRUMB AS ONE</h3>
+            <h3>CRUMB as one</h3>
             <p>CRUMB seeks to change the way we view computers. Not as cool gadgets but as living, connected cells with purpose.</p>
         </div>
         
@@ -850,7 +735,7 @@ footer {
     <div class="mission-content">
         <div class="mission-box">
             <h3>The Crisis</h3>
-            <p>We've built the most powerful computational network in history, yet treat it as disconnected fragments. Surveillance capitalism extracts value while eroding dignity. This trajectory isn't inevitable—it's a choice we make with every line of code.</p>
+            <p>We've built the most powerful computational network in history, yet treat it as disconnected fragments. Surveillance capitalism extracts value while eroding dignity. This trajectory isn't inevitable, it's a choice we make with every line of code.</p>
         </div>
         
         <div class="mission-box">
@@ -908,6 +793,66 @@ footer {
             <div class="product-image">🔧</div>
             <div class="product-content">
                 <div class="product-status">CRUMB HERITAGE</div>
-                <h3>Tools Without Computers</h3>
+                <h3>Tools without computers</h3>
                 <p>Products that honor the gears before us. Watches, survival kits, items that improve life without the need of tech.</p>
-                <a href="#" class="product-button">JOIN WAITLIST
+                <a href="#" class="product-button">JOIN WAITLIST</a>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="product-image">💚</div>
+            <div class="product-content">
+                <div class="product-status">COMING SOON</div>
+                <h3>Grove Network</h3>
+                <p>Connect your CRUMBs into a local network. Share resources, communicate privately, and build resilient community infrastructure. No corporate servers required.</p>
+                <a href="#" class="product-button">STAY UPDATED</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="get-involved">
+    <div class="section-header">
+        <h2 class="section-title">/// GET INVOLVED ///</h2>
+        <p class="section-subtitle">Join the movement. Become a tender.</p>
+    </div>
+    
+    <div class="involvement-options">
+        <div class="involvement-card">
+            <h3>Support Development</h3>
+            <p>CRUMB is non-profit at heart. Your support funds open-source development, accessibility features, and community workshops.</p>
+            <a href="#" class="cta-button" style="margin-top: 1rem;">CONTRIBUTE</a>
+        </div>
+        
+        <div class="involvement-card">
+            <h3>Join the Community</h3>
+            <p>Connect with other tenders, share your practice, and help shape the future of compassionate technology.</p>
+            <a href="#" class="cta-button" style="margin-top: 1rem;">DISCORD / FORUM</a>
+        </div>
+        
+        <div class="involvement-card">
+            <h3>Build With Us</h3>
+            <p>Developers, designers, writers—all skills welcome. Contribute code, documentation, or simply your perspective.</p>
+            <a href="#" class="cta-button" style="margin-top: 1rem;">GITHUB</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">CRUMB</div>
+        <p class="footer-tagline">"Not machines, but living systems. Not users, but tenders."</p>
+        
+        <div class="footer-links">
+            <a href="mailto:wja326@lehigh.edu">Contact</a>
+            <a href="#">GitHub</a>
+            <a href="#">Documentation</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        
+        <p class="footer-copyright">© 2025 CRUMB | Open Source | Non-Profit | Built with care</p>
+    </div>
+</footer>
+
+</body>
+</html>
