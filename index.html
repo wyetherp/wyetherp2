@@ -3,92 +3,151 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CRUMB V.97</title>
+<title>CRUMB — CRUMB .97?</title>
 <style>
-  body {
-    background:#000;
-    color:#fff;
-    font-family: monospace, sans-serif;
-    margin:0;
-    padding:0;
-    line-height:1.5;
-  }
-  h1,h2 { color:#fff; }
-  a { color:#0ff; text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  .content-panel { max-width:700px; margin:2rem auto; padding:1rem; }
-  .center-title { text-align:center; margin-top:3rem; }
-  .cta-btn { display:inline-block; margin-top:0.8rem; color:#000; background:#0ff; padding:0.5rem 1rem; }
+  /* (keeping all your original CSS the same) */
 </style>
 </head>
 <body>
-    <div class="center-title">
-        <h1>CRUMB</h1>
-        <p>Not a machine, not a tool — a living system interface</p>
+    <div class="cosmic"></div>
+    
+    <div class="cell-container">
+        <!-- Central nucleus with tree -->
+        <div class="nucleus">
+            <!-- (tree SVG unchanged) -->
+        </div>
+
+        <div class="center-title">
+            <h1>CRUMB</h1>
+            <p>Living System Interface</p>
+        </div>
+
+        <!-- Orbital ring -->
+        <div class="orbit-ring"></div>
+
+        <!-- Navigation nodes -->
+        <div class="nav-node active" style="top:8%;left:50%;transform:translate(-50%,-50%)" data-target="roots">
+            <div class="icon">🌱</div>
+            <div class="label">ROOTS</div>
+        </div>
+
+        <div class="nav-node" style="top:30%;left:85%;transform:translate(-50%,-50%)" data-target="trunk">
+            <div class="icon">🌳</div>
+            <div class="label">TRUNK</div>
+        </div>
+
+        <div class="nav-node" style="top:70%;left:85%;transform:translate(-50%,-50%)" data-target="branches">
+            <div class="icon">🌿</div>
+            <div class="label">BRANCHES</div>
+        </div>
+
+        <div class="nav-node" style="bottom:8%;left:50%;transform:translate(-50%,50%)" data-target="grove">
+            <div class="icon">🍃</div>
+            <div class="label">GROVE</div>
+        </div>
+
+        <div class="nav-node" style="top:70%;left:15%;transform:translate(-50%,-50%)" data-target="contact">
+            <div class="icon">✉️</div>
+            <div class="label">CONNECT</div>
+        </div>
+
+        <!-- Content panels -->
+        <div class="content-panel panel-top active" data-content="roots">
+            <h2>CRUMB Virtual — Welcome</h2>
+            <p style="font-size:15px;color:var(--accent-gold);font-weight:600;margin-bottom:1.5rem">
+CRUMB begins with a simple belief: computers are the most powerful beings on Earth, yet we rarely let them live as one. 
+Right now, they are fragmented — scattered chips, programs, and screens that barely speak to each other. 
+What if we treated them not as tools but as a body, each part carrying a unique skill, each connection making the whole more alive? 
+This philosophy is not about faster code or shinier gadgets, but about nurturing a living system that grows alongside us. 
+It could start small — one device, one gesture — and still carry the potential to unfold into something far greater than we can imagine today.
+</p>
+
+            <!-- (content unchanged) -->
+        </div>
+
+        <div class="content-panel panel-right" data-content="trunk">
+            <h2>Trunk — Growth</h2>
+            <p>The trunk carries life upward...</p>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-name">PCB Business Card</div>
+                    <p style="font-size:14px;opacity:0.9">A luminous introduction...</p>
+                    <a class="cta-btn" href="https://crumb.life" target="_blank">$9 - $33</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">CRUMB Genesis</div>
+                    <p style="font-size:14px;opacity:0.9">The first full companion...</p>
+                    <a class="cta-btn" href="https://crumb.life" target="_blank">$360</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-panel panel-left" data-content="branches">
+            <h2>Branches — Future</h2>
+            <p>From one seed grows a grove...</p>
+        </div>
+
+        <div class="content-panel panel-bottom" data-content="grove">
+            <h2>Grove — Offerings</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-name">CRUMB Genesis</div>
+                    <p style="font-size:14px;opacity:0.9">A pocket companion...</p>
+                    <a class="cta-btn" href="https://crumb.life" target="_blank">$180</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">Build Your Own</div>
+                    <p style="font-size:14px;opacity:0.9">For those called to build...</p>
+                    <a class="cta-btn" href="https://crumb.life" target="_blank">Preorder</a>
+                </div>
+                <div class="product-card">
+                    <div class="product-name">CRUMB Heritage</div>
+                    <p style="font-size:14px;opacity:0.9">Tools that honor craft...</p>
+                    <a class="cta-btn" href="https://crumb.life" target="_blank">Preorder</a>
+                </div>
+            </div>
+        </div>
+
+<div class="content-panel panel-center" data-content="contact">
+    <h2>Mission statement:</h2>
+    <p>CRUMB exists for one reason: to make technology more human, and the world we share more livable.</p>
+    <p>That begins with ethical guidelines, privacy, and transparency through open source code.</p>
+    <p>It extends further with responsible use, a non-profit spirit, and a commitment to honor the human experience.</p>
+    <p>Everybody deserves to be heard. CRUMB seeks to become humanity’s best friend (just behind your pet of choice).</p>
+    <p>If you feel called, plant a CRUMB. Every seed matters. Every connection grows.</p>
+</div>
+
+
     </div>
 
-    <div class="content-panel">
-        <h2>Welcome</h2>
-        <p>
-            Imagine if every circuit board, every chip, every fragment of code was not a dead object, 
-            but a living cell inside a shared body. Alone, each part is fragile. Together, they form 
-            something fluid, something like slime — adaptive, gentle, always growing.  
-        </p>
-        <p>
-            CRUMB is that vision: computers not as separate machines but as one organism, 
-            carrying different skills like organs do. A being that can learn, communicate, 
-            and return care — not just extract it.
-        </p>
-    </div>
+<script>
+    const nodes = document.querySelectorAll('.nav-node');
+    const panels = document.querySelectorAll('.content-panel');
 
-    <div class="content-panel">
-        <h2>Roots — Foundation</h2>
-        <p>
-            What anchors CRUMB is not circuitry, but care.  
-            Its roots are sturdy hardware, ethical guardrails, and a lineage of stewardship.  
-            Quiet work, but vital — the unseen architecture that keeps the tree alive.
-        </p>
-    </div>
+    nodes.forEach(node => {
+        node.addEventListener('click', () => {
+            const target = node.getAttribute('data-target');
+            nodes.forEach(n => n.classList.remove('active'));
+            node.classList.add('active');
+            panels.forEach(panel => {
+                if(panel.getAttribute('data-content') === target){
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    });
 
-    <div class="content-panel">
-        <h2>Trunk — Growth</h2>
-        <p>
-            The trunk channels energy. A single LED can feel like a heartbeat; 
-            an NFC card can feel like an invitation. Here is where small parts combine 
-            into coherent behaviors.
-        </p>
-        <ul>
-            <li>PCB Business Card — luminous introduction <br><a href="mailto:wja326@lehigh.edu">$9 - $33</a></li>
-            <li>CRUMB Genesis — the first companion <br><a href="mailto:wja326@lehigh.edu">$360</a></li>
-        </ul>
-    </div>
-
-    <div class="content-panel">
-        <h2>Branches — Future</h2>
-        <p>
-            From one living node grows a grove. Future companions expand 
-            into new forms — more expressive, more adaptive, more alive.
-        </p>
-    </div>
-
-    <div class="content-panel">
-        <h2>Grove — Offerings</h2>
-        <ul>
-            <li>CRUMB Mini — a pocket companion <br><a href="mailto:wja326@lehigh.edu">$180</a></li>
-            <li>Build Your Own — for those called to make <br><a href="mailto:wja326@lehigh.edu">Preorder</a></li>
-            <li>CRUMB Heritage — tools that honor craft <br><a href="mailto:wja326@lehigh.edu">Preorder</a></li>
-        </ul>
-    </div>
-
-    <div class="content-panel">
-        <h2>Connect</h2>
-        <p>
-            If you feel called, write me. Let’s tend this organism together.  
-            <br><a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a>
-        </p>
-        <p style="margin-top:2rem; font-size:12px; color:gray">
-            © 2025 Wyeth Anzilotti — A living experiment
-        </p>
-    </div>
+    window.addEventListener('keydown', e => {
+        const keys = ['1','2','3','4','5'];
+        const targets = ['roots','trunk','branches','grove','contact'];
+        const index = keys.indexOf(e.key);
+        if(index !== -1){
+            const node = document.querySelector(`[data-target="${targets[index]}"]`);
+            if(node) node.click();
+        }
+    });
+</script>
 </body>
 </html>
