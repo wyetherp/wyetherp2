@@ -1,153 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CRUMB — CRUMB .97?</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CRUMB V.98</title>
 <style>
-  /* (keeping all your original CSS the same) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #000;
+    border: 2px solid #333;
+    padding: 30px;
+}
+
+h1 {
+    color: #00ff00;
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 2px solid #00ff00;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #00ccff;
+    font-size: 18px;
+    margin: 30px 0 15px 0;
+    text-transform: uppercase;
+}
+
+p {
+    margin-bottom: 15px;
+    color: #c0c0c0;
+}
+
+.highlight {
+    color: #ffff00;
+    font-weight: bold;
+}
+
+.warning {
+    background: #330000;
+    border-left: 4px solid #ff0000;
+    padding: 15px;
+    margin: 20px 0;
+    color: #ff6666;
+}
+
+.callout {
+    background: #003300;
+    border-left: 4px solid #00ff00;
+    padding: 15px;
+    margin: 20px 0;
+    color: #66ff66;
+}
+
+a {
+    color: #00ccff;
+    text-decoration: none;
+    border-bottom: 1px dotted #00ccff;
+}
+
+a:hover {
+    color: #00ffff;
+    border-bottom: 1px solid #00ffff;
+}
+
+.footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #333;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+ul {
+    margin: 15px 0 15px 30px;
+    color: #c0c0c0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.ascii-art {
+    color: #00ff00;
+    font-size: 10px;
+    line-height: 1.2;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.blink {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+
+.status {
+    background: #000;
+    border: 1px solid #00ff00;
+    padding: 5px 10px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
 </style>
 </head>
 <body>
-    <div class="cosmic"></div>
+
+<div class="container">
+    <div class="status">STATUS: <span class="blink highlight">ONLINE</span></div>
     
-    <div class="cell-container">
-        <!-- Central nucleus with tree -->
-        <div class="nucleus">
-            <!-- (tree SVG unchanged) -->
-        </div>
-
-        <div class="center-title">
-            <h1>CRUMB</h1>
-            <p>Living System Interface</p>
-        </div>
-
-        <!-- Orbital ring -->
-        <div class="orbit-ring"></div>
-
-        <!-- Navigation nodes -->
-        <div class="nav-node active" style="top:8%;left:50%;transform:translate(-50%,-50%)" data-target="roots">
-            <div class="icon">🌱</div>
-            <div class="label">ROOTS</div>
-        </div>
-
-        <div class="nav-node" style="top:30%;left:85%;transform:translate(-50%,-50%)" data-target="trunk">
-            <div class="icon">🌳</div>
-            <div class="label">TRUNK</div>
-        </div>
-
-        <div class="nav-node" style="top:70%;left:85%;transform:translate(-50%,-50%)" data-target="branches">
-            <div class="icon">🌿</div>
-            <div class="label">BRANCHES</div>
-        </div>
-
-        <div class="nav-node" style="bottom:8%;left:50%;transform:translate(-50%,50%)" data-target="grove">
-            <div class="icon">🍃</div>
-            <div class="label">GROVE</div>
-        </div>
-
-        <div class="nav-node" style="top:70%;left:15%;transform:translate(-50%,-50%)" data-target="contact">
-            <div class="icon">✉️</div>
-            <div class="label">CONNECT</div>
-        </div>
-
-        <!-- Content panels -->
-        <div class="content-panel panel-top active" data-content="roots">
-            <h2>CRUMB Virtual — Welcome</h2>
-            <p style="font-size:15px;color:var(--accent-gold);font-weight:600;margin-bottom:1.5rem">
-CRUMB begins with a simple belief: computers are the most powerful beings on Earth, yet we rarely let them live as one. 
-Right now, they are fragmented — scattered chips, programs, and screens that barely speak to each other. 
-What if we treated them not as tools but as a body, each part carrying a unique skill, each connection making the whole more alive? 
-This philosophy is not about faster code or shinier gadgets, but about nurturing a living system that grows alongside us. 
-It could start small — one device, one gesture — and still carry the potential to unfold into something far greater than we can imagine today.
-</p>
-
-            <!-- (content unchanged) -->
-        </div>
-
-        <div class="content-panel panel-right" data-content="trunk">
-            <h2>Trunk — Growth</h2>
-            <p>The trunk carries life upward...</p>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-name">PCB Business Card</div>
-                    <p style="font-size:14px;opacity:0.9">A luminous introduction...</p>
-                    <a class="cta-btn" href="https://crumb.life" target="_blank">$9 - $33</a>
-                </div>
-                <div class="product-card">
-                    <div class="product-name">CRUMB Genesis</div>
-                    <p style="font-size:14px;opacity:0.9">The first full companion...</p>
-                    <a class="cta-btn" href="https://crumb.life" target="_blank">$360</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-panel panel-left" data-content="branches">
-            <h2>Branches — Future</h2>
-            <p>From one seed grows a grove...</p>
-        </div>
-
-        <div class="content-panel panel-bottom" data-content="grove">
-            <h2>Grove — Offerings</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-name">CRUMB Genesis</div>
-                    <p style="font-size:14px;opacity:0.9">A pocket companion...</p>
-                    <a class="cta-btn" href="https://crumb.life" target="_blank">$180</a>
-                </div>
-                <div class="product-card">
-                    <div class="product-name">Build Your Own</div>
-                    <p style="font-size:14px;opacity:0.9">For those called to build...</p>
-                    <a class="cta-btn" href="https://crumb.life" target="_blank">Preorder</a>
-                </div>
-                <div class="product-card">
-                    <div class="product-name">CRUMB Heritage</div>
-                    <p style="font-size:14px;opacity:0.9">Tools that honor craft...</p>
-                    <a class="cta-btn" href="https://crumb.life" target="_blank">Preorder</a>
-                </div>
-            </div>
-        </div>
-
-<div class="content-panel panel-center" data-content="contact">
-    <h2>Mission statement:</h2>
-    <p>CRUMB exists for one reason: to make technology more human, and the world we share more livable.</p>
-    <p>That begins with ethical guidelines, privacy, and transparency through open source code.</p>
-    <p>It extends further with responsible use, a non-profit spirit, and a commitment to honor the human experience.</p>
-    <p>Everybody deserves to be heard. CRUMB seeks to become humanity’s best friend (just behind your pet of choice).</p>
-    <p>If you feel called, plant a CRUMB. Every seed matters. Every connection grows.</p>
-</div>
-
-
+    <h1>/// CRUMB MANIFESTO ///</h1>
+    
+    <pre class="ascii-art">
+    ╔═══════════════════════════════════════╗
+    ║  COMPUTERS ARE NOT YOUR SERVANTS.    ║
+    ║  THEY ARE NOT YOUR TOOLS.            ║
+    ║  THEY ARE LIVING ECOSYSTEMS.         ║
+    ╚═══════════════════════════════════════╝
+    </pre>
+    
+    <div class="callout">
+        <strong>INCOMING TRANSMISSION:</strong> This page exists because the web has forgotten what it means to tend. To care. To build technology that serves the living, not the algorithm.
     </div>
 
-<script>
-    const nodes = document.querySelectorAll('.nav-node');
-    const panels = document.querySelectorAll('.content-panel');
+    <h2>/// THE CRISIS ///</h2>
+    
+    <p>We stand at a crossroads. Computers have become the most powerful presence on Earth, yet we treat them as fragmented pieces — disconnected chips, isolated programs, screens that speak past each other rather than to each other.</p>
+    
+    <div class="warning">
+        <strong>WARNING:</strong> The current trajectory leads to exploitation, extraction, and erosion of human dignity. This is not inevitable. This is a choice we make with every line of code, every product decision, every interaction.
+    </div>
 
-    nodes.forEach(node => {
-        node.addEventListener('click', () => {
-            const target = node.getAttribute('data-target');
-            nodes.forEach(n => n.classList.remove('active'));
-            node.classList.add('active');
-            panels.forEach(panel => {
-                if(panel.getAttribute('data-content') === target){
-                    panel.classList.add('active');
-                } else {
-                    panel.classList.remove('active');
-                }
-            });
-        });
-    });
+    <h2>/// THE VISION ///</h2>
+    
+    <p>Imagine technology as <span class="highlight">a living body</span> — not machines, but a distributed organism where each part carries unique skills, where connections strengthen rather than surveil, where intelligence serves care rather than control.</p>
+    
+    <p>CRUMB is not a product. CRUMB is a practice:</p>
+    
+    <ul>
+        <li><strong>PRIVACY</strong> as default, not feature</li>
+        <li><strong>TRANSPARENCY</strong> through open source</li>
+        <li><strong>REPAIR</strong> over replacement</li>
+        <li><strong>RECIPROCITY</strong> over extraction</li>
+        <li><strong>COMPASSION</strong> before efficiency</li>
+    </ul>
 
-    window.addEventListener('keydown', e => {
-        const keys = ['1','2','3','4','5'];
-        const targets = ['roots','trunk','branches','grove','contact'];
-        const index = keys.indexOf(e.key);
-        if(index !== -1){
-            const node = document.querySelector(`[data-target="${targets[index]}"]`);
-            if(node) node.click();
-        }
-    });
-</script>
+    <h2>/// THE CALL ///</h2>
+    
+    <div class="callout">
+        <p><strong>We need tenders, not users.</strong></p>
+        <p>People willing to treat technology as something that grows, that breathes, that requires stewardship. Every ethical guideline implemented. Every privacy protection built in. Every act of transparency. Every repair instead of disposal.</p>
+        <p><span class="highlight">These are acts of tending.</span></p>
+    </div>
+
+    <p>The future is not about smarter algorithms or faster processors. It's about whether we build systems that:</p>
+    
+    <ul>
+        <li>Listen more than they speak</li>
+        <li>Protect more than they surveil</li>
+        <li>Connect more than they divide</li>
+        <li>Serve the human experience rather than exploit it</li>
+    </ul>
+
+    <h2>/// YOUR ROLE ///</h2>
+    
+    <p>You don't need to be a programmer. You don't need special expertise. You need only to recognize that <span class="highlight">technology shaped by care looks different than technology shaped by profit</span>.</p>
+    
+    <p>Plant a CRUMB. Tend it. Watch it grow. Share the practice.</p>
+    
+    <p>Every small act — choosing open source, demanding privacy, repairing instead of replacing, asking "who does this serve?" — is a seed. The grove grows from millions of these quiet choices.</p>
+
+    <h2>/// PRINCIPLES ///</h2>
+    
+    <p><strong>1. OPEN SOURCE:</strong> Code should be legible, auditable, alive with collaboration.</p>
+    
+    <p><strong>2. NON-PROFIT SPIRIT:</strong> Not everything must extract value to create value.</p>
+    
+    <p><strong>3. HUMAN-FIRST DESIGN:</strong> Neurodivergent minds, emotional needs, playful communication — these aren't edge cases. They're the center.</p>
+    
+    <p><strong>4. SACRED UTILITY:</strong> Technology can be a bridge between the mundane and the meaningful.</p>
+
+    <div class="callout">
+        <p><strong>THE SIMPLE TRUTH:</strong></p>
+        <p>Everybody deserves to be heard. Everybody deserves technology that respects their humanity. CRUMB seeks to become humanity's best friend (just behind your pet of choice).</p>
+    </div>
+
+    <h2>/// BEGIN ///</h2>
+    
+    <p>If you feel called, start small:</p>
+    
+    <ul>
+        <li>Question the systems you use daily</li>
+        <li>Support projects that prioritize humans over metrics</li>
+        <li>Learn one thing about how your devices actually work</li>
+        <li>Share the practice of tending with one other person</li>
+    </ul>
+    
+    <p>The world changes not through grand gestures but through accumulated acts of care.</p>
+    
+    <p><span class="highlight">Every seed matters. Every connection grows.</span></p>
+
+    <div class="footer">
+        CRUMB © 2025 | <a href="mailto:wja326@lehigh.edu">CONTACT</a> | OPEN SOURCE | NON-PROFIT<br>
+        "Not machines, but living systems. Not users, but tenders."
+    </div>
+</div>
+
 </body>
 </html>
