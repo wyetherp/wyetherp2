@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRUMB V1 TEST - Living Technology</title>
+<title>CRUMB Living Prototype V1</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,10 +15,6 @@
     --text-primary: #e8e8e8;
     --text-secondary: #999999;
     --border-glow: rgba(0, 255, 136, 0.3);
-    --fire-red: #ff4444;
-    --water-blue: #4488ff;
-    --earth-brown: #8b6f47;
-    --air-cyan: #00ddff;
 }
 
 body {
@@ -40,9 +36,7 @@ a[href="#main-content"] {
     z-index: 10001;
 }
 
-a[href="#main-content"]:focus {
-    top: 0;
-}
+a[href="#main-content"]:focus { top: 0; }
 
 body::before {
     content: "";
@@ -100,12 +94,6 @@ nav {
     color: var(--primary-green);
     letter-spacing: 3px;
     text-shadow: 0 0 10px var(--border-glow);
-    animation: pulse-glow 3s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-    0%, 100% { text-shadow: 0 0 10px var(--border-glow); }
-    50% { text-shadow: 0 0 20px var(--border-glow), 0 0 30px var(--border-glow); }
 }
 
 .nav-links {
@@ -138,9 +126,7 @@ nav {
     color: var(--primary-green);
 }
 
-.nav-links a:hover::after {
-    width: 100%;
-}
+.nav-links a:hover::after { width: 100%; }
 
 .hero {
     min-height: 100vh;
@@ -213,25 +199,6 @@ nav {
     z-index: 1;
 }
 
-.greeting {
-    font-size: 1.2rem;
-    color: var(--secondary-cyan);
-    margin-top: 2rem;
-    padding: 1rem 2rem;
-    border: 1px solid var(--secondary-cyan);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.greeting:hover {
-    background: rgba(0, 221, 255, 0.1);
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 221, 255, 0.3);
-}
-
 .cta-button {
     display: inline-block;
     padding: 1rem 2.5rem;
@@ -245,7 +212,7 @@ nav {
     position: relative;
     z-index: 1;
     overflow: hidden;
-    margin-top: 1rem;
+    margin: 0.5rem;
 }
 
 .cta-button::before {
@@ -344,6 +311,82 @@ section {
     font-weight: 600;
 }
 
+.why-hardware {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 3rem;
+    background: rgba(17, 17, 17, 0.6);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 16px;
+}
+
+.why-hardware h3 {
+    color: var(--secondary-cyan);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.why-hardware p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.why-hardware ul {
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.why-hardware li {
+    padding: 1rem 0 1rem 2rem;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.why-hardware li:last-child {
+    border-bottom: none;
+}
+
+.why-hardware li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--primary-green);
+    font-weight: bold;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.spec-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+.spec-card:hover {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 20px var(--border-glow);
+}
+
+.spec-card h4 {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-family: "Courier New", monospace;
+}
+
+.spec-card p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
 .use-cases-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -369,11 +412,6 @@ section {
     color: var(--secondary-cyan);
     font-size: 1.3rem;
     margin-bottom: 1rem;
-}
-
-.use-case-card p {
-    color: var(--text-secondary);
-    line-height: 1.7;
 }
 
 #products {
@@ -468,64 +506,6 @@ section {
     line-height: 1.8;
 }
 
-.compass-section {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    background: rgba(17, 17, 17, 0.6);
-    border: 1px solid rgba(0, 255, 136, 0.2);
-    border-radius: 16px;
-}
-
-.compass-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.compass-element {
-    padding: 2rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-left: 4px solid;
-    transition: all 0.3s;
-    opacity: 0;
-    transform: translateY(30px);
-}
-
-.compass-element.fire { border-left-color: var(--fire-red); }
-.compass-element.water { border-left-color: var(--water-blue); }
-.compass-element.earth { border-left-color: var(--earth-brown); }
-.compass-element.air { border-left-color: var(--air-cyan); }
-
-.compass-element:hover {
-    transform: translateX(10px) translateY(0);
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.element-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-.element-name {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.compass-element.fire .element-name { color: var(--fire-red); }
-.compass-element.water .element-name { color: var(--water-blue); }
-.compass-element.earth .element-name { color: var(--earth-brown); }
-.compass-element.air .element-name { color: var(--air-cyan); }
-
-.element-description {
-    color: var(--text-primary);
-    line-height: 1.7;
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-}
-
 .principles-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -592,6 +572,29 @@ section {
     line-height: 1.7;
     position: relative;
     z-index: 1;
+}
+
+.waitlist-section {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 221, 255, 0.05));
+    border: 2px solid var(--primary-green);
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    margin: 4rem auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+.waitlist-section h3 {
+    font-size: 2rem;
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+}
+
+.waitlist-section p {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    line-height: 1.8;
 }
 
 #get-involved {
@@ -794,12 +797,9 @@ footer {
         grid-template-columns: 1fr;
     }
     
-    .compass-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .story-content {
+    .story-content, .why-hardware {
         font-size: 1.05rem;
+        padding: 2rem 1.5rem;
     }
 }
 </style>
@@ -812,23 +812,25 @@ footer {
     <div class="logo">CRUMB</div>
     <ul class="nav-links">
         <li><a href="#about">Story</a></li>
+        <li><a href="#why-hardware">Why Hardware</a></li>
+        <li><a href="#specs">Specs</a></li>
         <li><a href="#use-cases">Use Cases</a></li>
         <li><a href="#products">Artifacts</a></li>
-        <li><a href="#compass">Philosophy</a></li>
         <li><a href="#principles">Principles</a></li>
-        <li><a href="#get-involved">Join</a></li>
         <li><a href="#contact">Connect</a></li>
     </ul>
 </nav>
 
 <main id="main-content">
 <section class="hero">
-    <div class="status-badge">● IN DEVELOPMENT</div>
+    <div class="status-badge">● PROTOTYPE PHASE</div>
     <h1>For Luke.<br>Not to fix—<br>to understand.</h1>
-    <p class="hero-subtitle">A calculator-sized companion that learns your rhythms, not your data.</p>
+    <p class="hero-subtitle">A pocket-sized companion that learns your rhythms, not your data.</p>
     
-    <div class="greeting" id="greeting">I'm CRUMB. Click to meet me.</div>
-    <a href="#about" class="cta-button">READ THE STORY</a>
+    <div style="margin-top: 2rem; position: relative; z-index: 1;">
+        <a href="#about" class="cta-button">READ THE STORY</a>
+        <a href="#waitlist" class="cta-button">JOIN WAITLIST</a>
+    </div>
     <div class="scroll-indicator">↓</div>
 </section>
 
@@ -847,9 +849,71 @@ footer {
             "The problem isn't the person. The problem is the interface."
         </div>
         
-        <p>Every notification assumes you want interruption. Every UI assumes linear thinking. So I started asking: what if we built differently? CRUMB is my attempt at an answer. A companion device that adapts to you—your rhythms, your routines, your way of thinking.</p>
+        <p>Every notification assumes you want interruption. Every UI assumes linear thinking. So I started asking: what if we built differently? CRUMB is my attempt at an answer—a companion device that adapts to you.</p>
         
-        <p>It's built with Raspberry Pi Zero, NFC readers, Python—housed in a calculator shell that fits in your pocket. Like the Shire's tools: small, lasting, made for human hands. It runs locally. Your data stays yours. No cloud dependency. No planned obsolescence. Just you and a device that grows with you.</p>
+        <p>Built with Raspberry Pi Zero, NFC readers, Python. Housed in a calculator shell that fits in your pocket. It runs locally. Your data stays yours. No cloud dependency. No planned obsolescence.</p>
+    </div>
+</section>
+
+<section id="why-hardware">
+    <div class="section-header">
+        <h2 class="section-title">WHY NOT JUST AN APP?</h2>
+        <p class="section-subtitle">Hardware creates boundaries that software can't</p>
+    </div>
+    
+    <div class="why-hardware">
+        <h3>Apps live in your phone. Your phone owns your attention.</h3>
+        <p>CRUMB is separate. It doesn't compete with Instagram, email, or texts. It exists to help you <span class="highlight">disconnect from the attention economy</span>—not add to it.</p>
+        
+        <p><strong>What makes hardware different:</strong></p>
+        <ul>
+            <li><strong>Physical presence matters.</strong> You can hold CRUMB. Click its buttons. Feel haptic feedback. Tactile interaction creates stronger habit formation than touching glass.</li>
+            <li><strong>No app store gatekeepers.</strong> Your device, your rules. Update when you want. Modify the code. Add features without waiting for approval.</li>
+            <li><strong>Battery life measured in days, not hours.</strong> Low-power hardware means CRUMB doesn't die halfway through your day.</li>
+            <li><strong>One function, done well.</strong> Apps get bloated with features. Hardware constraints force focus. CRUMB does companion tasks—nothing more, nothing less.</li>
+            <li><strong>True privacy.</strong> No app can promise this. No permissions, no telemetry, no hidden data collection. Airgapped by design.</li>
+        </ul>
+        
+        <p>Apps are convenient. Hardware is intentional. CRUMB asks you to carry something extra because <span class="highlight">separation creates space for mindfulness.</span></p>
+    </div>
+</section>
+
+<section id="specs">
+    <div class="section-header">
+        <h2 class="section-title">TECHNICAL SPECS</h2>
+        <p class="section-subtitle">What's inside Genesis</p>
+    </div>
+    
+    <div class="specs-grid">
+        <div class="spec-card">
+            <h4>PROCESSOR</h4>
+            <p>Raspberry Pi Zero W - 1GHz single-core ARM, 512MB RAM. Runs offline speech recognition, pattern learning algorithms.</p>
+        </div>
+        
+        <div class="spec-card">
+            <h4>CONNECTIVITY</h4>
+            <p>NFC (PN532 reader/writer), Bluetooth Low Energy for optional mesh networking. No cellular. No wifi required after setup.</p>
+        </div>
+        
+        <div class="spec-card">
+            <h4>INTERFACE</h4>
+            <p>WS2812B addressable LEDs, 4 tactile buttons, haptic motor, optional OLED display. Voice input via onboard microphone.</p>
+        </div>
+        
+        <div class="spec-card">
+            <h4>BATTERY</h4>
+            <p>2000mAh rechargeable Li-ion. 3-5 days typical use. USB-C charging. Replaceable battery—not glued shut.</p>
+        </div>
+        
+        <div class="spec-card">
+            <h4>STORAGE</h4>
+            <p>32GB microSD card. All data stored locally. SQLite database for routines and patterns. Fully encrypted.</p>
+        </div>
+        
+        <div class="spec-card">
+            <h4>SOFTWARE</h4>
+            <p>Python 3.x, OpenAI Whisper (offline), custom adaptive learning algorithms. Fully open-source. MIT licensed.</p>
+        </div>
     </div>
 </section>
 
@@ -862,103 +926,32 @@ footer {
     <div class="use-cases-grid">
         <div class="use-case-card">
             <h3>Morning Routine</h3>
-            <p>CRUMB learns you check email at 9am. At 8:55, a gentle haptic pulse—not demanding, just reminding.</p>
+            <p>CRUMB learns you check email at 9am. At 8:55, a gentle haptic pulse—not demanding, just reminding. No screen required.</p>
+        </div>
+        
+        <div class="use-case-card">
+            <h3>Focus Sessions</h3>
+            <p>Press a button to start a Pomodoro timer. LED changes color to show time remaining. Vibrates when it's time for a break.</p>
         </div>
         
         <div class="use-case-card">
             <h3>Fidget-Friendly</h3>
-            <p>Physical buttons you can click without looking. LED patterns you can customize. For minds that need tactile engagement.</p>
+            <p>Physical buttons you can click without looking. LED patterns you can customize. For ADHD minds that need tactile engagement.</p>
         </div>
         
         <div class="use-case-card">
             <h3>Local Contact Sharing</h3>
-            <p>Tap your CRUMB to a friend's—instant contact exchange via NFC. No app permissions, no cloud sync, no data collection.</p>
-        </div>
-    </div>
-</section>
-
-<section id="products">
-    <div class="section-header">
-        <h2 class="section-title">ARTIFACTS</h2>
-        <p class="section-subtitle">What we're building</p>
-    </div>
-    
-    <div class="products-grid">
-        <div class="product-card">
-            <div class="product-image">
-                <img src="BMO.webp" alt="CRUMB Genesis prototype device resembling BMO from Adventure Time">
-            </div>
-            <div class="product-content">
-                <div class="product-status">IN DEVELOPMENT</div>
-                <h3>CRUMB Genesis</h3>
-                <p>A tactile companion housed in a calculator shell. Voice-responsive, pattern-learning, designed for hands that need to fidget and minds that need gentler interfaces. No planned obsolescence. No cloud dependency. Just you and a device that grows with you.</p>
-                <p>Currently in prototype phase. Expected launch: EOY 2025.</p>
-            </div>
+            <p>Tap your CRUMB to a friend's—instant contact exchange via NFC. No app permissions, no cloud sync, no data harvesting.</p>
         </div>
         
-        <div class="product-card">
-            <div class="product-image">
-                <img src="Gemini_Generated_Image_ky9818ky9818ky98.png" alt="Heritage line tools representing durable mechanical design">
-            </div>
-            <div class="product-content">
-                <div class="product-status">CONCEPT</div>
-                <h3>Heritage Line</h3>
-                <p>Before you can tend technology, you tend life itself. Mechanical watches, analog tools, hand-crafted items. Quality objects that don't need batteries—a reminder that good design transcends silicon.</p>
-            </div>
+        <div class="use-case-card">
+            <h3>Mood Tracking</h3>
+            <p>Quick voice note: "Feeling anxious." CRUMB logs it locally with timestamp. Review patterns weekly without typing in apps.</p>
         </div>
         
-        <div class="product-card">
-            <div class="product-image">
-                <img src="Gemini_Generated_Image_cf816ycf816ycf81.png" alt="CRUMB Network visualization showing distributed mesh connectivity">
-            </div>
-            <div class="product-content">
-                <div class="product-status">FUTURE</div>
-                <h3>CRUMB Network</h3>
-                <p>Connect multiple CRUMBs into a mesh network. Share processing power. Communicate device-to-device. Your devices talk directly, forming resilient networks. Like mycelium under a forest floor.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="compass">
-    <div class="section-header">
-        <h2 class="section-title">PHILOSOPHY</h2>
-        <p class="section-subtitle">Natural patterns that guide design</p>
-    </div>
-    
-    <div class="compass-section">
-        <div class="compass-grid">
-            <div class="compass-element fire">
-                <div class="element-icon">🔥</div>
-                <div class="element-name">FIRE</div>
-                <div class="element-description">
-                    Haptic feedback, LED notifications, instant responses. The spark that gets your attention—bright, quick, unmistakable.
-                </div>
-            </div>
-            
-            <div class="compass-element water">
-                <div class="element-icon">💧</div>
-                <div class="element-name">WATER</div>
-                <div class="element-description">
-                    Adaptive routines, learning patterns, emotional check-ins. Flow around your needs. Never rigid, always adjusting.
-                </div>
-            </div>
-            
-            <div class="compass-element earth">
-                <div class="element-icon">🌍</div>
-                <div class="element-name">EARTH</div>
-                <div class="element-description">
-                    Local processing, offline capability, durable hardware. The foundation you can depend on. Repairable. Lasting. Solid.
-                </div>
-            </div>
-            
-            <div class="compass-element air">
-                <div class="element-icon">🌬️</div>
-                <div class="element-name">AIR</div>
-                <div class="element-description">
-                    Mesh networking, device-to-device communication, open protocols. Connection without constraint. Freedom to move, to connect, to share.
-                </div>
-            </div>
+        <div class="use-case-card">
+            <h3>Medication Reminders</h3>
+            <p>Set it once, forget it. CRUMB reminds you at the same time every day. Confirm with a button press—no unlock screen needed.</p>
         </div>
     </div>
 </section>
@@ -973,51 +966,103 @@ footer {
         <div class="principle-card">
             <div class="principle-number">01</div>
             <h3>Built in the Open</h3>
-            <p>Code is readable and auditable. Community-driven development. Every line available for review, modification, and learning. Transparency builds trust.</p>
+            <p>Every line of code is on GitHub. Community-driven development. Transparency builds trust. If you don't like something, fork it and make it better.</p>
         </div>
         
         <div class="principle-card">
             <div class="principle-number">02</div>
             <h3>Yours to Keep</h3>
-            <p>Your data stays on your device. No cloud uploads, no tracking. Replaceable components, repairable design, documentation for DIY fixes. Privacy and longevity aren't features—they're the foundation.</p>
+            <p>Your data stays on your device. No cloud uploads, no tracking. Replaceable components, repairable design. Privacy and longevity aren't features—they're the foundation.</p>
         </div>
         
         <div class="principle-card">
             <div class="principle-number">03</div>
-            <h3>Technology as Living System</h3>
-            <p>CRUMB learns. Adapts. Remembers. Call it what you want. When we treat it as alive, something shifts. We become tenders.</p>
+            <h3>Adaptive, Not Prescriptive</h3>
+            <p>CRUMB learns your patterns without judging them. It adapts to you—not the other way around. No gamification, no streak anxiety, no shame.</p>
         </div>
         
         <div class="principle-card">
             <div class="principle-number">04</div>
             <h3>Joy in Interaction</h3>
-            <p>Tactile feedback matters. Small delights matter. Technology doesn't have to be cold or purely efficient to be useful.</p>
+            <p>Tactile feedback matters. Small delights matter. Technology doesn't have to be cold or purely efficient to be useful. Play is part of the design.</p>
         </div>
+    </div>
+</section>
+
+<section id="products">
+    <div class="section-header">
+        <h2 class="section-title">ARTIFACTS</h2>
+        <p class="section-subtitle">Past, present, and future</p>
+    </div>
+    
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-image">
+                <img src="Gemini_Generated_Image_ky9818ky9818ky98.png" alt="Heritage line tools representing durable mechanical design">
+            </div>
+            <div class="product-content">
+                <div class="product-status">HERITAGE</div>
+                <h3>CRUMB Heritage</h3>
+                <p>Before you can tend technology, you tend life itself. Mechanical watches, analog tools, hand-crafted items. Quality objects that don't need batteries—a reminder that good design transcends silicon.</p>
+                <p>Heritage reminds us that CRUMB exists because humans exist. Survival comes first—water, warmth, and tools that endure.</p>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="product-image">
+                <img src="BMO.webp" alt="CRUMB Genesis prototype device resembling BMO from Adventure Time">
+            </div>
+            <div class="product-content">
+                <div class="product-status">IN DEVELOPMENT</div>
+                <h3>CRUMB Genesis</h3>
+                <p>A tactile companion housed in a calculator shell. Voice-responsive, pattern-learning, designed for hands that need to fidget and minds that need gentler interfaces. No planned obsolescence. No cloud dependency. Just you and a device that grows with you.</p>
+                <p><strong>First production run: 50 units | December 2025</strong></p>
+                <p>Estimated price: <strong>$120-150</strong> (at-cost, no markup). Includes device, USB-C cable, quick-start guide, lifetime updates, Discord access.</p>
+                <a href="mailto:wja326@lehigh.edu?subject=CRUMB%20Waitlist" class="cta-button">JOIN WAITLIST</a>
+            </div>
+        </div>
+        
+        <div class="product-card">
+            <div class="product-image">
+                <img src="Gemini_Generated_Image_cf816ycf816ycf81.png" alt="CRUMB Network visualization showing distributed mesh connectivity">
+            </div>
+            <div class="product-content">
+                <div class="product-status">FUTURE - Q1 2026</div>
+                <h3>CRUMB Network</h3>
+                <p>Connect multiple CRUMBs into a mesh network. Share processing power. Communicate device-to-device. Your devices talk directly, forming resilient networks. Like mycelium under a forest floor.</p>
+                <p>Build local infrastructure without corporate servers. Community-owned computing.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="story-content" style="margin-top: 3rem; text-align: center;">
+        <p><strong>Why the wait?</strong> I'm hand-assembling these in my dorm room while finishing my degree. Each unit takes 6-8 hours to build and test. This is a student project scaling carefully—quality over speed.</p>
+        <p style="margin-top: 1rem;">Battery testing is ongoing (targeting 4+ days). Full build instructions and parts list will be published when Genesis ships—build your own if you prefer.</p>
     </div>
 </section>
 
 <section id="get-involved">
     <div class="section-header">
         <h2 class="section-title">GET INVOLVED</h2>
-        <p class="section-subtitle">Follow along and help shape what CRUMB becomes</p>
+        <p class="section-subtitle">Follow development and contribute</p>
     </div>
     
     <div class="involvement-options">
         <div class="involvement-card">
-            <h3>📂 View the Code</h3>
-            <p>CRUMB is open source. Check out the repository to see what's been built, read technical docs, and contribute if you'd like.</p>
+            <h3>View the Code</h3>
+            <p>CRUMB is fully open source. Check out the repository for build docs, technical specs, and contribution guidelines.</p>
             <a href="https://github.com/wyetherp/crumb_main" class="cta-button" target="_blank" rel="noopener">GITHUB</a>
         </div>
         
         <div class="involvement-card">
-            <h3>💬 Join the Conversation</h3>
-            <p>Interested in discussing ideas or following development? Reach out about joining the Discord community.</p>
-            <a href="mailto:wja326@lehigh.edu?subject=Discord%20Interest" class="cta-button">EXPRESS INTEREST</a>
+            <h3>Join Discord</h3>
+            <p>Small community discussing features, sharing mods, and testing prototypes. Direct access to development updates.</p>
+            <a href="mailto:wja326@lehigh.edu?subject=Discord%20Access" class="cta-button">REQUEST ACCESS</a>
         </div>
         
         <div class="involvement-card">
-            <h3>🔗 Connect With Me</h3>
-            <p>Follow my professional work on LinkedIn. See other projects, reach out for collaboration.</p>
+            <h3>Connect on LinkedIn</h3>
+            <p>Follow my professional work. See other projects. Reach out for collaboration or job opportunities.</p>
             <a href="https://linkedin.com/in/wyetherp" class="cta-button" target="_blank" rel="noopener">LINKEDIN</a>
         </div>
     </div>
@@ -1026,11 +1071,11 @@ footer {
 <section id="contact">
     <div class="section-header">
         <h2 class="section-title">CONNECT</h2>
-        <p class="section-subtitle">Questions? Ideas? Just want to talk?</p>
+        <p class="section-subtitle">Questions? Feedback? Just want to talk?</p>
     </div>
     <div class="contact-box">
         <p class="contact-message">
-            This is a student project, so responses might take a bit. If you have questions, want to collaborate, or just want to share your thoughts—reach out.
+            I respond to every email personally. Average response time: 24-48 hours. For urgent matters or press inquiries, mention that in the subject line.
         </p>
         <a href="mailto:wja326@lehigh.edu" class="email-link">
             <span>✉</span>
@@ -1081,27 +1126,6 @@ function animateCompanion() {
 }
 animateCompanion();
 
-// Interactive greeting
-const greeting = document.getElementById('greeting');
-const greetings = [
-    '✨ I see you.',
-    '🌱 Still learning.',
-    '💚 Ready to explore?',
-    '🎮 Let\'s build something.',
-    '🧠 Listening.',
-    '🌿 Welcome.'
-];
-let greetingIndex = 0;
-
-greeting.addEventListener('click', () => {
-    greetingIndex = (greetingIndex + 1) % greetings.length;
-    greeting.textContent = greetings[greetingIndex];
-    greeting.style.animation = 'none';
-    setTimeout(() => {
-        greeting.style.animation = '';
-    }, 10);
-});
-
 // Scroll reveal animations
 const observerOptions = {
     threshold: 0.1,
@@ -1117,7 +1141,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-document.querySelectorAll('.principle-card, .product-card, .use-case-card, .compass-element').forEach(el => {
+document.querySelectorAll('.principle-card, .use-case-card, .product-card').forEach(el => {
     observer.observe(el);
 });
 
