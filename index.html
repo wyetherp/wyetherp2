@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CRUMB V.99 - Living Prototype</title>
+<title>CRUMB V.999 - Living Prototype</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -983,7 +983,7 @@ footer {
     <div class="story-content">
         <p>I'm Wyeth Anzilotti, a senior at Lehigh University studying computer science and human-computer interaction. This project started with a simple observation about my brother Luke.</p>
         
-        <p>Luke's mind works differently—faster in some ways, slower in others. Watching him interact with technology made something obvious: <span class="highlight">Technology wasnt designed with the human experience in mind.</span> They're designed for a perfect user that doesn't really exist.</p>
+        <p>Luke's mind works differently—faster in some ways, slower in others. Watching him interact with technology made something obvious: <span class="highlight">Technology wasn't designed with the human experience in mind.</span> They're designed for a perfect user that doesn't really exist.</p>
         
         <div class="story-quote">
             "The problem isn't the person. The problem is the interface."
@@ -996,6 +996,28 @@ footer {
         <p>It's housed in a calculator shell. It runs locally. It doesn't send your data anywhere. And eventually, it could connect with other CRUMBs to form networks without corporate servers—distributed computing that serves communities, not companies.</p>
         
         <p>This is early. I'm still figuring out what it should be. But I think the direction matters.</p>
+    </div>
+</section>
+
+<!-- TECHNICAL OVERVIEW -->
+<section id="tech">
+    <div class="section-header">
+        <h2 class="section-title">UNDER THE HOOD</h2>
+        <p class="section-subtitle">What CRUMB is built with</p>
+    </div>
+    
+    <div class="story-content">
+        <p><strong>Hardware:</strong> Raspberry Pi Zero W, NFC reader/writer (PN532), WS2812B LEDs, tactile buttons, custom 3D-printed enclosure</p>
+        
+        <p><strong>Software:</strong> Python for device logic, HTML/CSS/JavaScript for this website</p>
+        
+        <p><strong>Communication:</strong> NFC for device-to-device pairing, Bluetooth Low Energy for mesh networking (in development), local SQLite database for pattern storage</p>
+        
+        <p><strong>Currently Working:</strong> LED patterns, NFC tagging, basic voice commands via offline speech recognition with OpenAI Whiper API</p>
+        
+        <p><strong>In Progress:</strong> CRUMB Genisis V1, CRUMB to CRUMB communication, SQL databses for data storage.</p>
+        
+        <p>All code is on <a href="https://github.com/wyetherp/crumb_main" style="color: var(--primary-green);">GitHub</a>. Check the README for build instructions.</p>
     </div>
 </section>
 
@@ -1017,7 +1039,7 @@ footer {
                 <div class="element-name">FIRE</div>
                 <div class="element-trait">Energy / Action / Passion</div>
                 <div class="element-description">
-                    <strong>In CRUMB:</strong> The fire that burns within CRUMB. The flow of energy. The power that makes it shine. 
+                    <strong>In CRUMB:</strong> Haptic feedback, LED notifications, instant responses. The spark that gets your attention when needed—bright, quick, unmistakable. 
                 </div>
             </div>
             
@@ -1075,6 +1097,7 @@ footer {
             <div class="principle-number">03</div>
             <h3>Mutual respect</h3>
             <p>If we want computers to respect us, it's time we start respecting them.</p>
+        </div>
         
         <div class="principle-card">
             <div class="principle-number">04</div>
