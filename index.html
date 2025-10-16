@@ -583,16 +583,13 @@ status() {
     `> Timestamp: ${now.toISOString()}`
   ];
   diagnostics.forEach(line => print(line));
-}
-    whoami() {
-      printUser('whoami');
-      print('Operator: Wyeth Anzilotti');
-      print('Role: Field Engineer');
-    },
-    clear() {
-      outputEl.textContent = '';
-    }
-  };
+},
+
+whoami() {
+  printUser('whoami');
+  print('Operator: Wyeth Anzilotti');
+  print('Role: Field Engineer');
+},
 
   // --------- Boot sequence ---------
   function runStartSequence() {
