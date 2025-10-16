@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.09 — Field Console</title>
+  <title>CRUMB V1.1 — Field Console</title>
 
   <!--
   ======================================================================
@@ -310,6 +310,31 @@
       .cta { border: 1px solid black; background: white; color: black; }
       .product-card { break-inside: avoid; }
     }
+    /* ========================================
+   HEARTBEAT — CRUMB LIFESIGN INDICATOR
+   ======================================== */
+#heartbeat {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 12px;
+  height: 12px;
+  background: #ff3b3b;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ff3b3b;
+  animation: pulse 1.6s infinite ease-in-out;
+  opacity: 0.85;
+  z-index: 50;
+  display: none; /* hidden until system start */
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  25%  { transform: scale(1.25); opacity: 1; }
+  40%  { transform: scale(1);   opacity: 0.6; }
+  60%  { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1);   opacity: 0.7; }
+}
   </style>
 </head>
 <body class="locked"><!-- body starts locked; main content hidden until `start` -->
@@ -465,15 +490,19 @@
   const main = document.querySelector('.main-content');
 
   // --------- Boot text (operational realistic) ---------
-  const bootLines = [
-    'BOOT LOG',
-    '> initializing CRUMB protocol …',
-    '> establishing local environment …',
-    '> system diagnostics … passed',
-    '> encryption layer … active',
-    '> awaiting user command',
-    '(type "start" to continue or "help" for a list of commands)'
-  ];
+const bootLines = [
+  'BOOT CONSOLE — CRUMB FIELD INTERFACE',
+  '',
+  '> initializing CRUMB protocol …',
+  '> system diagnostics … passed',
+  '',
+  'CRUMB is a calm companion — tech that adapts to you.',
+  'This console is your entry point.',
+  'Type "help" for commands or "start" to open the full site.',
+  '',
+  '> awaiting user command'
+];
+
 
   const bootText = bootLines.join('\n');
 
@@ -611,6 +640,7 @@ status() {
   function unlockSite(skip = false) {
     body.classList.remove('locked');
     body.classList.add('unlocked');
+    document.getElementById('heartbeat').style.display = 'block';
     main && main.setAttribute('aria-hidden', 'false');
 
     const full = consoleSection.scrollHeight;
@@ -655,6 +685,6 @@ status() {
   setTimeout(typeBoot, 400); // slight pause for realism
 })();
 </script>
-
+<div id="heartbeat" aria-hidden="true"></div>
 </body>
 </html>
