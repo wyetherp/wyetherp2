@@ -7,279 +7,227 @@
   <title>CRUMB — Field Console</title>
   <style>
     :root{
-      /* War‑room palette */
-      --bg:#0b0f14;           /* charcoal */
-      --bg-elev:#10161f;      /* panels */
-      --grid:#121821;         /* faint grid lines */
-      --border:#1f2933;       /* strokes */
-      --ink:#f3f4f6;          /* primary text */
-      --muted:#98a2b3;        /* secondary text */
-      --accent:#e5e7eb;       /* ui accents */
-      --ok:#a7f3d0;           /* status ok */
-      --warn:#fde68a;         /* status warn */
-      --err:#fca5a5;          /* status error */
+      --bg:#0b0f14;
+      --bg-elev:#10161f;
+      --border:#1f2933;
+      --ink:#f3f4f6;
+      --muted:#98a2b3;
+      --accent:#e5e7eb;
+      --ok:#a7f3d0;
+      --warn:#fde68a;
+      --err:#fca5a5;
       --maxw:1200px;
       --radius:6px;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      font-family:var(--sans);
-      background: var(--bg);
-      color: var(--ink);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      /* subtle grid: vertical columns + horizontal scanlines for control‑room vibe */
-      background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 12rem);
-      background-size: 100% 24px, 12rem 100%;
-      background-attachment: fixed;
-    }
+    body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-    /* Top command bar */
-    .commandbar{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:saturate(140%) blur(10px);
-      background: rgba(16,22,31,.92);
-      border-bottom:1px solid var(--border);
-    }
+    .commandbar{position:sticky;top:0;z-index:50;background:rgba(16,22,31,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
     .commandbar-inner{display:flex;align-items:center;gap:24px;padding:14px 0}
     .brand{letter-spacing:.3em;text-transform:uppercase;font-weight:600}
     nav{margin-left:auto}
     nav ul{list-style:none;display:flex;gap:22px}
     nav a{color:var(--muted);font-weight:600;font-size:.92rem;position:relative}
-    nav a::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .18s ease}
-    nav a:focus-visible, nav a:hover{color:var(--ink)}
-    nav a:hover::after, nav a:focus-visible::after{transform:scaleX(1)}
+    nav a:hover{color:var(--ink)}
 
-    /* Status lights */
     .status{display:flex;align-items:center;gap:10px;margin-left:8px}
-    .dot{width:8px;height:8px;border-radius:50%;filter:drop-shadow(0 0 6px rgba(0,0,0,.6))}
+    .dot{width:8px;height:8px;border-radius:50%}
     .ok{background:var(--ok)} .warn{background:var(--warn)} .err{background:var(--err)}
 
-    /* Hero deck */
     .deck{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:72px 0}
-    .kicker{font:600 .8rem var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-    h1{font-size:clamp(2.2rem, 4.6vw, 3.8rem);line-height:1.1;font-weight:700;margin-bottom:18px}
+    h1{font-size:clamp(2.2rem,4.6vw,3.8rem);font-weight:700;margin-bottom:18px}
     .lead{color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:44ch}
-    .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border:1px solid var(--accent);border-radius:var(--radius);font-weight:700}
-    .btn.primary{background:var(--accent);color:#0b0f14}
-    .btn:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 
-    /* Breathing figure */
-    .figure{
-      background: radial-gradient(120px 120px at 50% 35%, rgba(167,243,208,.08), transparent 60%),
-                  radial-gradient(200px 200px at 70% 70%, rgba(229,231,235,.06), transparent 60%);
-      display:grid;place-items:center;border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);
-    }
-    .stick{filter:invert(1);opacity:.95;animation: breathe 6s ease-in-out infinite}
-    @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-
-    /* Terminal / ops strip */
-    .ops{background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:24px 0;box-shadow:var(--shadow)}
+    .ops{background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:24px 0}
     .ops pre{font-family:var(--mono);font-size:.9rem;color:var(--accent);white-space:pre-wrap}
-    .cursor{display:inline-block;width:9px;height:1em;background:var(--accent);transform:translateY(3px);animation:blink 1s step-start infinite}
+    .cursor{display:inline-block;width:9px;height:1em;background:var(--accent);animation:blink 1s step-start infinite}
     @keyframes blink{50%{opacity:0}}
 
-    /* Sections */
-    section{padding:56px 0;border-top:1px solid var(--border)}
-    section:first-of-type{border-top:none}
-    section h2{font-size:1.6rem;margin-bottom:16px}
-    section p{color:var(--muted);max-width:70ch}
-
-    /* About panel */
-    .panel{background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow)}
-    .about-list{list-style:none;margin-top:18px}
-    .about-list li{margin:14px 0;line-height:1.65}
-    .about-list strong{display:block;color:var(--ink);margin-bottom:6px}
-
-    /* Products grid */
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:20px}
-    .card{display:flex;flex-direction:column;background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s ease, border-color .15s ease}
-    .card:hover{transform:translateY(-2px);border-color:var(--accent)}
-    .card img{width:100%;height:200px;object-fit:cover;border-bottom:1px solid var(--border)}
-    .card h3{font-size:1.05rem;margin:14px 16px 6px}
-    .card p{color:var(--muted);margin:0 16px 16px}
-
-    /* Philosophy */
-    .philo p{margin:10px 0}
-
-    /* Footer */
-    footer{border-top:1px solid var(--border);padding:28px 0;margin-top:56px;color:var(--muted)}
-
-    /* Responsiveness */
-    @media (max-width: 860px){
-      .deck{grid-template-columns:1fr;gap:24px}
-    }
-    @media (prefers-reduced-motion: reduce){
-      .stick{animation:none}
-      .cursor{animation:none}
-    }
+    footer{border-top:1px solid var(--border);padding:28px 0;margin-top:56px;color:var(--muted);text-align:center}
   </style>
 </head>
 <body>
-  <!-- Command Bar / Navigation -->
-  <header class="commandbar">
-    <div class="container commandbar-inner">
-      <div class="brand">CRUMB</div>
-      <nav aria-label="Primary">
-        <ul>
-          <li><a href="#mission">Mission</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#products">Products</a></li>
-          <li><a href="#involved">Get Involved</a></li>
-        </ul>
-      </nav>
-      <div class="status" aria-label="system status">
-        <div class="dot ok" title="signal"></div>
-        <div class="dot warn" title="latency"></div>
-        <div class="dot err" title="noise"></div>
-      </div>
+<header class="commandbar">
+  <div class="container commandbar-inner">
+    <div class="brand">CRUMB</div>
+    <nav>
+      <ul>
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#involved">Get Involved</a></li>
+      </ul>
+    </nav>
+    <div class="status">
+      <div class="dot ok"></div>
+      <div class="dot warn"></div>
+      <div class="dot err"></div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
-    <!-- Hero / Deck -->
-    <section id="mission" class="deck" aria-labelledby="mission-title">
-      <div>
-        <div class="kicker">field‑ready • human‑centered • offline</div>
-        <h1 id="mission-title">Technology that adapts to you.</h1>
-        <p class="lead">CRUMB is a pocket‑sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention‑stealing. Just calm technology that fits in your hand.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#about">Learn More</a>
-          <a class="btn" href="#involved">Get Involved</a>
-        </div>
-        <div class="ops" aria-live="polite">
-          <pre><strong>BOOT LOG</strong>
+<main class="container">
+  <section id="mission" class="deck">
+    <div>
+      <h1>Technology that adapts to you.</h1>
+      <p class="lead">CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy.</p>
+      <div class="ops" aria-live="polite">
+        <pre><strong>BOOT LOG</strong>
 > initializing protocol …
 > calibrating presence …
-> local privacy guard … <span style="color:var(--ok)">enabled</span>
-> cloud dependency …… <span style="color:var(--ok)">none detected</span>
-> readiness state …… <span style="color:var(--ok)">green</span>
-> awaiting human input <span class="cursor" aria-hidden="true"></span></pre>
-        </div>
+> local privacy guard … enabled
+> cloud dependency …… none detected
+> readiness state …… green
+> awaiting human input █</pre>
       </div>
-      <div class="figure" aria-hidden="true">
-        <!-- Stick figure svg (self‑contained) -->
-        <svg class="stick" width="360" height="520" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="human schematic">
-          <circle cx="50" cy="20" r="12" fill="none" stroke="white" stroke-width="3"/>
-          <line x1="50" y1="32" x2="50" y2="85" stroke="white" stroke-width="3"/>
-          <line x1="50" y1="45" x2="25" y2="62" stroke="white" stroke-width="3"/>
-          <line x1="50" y1="45" x2="75" y2="62" stroke="white" stroke-width="3"/>
-          <line x1="50" y1="85" x2="30" y2="120" stroke="white" stroke-width="3"/>
-          <line x1="50" y1="85" x2="70" y2="120" stroke="white" stroke-width="3"/>
-        </svg>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- About / Mission Briefing -->
-    <section id="about" aria-labelledby="about-title">
-      <h2 id="about-title">About</h2>
-      <div class="panel">
-        <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
-        <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken — the communication was.</p>
-        <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
-        <p style="font-family:var(--mono);color:var(--accent)"><em>Raspberry&nbsp;Pi&nbsp;Zero • NFC • Python • Runs locally • Your data stays yours.</em></p>
+  <section id="about">
+    <h2>About</h2>
+    <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
+    <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
+    <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
+    <p><em>Raspberry Pi Zero. NFC. Python. Runs locally. Your data stays yours.</em></p>
+  </section>
 
-        <h3 style="margin-top:16px">What CRUMB Does</h3>
-        <ul class="about-list">
-          <li><strong>🌅 Morning Structure</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
-          <li><strong>💡 Focus</strong> Press once to start. LED shifts as time passes. Vibrates when it's time to rest.</li>
-          <li><strong>🌀 Tactile Engagement</strong> Physical buttons and LED patterns. For hands that think while they move.</li>
-          <li><strong>🌙 Mood Tracking</strong> Voice notes saved locally. Weekly patterns, no cloud.</li>
-          <li><strong>💊 Reminders</strong> Set once. Daily pulse. Button to confirm.</li>
-          <li><strong>🔗 Contact Sharing</strong> Tap two CRUMBs together. NFC transfer. No permissions.</li>
-        </ul>
-      </div>
-    </section>
+  <section id="products">
+    <h2>Products</h2>
+    <p>Three forms. Same intention.</p>
+    <p><em>Available December 2025</em></p>
+    <ul>
+      <li>CRUMB Genesis — pocket-sized calculator shell, voice-responsive, pattern-learning.</li>
+      <li>CRUMB Cell — touch-responsive, local AI, private presence without surveillance.</li>
+      <li>CRUMB Grove — room-scale, light, motion, sound. The environment becomes aware.</li>
+    </ul>
+  </section>
 
-    <!-- Products / Asset Inventory -->
-    <section id="products" aria-labelledby="products-title">
-      <h2 id="products-title">Products</h2>
-      <p class="muted">Three forms. Same intention.</p>
-      <p style="opacity:.9;font-style:italic;margin-top:4px">Available December 2025</p>
+  <section id="involved">
+    <h2>Get Involved</h2>
+    <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
+    <ul>
+      <li><a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a></li>
+      <li><a href="mailto:wja326@lehigh.edu">Email</a></li>
+      <li><a href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a></li>
+    </ul>
+  </section>
 
-      <div class="grid" style="margin-top:18px">
-        <article class="card">
-          <img src="BMO.webp" alt="CRUMB Genesis prototype"/>
-          <h3>CRUMB Genesis</h3>
-          <p>Pocket‑sized. Calculator shell. Voice‑responsive, pattern‑learning. Built to last.</p>
-          <p style="font-family:var(--mono);color:var(--accent);margin-top:-4px">33 units in production</p>
-        </article>
-        <article class="card">
-          <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell"/>
-          <h3>CRUMB Cell</h3>
-          <p>Touch‑responsive. Local AI. Offline, private. Presence without surveillance.</p>
-        </article>
-        <article class="card">
-          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Grove"/>
-          <h3>CRUMB Grove</h3>
-          <p>Room‑scale. Light, motion, sound. The environment becomes aware.</p>
-        </article>
-      </div>
+  <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
+</main>
 
-      <!-- Field Logs: reads like a deployment dossier without naming companies -->
-      <div class="panel" style="margin-top:22px">
-        <h3 style="margin-bottom:8px">Field Logs</h3>
-        <pre style="font-family:var(--mono);white-space:pre-wrap;color:var(--accent)">[001] Genesis — v1.08  | baseline stable | haptics/LED cadence validated
-[002] Cell    — alpha   | offline NLU pass | privacy guard hardened
-[003] Grove   — proto   | ambient I/O mesh | room‑state heuristics in study</pre>
-      </div>
-    </section>
+<script>
+/*
+==========================================
+  CRUMB TERMINAL INTERACTION MODULE
+  ---------------------------------
+  This script powers the interactive terminal
+  inside the "BOOT LOG" section of the CRUMB webpage.
 
-    <!-- Philosophy / Systems of Care and Consequence -->
-    <section id="philosophy" class="philo" aria-labelledby="philo-title">
-      <h2 id="philo-title">Philosophy</h2>
-      <div class="panel">
-        <p>We live in an attention economy. CRUMB is a counter‑design.</p>
-        <p>What happens when technology learns your rhythms instead of breaking them?</p>
-        <p>Small enough to fit in your hand. Built to challenge a paradigm.</p>
-        <hr style="border:none;border-top:1px solid var(--border);margin:14px 0"/>
-        <p style="font-family:var(--mono);color:var(--accent)">Systems belong in the field. Reliability isn’t an aesthetic — it’s an ethic.</p>
-      </div>
-    </section>
+  DESIGN GOALS:
+  - Keep all logic local (no network calls).
+  - Maintain full accessibility and graceful fallback.
+  - Write clearly enough for another engineer to understand at a glance.
 
-    <!-- Get Involved -->
-    <section id="involved" aria-labelledby="involved-title">
-      <h2 id="involved-title">Get Involved</h2>
-      <div class="panel" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
-        <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
-        <p class="cta-row">
-          <a class="btn" href="https://github.com/wyetherp/crumb_main" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn" href="mailto:wja326@lehigh.edu">Email</a>
-          <a class="btn" href="https://linkedin.com/in/wyetherp" target="_blank" rel="noopener">LinkedIn</a>
-        </p>
-      </div>
-    </section>
+  Author: Wyeth Anzilotti
+  Version: 1.1
+==========================================
+*/
 
-    <footer>
-      <div class="container" style="text-align:center">© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</div>
-    </footer>
-  </main>
+(function () {
+  const pre = document.querySelector('.ops pre');
+  if (!pre) return;
 
-  <script>
-    // Optional: tiny typewriter reveal for the ops log (no frameworks)
-    (function(){
-      const pre = document.querySelector('.ops pre');
-      if(!pre) return;
-      const full = pre.textContent; pre.textContent = '';
-      let i=0; const speed = 12;
-      function tick(){
-        pre.textContent = full.slice(0, i++);
-        if(i <= full.length) requestAnimationFrame(tick);
+  const bootText = `\nBOOT LOG\n> initializing protocol …\n> calibrating presence …\n> local privacy guard … enabled\n> cloud dependency …… none detected\n> readiness state …… green\n> awaiting human input █\n`;
+
+  pre.textContent = '';
+  const totalDuration = 10000;
+  const speed = totalDuration / bootText.length;
+  let i = 0;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pre.textContent = bootText;
+    activateTerminal();
+    return;
+  }
+
+  function typeLine() {
+    pre.textContent = bootText.slice(0, i++);
+    if (i <= bootText.length) {
+      setTimeout(typeLine, speed);
+    } else {
+      activateTerminal();
+    }
+  }
+  typeLine();
+
+  function activateTerminal() {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'enter command';
+    input.style.cssText = `background:transparent;border:none;outline:none;color:#e5e7eb;font-family:var(--mono);font-size:0.9rem;width:100%;`;
+
+    const prompt = document.createElement('div');
+    prompt.textContent = '> ';
+    prompt.style.display = 'inline-block';
+    prompt.style.color = '#a7f3d0';
+    prompt.style.fontFamily = 'var(--mono)';
+
+    const consoleDiv = document.createElement('div');
+    consoleDiv.appendChild(prompt);
+    consoleDiv.appendChild(input);
+    pre.insertAdjacentElement('afterend', consoleDiv);
+
+    const outputDiv = document.createElement('div');
+    outputDiv.style.fontFamily = 'var(--mono)';
+    outputDiv.style.fontSize = '0.9rem';
+    outputDiv.style.color = '#98a2b3';
+    outputDiv.style.marginTop = '8px';
+    pre.parentNode.insertBefore(outputDiv, pre.nextSibling.nextSibling);
+
+    const commands = {
+      help: `Available commands:\n  - help ............ list available commands\n  - status .......... check system readiness\n  - whoami .......... identify current operator\n  - mission ......... reveal active objective\n  - clear ........... clear terminal output`,
+      status: 'STATUS: all systems nominal. Privacy guard active.',
+      whoami: 'USER: Wyeth Anzilotti — Field Systems Engineer in training.',
+      mission: 'MISSION: Build calm, resilient systems that hold up in the field.',
+      clear: '',
+    };
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const command = input.value.trim().toLowerCase();
+        const line = document.createElement('div');
+        line.textContent = `> ${command}`;
+        line.style.color = '#e5e7eb';
+        outputDiv.appendChild(line);
+
+        if (commands[command] !== undefined) {
+          if (command === 'clear') {
+            outputDiv.innerHTML = '';
+          } else {
+            const response = document.createElement('div');
+            response.textContent = commands[command];
+            response.style.marginLeft = '1rem';
+            outputDiv.appendChild(response);
+          }
+        } else if (command !== '') {
+          const error = document.createElement('div');
+          error.textContent = 'Unknown command. Type "help" for a list of commands.';
+          error.style.color = '#fca5a5';
+          outputDiv.appendChild(error);
+        }
+
+        input.value = '';
+        outputDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
-      // Respect reduced motion
-      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        pre.textContent = full; return;
-      }
-      tick();
-    })();
-  </script>
+    });
+
+    setTimeout(() => input.focus(), 500);
+  }
+})();
+</script>
 </body>
 </html>
