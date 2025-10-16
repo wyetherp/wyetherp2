@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.08 — Field Console</title>
+  <title>CRUMB V1.09 — Field Console</title>
 
   <!--
   ======================================================================
@@ -521,15 +521,19 @@
 
   // --------- Command registry ---------
   const commands = {
-    help() {
-      printUser('help');
-      print(`Available commands:
-  START initialize full interface
-  HELP | show available commands
-  ABOUT | learn about CRUMB philosophy
-  STATUS | system diagnostics
-  WHOAMI | operator identity`);
-    },
+help() {
+  printUser('help');
+  const lines = [
+    'Available commands:',
+    '  start ............ Enter full website',
+    '  help ............. show available commands',
+    '  about ............ learn about CRUMB philosophy',
+    '  status ........... system diagnostics',
+    '  whoami ........... operator identity',
+    '  clear ............ clear terminal output'
+  ];
+  lines.forEach(line => print(line));
+},
     start() {
       printUser('start');
       runStartSequence();
