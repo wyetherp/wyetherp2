@@ -341,7 +341,7 @@
   Skip Boot Sequence
 </button>
     <div class="boot-inner">
-      <div class="boot-title">BOOT LOG</div>
+      <div class="boot-title">BOOT CONSOLE</div>
       <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
       <div class="boot-io" id="bootIO" style="display:none">
         <span class="boot-prompt">&gt;</span>
@@ -453,171 +453,201 @@
        - On `start`: show short init, then collapse console & reveal site
   ===================================================== -->
   <script>
-    (function() {
-      // --------- DOM references ---------
-      const skipBtn = document.getElementById('skipBoot');
-      const body = document.body;
-      const logEl = document.getElementById('bootLog');
-      const ioRow = document.getElementById('bootIO');
-      const inputEl = document.getElementById('bootInput');
-      const outputEl = document.getElementById('bootOutput');
-      const consoleSection = document.getElementById('boot-console');
-      const main = document.querySelector('.main-content');
+(function() {
+  // --------- DOM references ---------
+  const skipBtn = document.getElementById('skipBoot');
+  const body = document.body;
+  const logEl = document.getElementById('bootLog');
+  const ioRow = document.getElementById('bootIO');
+  const inputEl = document.getElementById('bootInput');
+  const outputEl = document.getElementById('bootOutput');
+  const consoleSection = document.getElementById('boot-console');
+  const main = document.querySelector('.main-content');
 
-      // --------- Boot text (operational realistic) ---------
-      const bootLines = [
-        'BOOT LOG',
-        '> initializing CRUMB protocol …',
-        '> establishing local environment …',
-        '> system diagnostics … passed',
-        '> encryption layer … active',
-        '> awaiting user command',
-        '(type "start" to continue or "help" for a list of commands)'
-      ];
+  // --------- Boot text (operational realistic) ---------
+  const bootLines = [
+    'BOOT LOG',
+    '> initializing CRUMB protocol …',
+    '> establishing local environment …',
+    '> system diagnostics … passed',
+    '> encryption layer … active',
+    '> awaiting user command',
+    '(type "start" to continue or "help" for a list of commands)'
+  ];
 
-      // Join as one string so we can typewriter it
-      const bootText = bootLines.join('\n');
+  const bootText = bootLines.join('\n');
 
-      // --------- Typewriter parameters ---------
-      const totalDurationMs = 10000; // ~10s for entire text block
-      const speed = Math.max(6, Math.floor(totalDurationMs / Math.max(bootText.length, 1)));
-      let i = 0; // cursor position while typing
+  // --------- Typewriter parameters ---------
+  const totalDurationMs = 10000; // Slower: ~10s for full hypnotic effect
+  const speed = Math.max(6, Math.floor(totalDurationMs / Math.max(bootText.length, 1)));
+  let i = 0;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Respect reduced motion: no typing effect, but keep interactive flow
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // --------- Boot typing sequence ---------
-      function typeBoot() {
-        if (reduced) {
-          logEl.textContent = bootText;
-          showPrompt();
-          return;
-        }
-        
-        logEl.textContent = bootText.slice(0, i++);
-        if (i <= bootText.length) {
-          setTimeout(typeBoot, speed);
-        } else {
-          showPrompt();
-        }
-      }
-
-      // --------- Show prompt/input row and focus it ---------
-      function showPrompt() {
-        ioRow.style.display = 'flex';
-        // Tiny delay ensures reflow then focus
-        setTimeout(() => inputEl && inputEl.focus(), 150);
-      }
-
-      // --------- Command registry (explicitly simple) ---------
-      const commands = {
-        help() {
-          printUser('help');
-          print(`Available commands:\n  start ............ initialize full interface\n  help ............. show available commands`);
-        },
-        start() {
-          printUser('start');
-          runStartSequence();
-        }
-      };
-
-      // --------- Helpers to print lines to the output area ---------
-      function printUser(cmd) {
-        const line = document.createElement('div');
-        line.textContent = '> ' + cmd;
-        line.style.color = '#FFFFFF';
-        outputEl.appendChild(line);
-      }
-      function print(msg, muted = true) {
-        const line = document.createElement('div');
-        line.textContent = msg;
-        line.style.marginLeft = '1rem';
-        line.style.color = muted ? '#999999' : '#FFFFFF';
-        outputEl.appendChild(line);
-        line.scrollIntoView({ block: 'end' });
-      }
-
-      // --------- Start sequence then reveal site ---------
-      function runStartSequence() {
-        // Short, believable ops steps then unlock.
-        const seq = [
-          '> running initialization sequence …',
-          '> synchronizing interface modules …',
-          '> verifying local assets …',
-          '> deployment complete',
-          '> CRUMB interface online'
-        ];
-
-        let idx = 0;
-        const step = () => {
-          if (idx < seq.length) {
-            print(seq[idx++]);
-            setTimeout(step, 450);
-          } else {
-            // Collapse console and reveal content
-            unlockSite();
-          }
-        };
-        step();
-      }
-
-      // --------- Collapse console + reveal main content ---------
-function unlockSite(skip = false) {
-  // Mark body as unlocked for CSS fade
-  body.classList.remove('locked');
-  body.classList.add('unlocked');
-  main && main.setAttribute('aria-hidden', 'false');
-
-  // Animate boot console collapse
-  const full = consoleSection.scrollHeight;
-  consoleSection.style.maxHeight = full + 'px';
-  void consoleSection.offsetHeight;
-  consoleSection.classList.add('is-collapsed');
-
-  // Scroll to top immediately after unlocking
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // After collapse completes, remove from layout
-  setTimeout(() => {
-    consoleSection.style.display = 'none';
-    // Final scroll correction in case user clicked a hash link
-    if (window.location.hash) {
-      const target = document.querySelector(window.location.hash);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function typeBoot() {
+    if (reduced) {
+      logEl.textContent = bootText;
+      showPrompt();
+      return;
     }
-  }, 1200);
-}
+    logEl.textContent = bootText.slice(0, i++);
+    if (i <= bootText.length) {
+      setTimeout(typeBoot, speed);
+    } else {
+      showPrompt();
+    }
+  }
 
+  // --------- Show prompt/input row and focus it ---------
+  function showPrompt() {
+    ioRow.style.display = 'flex';
+    setTimeout(() => inputEl && inputEl.focus(), 150);
+  }
 
-      // --------- Input handling ---------
-      inputEl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          const raw = inputEl.value.trim().toLowerCase();
-          inputEl.value = '';
+  // --------- Print utilities ---------
+  function printUser(cmd) {
+    const line = document.createElement('div');
+    line.textContent = '> ' + cmd;
+    line.style.color = '#FFFFFF';
+    outputEl.appendChild(line);
+  }
+  function print(msg, muted = true) {
+    const line = document.createElement('div');
+    line.textContent = msg;
+    line.style.marginLeft = '1rem';
+    line.style.color = muted ? '#999999' : '#FFFFFF';
+    outputEl.appendChild(line);
+    line.scrollIntoView({ block: 'end' });
+  }
 
-          if (!raw) return; // ignore empty
+  // --------- Command registry ---------
+  const commands = {
+    help() {
+      printUser('help');
+      print(`Available commands:
+  start ............ initialize full interface
+  help ............. show available commands
+  about ............ learn about CRUMB philosophy
+  status ........... system diagnostics
+  whoami ........... operator identity`);
+    },
+    start() {
+      printUser('start');
+      runStartSequence();
+    },
+    about() {
+      printUser('about');
+      runAboutSequence();
+    },
+    status() {
+      printUser('status');
+      const diagnostics = [
+        '> CRUMB PROTOCOL: ACTIVE',
+        '> Environment: LOCAL',
+        '> Encryption: ENABLED',
+        '> Uptime: ' + Math.floor(Math.random() * 90) + ' mins'
+      ];
+      diagnostics.forEach(line => print(line));
+    },
+    whoami() {
+      printUser('whoami');
+      print('Operator: Wyeth Anzilotti');
+      print('Role: Field Engineer');
+    },
+    clear() {
+      outputEl.textContent = '';
+    }
+  };
 
-          if (typeof commands[raw] === 'function') {
-            commands[raw]();
-          } else {
-            printUser(raw);
-            print('Unknown command. Type "help" for instructions.');
-          }
-        }
-      });
+  // --------- Boot sequence ---------
+  function runStartSequence() {
+    const seq = [
+      '> running initialization sequence …',
+      '> synchronizing interface modules …',
+      '> verifying local assets …',
+      '> deployment complete',
+      '> CRUMB interface online'
+    ];
 
-      // --------- Kick off boot ---------
-      typeBoot();
-      // --------- Skip button event handler ---------
-skipBtn.addEventListener('click', () => {
-  // Immediately print that the sequence was skipped (optional for feedback)
-  outputEl.textContent = '';
-  logEl.textContent += '\n> skip command received\n> bypassing initialization sequence';
-  // Unlock instantly
-  unlockSite(true);
-});
+    let idx = 0;
+    const step = () => {
+      if (idx < seq.length) {
+        print(seq[idx++]);
+        setTimeout(step, 450);
+      } else {
+        unlockSite();
+      }
+    };
+    step();
+  }
 
-    })();
-  </script>
+  // --------- About sequence ---------
+  function runAboutSequence() {
+    const seq = [
+      '> Operator: Wyeth Anzilotti',
+      '> Objective: Create systems that adapt to humans, not the reverse.',
+      '> CRUMB is not a product — it’s a philosophy of humane engineering.',
+      '> Mission: Field-deploy calm technology.',
+      '> Type "start" to initialize the full interface.'
+    ];
+
+    let idx = 0;
+    const step = () => {
+      if (idx < seq.length) {
+        print(seq[idx++]);
+        setTimeout(step, 450);
+      }
+    };
+    step();
+  }
+
+  // --------- Unlock + reveal main site ---------
+  function unlockSite(skip = false) {
+    body.classList.remove('locked');
+    body.classList.add('unlocked');
+    main && main.setAttribute('aria-hidden', 'false');
+
+    const full = consoleSection.scrollHeight;
+    consoleSection.style.maxHeight = full + 'px';
+    void consoleSection.offsetHeight;
+    consoleSection.classList.add('is-collapsed');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    setTimeout(() => {
+      consoleSection.style.display = 'none';
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 1200);
+  }
+
+  // --------- Input handling ---------
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const raw = inputEl.value.trim().toLowerCase();
+      inputEl.value = '';
+      if (!raw) return;
+
+      if (typeof commands[raw] === 'function') {
+        commands[raw]();
+      } else {
+        printUser(raw);
+        print('Unknown command. Type "help" for instructions.');
+      }
+    }
+  });
+
+  // --------- Skip button ---------
+  skipBtn.addEventListener('click', () => {
+    outputEl.textContent = '';
+    logEl.textContent += '\n> skip command received\n> bypassing initialization sequence';
+    unlockSite(true);
+  });
+
+  // --------- Initialize ---------
+  setTimeout(typeBoot, 400); // slight pause for realism
+})();
+</script>
+
 </body>
 </html>
