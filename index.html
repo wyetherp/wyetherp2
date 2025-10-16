@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.08 — Field-Console Intro</title>
+  <title>CRUMB V1.08 — Field Console</title>
 
   <!--
   ======================================================================
@@ -82,6 +82,30 @@
       margin: 0 auto;
       padding: 2rem;
     }
+/* ========================================
+   Skip Button — minimal, visible top-right
+   ======================================== */
+.skip-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  z-index: 200;
+}
+.skip-btn:hover,
+.skip-btn:focus {
+  background: var(--text);
+  color: var(--bg);
+  outline: none;
+}
 
     .boot-title {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -312,6 +336,10 @@
        BOOT CONSOLE (new) — operational realistic
        ===================================================== -->
   <section id="boot-console" class="collapse">
+    <!-- Skip button for non-technical users -->
+<button id="skipBoot" class="skip-btn" aria-label="Skip boot sequence">
+  Skip Boot Sequence
+</button>
     <div class="boot-inner">
       <div class="boot-title">BOOT LOG</div>
       <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
@@ -427,6 +455,7 @@
   <script>
     (function() {
       // --------- DOM references ---------
+      const skipBtn = document.getElementById('skipBoot');
       const body = document.body;
       const logEl = document.getElementById('bootLog');
       const ioRow = document.getElementById('bootIO');
@@ -464,6 +493,7 @@
           showPrompt();
           return;
         }
+        
         logEl.textContent = bootText.slice(0, i++);
         if (i <= bootText.length) {
           setTimeout(typeBoot, speed);
@@ -532,25 +562,32 @@
       }
 
       // --------- Collapse console + reveal main content ---------
-      function unlockSite() {
-        // Mark body as unlocked for CSS fade
-        body.classList.remove('locked');
-        body.classList.add('unlocked');
-        main && main.setAttribute('aria-hidden', 'false');
+function unlockSite(skip = false) {
+  // Mark body as unlocked for CSS fade
+  body.classList.remove('locked');
+  body.classList.add('unlocked');
+  main && main.setAttribute('aria-hidden', 'false');
 
-        // Animate boot console collapse
-        // Measure height, then set max-height for smooth transition
-        const full = consoleSection.scrollHeight;
-        consoleSection.style.maxHeight = full + 'px';
-        // Force reflow to apply the height before collapsing
-        void consoleSection.offsetHeight;
-        consoleSection.classList.add('is-collapsed');
+  // Animate boot console collapse
+  const full = consoleSection.scrollHeight;
+  consoleSection.style.maxHeight = full + 'px';
+  void consoleSection.offsetHeight;
+  consoleSection.classList.add('is-collapsed');
 
-        // After collapse completes, optionally remove from layout
-        setTimeout(() => {
-          consoleSection.style.display = 'none';
-        }, 1200);
-      }
+  // Scroll to top immediately after unlocking
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // After collapse completes, remove from layout
+  setTimeout(() => {
+    consoleSection.style.display = 'none';
+    // Final scroll correction in case user clicked a hash link
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 1200);
+}
+
 
       // --------- Input handling ---------
       inputEl.addEventListener('keydown', (e) => {
@@ -571,6 +608,15 @@
 
       // --------- Kick off boot ---------
       typeBoot();
+      // --------- Skip button event handler ---------
+skipBtn.addEventListener('click', () => {
+  // Immediately print that the sequence was skipped (optional for feedback)
+  outputEl.textContent = '';
+  logEl.textContent += '\n> skip command received\n> bypassing initialization sequence';
+  // Unlock instantly
+  unlockSite(true);
+});
+
     })();
   </script>
 </body>
