@@ -3,219 +3,666 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRUMB V1.06</title>
+  <meta name="description" content="CRUMB - Technology that adapts to you. A pocket-sized companion for neurodivergent rhythms and human emotion."/>
+  <title>CRUMB V1.07</title>
   <style>
+    /* ========================================
+       MINIMAL BLACK & WHITE DESIGN SYSTEM
+       Human-AI intersection interface
+       ======================================== */
+    
     :root {
-      --bg: #000;
-      --text: #fff;
-      --muted: #888;
-      --accent: #fff;
-      --max-width: 1100px;
+      --bg: #000000;
+      --bg-elev: #0A0A0A;
+      --panel: #111111;
+      --border: #333333;
+      --text: #FFFFFF;
+      --muted: #999999;
+      --accent: #FFFFFF;
+      --accent-quiet: #666666;
+      --ok: #FFFFFF;
+      --warn: #FFFFFF;
+      --err: #FFFFFF;
+      --shadow: 0 2px 12px rgba(0,0,0,0.5);
+      --radius: 0px;
+      --radius-sm: 0px;
+      --maxw: 1200px;
+      --grid-gap: 16px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
+    /* ========================================
+       HEADER - Tactical navigation bar
+       ======================================== */
+    
     header {
-      padding: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 20, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+    }
+
+    header > div {
+      max-width: var(--maxw);
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: var(--max-width);
-      margin: 0 auto;
+      gap: 2rem;
     }
+
     header h1 {
       font-weight: 600;
-      letter-spacing: 2px;
-      font-size: 1.2rem;
+      letter-spacing: 3px;
+      font-size: 1.1rem;
+      color: var(--text);
+      text-transform: uppercase;
+      flex-shrink: 0;
     }
+
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      margin-left: auto;
+      filter: invert(1);
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+
     nav ul {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       list-style: none;
     }
+
     nav a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.2s;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 160ms;
+      position: relative;
     }
-    nav a:hover { color: var(--text); }
 
+    nav a:hover {
+      color: var(--text);
+    }
+
+    nav a:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+      color: var(--text);
+    }
+
+    /* ========================================
+       HERO - The human form as interface
+       ======================================== */
+    
     .hero {
-      max-width: var(--max-width);
-      margin: 8rem auto 6rem;
-      padding: 0 2rem;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
     }
+
+    .hero-content {
+      order: 1;
+    }
+
+    .hero-figure {
+      order: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-figure img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      filter: invert(1);
+      animation: presence 6s ease-in-out infinite;
+    }
+
+    @keyframes presence {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+      50% { transform: translateY(-10px) scale(1.02); opacity: 0.95; }
+    }
+
     .hero h2 {
-      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
       font-weight: 600;
+      line-height: 1.15;
       margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
-    .hero p {
+
+    .hero > p,
+    .hero-content > p {
       max-width: 700px;
       color: var(--muted);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
     }
 
+    /* ========================================
+       SECTIONS - Operational panels
+       ======================================== */
+    
     section {
-      max-width: var(--max-width);
-      margin: 6rem auto;
+      max-width: var(--maxw);
+      margin: 5rem auto;
       padding: 0 2rem;
     }
+
     section h3 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      color: var(--muted);
       margin-bottom: 1rem;
     }
+
+    section h3::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 14px;
+      background: var(--text);
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    section > h3:first-child {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-transform: none;
+      margin-bottom: 1.5rem;
+    }
+
+    section > h3:first-child::before {
+      display: none;
+    }
+
     section p {
       color: var(--muted);
       max-width: 800px;
       margin-bottom: 1.5rem;
+      line-height: 1.75;
     }
 
+    /* ========================================
+       ABOUT SECTION - Mission briefing
+       ======================================== */
+    
+    #about {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 3rem;
+      max-width: 900px;
+      line-height: 1.8;
+    }
+
+    #about h3 {
+      font-size: 1.8rem;
+      text-transform: none;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+
+    #about h3::before {
+      display: none;
+    }
+
+    #about p {
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+      max-width: 100%;
+    }
+
+    #about strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    #about em {
+      color: var(--muted);
+      font-style: italic;
+      display: block;
+      margin-top: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+    }
+
+    #about h4 {
+      margin-top: 2.5rem;
+      font-size: 1.3rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    #about ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1.5rem;
+    }
+
+    #about ul li {
+      margin-bottom: 1.5rem;
+      padding-left: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    #about ul li strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    /* ========================================
+       PRODUCTS - Asset inventory
+       ======================================== */
+    
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      gap: var(--grid-gap);
+      margin-top: 2.5rem;
     }
+
     .product-card {
-      background: #111;
-      border: 1px solid #222;
-      padding-bottom: 1rem;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: border 0.3s;
+      transition: border 160ms, transform 160ms;
     }
-    .product-card:hover { border: 1px solid #444; }
+
+    .product-card:hover {
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .product-card:focus-within {
+      outline: 2px solid var(--text);
+      outline-offset: 2px;
+    }
+
     .product-card img {
       width: 100%;
-      height: 220px;
+      height: 240px;
       object-fit: cover;
       display: block;
-      border-bottom: 1px solid #222;
+      border-bottom: 1px solid var(--border);
     }
+
     .product-card h4 {
-      font-size: 1.2rem;
-      margin: 1rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 1.5rem 1.5rem 0.5rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
+
     .product-card p {
       color: var(--muted);
       font-size: 0.95rem;
-      margin: 0 1rem 1rem;
+      line-height: 1.6;
+      margin: 0 1.5rem 1.5rem;
     }
 
+    /* ========================================
+       PHILOSOPHY SECTION
+       ======================================== */
+    
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .story-content p {
+      margin-bottom: 1.5rem;
+      line-height: 1.75;
+    }
+
+    /* ========================================
+       HIGHLIGHT - Minimal emphasis
+       ======================================== */
+    
+    .highlight {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      border-bottom: 1px solid var(--text);
+    }
+
+    /* ========================================
+       CTA - Action controls
+       ======================================== */
+    
     .cta-row {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-top: 2rem;
+      margin-top: 2.5rem;
     }
+
     .cta {
       display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border: 1px solid var(--text);
+      padding: 0.85rem 1.75rem;
+      background: transparent;
       color: var(--text);
       text-decoration: none;
       font-size: 0.9rem;
+      font-weight: 600;
       letter-spacing: 0.5px;
-      transition: background 0.2s, color 0.2s;
+      border: 2px solid var(--text);
+      border-radius: 0;
+      transition: background 160ms, color 160ms;
     }
+
     .cta:hover {
       background: var(--text);
       color: var(--bg);
     }
 
+    .cta:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 3px;
+    }
+
+    .cta:active {
+      transform: translateY(0);
+    }
+
+    /* ========================================
+       FOOTER - System information
+       ======================================== */
+    
     footer {
-      border-top: 1px solid #222;
+      border-top: 1px solid var(--border);
       text-align: center;
-      padding: 2rem;
+      padding: 2.5rem 2rem;
       color: var(--muted);
       font-size: 0.85rem;
+      margin-top: 6rem;
+      background: var(--panel);
     }
+
+    /* ========================================
+       ACCESSIBILITY & RESPONSIVENESS
+       ======================================== */
     
-    .highlight {
-  color: #fff;
-  text-decoration: underline;
-  text-decoration-color: #444;
-  text-underline-offset: 4px;
-}
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
 
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 1.5rem;
+      }
 
-    @media (max-width: 600px) {
-      nav ul { gap: 1rem; flex-wrap: wrap; justify-content: flex-end; }
-      .hero { margin-top: 4rem; }
+      header h1 {
+        font-size: 1rem;
+      }
+
+      .header-logo {
+        width: 32px;
+        height: 32px;
+      }
+
+      nav ul {
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 1.5rem 4rem;
+        gap: 2rem;
+      }
+
+      .hero-content {
+        order: 2;
+      }
+
+      .hero-figure {
+        order: 1;
+      }
+
+      .hero-figure img {
+        max-width: 250px;
+      }
+
+      .hero h2 {
+        font-size: 2rem;
+      }
+
+      .hero > p,
+      .hero-content > p {
+        font-size: 1rem;
+      }
+
+      section {
+        padding: 0 1.5rem;
+        margin: 3rem auto;
+      }
+
+      #about {
+        padding: 2rem 1.5rem;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-row {
+        flex-direction: column;
+      }
+
+      .cta {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 0.95rem;
+        letter-spacing: 2px;
+      }
+
+      .header-logo {
+        width: 28px;
+        height: 28px;
+      }
+
+      nav ul {
+        gap: 1rem;
+      }
+
+      nav a {
+        font-size: 0.8rem;
+      }
+
+      .hero {
+        padding: 2rem 1rem 3rem;
+      }
+
+      .hero-figure img {
+        max-width: 180px;
+      }
+
+      section {
+        padding: 0 1rem;
+      }
+
+      #about {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    /* ========================================
+       PRINT STYLES
+       ======================================== */
+    
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      header {
+        position: static;
+        background: white;
+        border-bottom: 1px solid black;
+      }
+
+      .cta {
+        border: 1px solid black;
+        background: white;
+        color: black;
+      }
+
+      .product-card {
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>CRUMB</h1>
-  <nav>
-    <ul>
-      <li><a href="#mission">Mission</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#products">Products</a></li>
-      <li><a href="#involve">Get Involved</a></li>
-    </ul>
-  </nav>
+  <div>
+    <h1>CRUMB</h1>
+    <nav>
+      <ul>
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#involve">Get Involved</a></li>
+      </ul>
+    </nav>
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Human-AI Icon" class="header-logo" />
+  </div>
 </header>
 
 <section class="hero" id="mission">
-  <h2>Technology that adapts to you.</h2>
-  <p>CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention-stealing. Just calm technology that fits in your hand.</p>
-  <div class="cta-row">
-    <a href="#about" class="cta">Learn More</a>
-    <a href="#involve" class="cta">Get Involved</a>
+  <div class="hero-content">
+    <h2>Technology that adapts to you.</h2>
+    <p>CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention-stealing. Just calm technology that fits in your hand.</p>
+    <div class="cta-row">
+      <a href="#about" class="cta">Learn More</a>
+      <a href="#involve" class="cta">Get Involved</a>
+    </div>
+  </div>
+  <div class="hero-figure">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Human-AI Interface Representation" />
   </div>
 </section>
 
-<section id="about" style="max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.7; font-family: 'Inter', sans-serif; color: #fff;">
-  <h3 style="font-size: 1.8rem; margin-bottom: 1rem; letter-spacing: 1px;">About</h3>
+<section id="about">
+  <h3>About</h3>
 
   <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science, human–computer interaction, and the science of the human–AI mind.</p>
 
-  <p>CRUMB began while watching my brother navigate devices that were never built for how he experiences the world. The interfaces weren’t broken. He wasn’t broken. The way of communication was broken.</p>
+  <p>CRUMB began while watching my brother navigate devices that were never built for how he experiences the world. The interfaces weren't broken. He wasn't broken. The way of communication was broken.</p>
 
-  <p>Most systems are built on the attention economy—designed to capture, not calm. CRUMB reverses that pattern. It gives control back to the user, offering sensory feedback, focus, and stillness. The goal isn’t to demand attention, but to restore rhythm.</p>
+  <p>Most systems are built on the attention economy—designed to capture, not calm. CRUMB reverses that pattern. It gives control back to the user, offering sensory feedback, focus, and stillness. The goal isn't to demand attention, but to restore rhythm.</p>
 
   <p><em>Built with Raspberry Pi Zero, NFC readers, and Python—housed in a modified calculator shell—CRUMB runs fully locally. Your data stays yours.</em></p>
 
-  <h4 style="margin-top: 2rem; font-size: 1.4rem;">What Can CRUMB Do?</h4>
+  <h4>What Can CRUMB Do?</h4>
 
-  <ul style="margin-top: 1rem; list-style-type: none; padding-left: 0;">
-    <li style="margin-bottom: 1rem;">
+  <ul>
+    <li>
       <strong>🌅 Morning Routine:</strong> Guides you through awakening, hygiene, and daily planning with gentle haptic cues—not demanding, just reminding. No screens. No distractions.
     </li>
 
-    <li style="margin-bottom: 1rem;">
-      <strong>💡 Focus Sessions:</strong> Start a Pomodoro timer with a press. LED light shifts color as time passes and vibrates softly when it’s time for a break.
+    <li>
+      <strong>💡 Focus Sessions:</strong> Start a Pomodoro timer with a press. LED light shifts color as time passes and vibrates softly when it's time for a break.
     </li>
 
-    <li style="margin-bottom: 1rem;">
+    <li>
       <strong>🌀 Fidget-Friendly:</strong> Physical buttons and customizable LED patterns for tactile engagement. Built for hands that think while they move.
     </li>
 
-    <li style="margin-bottom: 1rem;">
-      <strong>🌙 Mood Tracking:</strong> Log quick voice notes like “Feeling anxious.” CRUMB saves them locally—no typing, no apps, no data trail. Review weekly patterns and connect them with pre-set coping cues.
+    <li>
+      <strong>🌙 Mood Tracking:</strong> Log quick voice notes like "Feeling anxious." CRUMB saves them locally—no typing, no apps, no data trail. Review weekly patterns and connect them with pre-set coping cues.
     </li>
 
-    <li style="margin-bottom: 1rem;">
+    <li>
       <strong>💊 Medication Reminders:</strong> Set it once. CRUMB reminds you daily with a simple pulse. Confirm with a button press—no unlocks or notifications needed.
     </li>
 
-    <li style="margin-bottom: 1rem;">
-      <strong>🔗 Local Contact Sharing:</strong> Tap your CRUMB to a friend’s—instant contact exchange via NFC. No cloud, no tracking, no permissions.
+    <li>
+      <strong>🔗 Local Contact Sharing:</strong> Tap your CRUMB to a friend's—instant contact exchange via NFC. No cloud, no tracking, no permissions.
     </li>
   </ul>
 </section>
-
-
 
 <section id="products">
 <h3>Products</h3>
@@ -254,11 +701,10 @@ every form is crafted with intention: simple, connected, and deeply personal.</p
 
   <div class="story-content">
     <p>We live in an attention economy that mistakes friction for engagement. CRUMB is a counter-design — an experiment in quiet intelligence.</p>
-    <p>It’s a device small enough to fit in your hand, but built to challenge an entire paradigm. What happens when design starts with empathy, not metrics?</p>
+    <p>It's a device small enough to fit in your hand, but built to challenge an entire paradigm. What happens when design starts with empathy, not metrics?</p>
     <p><span class="highlight">Our goal:</span> create technologies that honor human variability. Not software that optimizes for sameness, but systems that breathe with the user.</p>
   </div>
 </section>
-
 
 <section id="involve">
   <h3>Get Involved</h3>
