@@ -2,232 +2,576 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="CRUMB — field‑ready, human‑centered systems. Technology that adapts to you without surveillance." />
-  <title>CRUMB — Field Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
+  <title>CRUMB V1.08 — Field-Console Intro</title>
+
+  <!--
+  ======================================================================
+   CRUMB FIELD-CONSOLE INTRO
+   ----------------------------------------------------------------------
+   Mission: Present a restrained, operationally realistic terminal that
+   gates entry to the primary site. The console instructs non-technical
+   users (explicit 'type "start" to continue' + 'help' command) and shows
+   clean, auditable code to any engineer reviewing the source.
+
+   Interaction model (triggered mode):
+     1) Typewriter boot log appears on load and then awaits a command.
+     2) User types `start` -> short init sequence -> console collapses.
+     3) Main site fades/appears; rest of original content remains intact.
+
+   Accessibility & UX:
+     - Respects reduced motion. If reduced motion is set, we skip the
+       typewriter effect but keep the command flow.
+     - Keyboard-first: auto-focuses the input; clear focus styles.
+     - Clear copy: tells users exactly what to do and that 'help' exists.
+
+   Implementation:
+     - Fully client-side; no network calls.
+     - Minimal new CSS; original styles preserved.
+     - All logic encapsulated in one <script> with heavy commentary.
+  ======================================================================
+  -->
+
   <style>
-    :root{
-      --bg:#0b0f14;
-      --bg-elev:#10161f;
-      --border:#1f2933;
-      --ink:#f3f4f6;
-      --muted:#98a2b3;
-      --accent:#e5e7eb;
-      --ok:#a7f3d0;
-      --warn:#fde68a;
-      --err:#fca5a5;
-      --maxw:1200px;
-      --radius:6px;
-      --mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --sans:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    /* ========================================
+       MINIMAL BLACK & WHITE DESIGN SYSTEM
+       (original palette preserved)
+       ======================================== */
+    :root {
+      --bg: #000000;
+      --bg-elev: #0A0A0A;
+      --panel: #111111;
+      --border: #333333;
+      --text: #FFFFFF;
+      --muted: #999999;
+      --accent: #FFFFFF;
+      --accent-quiet: #666666;
+      --ok: #FFFFFF;   /* we keep white for monochrome aesthetic */
+      --warn: #FFFFFF;
+      --err: #FFFFFF;
+      --shadow: 0 2px 12px rgba(0,0,0,0.5);
+      --radius: 0px;
+      --radius-sm: 0px;
+      --maxw: 1200px;
+      --grid-gap: 16px;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-    .commandbar{position:sticky;top:0;z-index:50;background:rgba(16,22,31,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-    .commandbar-inner{display:flex;align-items:center;gap:24px;padding:14px 0}
-    .brand{letter-spacing:.3em;text-transform:uppercase;font-weight:600}
-    nav{margin-left:auto}
-    nav ul{list-style:none;display:flex;gap:22px}
-    nav a{color:var(--muted);font-weight:600;font-size:.92rem;position:relative}
-    nav a:hover{color:var(--ink)}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .status{display:flex;align-items:center;gap:10px;margin-left:8px}
-    .dot{width:8px;height:8px;border-radius:50%}
-    .ok{background:var(--ok)} .warn{background:var(--warn)} .err{background:var(--err)}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-    .deck{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:72px 0}
-    h1{font-size:clamp(2.2rem,4.6vw,3.8rem);font-weight:700;margin-bottom:18px}
-    .lead{color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:44ch}
+    /* ========================================
+       BOOT CONSOLE (new, sits above hero)
+       ======================================== */
+    #boot-console {
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
 
-    .ops{background:var(--bg-elev);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:24px 0}
-    .ops pre{font-family:var(--mono);font-size:.9rem;color:var(--accent);white-space:pre-wrap}
-    .cursor{display:inline-block;width:9px;height:1em;background:var(--accent);animation:blink 1s step-start infinite}
-    @keyframes blink{50%{opacity:0}}
+    .boot-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 2rem;
+    }
 
-    footer{border-top:1px solid var(--border);padding:28px 0;margin-top:56px;color:var(--muted);text-align:center}
+    .boot-title {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .boot-log {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .boot-io { /* prompt + input live row */
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .boot-prompt { color: var(--text); }
+
+    .boot-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-bottom: 1px dashed var(--border);
+      color: var(--text);
+      outline: none;
+      padding: 0.25rem 0.25rem 0.35rem;
+      font: inherit;
+    }
+    .boot-input::placeholder { color: var(--muted); }
+    .boot-input:focus { border-bottom-color: var(--text); }
+
+    .boot-output {
+      margin-top: 0.5rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--muted);
+    }
+
+    /* Console collapse + main reveal */
+    .collapse {
+      overflow: hidden;
+      transition: max-height 1.2s ease, opacity 1.2s ease;
+      max-height: 1000px; /* large enough to show content before collapse */
+      opacity: 1;
+    }
+    .collapse.is-collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    /* While locked, hide the rest of the site (hero + below) */
+    .locked .main-content { opacity: 0; pointer-events: none; }
+    .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
+
+    /* ========================================
+       HEADER - Tactical navigation bar (original)
+       ======================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 15, 20, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+    }
+    header > div { max-width: var(--maxw); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+    header h1 { font-weight: 600; letter-spacing: 3px; font-size: 1.1rem; color: var(--text); text-transform: uppercase; flex-shrink: 0; }
+    .header-logo { width: 40px; height: 40px; margin-left: auto; filter: invert(1); animation: breathe 4s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
+    nav ul { display: flex; gap: 2rem; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.3px; transition: color 160ms; position: relative; }
+    nav a:hover { color: var(--text); }
+    nav a:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; color: var(--text); }
+
+    /* ========================================
+       HERO - The human form as interface (original)
+       ======================================== */
+    .hero { max-width: var(--maxw); margin: 0 auto; padding: 4rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero-content { order: 1; }
+    .hero-figure { order: 2; display: flex; justify-content: center; align-items: center; }
+    .hero-figure img { width: 100%; max-width: 400px; height: auto; filter: invert(1); animation: presence 6s ease-in-out infinite; }
+    @keyframes presence { 0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(-10px) scale(1.02); opacity: 0.95; } }
+    .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; color: var(--text); }
+    .hero > p, .hero-content > p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
+
+    /* ========================================
+       SECTIONS - Operational panels (original)
+       ======================================== */
+    section { max-width: var(--maxw); margin: 5rem auto; padding: 0 2rem; }
+    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 1rem; }
+    section h3::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--text); margin-right: 10px; vertical-align: middle; }
+    section > h3:first-child { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); text-transform: none; margin-bottom: 1.5rem; }
+    section > h3:first-child::before { display: none; }
+    section p { color: var(--muted); max-width: 800px; margin-bottom: 1.5rem; line-height: 1.75; }
+
+    /* ========================================
+       ABOUT SECTION - Mission briefing (original)
+       ======================================== */
+    #about { background: var(--panel); border: 1px solid var(--border); border-radius: 0; padding: 3rem; max-width: 900px; line-height: 1.8; }
+    #about h3 { font-size: 1.8rem; text-transform: none; letter-spacing: -0.01em; margin-bottom: 2rem; color: var(--text); }
+    #about h3::before { display: none; }
+    #about p { margin-bottom: 1.5rem; color: var(--muted); max-width: 100%; }
+    #about strong { color: var(--text); font-weight: 600; }
+    #about em { color: var(--muted); font-style: italic; display: block; margin-top: 1rem; padding-left: 1rem; border-left: 2px solid var(--border); }
+    #about h4 { margin-top: 2.5rem; font-size: 1.3rem; color: var(--text); margin-bottom: 1rem; font-weight: 600; }
+    #about ul { list-style: none; padding: 0; margin-top: 1.5rem; }
+    #about ul li { margin-bottom: 1.5rem; padding-left: 0; color: var(--muted); line-height: 1.7; }
+    #about ul li strong { display: block; color: var(--text); margin-bottom: 0.3rem; font-weight: 600; }
+
+    /* ========================================
+       PRODUCTS - Asset inventory (original)
+       ======================================== */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
+    .product-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
+    .product-card:hover { border-color: var(--text); transform: translateY(-2px); }
+    .product-card:focus-within { outline: 2px solid var(--text); outline-offset: 2px; }
+    .product-card img { width: 100%; height: 240px; object-fit: cover; display: block; border-bottom: 1px solid var(--border); }
+    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; color: var(--text); letter-spacing: -0.01em; }
+    .product-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0 1.5rem 1.5rem; }
+
+    /* ========================================
+       PHILOSOPHY SECTION (original)
+       ======================================== */
+    .section-header { margin-bottom: 2rem; }
+    .section-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); margin-bottom: 0.5rem; }
+    .section-subtitle { color: var(--muted); font-size: 1rem; }
+    .story-content p { margin-bottom: 1.5rem; line-height: 1.75; }
+
+    /* ========================================
+       HIGHLIGHT - Minimal emphasis (original)
+       ======================================== */
+    .highlight { color: var(--text); text-decoration: none; font-weight: 600; position: relative; border-bottom: 1px solid var(--text); }
+
+    /* ========================================
+       CTA - Action controls (original)
+       ======================================== */
+    .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
+    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); border-radius: 0; transition: background 160ms, color 160ms; }
+    .cta:hover { background: var(--text); color: var(--bg); }
+    .cta:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+    .cta:active { transform: translateY(0); }
+
+    /* ========================================
+       FOOTER - System information (original)
+       ======================================== */
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
+
+    /* ========================================
+       ACCESSIBILITY & RESPONSIVENESS (original)
+       ======================================== */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+    @media (max-width: 768px) {
+      header { padding: 1rem 1.5rem; }
+      header h1 { font-size: 1rem; }
+      .header-logo { width: 32px; height: 32px; }
+      nav ul { gap: 1.25rem; flex-wrap: wrap; }
+      nav a { font-size: 0.85rem; }
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; gap: 2rem; }
+      .hero-content { order: 2; }
+      .hero-figure { order: 1; }
+      .hero-figure img { max-width: 250px; }
+      .hero h2 { font-size: 2rem; }
+      .hero > p, .hero-content > p { font-size: 1rem; }
+      section { padding: 0 1.5rem; margin: 3rem auto; }
+      #about { padding: 2rem 1.5rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      .cta-row { flex-direction: column; }
+      .cta { width: 100%; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 0.95rem; letter-spacing: 2px; }
+      .header-logo { width: 28px; height: 28px; }
+      nav ul { gap: 1rem; }
+      nav a { font-size: 0.8rem; }
+      .hero { padding: 2rem 1rem 3rem; }
+      .hero-figure img { max-width: 180px; }
+      section { padding: 0 1rem; }
+      #about { padding: 1.5rem 1rem; }
+    }
+
+    /* ========================================
+       PRINT STYLES (original)
+       ======================================== */
+    @media print {
+      body { background: white; color: black; }
+      header { position: static; background: white; border-bottom: 1px solid black; }
+      .cta { border: 1px solid black; background: white; color: black; }
+      .product-card { break-inside: avoid; }
+    }
   </style>
 </head>
-<body>
-<header class="commandbar">
-  <div class="container commandbar-inner">
-    <div class="brand">CRUMB</div>
-    <nav>
-      <ul>
-        <li><a href="#mission">Mission</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#products">Products</a></li>
-        <li><a href="#involved">Get Involved</a></li>
-      </ul>
-    </nav>
-    <div class="status">
-      <div class="dot ok"></div>
-      <div class="dot warn"></div>
-      <div class="dot err"></div>
-    </div>
-  </div>
-</header>
+<body class="locked"><!-- body starts locked; main content hidden until `start` -->
 
-<main class="container">
-  <section id="mission" class="deck">
+  <!-- =====================================================
+       COMMAND BAR / HEADER (original, unchanged)
+       ===================================================== -->
+  <header>
     <div>
-      <h1>Technology that adapts to you.</h1>
-      <p class="lead">CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy.</p>
-      <div class="ops" aria-live="polite">
-        <pre><strong>BOOT LOG</strong>
-> initializing protocol …
-> calibrating presence …
-> local privacy guard … enabled
-> cloud dependency …… none detected
-> readiness state …… green
-> awaiting human input █</pre>
+      <h1>CRUMB</h1>
+      <nav>
+        <ul>
+          <li><a href="#mission">Mission</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#involve">Get Involved</a></li>
+        </ul>
+      </nav>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Human-AI Icon" class="header-logo" />
+    </div>
+  </header>
+
+  <!-- =====================================================
+       BOOT CONSOLE (new) — operational realistic
+       ===================================================== -->
+  <section id="boot-console" class="collapse">
+    <div class="boot-inner">
+      <div class="boot-title">BOOT LOG</div>
+      <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
+      <div class="boot-io" id="bootIO" style="display:none">
+        <span class="boot-prompt">&gt;</span>
+        <input id="bootInput" class="boot-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="type &quot;start&quot; to continue or &quot;help&quot; for instructions" aria-label="Boot console input" />
       </div>
+      <div class="boot-output" id="bootOutput" aria-live="polite"></div>
     </div>
   </section>
 
-  <section id="about">
-    <h2>About</h2>
-    <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
-    <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
-    <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
-    <p><em>Raspberry Pi Zero. NFC. Python. Runs locally. Your data stays yours.</em></p>
-  </section>
+  <!-- =====================================================
+       MAIN CONTENT (original site wrapped for reveal)
+       ===================================================== -->
+  <div class="main-content" aria-hidden="true">
 
-  <section id="products">
-    <h2>Products</h2>
-    <p>Three forms. Same intention.</p>
-    <p><em>Available December 2025</em></p>
-    <ul>
-      <li>CRUMB Genesis — pocket-sized calculator shell, voice-responsive, pattern-learning.</li>
-      <li>CRUMB Cell — touch-responsive, local AI, private presence without surveillance.</li>
-      <li>CRUMB Grove — room-scale, light, motion, sound. The environment becomes aware.</li>
-    </ul>
-  </section>
+    <section class="hero" id="mission">
+      <div class="hero-content">
+        <h2>Technology that adapts to you.</h2>
+        <p>CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention-stealing. Just calm technology that fits in your hand.</p>
+        <div class="cta-row">
+          <a href="#about" class="cta">Learn More</a>
+          <a href="#involve" class="cta">Get Involved</a>
+        </div>
+      </div>
+      <div class="hero-figure">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Human-AI Interface Representation" />
+      </div>
+    </section>
 
-  <section id="involved">
-    <h2>Get Involved</h2>
-    <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
-    <ul>
-      <li><a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a></li>
-      <li><a href="mailto:wja326@lehigh.edu">Email</a></li>
-      <li><a href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a></li>
-    </ul>
-  </section>
+    <section id="about">
+      <h3>About</h3>
 
-  <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
-</main>
+      <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
 
-<script>
-/*
-==========================================
-  CRUMB TERMINAL INTERACTION MODULE
-  ---------------------------------
-  This script powers the interactive terminal
-  inside the "BOOT LOG" section of the CRUMB webpage.
+      <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
 
-  DESIGN GOALS:
-  - Keep all logic local (no network calls).
-  - Maintain full accessibility and graceful fallback.
-  - Write clearly enough for another engineer to understand at a glance.
+      <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
 
-  Author: Wyeth Anzilotti
-  Version: 1.1
-==========================================
-*/
+      <p><em>Raspberry Pi Zero. NFC. Python. Runs locally. Your data stays yours.</em></p>
 
-(function () {
-  const pre = document.querySelector('.ops pre');
-  if (!pre) return;
+      <h4>What CRUMB Does</h4>
 
-  const bootText = `\nBOOT LOG\n> initializing protocol …\n> calibrating presence …\n> local privacy guard … enabled\n> cloud dependency …… none detected\n> readiness state …… green\n> awaiting human input █\n`;
+      <ul>
+        <li><strong>🌅 Morning Structure:</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
+        <li><strong>💡 Focus:</strong> Press once to start. LED shifts as time passes. Vibrates when it's time to rest.</li>
+        <li><strong>🌀 Tactile Engagement:</strong> Physical buttons and LED patterns. For hands that think while they move.</li>
+        <li><strong>🌙 Mood Tracking:</strong> Voice notes saved locally. Weekly patterns, no cloud.</li>
+        <li><strong>💊 Reminders:</strong> Set once. Daily pulse. Button to confirm.</li>
+        <li><strong>🔗 Contact Sharing:</strong> Tap two CRUMBs together. NFC transfer. No permissions.</li>
+      </ul>
+    </section>
 
-  pre.textContent = '';
-  const totalDuration = 10000;
-  const speed = totalDuration / bootText.length;
-  let i = 0;
+    <section id="products">
+      <h3>Products</h3>
+      <p>Three forms. Same intention.</p>
+      <p style="opacity: 0.9; font-style: italic;">Available December 2025</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src="BMO.webp" alt="CRUMB Genesis prototype">
+          <h4>CRUMB Genesis</h4>
+          <p>Pocket-sized. Calculator shell. Voice-responsive, pattern-learning. Built to last.</p>
+          <p>33 units in production</p>
+        </div>
+        <div class="product-card">
+          <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell">
+          <h4>CRUMB Cell</h4>
+          <p>Touch-responsive. Local AI. Offline, private. Presence without surveillance.</p>
+        </div>
+        <div class="product-card">
+          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Planet">
+          <h4>CRUMB Grove</h4>
+          <p>Room-scale. Light, motion, sound. The environment becomes aware.</p>
+        </div>
+      </div>
+    </section>
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    pre.textContent = bootText;
-    activateTerminal();
-    return;
-  }
+    <section id="Philosophy">
+      <div class="section-header">
+        <h2 class="section-title">Philosophy</h2>
+      </div>
+      <div class="story-content">
+        <p>We live in an attention economy. CRUMB is a counterdesign</p>
+        <p>What happens when technology learns your rhythms instead of breaking them?</p>
+        <p>Small enough to fit in your hand. Built to challenge a paradigm.</p>
+      </div>
+    </section>
 
-  function typeLine() {
-    pre.textContent = bootText.slice(0, i++);
-    if (i <= bootText.length) {
-      setTimeout(typeLine, speed);
-    } else {
-      activateTerminal();
-    }
-  }
-  typeLine();
+    <section id="involve">
+      <h3>Get Involved</h3>
+      <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
+      <div class="cta-row">
+        <a class="cta" href="https://github.com/wyetherp/crumb_main" target="_blank" rel="noopener">GitHub</a>
+        <a class="cta" href="mailto:wja326@lehigh.edu">Email</a>
+        <a class="cta" href="https://linkedin.com/in/wyetherp" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
 
-  function activateTerminal() {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = 'enter command';
-    input.style.cssText = `background:transparent;border:none;outline:none;color:#e5e7eb;font-family:var(--mono);font-size:0.9rem;width:100%;`;
+    <footer>
+      © 2025 CRUMB — Built by Wyeth Anzilotti | Open Source
+    </footer>
 
-    const prompt = document.createElement('div');
-    prompt.textContent = '> ';
-    prompt.style.display = 'inline-block';
-    prompt.style.color = '#a7f3d0';
-    prompt.style.fontFamily = 'var(--mono)';
+  </div><!-- /.main-content -->
 
-    const consoleDiv = document.createElement('div');
-    consoleDiv.appendChild(prompt);
-    consoleDiv.appendChild(input);
-    pre.insertAdjacentElement('afterend', consoleDiv);
+  <!-- =====================================================
+       INTERACTIVE BOOT CONSOLE SCRIPT
+       -----------------------------------------------------
+       Operational, readable, and self-contained.
+       - Typewriter boot sequence (~10s) with reduced-motion respect
+       - Commands: help, start
+       - On `start`: show short init, then collapse console & reveal site
+  ===================================================== -->
+  <script>
+    (function() {
+      // --------- DOM references ---------
+      const body = document.body;
+      const logEl = document.getElementById('bootLog');
+      const ioRow = document.getElementById('bootIO');
+      const inputEl = document.getElementById('bootInput');
+      const outputEl = document.getElementById('bootOutput');
+      const consoleSection = document.getElementById('boot-console');
+      const main = document.querySelector('.main-content');
 
-    const outputDiv = document.createElement('div');
-    outputDiv.style.fontFamily = 'var(--mono)';
-    outputDiv.style.fontSize = '0.9rem';
-    outputDiv.style.color = '#98a2b3';
-    outputDiv.style.marginTop = '8px';
-    pre.parentNode.insertBefore(outputDiv, pre.nextSibling.nextSibling);
+      // --------- Boot text (operational realistic) ---------
+      const bootLines = [
+        'BOOT LOG',
+        '> initializing CRUMB protocol …',
+        '> establishing local environment …',
+        '> system diagnostics … passed',
+        '> encryption layer … active',
+        '> awaiting user command',
+        '(type "start" to continue or "help" for a list of commands)'
+      ];
 
-    const commands = {
-      help: `Available commands:\n  - help ............ list available commands\n  - status .......... check system readiness\n  - whoami .......... identify current operator\n  - mission ......... reveal active objective\n  - clear ........... clear terminal output`,
-      status: 'STATUS: all systems nominal. Privacy guard active.',
-      whoami: 'USER: Wyeth Anzilotti — Field Systems Engineer in training.',
-      mission: 'MISSION: Build calm, resilient systems that hold up in the field.',
-      clear: '',
-    };
+      // Join as one string so we can typewriter it
+      const bootText = bootLines.join('\n');
 
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const command = input.value.trim().toLowerCase();
-        const line = document.createElement('div');
-        line.textContent = `> ${command}`;
-        line.style.color = '#e5e7eb';
-        outputDiv.appendChild(line);
+      // --------- Typewriter parameters ---------
+      const totalDurationMs = 10000; // ~10s for entire text block
+      const speed = Math.max(6, Math.floor(totalDurationMs / Math.max(bootText.length, 1)));
+      let i = 0; // cursor position while typing
 
-        if (commands[command] !== undefined) {
-          if (command === 'clear') {
-            outputDiv.innerHTML = '';
-          } else {
-            const response = document.createElement('div');
-            response.textContent = commands[command];
-            response.style.marginLeft = '1rem';
-            outputDiv.appendChild(response);
-          }
-        } else if (command !== '') {
-          const error = document.createElement('div');
-          error.textContent = 'Unknown command. Type "help" for a list of commands.';
-          error.style.color = '#fca5a5';
-          outputDiv.appendChild(error);
+      // Respect reduced motion: no typing effect, but keep interactive flow
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // --------- Boot typing sequence ---------
+      function typeBoot() {
+        if (reduced) {
+          logEl.textContent = bootText;
+          showPrompt();
+          return;
         }
-
-        input.value = '';
-        outputDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        logEl.textContent = bootText.slice(0, i++);
+        if (i <= bootText.length) {
+          setTimeout(typeBoot, speed);
+        } else {
+          showPrompt();
+        }
       }
-    });
 
-    setTimeout(() => input.focus(), 500);
-  }
-})();
-</script>
+      // --------- Show prompt/input row and focus it ---------
+      function showPrompt() {
+        ioRow.style.display = 'flex';
+        // Tiny delay ensures reflow then focus
+        setTimeout(() => inputEl && inputEl.focus(), 150);
+      }
+
+      // --------- Command registry (explicitly simple) ---------
+      const commands = {
+        help() {
+          printUser('help');
+          print(`Available commands:\n  start ............ initialize full interface\n  help ............. show available commands`);
+        },
+        start() {
+          printUser('start');
+          runStartSequence();
+        }
+      };
+
+      // --------- Helpers to print lines to the output area ---------
+      function printUser(cmd) {
+        const line = document.createElement('div');
+        line.textContent = '> ' + cmd;
+        line.style.color = '#FFFFFF';
+        outputEl.appendChild(line);
+      }
+      function print(msg, muted = true) {
+        const line = document.createElement('div');
+        line.textContent = msg;
+        line.style.marginLeft = '1rem';
+        line.style.color = muted ? '#999999' : '#FFFFFF';
+        outputEl.appendChild(line);
+        line.scrollIntoView({ block: 'end' });
+      }
+
+      // --------- Start sequence then reveal site ---------
+      function runStartSequence() {
+        // Short, believable ops steps then unlock.
+        const seq = [
+          '> running initialization sequence …',
+          '> synchronizing interface modules …',
+          '> verifying local assets …',
+          '> deployment complete',
+          '> CRUMB interface online'
+        ];
+
+        let idx = 0;
+        const step = () => {
+          if (idx < seq.length) {
+            print(seq[idx++]);
+            setTimeout(step, 450);
+          } else {
+            // Collapse console and reveal content
+            unlockSite();
+          }
+        };
+        step();
+      }
+
+      // --------- Collapse console + reveal main content ---------
+      function unlockSite() {
+        // Mark body as unlocked for CSS fade
+        body.classList.remove('locked');
+        body.classList.add('unlocked');
+        main && main.setAttribute('aria-hidden', 'false');
+
+        // Animate boot console collapse
+        // Measure height, then set max-height for smooth transition
+        const full = consoleSection.scrollHeight;
+        consoleSection.style.maxHeight = full + 'px';
+        // Force reflow to apply the height before collapsing
+        void consoleSection.offsetHeight;
+        consoleSection.classList.add('is-collapsed');
+
+        // After collapse completes, optionally remove from layout
+        setTimeout(() => {
+          consoleSection.style.display = 'none';
+        }, 1200);
+      }
+
+      // --------- Input handling ---------
+      inputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const raw = inputEl.value.trim().toLowerCase();
+          inputEl.value = '';
+
+          if (!raw) return; // ignore empty
+
+          if (typeof commands[raw] === 'function') {
+            commands[raw]();
+          } else {
+            printUser(raw);
+            print('Unknown command. Type "help" for instructions.');
+          }
+        }
+      });
+
+      // --------- Kick off boot ---------
+      typeBoot();
+    })();
+  </script>
 </body>
 </html>
