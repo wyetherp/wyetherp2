@@ -542,16 +542,19 @@ help() {
       printUser('about');
       runAboutSequence();
     },
-    status() {
-      printUser('status');
-      const diagnostics = [
-        '> CRUMB PROTOCOL: ACTIVE',
-        '> Environment: LOCAL',
-        '> Encryption: ENABLED',
-        '> Uptime: ' + Math.floor(Math.random() * 90) + ' mins'
-      ];
-      diagnostics.forEach(line => print(line));
-    },
+status() {
+  printUser('status');
+  const now = new Date();
+  const diagnostics = [
+    `> CRUMB PROTOCOL: ACTIVE`,
+    `> Environment: ${window.location.hostname || 'LOCAL'}`,
+    `> Encryption: ENABLED`,
+    `> Uptime: ${Math.floor(performance.now() / 60000)} mins`,
+    `> Browser Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
+    `> Timestamp: ${now.toISOString()}`
+  ];
+  diagnostics.forEach(line => print(line));
+}
     whoami() {
       printUser('whoami');
       print('Operator: Wyeth Anzilotti');
