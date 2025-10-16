@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.10 — Field Console</title>
+  <title>CRUMB V1.11 — Field Console</title>
 
   <!--
   ======================================================================
@@ -548,48 +548,55 @@ const bootLines = [
     line.scrollIntoView({ block: 'end' });
   }
 
-  // --------- Command registry ---------
-  const commands = {
-help() {
-  printUser('help');
-  const lines = [
-    'Available commands:',
-    '  start ............ Enter full website',
-    '  help ............. show available commands',
-    '  about ............ learn about CRUMB philosophy',
-    '  status ........... system diagnostics',
-    '  whoami ........... operator identity',
-    '  clear ............ clear terminal output'
-  ];
-  lines.forEach(line => print(line));
-},
-    start() {
-      printUser('start');
-      runStartSequence();
-    },
-    about() {
-      printUser('about');
-      runAboutSequence();
-    },
-status() {
-  printUser('status');
-  const now = new Date();
-  const diagnostics = [
-    `> CRUMB PROTOCOL: ACTIVE`,
-    `> Environment: ${window.location.hostname || 'LOCAL'}`,
-    `> Encryption: ENABLED`,
-    `> Uptime: ${Math.floor(performance.now() / 60000)} mins`,
-    `> Browser Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
-    `> Timestamp: ${now.toISOString()}`
-  ];
-  diagnostics.forEach(line => print(line));
-},
+const commands = {
+  help() {
+    printUser('help');
+    const lines = [
+      'Available commands:',
+      '  start ............ Enter full website',
+      '  help ............. show available commands',
+      '  about ............ learn about CRUMB philosophy',
+      '  status ........... system diagnostics',
+      '  whoami ........... operator identity',
+      '  clear ............ clear terminal output'
+    ];
+    lines.forEach(line => print(line));
+  },
 
-whoami() {
-  printUser('whoami');
-  print('Operator: Wyeth Anzilotti');
-  print('Role: Field Engineer');
-},
+  start() {
+    printUser('start');
+    runStartSequence();
+  },
+
+  about() {
+    printUser('about');
+    runAboutSequence();
+  },
+
+  status() {
+    printUser('status');
+    const now = new Date();
+    const diagnostics = [
+      `> CRUMB PROTOCOL: ACTIVE`,
+      `> Environment: ${window.location.hostname || 'LOCAL'}`,
+      `> Encryption: ENABLED`,
+      `> Uptime: ${Math.floor(performance.now() / 60000)} mins`,
+      `> Browser Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
+      `> Timestamp: ${now.toISOString()}`
+    ];
+    diagnostics.forEach(line => print(line));
+  },
+
+  whoami() {
+    printUser('whoami');
+    print('Operator: Wyeth Anzilotti');
+    print('Role: Field Engineer');
+  },
+
+  clear() {
+    outputEl.textContent = '';
+  }
+};
 
   // --------- Boot sequence ---------
   function runStartSequence() {
