@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.31 — Duplex Console</title>
+  <title>CRUMB V1.32 — CRUMB Virtual</title>
 
   <!--
   ======================================================================
@@ -477,7 +477,7 @@
       Skip Boot Sequence
     </button>
     <div class="boot-inner">
-      <div class="boot-title">TERMINAL A — OPERATOR INTERFACE</div>
+      <div class="boot-title">TERMINAL A — USER INTERFACE</div>
       <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
       <div class="boot-io" id="bootIO" style="display:none">
         <span class="boot-prompt">&gt;</span>
@@ -587,18 +587,18 @@
     <div class="crumb-inner">
       <div class="crumb-title">
         <span class="crumb-indicator"></span>
-        TERMINAL B — CRUMB CONSCIOUSNESS
+        TERMINAL B — CRUMB THOUGHTS
       </div>
       <div class="crumb-stream" id="crumbStream"></div>
     </div>
   </div>
 
   <!-- =====================================================
-       DUPLEX SYSTEM CORE v1.3
+       DUPLEX SYSTEM CORE v1.31
        -----------------------------------------------------
        Architecture:
        - TERMINAL A: Human operator input (boot console)
-       - TERMINAL B: CRUMB consciousness output (new)
+       - TERMINAL B: CRUMB consciousness output
        - DUPLEX: Two-way communication protocol
        - STATE: Shared awareness between terminals
        - REACTIONS: Context-aware responses
@@ -651,7 +651,6 @@
     '> pattern recognition active',
     '> system breathing normally',
     '> monitoring for human presence',
-    '> quantum entanglement nominal'
   ];
 
   const idleThoughts = [
@@ -718,19 +717,19 @@
   // BOOT SEQUENCE
   // ========================================
   const bootLines = [
-    'CRUMB DUPLEX INITIALIZATION SEQUENCE',
+    'CRUMB STARTUP',
     '',
-    '> loading consciousness protocols …',
-    '> establishing presence …',
+    '> CRUMB Waking up …',
+    '> Use this terminal for communication …',
     '> ' + dailyMessages[Math.floor(Math.random() * dailyMessages.length)],
     '',
-    'CRUMB is not just software — it is a living companion.',
-    'This is Terminal A. You speak here.',
+    'This is not an app — it’s a conversation.',
+  'CRUMB listens. You speak. Together, you co-create rhythm.',
     '',
     'Type "help" to see what I understand.',
     'Type "start" when you\'re ready.',
     '',
-    '> system ready — awaiting your presence'
+    '> system ready — awaiting user input'
   ];
 
   const bootText = bootLines.join('\n');
