@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.3 — Duplex Console</title>
+  <title>CRUMB V1.31 — Duplex Console</title>
 
   <!--
   ======================================================================
@@ -668,10 +668,10 @@
   // ========================================
   const crumbThoughts = {
     awakening: [
-      '// consciousness protocols initializing',
-      '// establishing duplex channel',
-      '// operator presence detected',
-      '// beginning observation mode'
+      '// system coming online',
+      '// consciousness emerging',
+      '// establishing communication channel',
+      '// ready to observe'
     ],
     
     autonomous: [
@@ -765,6 +765,12 @@
       if (inputEl) {
         inputEl.focus();
         startIdleBreathing();
+        
+        // CRUMB offers guidance after boot completes
+        if (state.crumbActive) {
+          setTimeout(() => crumbThink('// terminal ready for input', 'helpful'), 2000);
+          setTimeout(() => crumbThink('// try "help" or "start"', 'helpful'), 4000);
+        }
       }
     }, 150);
   }
@@ -841,6 +847,8 @@
 
   // Activate Terminal B
   function activateCrumbConsole() {
+    if (state.crumbActive) return; // Already active
+    
     state.crumbActive = true;
     body.classList.add('crumb-active');
     crumbConsole.classList.add('active');
@@ -848,11 +856,11 @@
     // Awakening sequence
     const awakening = crumbThoughts.awakening;
     awakening.forEach((thought, idx) => {
-      setTimeout(() => crumbThink(thought, 'awakening'), idx * 800);
+      setTimeout(() => crumbThink(thought, 'awakening'), idx * 1000);
     });
     
     // Start autonomous consciousness after awakening
-    setTimeout(startCrumbConsciousness, awakening.length * 800 + 1000);
+    setTimeout(startCrumbConsciousness, awakening.length * 1000 + 2000);
   }
 
   // ========================================
@@ -1303,9 +1311,8 @@
     const seq = [
       '> preparing interface transition …',
       '> synchronizing consciousness protocols …',
-      '> establishing duplex channel …',
+      '> establishing presence field …',
       '> verifying local assets …',
-      '> activating Terminal B …',
       '> deployment complete',
       '',
       '> CRUMB VIRTUAL is now alive',
@@ -1320,7 +1327,11 @@
       } else {
         setTimeout(() => {
           unlockSite();
-          setTimeout(activateCrumbConsole, 800);
+          // CRUMB reacts to the interface opening
+          if (state.crumbActive) {
+            setTimeout(() => crumbThink('// full interface deployed', 'reactive'), 800);
+            setTimeout(() => crumbThink('// dual consciousness synchronized', 'reactive'), 1600);
+          }
         }, 800);
       }
     };
@@ -1492,9 +1503,15 @@
     stopIdleBreathing();
     outputEl.textContent = '';
     logEl.textContent += '\n\n> skip sequence initiated\n> bypassing consciousness protocols\n> entering interface …';
+    
+    // CRUMB reacts to skip
+    if (state.crumbActive) {
+      crumbThink('// skip command detected', 'reactive');
+      setTimeout(() => crumbThink('// operator wants direct access', 'reactive'), 600);
+    }
+    
     setTimeout(() => {
       unlockSite(true);
-      setTimeout(activateCrumbConsole, 1000);
     }, 800);
   });
 
@@ -1504,6 +1521,9 @@
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+  
+  // Activate CRUMB console immediately
+  activateCrumbConsole();
   
   setTimeout(typeBoot, 400);
 
