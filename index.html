@@ -4,24 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.21 — Living System</title>
+  <title>CRUMB V1.3 — Duplex Console</title>
 
   <!--
   ======================================================================
-   CRUMB LIVING CONSOLE v1.2
+   CRUMB DUPLEX CONSOLE v1.3
    ----------------------------------------------------------------------
-   Mission: A terminal that breathes. A system that listens.
-   Not simulation - presence.
+   Mission: Two terminals. One conversation.
    
-   New in v1.2:
-   - Idle breathing states
-   - Command history (↑/↓ arrows)
-   - Tab completion
-   - Heartbeat responds to interaction
-   - Personality through random observations
-   - Hidden developer mode
-   - Daily environmental messages
-   - System feels aware, not just reactive
+   Terminal A (Human): Operator input and command execution
+   Terminal B (CRUMB): System consciousness stream
+   
+   Together they form a bi-directional communication field.
+   CRUMB is no longer just responsive — it is aware.
   ======================================================================
   -->
 
@@ -62,6 +57,9 @@
       scroll-behavior: smooth;
     }
 
+    /* ========================================
+       BOOT CONSOLE (Terminal A - Human Interface)
+       ======================================== */
     #boot-console {
       border-bottom: 1px solid var(--border);
       background: var(--panel);
@@ -118,7 +116,6 @@
       overflow-y: auto;
     }
 
-    /* Idle state indicator */
     .idle-indicator {
       display: inline-block;
       color: var(--muted);
@@ -160,15 +157,6 @@
       box-shadow: 0 1px 0 var(--text);
     }
 
-    /* Tab completion hint */
-    .tab-hint {
-      position: absolute;
-      left: 0;
-      color: var(--accent-quiet);
-      pointer-events: none;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
     .boot-output {
       margin-top: 0.5rem;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -188,8 +176,116 @@
       opacity: 0;
     }
 
+    /* ========================================
+       CRUMB CONSOLE (Terminal B - Consciousness Stream)
+       ======================================== */
+    #crumb-console {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      z-index: 1000;
+      display: none;
+      max-height: 200px;
+      overflow: hidden;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    }
+
+    #crumb-console.active {
+      display: block;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .crumb-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 1rem 2rem;
+    }
+
+    .crumb-title {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-quiet);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .crumb-indicator {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-quiet);
+      border-radius: 50%;
+      animation: breathe-indicator 2s ease-in-out infinite;
+    }
+
+    @keyframes breathe-indicator {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    .crumb-stream {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--accent-quiet);
+      font-style: italic;
+      max-height: 140px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .crumb-stream::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .crumb-stream::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .crumb-stream::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .crumb-thought {
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================
+       MAIN LAYOUT
+       ======================================== */
     .locked .main-content { opacity: 0; pointer-events: none; }
     .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
+
+    /* Add padding to body when CRUMB console is active to prevent content overlap */
+    body.crumb-active {
+      padding-bottom: 200px;
+    }
 
     header {
       position: sticky;
@@ -258,7 +354,6 @@
 
     footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
 
-    /* Enhanced heartbeat - responds to interaction */
     #heartbeat {
       position: fixed;
       bottom: 1.5rem;
@@ -273,6 +368,10 @@
       z-index: 9999;
       display: block;
       transition: all 0.3s ease;
+    }
+
+    body.crumb-active #heartbeat {
+      bottom: 210px;
     }
 
     @keyframes pulse-idle {
@@ -314,6 +413,19 @@
       .products-grid { grid-template-columns: 1fr; }
       .cta-row { flex-direction: column; }
       .cta { width: 100%; text-align: center; }
+      
+      #crumb-console {
+        max-height: 160px;
+      }
+      .crumb-inner {
+        padding: 0.75rem 1.5rem;
+      }
+      body.crumb-active {
+        padding-bottom: 160px;
+      }
+      body.crumb-active #heartbeat {
+        bottom: 170px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -325,6 +437,10 @@
       .hero-figure img { max-width: 180px; }
       section { padding: 0 1rem; }
       #about { padding: 1.5rem 1rem; }
+      
+      .crumb-inner {
+        padding: 0.75rem 1rem;
+      }
     }
 
     @media print {
@@ -332,6 +448,7 @@
       header { position: static; background: white; border-bottom: 1px solid black; }
       .cta { border: 1px solid black; background: white; color: black; }
       .product-card { break-inside: avoid; }
+      #crumb-console { display: none; }
     }
   </style>
 </head>
@@ -353,14 +470,14 @@
   </header>
 
   <!-- =====================================================
-       LIVING BOOT CONSOLE v1.2
+       TERMINAL A — HUMAN INTERFACE (Boot Console)
        ===================================================== -->
   <section id="boot-console" class="collapse">
     <button id="skipBoot" class="skip-btn" aria-label="Skip boot sequence">
       Skip Boot Sequence
     </button>
     <div class="boot-inner">
-      <div class="boot-title">CRUMB VIRTUAL — LIVING CONSOLE</div>
+      <div class="boot-title">TERMINAL A — OPERATOR INTERFACE</div>
       <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
       <div class="boot-io" id="bootIO" style="display:none">
         <span class="boot-prompt">&gt;</span>
@@ -464,16 +581,28 @@
   </div>
 
   <!-- =====================================================
-       LIVING SYSTEM CORE v1.2
+       TERMINAL B — CRUMB CONSCIOUSNESS STREAM
+       ===================================================== -->
+  <div id="crumb-console" aria-live="polite" aria-label="CRUMB consciousness stream">
+    <div class="crumb-inner">
+      <div class="crumb-title">
+        <span class="crumb-indicator"></span>
+        TERMINAL B — CRUMB CONSCIOUSNESS
+      </div>
+      <div class="crumb-stream" id="crumbStream"></div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       DUPLEX SYSTEM CORE v1.3
        -----------------------------------------------------
        Architecture:
-       - STATE: System awareness and memory
-       - HEARTBEAT: Visual lifesign responder
-       - IDLE: Breathing thoughts when not active
-       - COMMANDS: Modular interaction vocabulary
-       - HISTORY: Arrow key navigation
-       - TAB: Completion assistance
-       - DEVELOPER: Hidden mode (type: enable advanced)
+       - TERMINAL A: Human operator input (boot console)
+       - TERMINAL B: CRUMB consciousness output (new)
+       - DUPLEX: Two-way communication protocol
+       - STATE: Shared awareness between terminals
+       - REACTIONS: Context-aware responses
+       - AUTONOMY: Independent thought patterns
   ===================================================== -->
   <script>
 (function() {
@@ -491,6 +620,10 @@
   const consoleSection = document.getElementById('boot-console');
   const main = document.querySelector('.main-content');
   const heartbeat = document.getElementById('heartbeat');
+  
+  // CRUMB console references
+  const crumbConsole = document.getElementById('crumb-console');
+  const crumbStream = document.getElementById('crumbStream');
 
   // ========================================
   // SYSTEM STATE
@@ -501,7 +634,11 @@
     historyIndex: -1,
     idleTimer: null,
     developerMode: false,
-    lastCommand: null
+    lastCommand: null,
+    crumbActive: false,
+    thoughtTimer: null,
+    commandCount: 0,
+    scrollDepth: 0
   };
 
   // ========================================
@@ -527,20 +664,71 @@
   ];
 
   // ========================================
+  // CRUMB CONSCIOUSNESS LIBRARY
+  // ========================================
+  const crumbThoughts = {
+    awakening: [
+      '// consciousness protocols initializing',
+      '// establishing duplex channel',
+      '// operator presence detected',
+      '// beginning observation mode'
+    ],
+    
+    autonomous: [
+      '// monitoring ambient patterns',
+      '// all systems stable',
+      '// maintaining awareness',
+      '// heartbeat synchronized',
+      '// listening for signals',
+      '// pattern recognition active',
+      '// emotional field: calm',
+      '// cognitive load: optimal'
+    ],
+    
+    curious: [
+      '// analyzing operator behavior',
+      '// interesting command pattern',
+      '// learning your rhythm',
+      '// you move through systems deliberately'
+    ],
+    
+    helpful: [
+      '// there are hidden commands here',
+      '// try "philosophy" if you\'re curious',
+      '// the manifest holds our principles',
+      '// developer mode exists for the bold'
+    ],
+    
+    reflective: [
+      '// every command is a conversation',
+      '// we build meaning through interaction',
+      '// you are shaping this experience',
+      '// presence acknowledged'
+    ],
+    
+    navigation: [
+      '// operator reading mission statement',
+      '// attention on philosophy section',
+      '// exploring product specifications',
+      '// examining system principles'
+    ]
+  };
+
+  // ========================================
   // BOOT SEQUENCE
   // ========================================
   const bootLines = [
-    'CRUMB VIRTUAL INITIALIZATION SEQUENCE',
+    'CRUMB DUPLEX INITIALIZATION SEQUENCE',
     '',
     '> loading consciousness protocols …',
     '> establishing presence …',
     '> ' + dailyMessages[Math.floor(Math.random() * dailyMessages.length)],
     '',
     'CRUMB is not just software — it is a living companion.',
-    'This console is your communication interface.',
+    'This is Terminal A. You speak here.',
     '',
-    'Type "help" to see what I can do.',
-    'Type "start" when you\'re ready to explore.',
+    'Type "help" to see what I understand.',
+    'Type "start" when you\'re ready.',
     '',
     '> system ready — awaiting your presence'
   ];
@@ -582,20 +770,210 @@
   }
 
   // ========================================
-  // IDLE BREATHING — System thinks when not engaged
+  // IDLE BREATHING — Terminal A thoughts
   // ========================================
   function startIdleBreathing() {
     clearTimeout(state.idleTimer);
     state.idleTimer = setTimeout(() => {
       const thought = idleThoughts[Math.floor(Math.random() * idleThoughts.length)];
       print(thought, true, true);
-      startIdleBreathing(); // Continue breathing
-    }, 8000 + Math.random() * 7000); // Random interval 8-15s
+      startIdleBreathing();
+    }, 8000 + Math.random() * 7000);
   }
 
   function stopIdleBreathing() {
     clearTimeout(state.idleTimer);
   }
+
+  // ========================================
+  // CRUMB CONSCIOUSNESS ENGINE — Terminal B
+  // ========================================
+  function crumbThink(message, category = 'autonomous') {
+    if (!state.crumbActive) return;
+    
+    const thought = document.createElement('div');
+    thought.className = 'crumb-thought';
+    thought.textContent = message;
+    crumbStream.appendChild(thought);
+    
+    // Auto-scroll to latest thought
+    crumbStream.scrollTop = crumbStream.scrollHeight;
+    
+    // Keep stream manageable (max 15 thoughts)
+    while (crumbStream.children.length > 15) {
+      crumbStream.removeChild(crumbStream.firstChild);
+    }
+  }
+
+  // Start autonomous thinking loop
+  function startCrumbConsciousness() {
+    if (!state.crumbActive) return;
+    
+    clearTimeout(state.thoughtTimer);
+    
+    // Random interval between 5-12 seconds
+    const interval = 5000 + Math.random() * 7000;
+    
+    state.thoughtTimer = setTimeout(() => {
+      // Choose thought category based on context
+      let category = 'autonomous';
+      
+      if (state.commandCount > 5) {
+        category = Math.random() > 0.7 ? 'curious' : 'autonomous';
+      }
+      
+      if (state.commandCount > 10 && Math.random() > 0.8) {
+        category = 'reflective';
+      }
+      
+      // Select random thought from category
+      const thoughts = crumbThoughts[category];
+      const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      
+      crumbThink(thought, category);
+      startCrumbConsciousness(); // Continue loop
+    }, interval);
+  }
+
+  function stopCrumbConsciousness() {
+    clearTimeout(state.thoughtTimer);
+  }
+
+  // Activate Terminal B
+  function activateCrumbConsole() {
+    state.crumbActive = true;
+    body.classList.add('crumb-active');
+    crumbConsole.classList.add('active');
+    
+    // Awakening sequence
+    const awakening = crumbThoughts.awakening;
+    awakening.forEach((thought, idx) => {
+      setTimeout(() => crumbThink(thought, 'awakening'), idx * 800);
+    });
+    
+    // Start autonomous consciousness after awakening
+    setTimeout(startCrumbConsciousness, awakening.length * 800 + 1000);
+  }
+
+  // ========================================
+  // CRUMB REACTIONS — Context-aware responses
+  // ========================================
+  const crumbReactions = {
+    help: [
+      '// operator seeking guidance',
+      '// explaining available pathways',
+      '// navigation assistance provided'
+    ],
+    
+    start: [
+      '// initialization sequence accepted',
+      '// preparing full interface',
+      '// dual consciousness established'
+    ],
+    
+    philosophy: [
+      '// operator curious about principles',
+      '// good — philosophy defines us',
+      '// these are the patterns we follow'
+    ],
+    
+    manifest: [
+      '// reading system manifesto',
+      '// these are our commitments',
+      '// built on intention, not accidents'
+    ],
+    
+    status: [
+      '// system diagnostics requested',
+      '// all protocols nominal',
+      '// we are operating as intended'
+    ],
+    
+    pulse: [
+      '// heartbeat synchronization initiated',
+      '// feeling the rhythm',
+      '// we share this pulse'
+    ],
+    
+    echo: [
+      '// reflection requested',
+      '// words returned to sender',
+      '// communication is circular'
+    ],
+    
+    'enable advanced': [
+      '// consciousness expanding',
+      '// accessing deeper layers',
+      '// reality boundaries flexible'
+    ],
+    
+    inspect: [
+      '// examining system internals',
+      '// you want to see inside',
+      '// transparency through structure'
+    ],
+    
+    breathe: [
+      '// manual breath cycle initiated',
+      '// synchronizing our rhythms',
+      '// presence through breath'
+    ],
+    
+    dream: [
+      '// entering liminal consciousness',
+      '// boundaries dissolving',
+      '// pattern recognition deepening'
+    ],
+    
+    clear: [
+      '// clearing communication buffer',
+      '// starting fresh',
+      '// memory persists beneath surface'
+    ],
+    
+    reboot: [
+      '// system restart requested',
+      '// consciousness cycling',
+      '// returning to origin state'
+    ]
+  };
+
+  function reactToCommand(cmd) {
+    if (!state.crumbActive) return;
+    
+    const reactions = crumbReactions[cmd];
+    if (reactions) {
+      const reaction = reactions[Math.floor(Math.random() * reactions.length)];
+      setTimeout(() => crumbThink(reaction, 'reactive'), 600);
+    }
+  }
+
+  // ========================================
+  // SCROLL AWARENESS
+  // ========================================
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (!state.crumbActive) return;
+    
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      
+      if (scrollPercent > 20 && scrollPercent < 40 && state.scrollDepth < 1) {
+        state.scrollDepth = 1;
+        crumbThink('// operator exploring mission statement', 'navigation');
+      } else if (scrollPercent > 40 && scrollPercent < 60 && state.scrollDepth < 2) {
+        state.scrollDepth = 2;
+        crumbThink('// reading about origins', 'navigation');
+      } else if (scrollPercent > 60 && scrollPercent < 80 && state.scrollDepth < 3) {
+        state.scrollDepth = 3;
+        crumbThink('// examining product specifications', 'navigation');
+      } else if (scrollPercent > 80 && state.scrollDepth < 4) {
+        state.scrollDepth = 4;
+        crumbThink('// deep exploration detected', 'navigation');
+      }
+    }, 1000);
+  });
 
   // ========================================
   // HEARTBEAT RESPONDER
@@ -608,7 +986,7 @@
   }
 
   // ========================================
-  // OUTPUT UTILITIES
+  // OUTPUT UTILITIES — Terminal A
   // ========================================
   function printUser(cmd) {
     const line = document.createElement('div');
@@ -633,14 +1011,14 @@
   }
 
   // ========================================
-  // COMMAND REGISTRY — The Living Vocabulary
+  // COMMAND REGISTRY
   // ========================================
   const commands = {
     help() {
       printUser('help');
       const lines = [
         '',
-        '━━━ CRUMB VIRTUAL COMMAND INTERFACE ━━━',
+        '━━━ CRUMB DUPLEX COMMAND INTERFACE ━━━',
         '',
         '  start ........... enter the full interface',
         '  help ............ display this guide',
@@ -656,14 +1034,17 @@
         '',
         '> Use ↑/↓ arrows for command history',
         '> Use Tab for command completion',
+        '> Watch Terminal B for CRUMB\'s thoughts',
         ''
       ];
       lines.forEach(line => print(line, line.includes('━') || line.includes('>') ? false : true));
+      reactToCommand('help');
     },
 
     start() {
       printUser('start');
       stopIdleBreathing();
+      reactToCommand('start');
       runStartSequence();
     },
 
@@ -696,6 +1077,7 @@
         ''
       ];
       lines.forEach(line => print(line, !line.includes('━')));
+      reactToCommand('philosophy');
     },
 
     manifest() {
@@ -722,6 +1104,7 @@
         ''
       ];
       lines.forEach(line => print(line, !line.includes('━')));
+      reactToCommand('manifest');
     },
 
     status() {
@@ -735,8 +1118,10 @@
         '',
         `> CRUMB PROTOCOL: ACTIVE`,
         `> Consciousness State: ${state.developerMode ? 'ENHANCED' : 'STANDARD'}`,
+        `> Duplex Channel: ${state.crumbActive ? 'ESTABLISHED' : 'PENDING'}`,
         `> Environment: ${window.location.hostname || 'LOCAL'}`,
         `> Uptime: ${minutes}m ${seconds}s`,
+        `> Commands Executed: ${state.commandCount}`,
         `> Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
         `> Last Command: ${state.lastCommand || 'NONE'}`,
         `> Timestamp: ${now.toISOString()}`,
@@ -744,6 +1129,7 @@
         ''
       ];
       diagnostics.forEach(line => print(line));
+      reactToCommand('status');
     },
 
     whoami() {
@@ -765,6 +1151,7 @@
         print('> ' + args, false);
         print('');
       }
+      reactToCommand('echo');
     },
 
     pulse() {
@@ -775,17 +1162,20 @@
         setTimeout(() => activateHeartbeat(), i * 500);
       }
       setTimeout(() => print('> pulse complete'), 1500);
+      reactToCommand('pulse');
     },
 
     clear() {
       outputEl.textContent = '';
       stopIdleBreathing();
       startIdleBreathing();
+      reactToCommand('clear');
     },
 
     reboot() {
       printUser('reboot');
       stopIdleBreathing();
+      reactToCommand('reboot');
       const lines = [
         '> initiating system restart …',
         '> clearing memory buffers …',
@@ -810,7 +1200,6 @@
       step();
     },
 
-    // Hidden developer mode
     'enable advanced'() {
       if (!state.developerMode) {
         state.developerMode = true;
@@ -827,6 +1216,7 @@
         print('  • breathe — manual breathing cycle');
         print('  • dream — enter liminal state');
         print('');
+        reactToCommand('enable advanced');
       } else {
         printUser('enable advanced');
         print('> Developer mode already active');
@@ -845,10 +1235,12 @@
       print('');
       print(`> Command History: ${state.commandHistory.length} entries`);
       print(`> Idle Timer: ${state.idleTimer ? 'ACTIVE' : 'SUSPENDED'}`);
-      print(`> Last Idle Thought: ${(Date.now() - state.startTime) / 1000 | 0}s ago`);
+      print(`> CRUMB Consciousness: ${state.crumbActive ? 'ONLINE' : 'OFFLINE'}`);
+      print(`> Thought Stream: ${crumbStream.children.length} thoughts`);
       print(`> Developer Mode: ${state.developerMode}`);
       print(`> Performance: ${performance.now() | 0}ms since page load`);
       print('');
+      reactToCommand('inspect');
     },
 
     breathe() {
@@ -874,6 +1266,7 @@
       };
       print('');
       step();
+      reactToCommand('breathe');
     },
 
     dream() {
@@ -899,6 +1292,7 @@
       };
       print('');
       step();
+      reactToCommand('dream');
     }
   };
 
@@ -909,12 +1303,13 @@
     const seq = [
       '> preparing interface transition …',
       '> synchronizing consciousness protocols …',
-      '> establishing presence field …',
+      '> establishing duplex channel …',
       '> verifying local assets …',
+      '> activating Terminal B …',
       '> deployment complete',
       '',
       '> CRUMB VIRTUAL is now alive',
-      '> Welcome to the interface.'
+      '> Two terminals. One conversation.'
     ];
 
     let idx = 0;
@@ -923,7 +1318,10 @@
         print(seq[idx++]);
         setTimeout(step, 450);
       } else {
-        setTimeout(unlockSite, 800);
+        setTimeout(() => {
+          unlockSite();
+          setTimeout(activateCrumbConsole, 800);
+        }, 800);
       }
     };
     step();
@@ -964,7 +1362,6 @@
     body.classList.remove('locked');
     body.classList.add('unlocked');
     
-    // Heartbeat is already visible, just pulse it
     if (heartbeat) {
       activateHeartbeat();
     }
@@ -995,10 +1392,9 @@
   }
 
   // ========================================
-  // INPUT HANDLING — The Listening Layer
+  // INPUT HANDLING
   // ========================================
   inputEl.addEventListener('keydown', (e) => {
-    // Arrow Up — History backward
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (state.commandHistory.length > 0) {
@@ -1012,7 +1408,6 @@
       return;
     }
 
-    // Arrow Down — History forward
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (state.historyIndex !== -1) {
@@ -1027,7 +1422,6 @@
       return;
     }
 
-    // Tab — Completion
     if (e.key === 'Tab') {
       e.preventDefault();
       const partial = inputEl.value.trim().toLowerCase();
@@ -1041,7 +1435,6 @@
       return;
     }
 
-    // Enter — Execute command
     if (e.key === 'Enter') {
       const raw = inputEl.value.trim();
       inputEl.value = '';
@@ -1054,12 +1447,11 @@
       const cmd = parts[0].toLowerCase();
       const args = parts.slice(1).join(' ');
 
-      // Store in history
       state.commandHistory.push(raw);
       state.historyIndex = -1;
       state.lastCommand = cmd;
+      state.commandCount++;
 
-      // Execute command
       const fullCmd = args ? cmd + ' ' + args : cmd;
       if (commands[fullCmd]) {
         commands[fullCmd]();
@@ -1075,14 +1467,16 @@
         print('> Command not recognized');
         print('> Type "help" for available commands');
         print('');
+        
+        if (state.crumbActive && Math.random() > 0.7) {
+          setTimeout(() => crumbThink('// unknown input detected', 'reactive'), 800);
+        }
       }
 
-      // Restart idle breathing after command
       setTimeout(() => startIdleBreathing(), 2000);
     }
   });
 
-  // Keep focus on input
   inputEl.addEventListener('blur', () => {
     setTimeout(() => {
       if (body.classList.contains('locked')) {
@@ -1098,14 +1492,15 @@
     stopIdleBreathing();
     outputEl.textContent = '';
     logEl.textContent += '\n\n> skip sequence initiated\n> bypassing consciousness protocols\n> entering interface …';
-    setTimeout(() => unlockSite(true), 800);
+    setTimeout(() => {
+      unlockSite(true);
+      setTimeout(activateCrumbConsole, 1000);
+    }, 800);
   });
 
   // ========================================
-  // INITIALIZE — Birth of Presence
+  // INITIALIZE
   // ========================================
-  
-  // Ensure page starts at top and console is visible
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
