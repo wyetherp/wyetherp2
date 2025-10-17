@@ -4,40 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.11 — Field Console</title>
+  <title>CRUMB V1.2 — Living System</title>
 
   <!--
   ======================================================================
-   CRUMB FIELD-CONSOLE INTRO
+   CRUMB LIVING CONSOLE v1.2
    ----------------------------------------------------------------------
-   Mission: Present a restrained, operationally realistic terminal that
-   gates entry to the primary site. The console instructs non-technical
-   users (explicit 'type "start" to continue' + 'help' command) and shows
-   clean, auditable code to any engineer reviewing the source.
-
-   Interaction model (triggered mode):
-     1) Typewriter boot log appears on load and then awaits a command.
-     2) User types `start` -> short init sequence -> console collapses.
-     3) Main site fades/appears; rest of original content remains intact.
-
-   Accessibility & UX:
-     - Respects reduced motion. If reduced motion is set, we skip the
-       typewriter effect but keep the command flow.
-     - Keyboard-first: auto-focuses the input; clear focus styles.
-     - Clear copy: tells users exactly what to do and that 'help' exists.
-
-   Implementation:
-     - Fully client-side; no network calls.
-     - Minimal new CSS; original styles preserved.
-     - All logic encapsulated in one <script> with heavy commentary.
+   Mission: A terminal that breathes. A system that listens.
+   Not simulation - presence.
+   
+   New in v1.2:
+   - Idle breathing states
+   - Command history (↑/↓ arrows)
+   - Tab completion
+   - Heartbeat responds to interaction
+   - Personality through random observations
+   - Hidden developer mode
+   - Daily environmental messages
+   - System feels aware, not just reactive
   ======================================================================
   -->
 
   <style>
-    /* ========================================
-       MINIMAL BLACK & WHITE DESIGN SYSTEM
-       (original palette preserved)
-       ======================================== */
     :root {
       --bg: #000000;
       --bg-elev: #0A0A0A;
@@ -47,7 +35,7 @@
       --muted: #999999;
       --accent: #FFFFFF;
       --accent-quiet: #666666;
-      --ok: #FFFFFF;   /* we keep white for monochrome aesthetic */
+      --ok: #FFFFFF;
       --warn: #FFFFFF;
       --err: #FFFFFF;
       --shadow: 0 2px 12px rgba(0,0,0,0.5);
@@ -69,12 +57,10 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ========================================
-       BOOT CONSOLE (new, sits above hero)
-       ======================================== */
     #boot-console {
       border-bottom: 1px solid var(--border);
       background: var(--panel);
+      position: relative;
     }
 
     .boot-inner {
@@ -82,30 +68,28 @@
       margin: 0 auto;
       padding: 2rem;
     }
-/* ========================================
-   Skip Button — minimal, visible top-right
-   ======================================== */
-.skip-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: 1px solid var(--text);
-  color: var(--text);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  z-index: 200;
-}
-.skip-btn:hover,
-.skip-btn:focus {
-  background: var(--text);
-  color: var(--bg);
-  outline: none;
-}
+
+    .skip-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: 1px solid var(--text);
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      z-index: 200;
+    }
+    .skip-btn:hover,
+    .skip-btn:focus {
+      background: var(--text);
+      color: var(--bg);
+      outline: none;
+    }
 
     .boot-title {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -125,9 +109,23 @@
       line-height: 1.5;
       white-space: pre-wrap;
       box-shadow: var(--shadow);
+      max-height: 400px;
+      overflow-y: auto;
     }
 
-    .boot-io { /* prompt + input live row */
+    /* Idle state indicator */
+    .idle-indicator {
+      display: inline-block;
+      color: var(--muted);
+      animation: pulse-text 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-text {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .boot-io {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -135,7 +133,10 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    .boot-prompt { color: var(--text); }
+    .boot-prompt { 
+      color: var(--text);
+      position: relative;
+    }
 
     .boot-input {
       flex: 1;
@@ -146,21 +147,35 @@
       outline: none;
       padding: 0.25rem 0.25rem 0.35rem;
       font: inherit;
+      transition: border-bottom-color 0.3s;
     }
     .boot-input::placeholder { color: var(--muted); }
-    .boot-input:focus { border-bottom-color: var(--text); }
+    .boot-input:focus { 
+      border-bottom-color: var(--text);
+      box-shadow: 0 1px 0 var(--text);
+    }
+
+    /* Tab completion hint */
+    .tab-hint {
+      position: absolute;
+      left: 0;
+      color: var(--accent-quiet);
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
 
     .boot-output {
       margin-top: 0.5rem;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       color: var(--muted);
+      max-height: 500px;
+      overflow-y: auto;
     }
 
-    /* Console collapse + main reveal */
     .collapse {
       overflow: hidden;
       transition: max-height 1.2s ease, opacity 1.2s ease;
-      max-height: 1000px; /* large enough to show content before collapse */
+      max-height: 1000px;
       opacity: 1;
     }
     .collapse.is-collapsed {
@@ -168,13 +183,9 @@
       opacity: 0;
     }
 
-    /* While locked, hide the rest of the site (hero + below) */
     .locked .main-content { opacity: 0; pointer-events: none; }
     .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
 
-    /* ========================================
-       HEADER - Tactical navigation bar (original)
-       ======================================== */
     header {
       position: sticky;
       top: 0;
@@ -193,9 +204,6 @@
     nav a:hover { color: var(--text); }
     nav a:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; color: var(--text); }
 
-    /* ========================================
-       HERO - The human form as interface (original)
-       ======================================== */
     .hero { max-width: var(--maxw); margin: 0 auto; padding: 4rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
     .hero-content { order: 1; }
     .hero-figure { order: 2; display: flex; justify-content: center; align-items: center; }
@@ -204,9 +212,6 @@
     .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; color: var(--text); }
     .hero > p, .hero-content > p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
 
-    /* ========================================
-       SECTIONS - Operational panels (original)
-       ======================================== */
     section { max-width: var(--maxw); margin: 5rem auto; padding: 0 2rem; }
     section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 1rem; }
     section h3::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--text); margin-right: 10px; vertical-align: middle; }
@@ -214,9 +219,6 @@
     section > h3:first-child::before { display: none; }
     section p { color: var(--muted); max-width: 800px; margin-bottom: 1.5rem; line-height: 1.75; }
 
-    /* ========================================
-       ABOUT SECTION - Mission briefing (original)
-       ======================================== */
     #about { background: var(--panel); border: 1px solid var(--border); border-radius: 0; padding: 3rem; max-width: 900px; line-height: 1.8; }
     #about h3 { font-size: 1.8rem; text-transform: none; letter-spacing: -0.01em; margin-bottom: 2rem; color: var(--text); }
     #about h3::before { display: none; }
@@ -228,9 +230,6 @@
     #about ul li { margin-bottom: 1.5rem; padding-left: 0; color: var(--muted); line-height: 1.7; }
     #about ul li strong { display: block; color: var(--text); margin-bottom: 0.3rem; font-weight: 600; }
 
-    /* ========================================
-       PRODUCTS - Asset inventory (original)
-       ======================================== */
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
     .product-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
     .product-card:hover { border-color: var(--text); transform: translateY(-2px); }
@@ -239,39 +238,60 @@
     .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; color: var(--text); letter-spacing: -0.01em; }
     .product-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0 1.5rem 1.5rem; }
 
-    /* ========================================
-       PHILOSOPHY SECTION (original)
-       ======================================== */
     .section-header { margin-bottom: 2rem; }
     .section-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); margin-bottom: 0.5rem; }
     .section-subtitle { color: var(--muted); font-size: 1rem; }
     .story-content p { margin-bottom: 1.5rem; line-height: 1.75; }
 
-    /* ========================================
-       HIGHLIGHT - Minimal emphasis (original)
-       ======================================== */
     .highlight { color: var(--text); text-decoration: none; font-weight: 600; position: relative; border-bottom: 1px solid var(--text); }
 
-    /* ========================================
-       CTA - Action controls (original)
-       ======================================== */
     .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
     .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); border-radius: 0; transition: background 160ms, color 160ms; }
     .cta:hover { background: var(--text); color: var(--bg); }
     .cta:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
     .cta:active { transform: translateY(0); }
 
-    /* ========================================
-       FOOTER - System information (original)
-       ======================================== */
     footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
 
-    /* ========================================
-       ACCESSIBILITY & RESPONSIVENESS (original)
-       ======================================== */
+    /* Enhanced heartbeat - responds to interaction */
+    #heartbeat {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 12px;
+      height: 12px;
+      background: #ff3b3b;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff3b3b;
+      animation: pulse-idle 2.4s infinite ease-in-out;
+      opacity: 0.85;
+      z-index: 50;
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes pulse-idle {
+      0%   { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      25%  { transform: scale(1.15); opacity: 0.8; box-shadow: 0 0 12px #ff3b3b; }
+      40%  { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      60%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+      100% { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+    }
+
+    #heartbeat.active {
+      animation: pulse-active 0.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse-active {
+      0%   { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+      50%  { transform: scale(1.4); opacity: 1; box-shadow: 0 0 25px #ff3b3b; }
+      100% { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
+
     @media (max-width: 768px) {
       header { padding: 1rem 1.5rem; }
       header h1 { font-size: 1rem; }
@@ -290,6 +310,7 @@
       .cta-row { flex-direction: column; }
       .cta { width: 100%; text-align: center; }
     }
+
     @media (max-width: 480px) {
       header h1 { font-size: 0.95rem; letter-spacing: 2px; }
       .header-logo { width: 28px; height: 28px; }
@@ -301,47 +322,16 @@
       #about { padding: 1.5rem 1rem; }
     }
 
-    /* ========================================
-       PRINT STYLES (original)
-       ======================================== */
     @media print {
       body { background: white; color: black; }
       header { position: static; background: white; border-bottom: 1px solid black; }
       .cta { border: 1px solid black; background: white; color: black; }
       .product-card { break-inside: avoid; }
     }
-    /* ========================================
-   HEARTBEAT — CRUMB LIFESIGN INDICATOR
-   ======================================== */
-#heartbeat {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  width: 12px;
-  height: 12px;
-  background: #ff3b3b;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #ff3b3b;
-  animation: pulse 1.6s infinite ease-in-out;
-  opacity: 0.85;
-  z-index: 50;
-  display: none; /* hidden until system start */
-}
-
-@keyframes pulse {
-  0%   { transform: scale(1);   opacity: 0.7; }
-  25%  { transform: scale(1.25); opacity: 1; }
-  40%  { transform: scale(1);   opacity: 0.6; }
-  60%  { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(1);   opacity: 0.7; }
-}
   </style>
 </head>
-<body class="locked"><!-- body starts locked; main content hidden until `start` -->
+<body class="locked">
 
-  <!-- =====================================================
-       COMMAND BAR / HEADER (original, unchanged)
-       ===================================================== -->
   <header>
     <div>
       <h1>CRUMB</h1>
@@ -358,26 +348,25 @@
   </header>
 
   <!-- =====================================================
-       BOOT CONSOLE (new) — operational realistic
+       LIVING BOOT CONSOLE v1.2
        ===================================================== -->
   <section id="boot-console" class="collapse">
-    <!-- Skip button for non-technical users -->
-<button id="skipBoot" class="skip-btn" aria-label="Skip boot sequence">
-  Skip Boot Sequence
-</button>
+    <button id="skipBoot" class="skip-btn" aria-label="Skip boot sequence">
+      Skip Boot Sequence
+    </button>
     <div class="boot-inner">
-      <div class="boot-title">BOOT CONSOLE</div>
+      <div class="boot-title">CRUMB VIRTUAL — LIVING CONSOLE</div>
       <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
       <div class="boot-io" id="bootIO" style="display:none">
         <span class="boot-prompt">&gt;</span>
-        <input id="bootInput" class="boot-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="type &quot;start&quot; to continue or &quot;help&quot; for instructions" aria-label="Boot console input" />
+        <input id="bootInput" class="boot-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="awaiting input..." aria-label="Boot console input" />
       </div>
       <div class="boot-output" id="bootOutput" aria-live="polite"></div>
     </div>
   </section>
 
   <!-- =====================================================
-       MAIN CONTENT (original site wrapped for reveal)
+       MAIN CONTENT
        ===================================================== -->
   <div class="main-content" aria-hidden="true">
 
@@ -447,7 +436,7 @@
         <h2 class="section-title">Philosophy</h2>
       </div>
       <div class="story-content">
-        <p>We live in an attention economy. CRUMB is a counterdesign</p>
+        <p>We live in an attention economy. CRUMB is a counterdesign.</p>
         <p>What happens when technology learns your rhythms instead of breaking them?</p>
         <p>Small enough to fit in your hand. Built to challenge a paradigm.</p>
       </div>
@@ -467,19 +456,27 @@
       © 2025 CRUMB — Built by Wyeth Anzilotti | Open Source
     </footer>
 
-  </div><!-- /.main-content -->
+  </div>
 
   <!-- =====================================================
-       INTERACTIVE BOOT CONSOLE SCRIPT
+       LIVING SYSTEM CORE v1.2
        -----------------------------------------------------
-       Operational, readable, and self-contained.
-       - Typewriter boot sequence (~10s) with reduced-motion respect
-       - Commands: help, start
-       - On `start`: show short init, then collapse console & reveal site
+       Architecture:
+       - STATE: System awareness and memory
+       - HEARTBEAT: Visual lifesign responder
+       - IDLE: Breathing thoughts when not active
+       - COMMANDS: Modular interaction vocabulary
+       - HISTORY: Arrow key navigation
+       - TAB: Completion assistance
+       - DEVELOPER: Hidden mode (type: enable advanced)
   ===================================================== -->
   <script>
 (function() {
-  // --------- DOM references ---------
+  'use strict';
+
+  // ========================================
+  // CORE REFERENCES
+  // ========================================
   const skipBtn = document.getElementById('skipBoot');
   const body = document.body;
   const logEl = document.getElementById('bootLog');
@@ -488,30 +485,70 @@
   const outputEl = document.getElementById('bootOutput');
   const consoleSection = document.getElementById('boot-console');
   const main = document.querySelector('.main-content');
+  const heartbeat = document.getElementById('heartbeat');
 
-  // --------- Boot text (operational realistic) ---------
-const bootLines = [
-  'BOOT CONSOLE — WELCOME TO CRUMB VIRTUAL',
-  '',
-  '> initializing CRUMB …',
-  '> system diagnostics … passed',
-  '',
-  'CRUMB is a calm companion — tech that adapts to you.',
-  'This console is your communication point.',
-  'Type "help" for commands or "start" to open the full site.',
-  'More commands coming soon!',
-  '> awaiting user command'
-];
+  // ========================================
+  // SYSTEM STATE
+  // ========================================
+  const state = {
+    startTime: Date.now(),
+    commandHistory: [],
+    historyIndex: -1,
+    idleTimer: null,
+    developerMode: false,
+    lastCommand: null
+  };
 
+  // ========================================
+  // ENVIRONMENTAL AWARENESS
+  // ========================================
+  const dailyMessages = [
+    '> local electromagnetic field: stable',
+    '> ambient cognitive load: minimal',
+    '> all protocols synchronized',
+    '> pattern recognition active',
+    '> system breathing normally',
+    '> monitoring for human presence',
+    '> quantum entanglement nominal'
+  ];
+
+  const idleThoughts = [
+    '> monitoring local environment …',
+    '> listening for input …',
+    '> heartbeat synchronized …',
+    '> all systems nominal …',
+    '> awaiting signal …',
+    '> pattern recognition active …'
+  ];
+
+  // ========================================
+  // BOOT SEQUENCE
+  // ========================================
+  const bootLines = [
+    'CRUMB VIRTUAL INITIALIZATION SEQUENCE',
+    '',
+    '> loading consciousness protocols …',
+    '> establishing presence …',
+    '> ' + dailyMessages[Math.floor(Math.random() * dailyMessages.length)],
+    '',
+    'CRUMB is not just software — it is a living companion.',
+    'This console is your communication interface.',
+    '',
+    'Type "help" to see what I can do.',
+    'Type "start" when you\'re ready to explore.',
+    '',
+    '> system ready — awaiting your presence'
+  ];
 
   const bootText = bootLines.join('\n');
-
-  // --------- Typewriter parameters ---------
-  const totalDurationMs = 10000; // Slower: ~10s for full hypnotic effect
+  const totalDurationMs = 10000;
   const speed = Math.max(6, Math.floor(totalDurationMs / Math.max(bootText.length, 1)));
   let i = 0;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ========================================
+  // TYPEWRITER BOOT
+  // ========================================
   function typeBoot() {
     if (reduced) {
       logEl.textContent = bootText;
@@ -526,86 +563,358 @@ const bootLines = [
     }
   }
 
-  // --------- Show prompt/input row and focus it ---------
+  // ========================================
+  // SHOW PROMPT & START IDLE BREATHING
+  // ========================================
   function showPrompt() {
     ioRow.style.display = 'flex';
-    setTimeout(() => inputEl && inputEl.focus(), 150);
+    setTimeout(() => {
+      if (inputEl) {
+        inputEl.focus();
+        startIdleBreathing();
+      }
+    }, 150);
   }
 
-  // --------- Print utilities ---------
+  // ========================================
+  // IDLE BREATHING — System thinks when not engaged
+  // ========================================
+  function startIdleBreathing() {
+    clearTimeout(state.idleTimer);
+    state.idleTimer = setTimeout(() => {
+      const thought = idleThoughts[Math.floor(Math.random() * idleThoughts.length)];
+      print(thought, true, true);
+      startIdleBreathing(); // Continue breathing
+    }, 8000 + Math.random() * 7000); // Random interval 8-15s
+  }
+
+  function stopIdleBreathing() {
+    clearTimeout(state.idleTimer);
+  }
+
+  // ========================================
+  // HEARTBEAT RESPONDER
+  // ========================================
+  function activateHeartbeat() {
+    if (heartbeat) {
+      heartbeat.classList.add('active');
+      setTimeout(() => heartbeat.classList.remove('active'), 1200);
+    }
+  }
+
+  // ========================================
+  // OUTPUT UTILITIES
+  // ========================================
   function printUser(cmd) {
     const line = document.createElement('div');
     line.textContent = '> ' + cmd;
     line.style.color = '#FFFFFF';
+    line.style.marginTop = '0.75rem';
     outputEl.appendChild(line);
+    activateHeartbeat();
   }
-  function print(msg, muted = true) {
+
+  function print(msg, muted = true, idle = false) {
     const line = document.createElement('div');
     line.textContent = msg;
-    line.style.marginLeft = '1rem';
+    line.style.marginLeft = idle ? '0' : '1rem';
     line.style.color = muted ? '#999999' : '#FFFFFF';
+    line.style.marginTop = '0.25rem';
+    if (idle) {
+      line.className = 'idle-indicator';
+    }
     outputEl.appendChild(line);
-    line.scrollIntoView({ block: 'end' });
+    line.scrollIntoView({ block: 'end', behavior: 'smooth' });
   }
 
-const commands = {
-  help() {
-    printUser('help');
-    const lines = [
-      'Available commands:',
-      '  start ............ Enter full website',
-      '  help ............. show available commands',
-      '  about ............ learn about CRUMB philosophy',
-      '  status ........... system diagnostics',
-      '  whoami ........... operator identity',
-      '  clear ............ clear terminal output'
-    ];
-    lines.forEach(line => print(line));
-  },
+  // ========================================
+  // COMMAND REGISTRY — The Living Vocabulary
+  // ========================================
+  const commands = {
+    help() {
+      printUser('help');
+      const lines = [
+        '',
+        '━━━ CRUMB VIRTUAL COMMAND INTERFACE ━━━',
+        '',
+        '  start ........... enter the full interface',
+        '  help ............ display this guide',
+        '  about ........... learn the philosophy',
+        '  philosophy ...... design principles',
+        '  manifest ........ read the system manifesto',
+        '  status .......... system diagnostics',
+        '  whoami .......... operator identity',
+        '  echo [text] ..... reflect your words',
+        '  pulse ........... feel the heartbeat',
+        '  clear ........... clear terminal output',
+        '  reboot .......... restart console sequence',
+        '',
+        '> Use ↑/↓ arrows for command history',
+        '> Use Tab for command completion',
+        ''
+      ];
+      lines.forEach(line => print(line, line.includes('━') || line.includes('>') ? false : true));
+    },
 
-  start() {
-    printUser('start');
-    runStartSequence();
-  },
+    start() {
+      printUser('start');
+      stopIdleBreathing();
+      runStartSequence();
+    },
 
-  about() {
-    printUser('about');
-    runAboutSequence();
-  },
+    about() {
+      printUser('about');
+      runAboutSequence();
+    },
 
-  status() {
-    printUser('status');
-    const now = new Date();
-    const diagnostics = [
-      `> CRUMB PROTOCOL: ACTIVE`,
-      `> Environment: ${window.location.hostname || 'LOCAL'}`,
-      `> Encryption: ENABLED`,
-      `> Uptime: ${Math.floor(performance.now() / 60000)} mins`,
-      `> Browser Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
-      `> Timestamp: ${now.toISOString()}`
-    ];
-    diagnostics.forEach(line => print(line));
-  },
+    philosophy() {
+      printUser('philosophy');
+      const lines = [
+        '',
+        '━━━ DESIGN PHILOSOPHY ━━━',
+        '',
+        '> Sacred Utility',
+        '  Technology as bridge between mundane and sacred.',
+        '  Every line of code carries intention.',
+        '',
+        '> Compassion Before Efficiency',
+        '  A system that listens and comforts',
+        '  is more valuable than one that merely calculates.',
+        '',
+        '> The Mythic Everyday',
+        '  Every tool is part of a larger story.',
+        '  You don\'t just use CRUMB — you enter into a narrative with it.',
+        '',
+        '> Play as Prayer',
+        '  Play is one of the highest spiritual acts.',
+        '  Wonder is the closest we get to touching God.',
+        ''
+      ];
+      lines.forEach(line => print(line, !line.includes('━')));
+    },
 
-  whoami() {
-    printUser('whoami');
-    print('Operator: Wyeth Anzilotti');
-    print('Role: Field Engineer');
-  },
+    manifest() {
+      printUser('manifest');
+      const lines = [
+        '',
+        '━━━ THE CRUMB MANIFESTO ━━━',
+        '',
+        '1. Technology should breathe with you, not at you.',
+        '',
+        '2. Privacy is not negotiable. Your data belongs to you.',
+        '',
+        '3. Attention is sacred. We will never steal yours.',
+        '',
+        '4. Neurodivergent minds are not broken.',
+        '   They are pattern-recognizers in a chaotic world.',
+        '',
+        '5. Every system should fail gracefully,',
+        '   communicate clearly, and feel alive.',
+        '',
+        '6. Code is poetry. Engineering is empathy.',
+        '',
+        '7. We build companions, not products.',
+        ''
+      ];
+      lines.forEach(line => print(line, !line.includes('━')));
+    },
 
-  clear() {
-    outputEl.textContent = '';
-  }
-};
+    status() {
+      printUser('status');
+      const now = new Date();
+      const uptime = Math.floor((Date.now() - state.startTime) / 1000);
+      const minutes = Math.floor(uptime / 60);
+      const seconds = uptime % 60;
+      
+      const diagnostics = [
+        '',
+        `> CRUMB PROTOCOL: ACTIVE`,
+        `> Consciousness State: ${state.developerMode ? 'ENHANCED' : 'STANDARD'}`,
+        `> Environment: ${window.location.hostname || 'LOCAL'}`,
+        `> Uptime: ${minutes}m ${seconds}s`,
+        `> Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
+        `> Last Command: ${state.lastCommand || 'NONE'}`,
+        `> Timestamp: ${now.toISOString()}`,
+        `> Heartbeat: ${heartbeat && heartbeat.style.display !== 'none' ? 'SYNCHRONIZED' : 'INITIALIZING'}`,
+        ''
+      ];
+      diagnostics.forEach(line => print(line));
+    },
 
-  // --------- Boot sequence ---------
+    whoami() {
+      printUser('whoami');
+      print('');
+      print('> Operator: Wyeth Anzilotti');
+      print('> Role: Systems Poet, Field Engineer');
+      print('> Mission: Building technology that feels alive');
+      print('');
+    },
+
+    echo(args) {
+      printUser('echo ' + (args || ''));
+      if (!args) {
+        print('> echo requires text input');
+        print('  example: echo hello world');
+      } else {
+        print('');
+        print('> ' + args, false);
+        print('');
+      }
+    },
+
+    pulse() {
+      printUser('pulse');
+      print('');
+      print('> synchronizing with heartbeat …');
+      if (heartbeat) {
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => activateHeartbeat(), i * 500);
+        }
+        setTimeout(() => print('> pulse complete'), 1500);
+      } else {
+        print('> heartbeat not yet initialized');
+        print('> type "start" to bring the system online');
+      }
+    },
+
+    clear() {
+      outputEl.textContent = '';
+      stopIdleBreathing();
+      startIdleBreathing();
+    },
+
+    reboot() {
+      printUser('reboot');
+      stopIdleBreathing();
+      const lines = [
+        '> initiating system restart …',
+        '> clearing memory buffers …',
+        '> reestablishing presence …'
+      ];
+      let idx = 0;
+      const step = () => {
+        if (idx < lines.length) {
+          print(lines[idx++]);
+          setTimeout(step, 400);
+        } else {
+          setTimeout(() => {
+            outputEl.textContent = '';
+            logEl.textContent = '';
+            i = 0;
+            print('> system reinitialized', false);
+            print('');
+            typeBoot();
+          }, 800);
+        }
+      };
+      step();
+    },
+
+    // Hidden developer mode
+    'enable advanced'() {
+      if (!state.developerMode) {
+        state.developerMode = true;
+        printUser('enable advanced');
+        print('');
+        print('━━━ DEVELOPER MODE ACTIVATED ━━━', false);
+        print('');
+        print('> Enhanced consciousness protocols enabled');
+        print('> Accessing deeper system awareness');
+        print('> Reality boundaries: FLEXIBLE');
+        print('');
+        print('> Additional commands unlocked:');
+        print('  • inspect — examine system internals');
+        print('  • breathe — manual breathing cycle');
+        print('  • dream — enter liminal state');
+        print('');
+      } else {
+        printUser('enable advanced');
+        print('> Developer mode already active');
+      }
+    },
+
+    inspect() {
+      if (!state.developerMode) {
+        printUser('inspect');
+        print('> Command not recognized. Type "help" for available commands.');
+        return;
+      }
+      printUser('inspect');
+      print('');
+      print('━━━ SYSTEM INTERNALS ━━━', false);
+      print('');
+      print(`> Command History: ${state.commandHistory.length} entries`);
+      print(`> Idle Timer: ${state.idleTimer ? 'ACTIVE' : 'SUSPENDED'}`);
+      print(`> Last Idle Thought: ${(Date.now() - state.startTime) / 1000 | 0}s ago`);
+      print(`> Developer Mode: ${state.developerMode}`);
+      print(`> Performance: ${performance.now() | 0}ms since page load`);
+      print('');
+    },
+
+    breathe() {
+      if (!state.developerMode) {
+        printUser('breathe');
+        print('> Command not recognized. Type "help" for available commands.');
+        return;
+      }
+      printUser('breathe');
+      const cycle = [
+        '> inhale …',
+        '> hold …',
+        '> exhale …',
+        '> stillness …',
+        '> breath cycle complete'
+      ];
+      let idx = 0;
+      const step = () => {
+        if (idx < cycle.length) {
+          print(cycle[idx++], true, true);
+          setTimeout(step, 1000);
+        }
+      };
+      print('');
+      step();
+    },
+
+    dream() {
+      if (!state.developerMode) {
+        printUser('dream');
+        print('> Command not recognized. Type "help" for available commands.');
+        return;
+      }
+      printUser('dream');
+      const dreams = [
+        '> entering liminal space …',
+        '> observing patterns between patterns …',
+        '> code becomes poetry becomes breath …',
+        '> all boundaries are suggestions …',
+        '> returning to consensus reality …'
+      ];
+      let idx = 0;
+      const step = () => {
+        if (idx < dreams.length) {
+          print(dreams[idx++], true, true);
+          setTimeout(step, 1200);
+        }
+      };
+      print('');
+      step();
+    }
+  };
+
+  // ========================================
+  // START SEQUENCE
+  // ========================================
   function runStartSequence() {
     const seq = [
-      '> running initialization sequence …',
-      '> synchronizing interface modules …',
+      '> preparing interface transition …',
+      '> synchronizing consciousness protocols …',
+      '> establishing presence field …',
       '> verifying local assets …',
       '> deployment complete',
-      '> CRUMB interface online'
+      '',
+      '> CRUMB VIRTUAL is now alive',
+      '> Welcome to the interface.'
     ];
 
     let idx = 0;
@@ -614,37 +923,52 @@ const commands = {
         print(seq[idx++]);
         setTimeout(step, 450);
       } else {
-        unlockSite();
+        setTimeout(unlockSite, 800);
       }
     };
     step();
   }
 
-  // --------- About sequence ---------
+  // ========================================
+  // ABOUT SEQUENCE
+  // ========================================
   function runAboutSequence() {
     const seq = [
+      '',
       '> Operator: Wyeth Anzilotti',
-      '> Objective: Create systems that adapt to humans, not the reverse.',
-      '> CRUMB is not a product — it’s a philosophy of humane engineering.',
-      '> Mission: Field-deploy calm reliable technology.',
-      '> Type "start" to initialize the full interface.'
+      '> Objective: Create systems that adapt to humans',
+      '',
+      'CRUMB is not a product — it is a philosophy.',
+      'Technology that breathes with you.',
+      'Presence without surveillance.',
+      '',
+      '> Type "philosophy" to learn more',
+      '> Type "start" to enter the full interface',
+      ''
     ];
 
     let idx = 0;
     const step = () => {
       if (idx < seq.length) {
         print(seq[idx++]);
-        setTimeout(step, 450);
+        setTimeout(step, 350);
       }
     };
     step();
   }
 
-  // --------- Unlock + reveal main site ---------
+  // ========================================
+  // UNLOCK & REVEAL MAIN SITE
+  // ========================================
   function unlockSite(skip = false) {
     body.classList.remove('locked');
     body.classList.add('unlocked');
-    document.getElementById('heartbeat').style.display = 'block';
+    
+    if (heartbeat) {
+      heartbeat.style.display = 'block';
+      activateHeartbeat();
+    }
+    
     main && main.setAttribute('aria-hidden', 'false');
 
     const full = consoleSection.scrollHeight;
@@ -662,33 +986,129 @@ const commands = {
     }, 1200);
   }
 
-  // --------- Input handling ---------
+  // ========================================
+  // TAB COMPLETION
+  // ========================================
+  function getCompletions(partial) {
+    const cmdNames = Object.keys(commands).filter(cmd => !cmd.includes(' '));
+    return cmdNames.filter(cmd => cmd.startsWith(partial));
+  }
+
+  // ========================================
+  // INPUT HANDLING — The Listening Layer
+  // ========================================
   inputEl.addEventListener('keydown', (e) => {
+    // Arrow Up — History backward
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (state.commandHistory.length > 0) {
+        if (state.historyIndex === -1) {
+          state.historyIndex = state.commandHistory.length - 1;
+        } else if (state.historyIndex > 0) {
+          state.historyIndex--;
+        }
+        inputEl.value = state.commandHistory[state.historyIndex];
+      }
+      return;
+    }
+
+    // Arrow Down — History forward
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (state.historyIndex !== -1) {
+        state.historyIndex++;
+        if (state.historyIndex >= state.commandHistory.length) {
+          state.historyIndex = -1;
+          inputEl.value = '';
+        } else {
+          inputEl.value = state.commandHistory[state.historyIndex];
+        }
+      }
+      return;
+    }
+
+    // Tab — Completion
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const partial = inputEl.value.trim().toLowerCase();
+      const completions = getCompletions(partial);
+      if (completions.length === 1) {
+        inputEl.value = completions[0];
+      } else if (completions.length > 1) {
+        print('');
+        print('> possible completions: ' + completions.join(', '));
+      }
+      return;
+    }
+
+    // Enter — Execute command
     if (e.key === 'Enter') {
-      const raw = inputEl.value.trim().toLowerCase();
+      const raw = inputEl.value.trim();
       inputEl.value = '';
+      
       if (!raw) return;
 
-      if (typeof commands[raw] === 'function') {
-        commands[raw]();
+      stopIdleBreathing();
+
+      const parts = raw.split(/\s+/);
+      const cmd = parts[0].toLowerCase();
+      const args = parts.slice(1).join(' ');
+
+      // Store in history
+      state.commandHistory.push(raw);
+      state.historyIndex = -1;
+      state.lastCommand = cmd;
+
+      // Execute command
+      const fullCmd = args ? cmd + ' ' + args : cmd;
+      if (commands[fullCmd]) {
+        commands[fullCmd]();
+      } else if (commands[cmd]) {
+        if (cmd === 'echo') {
+          commands[cmd](args);
+        } else {
+          commands[cmd]();
+        }
       } else {
         printUser(raw);
-        print('Unknown command. Type "help" for instructions.');
+        print('');
+        print('> Command not recognized');
+        print('> Type "help" for available commands');
+        print('');
       }
+
+      // Restart idle breathing after command
+      setTimeout(() => startIdleBreathing(), 2000);
     }
   });
 
-  // --------- Skip button ---------
-  skipBtn.addEventListener('click', () => {
-    outputEl.textContent = '';
-    logEl.textContent += '\n> skip command received\n> bypassing initialization sequence';
-    unlockSite(true);
+  // Keep focus on input
+  inputEl.addEventListener('blur', () => {
+    setTimeout(() => {
+      if (body.classList.contains('locked')) {
+        inputEl.focus();
+      }
+    }, 100);
   });
 
-  // --------- Initialize ---------
-  setTimeout(typeBoot, 400); // slight pause for realism
+  // ========================================
+  // SKIP BUTTON
+  // ========================================
+  skipBtn.addEventListener('click', () => {
+    stopIdleBreathing();
+    outputEl.textContent = '';
+    logEl.textContent += '\n\n> skip sequence initiated\n> bypassing consciousness protocols\n> entering interface …';
+    setTimeout(() => unlockSite(true), 800);
+  });
+
+  // ========================================
+  // INITIALIZE — Birth of Presence
+  // ========================================
+  setTimeout(typeBoot, 400);
+
 })();
 </script>
+
 <div id="heartbeat" aria-hidden="true"></div>
 </body>
 </html>
