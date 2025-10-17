@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.2 — Living System</title>
+  <title>CRUMB V1.21 — Living System</title>
 
   <!--
   ======================================================================
@@ -55,6 +55,11 @@
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    
+    html {
+      scroll-behavior: smooth;
     }
 
     #boot-console {
@@ -265,8 +270,8 @@
       box-shadow: 0 0 8px #ff3b3b;
       animation: pulse-idle 2.4s infinite ease-in-out;
       opacity: 0.85;
-      z-index: 50;
-      display: none;
+      z-index: 9999;
+      display: block;
       transition: all 0.3s ease;
     }
 
@@ -735,7 +740,7 @@
         `> Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
         `> Last Command: ${state.lastCommand || 'NONE'}`,
         `> Timestamp: ${now.toISOString()}`,
-        `> Heartbeat: ${heartbeat && heartbeat.style.display !== 'none' ? 'SYNCHRONIZED' : 'INITIALIZING'}`,
+        `> Heartbeat: SYNCHRONIZED`,
         ''
       ];
       diagnostics.forEach(line => print(line));
@@ -766,15 +771,10 @@
       printUser('pulse');
       print('');
       print('> synchronizing with heartbeat …');
-      if (heartbeat) {
-        for (let i = 0; i < 3; i++) {
-          setTimeout(() => activateHeartbeat(), i * 500);
-        }
-        setTimeout(() => print('> pulse complete'), 1500);
-      } else {
-        print('> heartbeat not yet initialized');
-        print('> type "start" to bring the system online');
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => activateHeartbeat(), i * 500);
       }
+      setTimeout(() => print('> pulse complete'), 1500);
     },
 
     clear() {
@@ -964,8 +964,8 @@
     body.classList.remove('locked');
     body.classList.add('unlocked');
     
+    // Heartbeat is already visible, just pulse it
     if (heartbeat) {
-      heartbeat.style.display = 'block';
       activateHeartbeat();
     }
     
@@ -1104,6 +1104,12 @@
   // ========================================
   // INITIALIZE — Birth of Presence
   // ========================================
+  
+  // Ensure page starts at top and console is visible
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
   setTimeout(typeBoot, 400);
 
 })();
