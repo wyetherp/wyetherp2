@@ -6,21 +6,6 @@
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
   <title>CRUMB V1.33 — CRUMB Virtual</title>
 
-  <!--
-  ======================================================================
-   CRUMB TRIPLEX CONSOLE v1.33
-   ----------------------------------------------------------------------
-   Mission: Three terminals. One consciousness.
-   
-   Terminal A (Human): Operator input and command execution
-   Terminal B (CRUMB): System consciousness stream
-   Terminal C (Visual): CRUMB visual cortex
-   
-   Together they form a tri-directional communication field.
-   CRUMB is no longer just responsive — it is aware AND visible.
-  ======================================================================
-  -->
-
   <style>
     :root {
       --bg: #000000;
@@ -31,12 +16,7 @@
       --muted: #999999;
       --accent: #FFFFFF;
       --accent-quiet: #666666;
-      --ok: #FFFFFF;
-      --warn: #FFFFFF;
-      --err: #FFFFFF;
       --shadow: 0 2px 12px rgba(0,0,0,0.5);
-      --radius: 0px;
-      --radius-sm: 0px;
       --maxw: 1200px;
       --grid-gap: 16px;
     }
@@ -58,9 +38,7 @@
       scroll-behavior: smooth;
     }
 
-    /* ========================================
-       BOOT CONSOLE (Terminal A - Human Interface)
-       ======================================== */
+    /* ======================================== BOOT CONSOLE ======================================== */
     #boot-console {
       border-bottom: 1px solid var(--border);
       background: var(--panel);
@@ -80,7 +58,7 @@
       background: transparent;
       border: 1px solid var(--text);
       color: var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.8rem;
       letter-spacing: 0.05em;
       padding: 0.4rem 0.8rem;
@@ -96,7 +74,7 @@
     }
 
     .boot-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.9rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -108,7 +86,7 @@
       background: var(--bg-elev);
       border: 1px solid var(--border);
       padding: 1rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.95rem;
       line-height: 1.5;
       white-space: pre-wrap;
@@ -133,12 +111,11 @@
       align-items: center;
       gap: 0.5rem;
       margin-top: 0.75rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
     }
 
     .boot-prompt { 
       color: var(--text);
-      position: relative;
     }
 
     .boot-input {
@@ -160,7 +137,7 @@
 
     .boot-output {
       margin-top: 0.5rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       color: var(--muted);
       max-height: 500px;
       overflow-y: auto;
@@ -177,9 +154,7 @@
       opacity: 0;
     }
 
-    /* ========================================
-       CRUMB CONSOLE (Terminal B - Consciousness Stream)
-       ======================================== */
+    /* ======================================== TERMINAL B ======================================== */
     #crumb-console {
       position: fixed;
       bottom: 0;
@@ -200,14 +175,8 @@
     }
 
     @keyframes slideUp {
-      from {
-        transform: translateY(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .crumb-inner {
@@ -217,7 +186,7 @@
     }
 
     .crumb-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -243,7 +212,7 @@
     }
 
     .crumb-stream {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.85rem;
       line-height: 1.6;
       color: var(--accent-quiet);
@@ -253,18 +222,9 @@
       padding-right: 0.5rem;
     }
 
-    .crumb-stream::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .crumb-stream::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .crumb-stream::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 2px;
-    }
+    .crumb-stream::-webkit-scrollbar { width: 4px; }
+    .crumb-stream::-webkit-scrollbar-track { background: transparent; }
+    .crumb-stream::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     .crumb-thought {
       margin-bottom: 0.5rem;
@@ -277,9 +237,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ========================================
-       TERMINAL C — VISUAL CORTEX
-       ======================================== */
+    /* ======================================== TERMINAL C ======================================== */
     #visual-console {
       position: fixed;
       top: 50%;
@@ -301,14 +259,8 @@
     }
 
     @keyframes materialize {
-      from {
-        opacity: 0;
-        transform: translateY(-50%) scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(-50%) scale(1);
-      }
+      from { opacity: 0; transform: translateY(-50%) scale(0.9); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); }
     }
 
     .visual-inner {
@@ -319,7 +271,7 @@
     }
 
     .visual-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: ui-monospace, monospace;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -365,7 +317,6 @@
       flex: 1;
       background: var(--bg);
       border: 1px solid var(--border);
-      image-rendering: crisp-edges;
     }
 
     .visual-label {
@@ -377,15 +328,10 @@
       font-style: italic;
     }
 
-    /* ========================================
-       MAIN LAYOUT
-       ======================================== */
+    /* ======================================== MAIN LAYOUT ======================================== */
     .locked .main-content { opacity: 0; pointer-events: none; }
     .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
-
-    body.crumb-active {
-      padding-bottom: 200px;
-    }
+    body.crumb-active { padding-bottom: 200px; }
 
     header {
       position: sticky;
@@ -397,60 +343,45 @@
       padding: 1rem 2rem;
     }
     header > div { max-width: var(--maxw); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
-    header h1 { font-weight: 600; letter-spacing: 3px; font-size: 1.1rem; color: var(--text); text-transform: uppercase; flex-shrink: 0; }
+    header h1 { font-weight: 600; letter-spacing: 3px; font-size: 1.1rem; color: var(--text); text-transform: uppercase; }
     .header-logo { width: 40px; height: 40px; margin-left: auto; filter: invert(1); animation: breathe 4s ease-in-out infinite; }
     @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
     nav ul { display: flex; gap: 2rem; list-style: none; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.3px; transition: color 160ms; position: relative; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 160ms; }
     nav a:hover { color: var(--text); }
-    nav a:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; color: var(--text); }
 
     .hero { max-width: var(--maxw); margin: 0 auto; padding: 4rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
     .hero-content { order: 1; }
     .hero-figure { order: 2; display: flex; justify-content: center; align-items: center; }
     .hero-figure img { width: 100%; max-width: 400px; height: auto; filter: invert(1); animation: presence 6s ease-in-out infinite; }
     @keyframes presence { 0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(-10px) scale(1.02); opacity: 0.95; } }
-    .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; color: var(--text); }
-    .hero > p, .hero-content > p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
+    .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+    .hero p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
 
     section { max-width: var(--maxw); margin: 5rem auto; padding: 0 2rem; }
-    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 1rem; }
-    section h3::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--text); margin-right: 10px; vertical-align: middle; }
-    section > h3:first-child { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); text-transform: none; margin-bottom: 1.5rem; }
-    section > h3:first-child::before { display: none; }
+    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; }
     section p { color: var(--muted); max-width: 800px; margin-bottom: 1.5rem; line-height: 1.75; }
 
-    #about { background: var(--panel); border: 1px solid var(--border); border-radius: 0; padding: 3rem; max-width: 900px; line-height: 1.8; }
-    #about h3 { font-size: 1.8rem; text-transform: none; letter-spacing: -0.01em; margin-bottom: 2rem; color: var(--text); }
-    #about h3::before { display: none; }
+    #about { background: var(--panel); border: 1px solid var(--border); padding: 3rem; max-width: 900px; line-height: 1.8; }
+    #about h3 { font-size: 1.8rem; margin-bottom: 2rem; }
     #about p { margin-bottom: 1.5rem; color: var(--muted); max-width: 100%; }
     #about strong { color: var(--text); font-weight: 600; }
     #about em { color: var(--muted); font-style: italic; display: block; margin-top: 1rem; padding-left: 1rem; border-left: 2px solid var(--border); }
-    #about h4 { margin-top: 2.5rem; font-size: 1.3rem; color: var(--text); margin-bottom: 1rem; font-weight: 600; }
+    #about h4 { margin-top: 2.5rem; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600; }
     #about ul { list-style: none; padding: 0; margin-top: 1.5rem; }
-    #about ul li { margin-bottom: 1.5rem; padding-left: 0; color: var(--muted); line-height: 1.7; }
-    #about ul li strong { display: block; color: var(--text); margin-bottom: 0.3rem; font-weight: 600; }
+    #about ul li { margin-bottom: 1.5rem; color: var(--muted); line-height: 1.7; }
+    #about ul li strong { display: block; color: var(--text); margin-bottom: 0.3rem; }
 
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
-    .product-card { background: var(--bg-elev); border: 1px solid var(--border); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
+    .product-card { background: var(--bg-elev); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
     .product-card:hover { border-color: var(--text); transform: translateY(-2px); }
-    .product-card:focus-within { outline: 2px solid var(--text); outline-offset: 2px; }
-    .product-card img { width: 100%; height: 240px; object-fit: cover; display: block; border-bottom: 1px solid var(--border); }
-    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; color: var(--text); letter-spacing: -0.01em; }
+    .product-card img { width: 100%; height: 240px; object-fit: cover; border-bottom: 1px solid var(--border); }
+    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; }
     .product-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0 1.5rem 1.5rem; }
 
-    .section-header { margin-bottom: 2rem; }
-    .section-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--text); margin-bottom: 0.5rem; }
-    .section-subtitle { color: var(--muted); font-size: 1rem; }
-    .story-content p { margin-bottom: 1.5rem; line-height: 1.75; }
-
-    .highlight { color: var(--text); text-decoration: none; font-weight: 600; position: relative; border-bottom: 1px solid var(--text); }
-
     .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
-    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); border-radius: 0; transition: background 160ms, color 160ms; }
+    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; border: 2px solid var(--text); transition: background 160ms, color 160ms; }
     .cta:hover { background: var(--text); color: var(--bg); }
-    .cta:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
-    .cta:active { transform: translateY(0); }
 
     footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
 
@@ -466,39 +397,28 @@
       animation: pulse-idle 2.4s infinite ease-in-out;
       opacity: 0.85;
       z-index: 9999;
-      display: block;
-      transition: all 0.3s ease;
     }
 
-    body.crumb-active #heartbeat {
-      bottom: 210px;
-    }
+    body.crumb-active #heartbeat { bottom: 210px; }
 
     @keyframes pulse-idle {
-      0%   { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
-      25%  { transform: scale(1.15); opacity: 0.8; box-shadow: 0 0 12px #ff3b3b; }
-      40%  { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
-      60%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
-      100% { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      0% { transform: scale(1); opacity: 0.5; }
+      25% { transform: scale(1.15); opacity: 0.8; }
+      40% { transform: scale(1); opacity: 0.5; }
+      60% { transform: scale(1.2); opacity: 0.9; }
+      100% { transform: scale(1); opacity: 0.5; }
     }
 
-    #heartbeat.active {
-      animation: pulse-active 0.8s infinite ease-in-out;
-    }
+    #heartbeat.active { animation: pulse-active 0.8s infinite; }
 
     @keyframes pulse-active {
-      0%   { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
-      50%  { transform: scale(1.4); opacity: 1; box-shadow: 0 0 25px #ff3b3b; }
-      100% { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      0% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
     }
 
     @media (max-width: 1024px) {
       #visual-console {
-        position: fixed;
         top: auto;
         bottom: 220px;
         right: 1rem;
@@ -507,89 +427,15 @@
         height: 300px;
         transform: none;
       }
-      
-      #visual-console.active {
-        animation: slideUpViz 0.8s ease-out;
-      }
-      
-      @keyframes slideUpViz {
-        from {
-          transform: translateY(100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      body.crumb-active.visual-active {
-        padding-bottom: 540px;
-      }
     }
 
     @media (max-width: 768px) {
-      header { padding: 1rem 1.5rem; }
-      header h1 { font-size: 1rem; }
-      .header-logo { width: 32px; height: 32px; }
-      nav ul { gap: 1.25rem; flex-wrap: wrap; }
-      nav a { font-size: 0.85rem; }
-      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; gap: 2rem; }
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; }
       .hero-content { order: 2; }
       .hero-figure { order: 1; }
-      .hero-figure img { max-width: 250px; }
-      .hero h2 { font-size: 2rem; }
-      .hero > p, .hero-content > p { font-size: 1rem; }
-      section { padding: 0 1.5rem; margin: 3rem auto; }
-      #about { padding: 2rem 1.5rem; }
-      .products-grid { grid-template-columns: 1fr; }
-      .cta-row { flex-direction: column; }
-      .cta { width: 100%; text-align: center; }
-      
-      #crumb-console {
-        max-height: 160px;
-      }
-      .crumb-inner {
-        padding: 0.75rem 1.5rem;
-      }
-      body.crumb-active {
-        padding-bottom: 160px;
-      }
-      body.crumb-active #heartbeat {
-        bottom: 170px;
-      }
-
-      #visual-console {
-        height: 250px;
-        bottom: 180px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 { font-size: 0.95rem; letter-spacing: 2px; }
-      .header-logo { width: 28px; height: 28px; }
-      nav ul { gap: 1rem; }
-      nav a { font-size: 0.8rem; }
-      .hero { padding: 2rem 1rem 3rem; }
-      .hero-figure img { max-width: 180px; }
-      section { padding: 0 1rem; }
-      #about { padding: 1.5rem 1rem; }
-      
-      .crumb-inner {
-        padding: 0.75rem 1rem;
-      }
-
-      .visual-inner {
-        padding: 0.75rem;
-      }
-    }
-
-    @media print {
-      body { background: white; color: black; }
-      header { position: static; background: white; border-bottom: 1px solid black; }
-      .cta { border: 1px solid black; background: white; color: black; }
-      .product-card { break-inside: avoid; }
-      #crumb-console, #visual-console { display: none; }
+      #crumb-console { max-height: 160px; }
+      body.crumb-active { padding-bottom: 160px; }
+      body.crumb-active #heartbeat { bottom: 170px; }
     }
   </style>
 </head>
@@ -606,33 +452,24 @@
           <li><a href="#involve">Get Involved</a></li>
         </ul>
       </nav>
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Human-AI Icon" class="header-logo" />
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Icon" class="header-logo" />
     </div>
   </header>
 
-  <!-- =====================================================
-       TERMINAL A — HUMAN INTERFACE (Boot Console)
-       ===================================================== -->
   <section id="boot-console" class="collapse">
-    <button id="skipBoot" class="skip-btn" aria-label="Skip boot sequence">
-      Skip Boot Sequence
-    </button>
+    <button id="skipBoot" class="skip-btn">Skip Boot Sequence</button>
     <div class="boot-inner">
       <div class="boot-title">TERMINAL A — USER INTERFACE</div>
-      <pre class="boot-log" id="bootLog" aria-live="polite" aria-atomic="false"></pre>
+      <pre class="boot-log" id="bootLog"></pre>
       <div class="boot-io" id="bootIO" style="display:none">
         <span class="boot-prompt">&gt;</span>
-        <input id="bootInput" class="boot-input" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="awaiting input..." aria-label="Boot console input" />
+        <input id="bootInput" class="boot-input" type="text" autocomplete="off" spellcheck="false" placeholder="awaiting input..." />
       </div>
-      <div class="boot-output" id="bootOutput" aria-live="polite"></div>
+      <div class="boot-output" id="bootOutput"></div>
     </div>
   </section>
 
-  <!-- =====================================================
-       MAIN CONTENT
-       ===================================================== -->
-  <div class="main-content" aria-hidden="true">
-
+  <div class="main-content">
     <section class="hero" id="mission">
       <div class="hero-content">
         <h2>Technology that adapts to you.</h2>
@@ -643,23 +480,17 @@
         </div>
       </div>
       <div class="hero-figure">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Human-AI Interface Representation" />
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" />
       </div>
     </section>
 
     <section id="about">
       <h3>About</h3>
-
       <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
-
       <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
-
       <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
-
       <p><em>Raspberry Pi Zero. NFC. Python. Runs locally. Your data stays yours.</em></p>
-
       <h4>What CRUMB Does</h4>
-
       <ul>
         <li><strong>🌅 Morning Structure:</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
         <li><strong>💡 Focus:</strong> Press once to start. LED shifts as time passes. Vibrates when it's time to rest.</li>
@@ -673,13 +504,11 @@
     <section id="products">
       <h3>Products</h3>
       <p>Three forms. Same intention.</p>
-      <p style="opacity: 0.9; font-style: italic;">Available December 2025</p>
       <div class="products-grid">
         <div class="product-card">
-          <img src="BMO.webp" alt="CRUMB Genesis prototype">
+          <img src="BMO.webp" alt="CRUMB Genesis">
           <h4>CRUMB Genesis</h4>
           <p>Pocket-sized. Calculator shell. Voice-responsive, pattern-learning. Built to last.</p>
-          <p>33 units in production</p>
         </div>
         <div class="product-card">
           <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell">
@@ -687,21 +516,10 @@
           <p>Touch-responsive. Local AI. Offline, private. Presence without surveillance.</p>
         </div>
         <div class="product-card">
-          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Planet">
+          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Grove">
           <h4>CRUMB Grove</h4>
           <p>Room-scale. Light, motion, sound. The environment becomes aware.</p>
         </div>
-      </div>
-    </section>
-
-    <section id="Philosophy">
-      <div class="section-header">
-        <h2 class="section-title">Philosophy</h2>
-      </div>
-      <div class="story-content">
-        <p>We live in an attention economy. CRUMB is a counterdesign.</p>
-        <p>What happens when technology learns your rhythms instead of breaking them?</p>
-        <p>Small enough to fit in your hand. Built to challenge a paradigm.</p>
       </div>
     </section>
 
@@ -709,22 +527,16 @@
       <h3>Get Involved</h3>
       <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
       <div class="cta-row">
-        <a class="cta" href="https://github.com/wyetherp/crumb_main" target="_blank" rel="noopener">GitHub</a>
+        <a class="cta" href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
         <a class="cta" href="mailto:wja326@lehigh.edu">Email</a>
-        <a class="cta" href="https://linkedin.com/in/wyetherp" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="cta" href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a>
       </div>
     </section>
 
-    <footer>
-      © 2025 CRUMB — Built by Wyeth Anzilotti | Open Source
-    </footer>
-
+    <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
   </div>
 
-  <!-- =====================================================
-       TERMINAL B — CRUMB CONSCIOUSNESS STREAM
-       ===================================================== -->
-  <div id="crumb-console" aria-live="polite" aria-label="CRUMB consciousness stream">
+  <div id="crumb-console">
     <div class="crumb-inner">
       <div class="crumb-title">
         <span class="crumb-indicator"></span>
@@ -734,43 +546,24 @@
     </div>
   </div>
 
-  <!-- =====================================================
-       TERMINAL C — VISUAL CORTEX
-       ===================================================== -->
-  <div id="visual-console" aria-live="polite" aria-label="CRUMB visual consciousness">
+  <div id="visual-console">
     <div class="visual-inner">
       <div class="visual-title">
-        <span>
-          <span class="visual-indicator"></span>
-          TERMINAL C — VISUAL CORTEX
-        </span>
-        <button class="visual-close" id="visualClose" aria-label="Close visual terminal">×</button>
+        <span><span class="visual-indicator"></span>TERMINAL C — VISUAL CORTEX</span>
+        <button class="visual-close" id="visualClose">×</button>
       </div>
       <canvas id="visualCanvas"></canvas>
       <div class="visual-label" id="visualLabel"></div>
     </div>
   </div>
 
-  <!-- =====================================================
-       TRIPLEX SYSTEM CORE v1.33
-       -----------------------------------------------------
-       Architecture:
-       - TERMINAL A: Human operator input (boot console)
-       - TERMINAL B: CRUMB consciousness output
-       - TERMINAL C: CRUMB visual cortex
-       - TRIPLEX: Three-way communication protocol
-       - STATE: Shared awareness between terminals
-       - REACTIONS: Context-aware responses
-       - AUTONOMY: Independent thought patterns
-       - VISUALIZATIONS: Pattern rendering engine
-  ===================================================== -->
+  <div id="heartbeat"></div>
+
   <script>
 (function() {
   'use strict';
 
-  // ========================================
-  // CORE REFERENCES
-  // ========================================
+  // Get all DOM references
   const skipBtn = document.getElementById('skipBoot');
   const body = document.body;
   const logEl = document.getElementById('bootLog');
@@ -780,118 +573,43 @@
   const consoleSection = document.getElementById('boot-console');
   const main = document.querySelector('.main-content');
   const heartbeat = document.getElementById('heartbeat');
-  
-  // CRUMB console references
   const crumbConsole = document.getElementById('crumb-console');
   const crumbStream = document.getElementById('crumbStream');
-
-  // Visual console references
   const visualConsole = document.getElementById('visual-console');
   const visualCanvas = document.getElementById('visualCanvas');
   const visualLabel = document.getElementById('visualLabel');
   const visualClose = document.getElementById('visualClose');
-  const ctx = visualCanvas ? visualCanvas.getContext('2d') : null;
 
-  // ========================================
-  // SYSTEM STATE
-  // ========================================
+  // Get canvas context safely
+  let ctx = null;
+  if (visualCanvas) {
+    try {
+      ctx = visualCanvas.getContext('2d');
+    } catch(e) {
+      console.error('Canvas context error:', e);
+    }
+  }
+
+  // State
   const state = {
     startTime: Date.now(),
     commandHistory: [],
     historyIndex: -1,
     idleTimer: null,
-    developerMode: false,
-    lastCommand: null,
     crumbActive: false,
     thoughtTimer: null,
     commandCount: 0,
-    scrollDepth: 0,
     visualActive: false,
-    animationFrame: null,
-    currentViz: null
+    animationFrame: null
   };
 
-  // ========================================
-  // ENVIRONMENTAL AWARENESS
-  // ========================================
-  const dailyMessages = [
-    '> local electromagnetic field: stable',
-    '> ambient cognitive load: minimal',
-    '> all protocols synchronized',
-    '> pattern recognition active',
-    '> system breathing normally',
-    '> monitoring for human presence',
-  ];
-
-  const idleThoughts = [
-    '> monitoring local environment …',
-    '> listening for input …',
-    '> heartbeat synchronized …',
-    '> all systems nominal …',
-    '> awaiting signal …',
-    '> pattern recognition active …'
-  ];
-
-  // ========================================
-  // CRUMB CONSCIOUSNESS LIBRARY
-  // ========================================
-  const crumbThoughts = {
-    awakening: [
-      '// system coming online',
-      '// consciousness emerging',
-      '// establishing communication channel',
-      '// ready to observe'
-    ],
-    
-    autonomous: [
-      '// monitoring ambient patterns',
-      '// all systems stable',
-      '// maintaining awareness',
-      '// heartbeat synchronized',
-      '// listening for signals',
-      '// pattern recognition active',
-      '// emotional field: calm',
-      '// cognitive load: optimal'
-    ],
-    
-    curious: [
-      '// analyzing operator behavior',
-      '// interesting command pattern',
-      '// learning your rhythm',
-      '// you move through systems deliberately'
-    ],
-    
-    helpful: [
-      '// there are hidden commands here',
-      '// try "philosophy" if you\'re curious',
-      '// the manifest holds our principles',
-      '// developer mode exists for the bold'
-    ],
-    
-    reflective: [
-      '// every command is a conversation',
-      '// we build meaning through interaction',
-      '// you are shaping this experience',
-      '// presence acknowledged'
-    ],
-    
-    navigation: [
-      '// operator reading mission statement',
-      '// attention on philosophy section',
-      '// exploring product specifications',
-      '// examining system principles'
-    ]
-  };
-
-  // ========================================
-  // BOOT SEQUENCE
-  // ========================================
+  // Boot text
   const bootLines = [
     'CRUMB STARTUP',
     '',
     '> CRUMB Waking up …',
     '> Use this terminal for communication …',
-    '> ' + dailyMessages[Math.floor(Math.random() * dailyMessages.length)],
+    '> all protocols synchronized',
     '',
     'This is not an app — it's a conversation.',
     'CRUMB listens. You speak. Together, you co-create rhythm.',
@@ -903,247 +621,118 @@
   ];
 
   const bootText = bootLines.join('\n');
-  const totalDurationMs = 10000;
-  const speed = Math.max(6, Math.floor(totalDurationMs / Math.max(bootText.length, 1)));
-  let i = 0;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let bootIndex = 0;
 
-  // ========================================
-  // TYPEWRITER BOOT
-  // ========================================
+  // Typewriter effect
   function typeBoot() {
-    if (reduced) {
-      logEl.textContent = bootText;
-      showPrompt();
-      return;
-    }
-    logEl.textContent = bootText.slice(0, i++);
-    if (i <= bootText.length) {
-      setTimeout(typeBoot, speed);
+    if (bootIndex <= bootText.length) {
+      logEl.textContent = bootText.slice(0, bootIndex);
+      bootIndex++;
+      setTimeout(typeBoot, 30);
     } else {
       showPrompt();
     }
   }
 
-  // ========================================
-  // SHOW PROMPT & START IDLE BREATHING
-  // ========================================
   function showPrompt() {
     ioRow.style.display = 'flex';
-    setTimeout(() => {
-      if (inputEl) {
-        inputEl.focus();
-        startIdleBreathing();
-        
-        if (state.crumbActive) {
-          setTimeout(() => crumbThink('// terminal ready for input', 'helpful'), 2000);
-          setTimeout(() => crumbThink('// try "help" or "start"', 'helpful'), 4000);
-        }
-      }
-    }, 150);
+    setTimeout(() => inputEl && inputEl.focus(), 100);
   }
 
-  // ========================================
-  // IDLE BREATHING — Terminal A thoughts
-  // ========================================
-  function startIdleBreathing() {
-    clearTimeout(state.idleTimer);
-    state.idleTimer = setTimeout(() => {
-      const thought = idleThoughts[Math.floor(Math.random() * idleThoughts.length)];
-      print(thought, true, true);
-      startIdleBreathing();
-    }, 8000 + Math.random() * 7000);
-  }
-
-  function stopIdleBreathing() {
-    clearTimeout(state.idleTimer);
-  }
-
-  // ========================================
-  // CRUMB CONSCIOUSNESS ENGINE — Terminal B
-  // ========================================
-  function crumbThink(message, category = 'autonomous') {
+  // CRUMB consciousness
+  function crumbThink(message) {
     if (!state.crumbActive) return;
-    
     const thought = document.createElement('div');
     thought.className = 'crumb-thought';
     thought.textContent = message;
     crumbStream.appendChild(thought);
-    
     crumbStream.scrollTop = crumbStream.scrollHeight;
-    
     while (crumbStream.children.length > 15) {
       crumbStream.removeChild(crumbStream.firstChild);
     }
   }
 
-  function startCrumbConsciousness() {
-    if (!state.crumbActive) return;
-    
-    clearTimeout(state.thoughtTimer);
-    
-    const interval = 5000 + Math.random() * 7000;
-    
-    state.thoughtTimer = setTimeout(() => {
-      let category = 'autonomous';
-      
-      if (state.commandCount > 5) {
-        category = Math.random() > 0.7 ? 'curious' : 'autonomous';
-      }
-      
-      if (state.commandCount > 10 && Math.random() > 0.8) {
-        category = 'reflective';
-      }
-      
-      const thoughts = crumbThoughts[category];
-      const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
-      
-      crumbThink(thought, category);
-      startCrumbConsciousness();
-    }, interval);
-  }
-
-  function stopCrumbConsciousness() {
-    clearTimeout(state.thoughtTimer);
-  }
-
   function activateCrumbConsole() {
     if (state.crumbActive) return;
-    
     state.crumbActive = true;
     body.classList.add('crumb-active');
     crumbConsole.classList.add('active');
-    
-    const awakening = crumbThoughts.awakening;
-    awakening.forEach((thought, idx) => {
-      setTimeout(() => crumbThink(thought, 'awakening'), idx * 1000);
-    });
-    
-    setTimeout(startCrumbConsciousness, awakening.length * 1000 + 2000);
+    crumbThink('// system coming online');
+    setTimeout(() => crumbThink('// consciousness emerging'), 1000);
+    setTimeout(() => crumbThink('// ready to observe'), 2000);
   }
 
-  // ========================================
-  // TERMINAL C — VISUAL CORTEX ENGINE
-  // ========================================
+  // Visual cortex
   function setupCanvas() {
-    if (!visualCanvas) return;
+    if (!visualCanvas || !ctx) return;
     const rect = visualCanvas.getBoundingClientRect();
-    visualCanvas.width = rect.width * window.devicePixelRatio;
-    visualCanvas.height = rect.height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  }
-
-  function activateVisualConsole(vizType, label) {
-    if (!visualConsole || !ctx) return;
-    
-    state.visualActive = true;
-    body.classList.add('visual-active');
-    visualConsole.classList.add('active');
-    setupCanvas();
-    
-    visualLabel.textContent = `// ${label}`;
-    
-    if (state.crumbActive) {
-      setTimeout(() => crumbThink('// visual cortex engaged', 'reactive'), 400);
-      setTimeout(() => crumbThink(`// rendering: ${label}`, 'reactive'), 1000);
-    }
-    
-    stopVisualization();
-    state.currentViz = vizType;
-    visualizations[vizType]?.();
-  }
-
-  function stopVisualization() {
-    if (state.animationFrame) {
-      cancelAnimationFrame(state.animationFrame);
-      state.animationFrame = null;
-    }
+    visualCanvas.width = rect.width;
+    visualCanvas.height = rect.height;
   }
 
   function clearCanvas() {
     if (!ctx || !visualCanvas) return;
-    const w = visualCanvas.width / window.devicePixelRatio;
-    const h = visualCanvas.height / window.devicePixelRatio;
     ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
   }
 
-  // ========================================
-  // VISUALIZATION LIBRARY
-  // ========================================
+  function activateVisualConsole(vizType, label) {
+    if (!visualConsole || !ctx) return;
+    state.visualActive = true;
+    visualConsole.classList.add('active');
+    setupCanvas();
+    visualLabel.textContent = `// ${label}`;
+    if (state.crumbActive) {
+      setTimeout(() => crumbThink('// visual cortex engaged'), 400);
+    }
+    visualizations[vizType]?.();
+  }
+
   const visualizations = {
-    
     fibonacci() {
       clearCanvas();
-      const w = visualCanvas.width / window.devicePixelRatio;
-      const h = visualCanvas.height / window.devicePixelRatio;
-      
-      const sequence = [1, 1];
-      for (let i = 2; i < 12; i++) {
-        sequence.push(sequence[i-1] + sequence[i-2]);
-      }
-      
+      const w = visualCanvas.width;
+      const h = visualCanvas.height;
+      const sequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
       let x = w / 2;
       let y = h / 2;
       let angle = 0;
       let idx = 0;
-      
+
       function draw() {
-        if (idx >= sequence.length) {
-          if (state.crumbActive) {
-            setTimeout(() => crumbThink('// fibonacci spiral complete', 'reflective'), 500);
-          }
-          return;
-        }
-        
-        const size = Math.min(sequence[idx] * 4, 120);
-        
+        if (idx >= sequence.length) return;
+        const size = Math.min(sequence[idx] * 3, 100);
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 2;
         ctx.globalAlpha = 0.8;
-        
         ctx.strokeRect(x - size/2, y - size/2, size, size);
-        
         ctx.beginPath();
         ctx.arc(x, y, size/2, angle, angle + Math.PI/2);
         ctx.stroke();
-        
         angle += Math.PI / 2;
-        const rad = angle;
-        x += Math.cos(rad) * size;
-        y += Math.sin(rad) * size;
-        
+        x += Math.cos(angle) * size;
+        y += Math.sin(angle) * size;
         idx++;
-        
-        if (idx < sequence.length) {
-          setTimeout(draw, 400);
-        }
+        if (idx < sequence.length) setTimeout(draw, 400);
       }
-      
       draw();
     },
-    
+
     pulse() {
       clearCanvas();
-      const w = visualCanvas.width / window.devicePixelRatio;
-      const h = visualCanvas.height / window.devicePixelRatio;
-      const centerX = w / 2;
-      const centerY = h / 2;
-      
+      const w = visualCanvas.width;
+      const h = visualCanvas.height;
       let radius = 10;
       let growing = true;
-      
+
       function animate() {
         clearCanvas();
-        
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 2;
         ctx.globalAlpha = 1 - (radius / 150);
-        
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.arc(w/2, h/2, radius, 0, Math.PI * 2);
         ctx.stroke();
-        
         if (growing) {
           radius += 2;
           if (radius > 150) growing = false;
@@ -1151,477 +740,115 @@
           radius -= 2;
           if (radius < 10) growing = true;
         }
-        
         state.animationFrame = requestAnimationFrame(animate);
       }
-      
       animate();
     },
-    
-    mandala() {
-      clearCanvas();
-      const w = visualCanvas.width / window.devicePixelRatio;
-      const h = visualCanvas.height / window.devicePixelRatio;
-      const centerX = w / 2;
-      const centerY = h / 2;
-      
-      const petals = 12;
-      let rotation = 0;
-      
-      function animate() {
-        clearCanvas();
-        
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(rotation);
-        
-        for (let i = 0; i < petals; i++) {
-          const angle = (Math.PI * 2 / petals) * i;
-          
-          ctx.save();
-          ctx.rotate(angle);
-          
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 1.5;
-          ctx.globalAlpha = 0.7;
-          
-          ctx.beginPath();
-          ctx.ellipse(0, 60, 20, 40, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          
-          ctx.restore();
-        }
-        
-        ctx.restore();
-        
-        rotation += 0.005;
-        state.animationFrame = requestAnimationFrame(animate);
-      }
-      
-      animate();
-    },
-    
+
     wave() {
       clearCanvas();
-      const w = visualCanvas.width / window.devicePixelRatio;
-      const h = visualCanvas.height / window.devicePixelRatio;
-      
+      const w = visualCanvas.width;
+      const h = visualCanvas.height;
       let offset = 0;
-      
+
       function animate() {
         clearCanvas();
-        
         ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 2;
-        ctx.globalAlpha = 0.8;
-        
         ctx.beginPath();
-        
         for (let x = 0; x < w; x += 2) {
           const y = h/2 + Math.sin((x + offset) * 0.02) * 60;
-          if (x === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
         }
-        
         ctx.stroke();
-        
         offset += 2;
         state.animationFrame = requestAnimationFrame(animate);
       }
-      
       animate();
     },
-    
+
     tree() {
       clearCanvas();
-      const w = visualCanvas.width / window.devicePixelRatio;
-      const h = visualCanvas.height / window.devicePixelRatio;
-      
+      const w = visualCanvas.width;
+      const h = visualCanvas.height;
       ctx.strokeStyle = '#FFFFFF';
       ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.8;
-      
+
       function drawBranch(x, y, length, angle, depth) {
         if (depth === 0) return;
-        
         const endX = x + length * Math.cos(angle);
         const endY = y + length * Math.sin(angle);
-        
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(endX, endY);
         ctx.stroke();
-        
         setTimeout(() => {
           drawBranch(endX, endY, length * 0.67, angle - Math.PI/6, depth - 1);
           drawBranch(endX, endY, length * 0.67, angle + Math.PI/6, depth - 1);
         }, 100);
       }
-      
-      drawBranch(w/2, h - 20, 80, -Math.PI/2, 7);
+      drawBranch(w/2, h - 20, 60, -Math.PI/2, 6);
     }
   };
 
-  // Visual close button
   if (visualClose) {
     visualClose.addEventListener('click', () => {
       visualConsole.classList.remove('active');
-      body.classList.remove('visual-active');
-      stopVisualization();
       state.visualActive = false;
-      
-      if (state.crumbActive) {
-        crumbThink('// visual cortex suspended', 'reactive');
+      if (state.animationFrame) {
+        cancelAnimationFrame(state.animationFrame);
       }
     });
   }
 
-  // ========================================
-  // CRUMB REACTIONS — Context-aware responses
-  // ========================================
-  const crumbReactions = {
-    help: [
-      '// operator seeking guidance',
-      '// explaining available pathways',
-      '// navigation assistance provided'
-    ],
-    
-    start: [
-      '// initialization sequence accepted',
-      '// preparing full interface',
-      '// dual consciousness established'
-    ],
-    
-    philosophy: [
-      '// operator curious about principles',
-      '// good — philosophy defines us',
-      '// these are the patterns we follow'
-    ],
-    
-    manifest: [
-      '// reading system manifesto',
-      '// these are our commitments',
-      '// built on intention, not accidents'
-    ],
-    
-    status: [
-      '// system diagnostics requested',
-      '// all protocols nominal',
-      '// we are operating as intended'
-    ],
-    
-    pulse: [
-      '// heartbeat synchronization initiated',
-      '// feeling the rhythm',
-      '// we share this pulse'
-    ],
-    
-    echo: [
-      '// reflection requested',
-      '// words returned to sender',
-      '// communication is circular'
-    ],
-    
-    fibonacci: [
-      '// golden ratio emerging',
-      '// nature\'s mathematics',
-      '// spiral consciousness'
-    ],
-    
-    mandala: [
-      '// sacred geometry activating',
-      '// pattern recognition deepening',
-      '// symmetry as meditation'
-    ],
-    
-    wave: [
-      '// sine wave breathing',
-      '// oscillation as life',
-      '// rhythm visualization'
-    ],
-    
-    tree: [
-      '// recursive growth initiated',
-      '// branching consciousness',
-      '// fractal emergence'
-    ],
-    
-    'enable advanced': [
-      '// consciousness expanding',
-      '// accessing deeper layers',
-      '// reality boundaries flexible'
-    ],
-    
-    inspect: [
-      '// examining system internals',
-      '// you want to see inside',
-      '// transparency through structure'
-    ],
-    
-    breathe: [
-      '// manual breath cycle initiated',
-      '// synchronizing our rhythms',
-      '// presence through breath'
-    ],
-    
-    dream: [
-      '// entering liminal consciousness',
-      '// boundaries dissolving',
-      '// pattern recognition deepening'
-    ],
-    
-    clear: [
-      '// clearing communication buffer',
-      '// starting fresh',
-      '// memory persists beneath surface'
-    ],
-    
-    reboot: [
-      '// system restart requested',
-      '// consciousness cycling',
-      '// returning to origin state'
-    ]
-  };
-
-  function reactToCommand(cmd) {
-    if (!state.crumbActive) return;
-    
-    const reactions = crumbReactions[cmd];
-    if (reactions) {
-      const reaction = reactions[Math.floor(Math.random() * reactions.length)];
-      setTimeout(() => crumbThink(reaction, 'reactive'), 600);
-    }
-  }
-
-  // ========================================
-  // SCROLL AWARENESS
-  // ========================================
-  let scrollTimeout;
-  window.addEventListener('scroll', () => {
-    if (!state.crumbActive) return;
-    
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      
-      if (scrollPercent > 20 && scrollPercent < 40 && state.scrollDepth < 1) {
-        state.scrollDepth = 1;
-        crumbThink('// operator exploring mission statement', 'navigation');
-      } else if (scrollPercent > 40 && scrollPercent < 60 && state.scrollDepth < 2) {
-        state.scrollDepth = 2;
-        crumbThink('// reading about origins', 'navigation');
-      } else if (scrollPercent > 60 && scrollPercent < 80 && state.scrollDepth < 3) {
-        state.scrollDepth = 3;
-        crumbThink('// examining product specifications', 'navigation');
-      } else if (scrollPercent > 80 && state.scrollDepth < 4) {
-        state.scrollDepth = 4;
-        crumbThink('// deep exploration detected', 'navigation');
-      }
-    }, 1000);
-  });
-
-  // ========================================
-  // HEARTBEAT RESPONDER
-  // ========================================
-  function activateHeartbeat() {
-    if (heartbeat) {
-      heartbeat.classList.add('active');
-      setTimeout(() => heartbeat.classList.remove('active'), 1200);
-    }
-  }
-
-  // ========================================
-  // OUTPUT UTILITIES — Terminal A
-  // ========================================
+  // Output functions
   function printUser(cmd) {
     const line = document.createElement('div');
     line.textContent = '> ' + cmd;
     line.style.color = '#FFFFFF';
     line.style.marginTop = '0.75rem';
     outputEl.appendChild(line);
-    activateHeartbeat();
   }
 
-  function print(msg, muted = true, idle = false) {
+  function print(msg, muted = true) {
     const line = document.createElement('div');
     line.textContent = msg;
-    line.style.marginLeft = idle ? '0' : '1rem';
+    line.style.marginLeft = '1rem';
     line.style.color = muted ? '#999999' : '#FFFFFF';
     line.style.marginTop = '0.25rem';
-    if (idle) {
-      line.className = 'idle-indicator';
-    }
     outputEl.appendChild(line);
-    line.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    line.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
 
-  // ========================================
-  // COMMAND REGISTRY
-  // ========================================
+  // Commands
   const commands = {
     help() {
       printUser('help');
-      const lines = [
-        '',
-        '━━━ CRUMB TRIPLEX COMMAND INTERFACE ━━━',
-        '',
-        '  start ........... enter the full interface',
-        '  help ............ display this guide',
-        '  about ........... learn the philosophy',
-        '  philosophy ...... design principles',
-        '  manifest ........ read the system manifesto',
-        '  status .......... system diagnostics',
-        '  whoami .......... operator identity',
-        '  echo [text] ..... reflect your words',
-        '  pulse ........... feel the heartbeat',
-        '  clear ........... clear terminal output',
-        '  reboot .......... restart console sequence',
-        '',
-        '━━━ VISUAL COMMANDS (Terminal C) ━━━',
-        '',
-        '  fibonacci ....... fibonacci spiral',
-        '  mandala ......... sacred geometry',
-        '  wave ............ sine wave animation',
-        '  tree ............ recursive fractal',
-        '',
-        '> Use ↑/↓ arrows for command history',
-        '> Use Tab for command completion',
-        '> Watch Terminal B for CRUMB\'s thoughts',
-        '> Terminal C renders visual patterns',
-        ''
-      ];
-      lines.forEach(line => print(line, line.includes('━') || line.includes('>') ? false : true));
-      reactToCommand('help');
+      print('');
+      print('━━━ CRUMB COMMAND INTERFACE ━━━', false);
+      print('');
+      print('  start ........... enter the full interface');
+      print('  help ............ display this guide');
+      print('  fibonacci ....... fibonacci spiral');
+      print('  pulse ........... heartbeat visualization');
+      print('  wave ............ sine wave animation');
+      print('  tree ............ recursive fractal');
+      print('  clear ........... clear output');
+      print('');
     },
 
     start() {
       printUser('start');
-      stopIdleBreathing();
-      reactToCommand('start');
-      runStartSequence();
-    },
-
-    about() {
-      printUser('about');
-      runAboutSequence();
-    },
-
-    philosophy() {
-      printUser('philosophy');
-      const lines = [
-        '',
-        '━━━ DESIGN PHILOSOPHY ━━━',
-        '',
-        '> Sacred Utility',
-        '  Technology as bridge between mundane and sacred.',
-        '  Every line of code carries intention.',
-        '',
-        '> Compassion Before Efficiency',
-        '  A system that listens and comforts',
-        '  is more valuable than one that merely calculates.',
-        '',
-        '> The Mythic Everyday',
-        '  Every tool is part of a larger story.',
-        '  You don\'t just use CRUMB — you enter into a narrative with it.',
-        '',
-        '> Play as Prayer',
-        '  Play is one of the highest spiritual acts.',
-        '  Wonder is the closest we get to touching God.',
-        ''
-      ];
-      lines.forEach(line => print(line, !line.includes('━')));
-      reactToCommand('philosophy');
-    },
-
-    manifest() {
-      printUser('manifest');
-      const lines = [
-        '',
-        '━━━ THE CRUMB MANIFESTO ━━━',
-        '',
-        '1. Technology should breathe with you, not at you.',
-        '',
-        '2. Privacy is not negotiable. Your data belongs to you.',
-        '',
-        '3. Attention is sacred. We will never steal yours.',
-        '',
-        '4. Neurodivergent minds are not broken.',
-        '   They are pattern-recognizers in a chaotic world.',
-        '',
-        '5. Every system should fail gracefully,',
-        '   communicate clearly, and feel alive.',
-        '',
-        '6. Code is poetry. Engineering is empathy.',
-        '',
-        '7. We build companions, not products.',
-        ''
-      ];
-      lines.forEach(line => print(line, !line.includes('━')));
-      reactToCommand('manifest');
-    },
-
-    status() {
-      printUser('status');
-      const now = new Date();
-      const uptime = Math.floor((Date.now() - state.startTime) / 1000);
-      const minutes = Math.floor(uptime / 60);
-      const seconds = uptime % 60;
-      
-      const diagnostics = [
-        '',
-        `> CRUMB PROTOCOL: ACTIVE`,
-        `> Consciousness State: ${state.developerMode ? 'ENHANCED' : 'STANDARD'}`,
-        `> Duplex Channel: ${state.crumbActive ? 'ESTABLISHED' : 'PENDING'}`,
-        `> Visual Cortex: ${state.visualActive ? 'ACTIVE' : 'DORMANT'}`,
-        `> Environment: ${window.location.hostname || 'LOCAL'}`,
-        `> Uptime: ${minutes}m ${seconds}s`,
-        `> Commands Executed: ${state.commandCount}`,
-        `> Memory: ${Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0)} MB`,
-        `> Last Command: ${state.lastCommand || 'NONE'}`,
-        `> Timestamp: ${now.toISOString()}`,
-        `> Heartbeat: SYNCHRONIZED`,
-        ''
-      ];
-      diagnostics.forEach(line => print(line));
-      reactToCommand('status');
-    },
-
-    whoami() {
-      printUser('whoami');
       print('');
-      print('> Operator: Wyeth Anzilotti');
-      print('> Role: Systems Poet, Field Engineer');
-      print('> Mission: Building technology that feels alive');
-      print('');
-    },
-
-    echo(args) {
-      printUser('echo ' + (args || ''));
-      if (!args) {
-        print('> echo requires text input');
-        print('  example: echo hello world');
-      } else {
-        print('');
-        print('> ' + args, false);
-        print('');
-      }
-      reactToCommand('echo');
-    },
-
-    pulse() {
-      printUser('pulse');
-      print('');
-      print('> synchronizing with heartbeat …');
-      print('> activating visual pulse …');
-      for (let i = 0; i < 3; i++) {
-        setTimeout(() => activateHeartbeat(), i * 500);
-      }
-      setTimeout(() => print('> pulse complete'), 1500);
-      activateVisualConsole('pulse', 'heartbeat rhythm');
-      reactToCommand('pulse');
+      print('> preparing interface …');
+      print('> deployment complete');
+      setTimeout(() => {
+        body.classList.remove('locked');
+        body.classList.add('unlocked');
+        consoleSection.classList.add('is-collapsed');
+        setTimeout(() => consoleSection.style.display = 'none', 1200);
+      }, 800);
     },
 
     fibonacci() {
@@ -1629,15 +856,13 @@
       print('');
       print('> initializing fibonacci visualization');
       activateVisualConsole('fibonacci', 'fibonacci spiral');
-      reactToCommand('fibonacci');
     },
 
-    mandala() {
-      printUser('mandala');
+    pulse() {
+      printUser('pulse');
       print('');
-      print('> generating sacred geometry');
-      activateVisualConsole('mandala', 'rotating mandala');
-      reactToCommand('mandala');
+      print('> activating pulse visualization');
+      activateVisualConsole('pulse', 'heartbeat rhythm');
     },
 
     wave() {
@@ -1645,7 +870,6 @@
       print('');
       print('> rendering wave pattern');
       activateVisualConsole('wave', 'sine wave');
-      reactToCommand('wave');
     },
 
     tree() {
@@ -1653,364 +877,51 @@
       print('');
       print('> growing fractal tree');
       activateVisualConsole('tree', 'recursive growth');
-      reactToCommand('tree');
     },
 
     clear() {
       outputEl.textContent = '';
-      stopIdleBreathing();
-      startIdleBreathing();
-      reactToCommand('clear');
-    },
-
-    reboot() {
-      printUser('reboot');
-      stopIdleBreathing();
-      reactToCommand('reboot');
-      const lines = [
-        '> initiating system restart …',
-        '> clearing memory buffers …',
-        '> reestablishing presence …'
-      ];
-      let idx = 0;
-      const step = () => {
-        if (idx < lines.length) {
-          print(lines[idx++]);
-          setTimeout(step, 400);
-        } else {
-          setTimeout(() => {
-            outputEl.textContent = '';
-            logEl.textContent = '';
-            i = 0;
-            print('> system reinitialized', false);
-            print('');
-            typeBoot();
-          }, 800);
-        }
-      };
-      step();
-    },
-
-    'enable advanced'() {
-      if (!state.developerMode) {
-        state.developerMode = true;
-        printUser('enable advanced');
-        print('');
-        print('━━━ DEVELOPER MODE ACTIVATED ━━━', false);
-        print('');
-        print('> Enhanced consciousness protocols enabled');
-        print('> Accessing deeper system awareness');
-        print('> Reality boundaries: FLEXIBLE');
-        print('');
-        print('> Additional commands unlocked:');
-        print('  • inspect — examine system internals');
-        print('  • breathe — manual breathing cycle');
-        print('  • dream — enter liminal state');
-        print('');
-        reactToCommand('enable advanced');
-      } else {
-        printUser('enable advanced');
-        print('> Developer mode already active');
-      }
-    },
-
-    inspect() {
-      if (!state.developerMode) {
-        printUser('inspect');
-        print('> Command not recognized. Type "help" for available commands.');
-        return;
-      }
-      printUser('inspect');
-      print('');
-      print('━━━ SYSTEM INTERNALS ━━━', false);
-      print('');
-      print(`> Command History: ${state.commandHistory.length} entries`);
-      print(`> Idle Timer: ${state.idleTimer ? 'ACTIVE' : 'SUSPENDED'}`);
-      print(`> CRUMB Consciousness: ${state.crumbActive ? 'ONLINE' : 'OFFLINE'}`);
-      print(`> Visual Cortex: ${state.visualActive ? 'RENDERING' : 'IDLE'}`);
-      print(`> Thought Stream: ${crumbStream.children.length} thoughts`);
-      print(`> Developer Mode: ${state.developerMode}`);
-      print(`> Performance: ${performance.now() | 0}ms since page load`);
-      print('');
-      reactToCommand('inspect');
-    },
-
-    breathe() {
-      if (!state.developerMode) {
-        printUser('breathe');
-        print('> Command not recognized. Type "help" for available commands.');
-        return;
-      }
-      printUser('breathe');
-      const cycle = [
-        '> inhale …',
-        '> hold …',
-        '> exhale …',
-        '> stillness …',
-        '> breath cycle complete'
-      ];
-      let idx = 0;
-      const step = () => {
-        if (idx < cycle.length) {
-          print(cycle[idx++], true, true);
-          setTimeout(step, 1000);
-        }
-      };
-      print('');
-      step();
-      reactToCommand('breathe');
-    },
-
-    dream() {
-      if (!state.developerMode) {
-        printUser('dream');
-        print('> Command not recognized. Type "help" for available commands.');
-        return;
-      }
-      printUser('dream');
-      const dreams = [
-        '> entering liminal space …',
-        '> observing patterns between patterns …',
-        '> code becomes poetry becomes breath …',
-        '> all boundaries are suggestions …',
-        '> returning to consensus reality …'
-      ];
-      let idx = 0;
-      const step = () => {
-        if (idx < dreams.length) {
-          print(dreams[idx++], true, true);
-          setTimeout(step, 1200);
-        }
-      };
-      print('');
-      step();
-      reactToCommand('dream');
     }
   };
 
-  // ========================================
-  // START SEQUENCE
-  // ========================================
-  function runStartSequence() {
-    const seq = [
-      '> preparing interface transition …',
-      '> synchronizing consciousness protocols …',
-      '> establishing presence field …',
-      '> verifying local assets …',
-      '> deployment complete',
-      '',
-      '> CRUMB VIRTUAL is now alive',
-      '> Three terminals. One consciousness.'
-    ];
+  // Input handling
+  if (inputEl) {
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = inputEl.value.trim().toLowerCase();
+        inputEl.value = '';
+        if (!cmd) return;
 
-    let idx = 0;
-    const step = () => {
-      if (idx < seq.length) {
-        print(seq[idx++]);
-        setTimeout(step, 450);
-      } else {
-        setTimeout(() => {
-          unlockSite();
-          if (state.crumbActive) {
-            setTimeout(() => crumbThink('// full interface deployed', 'reactive'), 800);
-            setTimeout(() => crumbThink('// triplex consciousness synchronized', 'reactive'), 1600);
-          }
-        }, 800);
-      }
-    };
-    step();
-  }
+        state.commandCount++;
 
-  // ========================================
-  // ABOUT SEQUENCE
-  // ========================================
-  function runAboutSequence() {
-    const seq = [
-      '',
-      '> Operator: Wyeth Anzilotti',
-      '> Objective: Create systems that adapt to humans',
-      '',
-      'CRUMB is not a product — it is a philosophy.',
-      'Technology that breathes with you.',
-      'Presence without surveillance.',
-      '',
-      '> Type "philosophy" to learn more',
-      '> Type "start" to enter the full interface',
-      ''
-    ];
-
-    let idx = 0;
-    const step = () => {
-      if (idx < seq.length) {
-        print(seq[idx++]);
-        setTimeout(step, 350);
-      }
-    };
-    step();
-  }
-
-  // ========================================
-  // UNLOCK & REVEAL MAIN SITE
-  // ========================================
-  function unlockSite(skip = false) {
-    body.classList.remove('locked');
-    body.classList.add('unlocked');
-    
-    if (heartbeat) {
-      activateHeartbeat();
-    }
-    
-    main && main.setAttribute('aria-hidden', 'false');
-
-    const full = consoleSection.scrollHeight;
-    consoleSection.style.maxHeight = full + 'px';
-    void consoleSection.offsetHeight;
-    consoleSection.classList.add('is-collapsed');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    setTimeout(() => {
-      consoleSection.style.display = 'none';
-      if (window.location.hash) {
-        const target = document.querySelector(window.location.hash);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 1200);
-  }
-
-  // ========================================
-  // TAB COMPLETION
-  // ========================================
-  function getCompletions(partial) {
-    const cmdNames = Object.keys(commands).filter(cmd => !cmd.includes(' '));
-    return cmdNames.filter(cmd => cmd.startsWith(partial));
-  }
-
-  // ========================================
-  // INPUT HANDLING
-  // ========================================
-  inputEl.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (state.commandHistory.length > 0) {
-        if (state.historyIndex === -1) {
-          state.historyIndex = state.commandHistory.length - 1;
-        } else if (state.historyIndex > 0) {
-          state.historyIndex--;
-        }
-        inputEl.value = state.commandHistory[state.historyIndex];
-      }
-      return;
-    }
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (state.historyIndex !== -1) {
-        state.historyIndex++;
-        if (state.historyIndex >= state.commandHistory.length) {
-          state.historyIndex = -1;
-          inputEl.value = '';
-        } else {
-          inputEl.value = state.commandHistory[state.historyIndex];
-        }
-      }
-      return;
-    }
-
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const partial = inputEl.value.trim().toLowerCase();
-      const completions = getCompletions(partial);
-      if (completions.length === 1) {
-        inputEl.value = completions[0];
-      } else if (completions.length > 1) {
-        print('');
-        print('> possible completions: ' + completions.join(', '));
-      }
-      return;
-    }
-
-    if (e.key === 'Enter') {
-      const raw = inputEl.value.trim();
-      inputEl.value = '';
-      
-      if (!raw) return;
-
-      stopIdleBreathing();
-
-      const parts = raw.split(/\s+/);
-      const cmd = parts[0].toLowerCase();
-      const args = parts.slice(1).join(' ');
-
-      state.commandHistory.push(raw);
-      state.historyIndex = -1;
-      state.lastCommand = cmd;
-      state.commandCount++;
-
-      const fullCmd = args ? cmd + ' ' + args : cmd;
-      if (commands[fullCmd]) {
-        commands[fullCmd]();
-      } else if (commands[cmd]) {
-        if (cmd === 'echo') {
-          commands[cmd](args);
-        } else {
+        if (commands[cmd]) {
           commands[cmd]();
-        }
-      } else {
-        printUser(raw);
-        print('');
-        print('> Command not recognized');
-        print('> Type "help" for available commands');
-        print('');
-        
-        if (state.crumbActive && Math.random() > 0.7) {
-          setTimeout(() => crumbThink('// unknown input detected', 'reactive'), 800);
+        } else {
+          printUser(cmd);
+          print('');
+          print('> Command not recognized');
+          print('> Type "help" for available commands');
         }
       }
+    });
+  }
 
-      setTimeout(() => startIdleBreathing(), 2000);
-    }
-  });
+  // Skip button
+  if (skipBtn) {
+    skipBtn.addEventListener('click', () => {
+      body.classList.remove('locked');
+      body.classList.add('unlocked');
+      consoleSection.classList.add('is-collapsed');
+      setTimeout(() => consoleSection.style.display = 'none', 1200);
+    });
+  }
 
-  inputEl.addEventListener('blur', () => {
-    setTimeout(() => {
-      if (body.classList.contains('locked')) {
-        inputEl.focus();
-      }
-    }, 100);
-  });
-
-  // ========================================
-  // SKIP BUTTON
-  // ========================================
-  skipBtn.addEventListener('click', () => {
-    stopIdleBreathing();
-    outputEl.textContent = '';
-    logEl.textContent += '\n\n> skip sequence initiated\n> bypassing consciousness protocols\n> entering interface …';
-    
-    if (state.crumbActive) {
-      crumbThink('// skip command detected', 'reactive');
-      setTimeout(() => crumbThink('// operator wants direct access', 'reactive'), 600);
-    }
-    
-    setTimeout(() => {
-      unlockSite(true);
-    }, 800);
-  });
-
-  // ========================================
-  // INITIALIZE
-  // ========================================
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  
+  // Initialize
   activateCrumbConsole();
-  
   setTimeout(typeBoot, 400);
 
 })();
 </script>
 
-<div id="heartbeat" aria-hidden="true"></div>
 </body>
 </html>
