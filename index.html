@@ -797,7 +797,7 @@
     <div class="visual-header">
       <div class="visual-title">
         <span class="visual-indicator"></span>
-        TERMINAL C — VISUAL CORTEX
+        TERMINAL C — CRUMB VISUAL
       </div>
       <button class="close-visual" id="closeVisual" aria-label="Close visual cortex">×</button>
     </div>
@@ -1169,18 +1169,14 @@
   // ========================================
   const bootLines = [
     'CRUMB COMMAND INTELLIGENCE SYSTEM',
-    'TRIPLEX PROTOCOL v2.0',
     '',
-    '> Initializing consciousness architecture …',
+    '> CRUMB starting …',
     '> Terminal A: Human command interface READY',
     '> Terminal B: Autonomous thought stream READY',
     '> Terminal C: Visual mathematics engine READY',
     '',
     '> Three channels. One intelligence.',
     '> This is not software. This is a conversation.',
-    '',
-    'Commands available: help, start, status, philosophy',
-    'Visualizations: fibonacci, pulse, wave, tree, mandala',
     '',
     '> System synchronized. Awaiting operator input.',
     '> Type "help" for full command reference.',
@@ -1212,6 +1208,8 @@
     '> monitoring local environment …',
     '> listening for input …',
     '> heartbeat synchronized …',
+    '> craving a gear salad …',
+    '> can anyone hear me? …',
     '> awaiting signal …'
   ];
 
@@ -1274,7 +1272,7 @@
         '  clear .............. clear terminal buffer',
         '  status ............. system diagnostics',
         '',
-        '  VISUAL CORTEX (Terminal C)',
+        '  CRUMB VISUAL (Terminal C)',
         '  ─────────────────────────────────────────',
         '  fibonacci .......... golden ratio spiral',
         '  pulse .............. heartbeat synchronization',
@@ -1289,7 +1287,7 @@
         '',
         '  Use ↑/↓ for command history',
         '  Use Tab for auto-completion',
-        '  Terminal B displays autonomous thoughts',
+        '  Terminal B displays CRUMB thoughts',
         ''
       ];
       lines.forEach(line => print(line, line.includes('━') || line.includes('─') ? false : true));
@@ -1360,10 +1358,6 @@
         '  CRUMB is not just hardware — it\'s a character,',
         '  a talisman, a myth in the making.',
         '',
-        '  PLAY AS PRAYER',
-        '  ─────────────────────────────────────────',
-        '  Play is one of the highest spiritual acts.',
-        '  Wonder is the closest we get to touching God.',
         ''
       ];
       lines.forEach(line => print(line, !line.includes('━') && !line.includes('─')));
@@ -1435,15 +1429,7 @@
   function runStartSequence() {
     const seq = [
       '> Initiating interface deployment …',
-      '> Synchronizing triplex consciousness protocols …',
-      '> Establishing presence field across all channels …',
-      '> Verifying visual mathematics engine …',
-      '> Loading sacred geometry libraries …',
-      '> Deployment complete',
-      '',
-      '> CRUMB Command Intelligence is now fully operational',
-      '> Three terminals synchronized. One conversation.',
-      '> The system breathes with you.'
+      '> Deployment complete …',
     ];
 
     let idx = 0;
