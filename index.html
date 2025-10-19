@@ -4,34 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V2.0 — TRIPLEX CONSCIOUSNESS</title>
+  <title>CRUMB V2</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --bg: #000000;
-      --bg-elev: #0A0A0A;
-      --panel: #111111;
-      --border: #333333;
-      --text: #FFFFFF;
-      --muted: #999999;
-      --accent: #FFFFFF;
-      --accent-quiet: #666666;
-      --shadow: 0 2px 12px rgba(0,0,0,0.5);
-      --maxw: 1200px;
-      --grid-gap: 16px;
+      --bg-elev: rgba(10, 15, 20, 0.85);
+      --panel: rgba(15, 15, 20, 0.9);
+      --border: rgba(42, 196, 255, 0.12);
+      --border-accent: rgba(42, 196, 255, 0.3);
+      --text: #e8faff;
+      --muted: #7a8a91;
+      --accent: #2ac4ff;
+      --accent-glow: rgba(42, 196, 255, 0.3);
+      --accent-quiet: #183e5a;
+      --shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+      --glow: 0 0 12px rgba(42, 196, 255, 0.15);
+      --maxw: 1400px;
+      --grid-gap: 20px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--bg);
+      background: radial-gradient(circle at 50% 10%, #0a0a0a 0%, #000 100%);
       color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
       line-height: 1.6;
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
     }
     
     html { scroll-behavior: smooth; }
@@ -41,57 +49,79 @@
        ======================================== */
     #boot-console {
       border-bottom: 1px solid var(--border);
-      background: var(--panel);
+      background: linear-gradient(to right, #050505, #0f0f10);
       position: relative;
+      backdrop-filter: blur(12px) saturate(120%);
     }
 
     .boot-inner {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 2rem;
+      padding: 2.5rem;
     }
 
     .skip-btn {
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: transparent;
-      border: 1px solid var(--text);
-      color: var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-      padding: 0.4rem 0.8rem;
+      background: rgba(42, 196, 255, 0.05);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: all 0.3s ease;
       z-index: 200;
+      box-shadow: 0 0 10px rgba(42, 196, 255, 0.1);
     }
     .skip-btn:hover, .skip-btn:focus {
-      background: var(--text);
-      color: var(--bg);
+      background: var(--accent);
+      color: #000;
       outline: none;
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-1px);
     }
 
     .boot-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .boot-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: signal-pulse 1.5s infinite alternate;
+    }
+    
+    @keyframes signal-pulse {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
     }
 
     .boot-log {
       background: var(--bg-elev);
       border: 1px solid var(--border);
-      padding: 1rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.95rem;
-      line-height: 1.5;
+      padding: 1.25rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
       white-space: pre-wrap;
-      box-shadow: var(--shadow);
-      max-height: 400px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), var(--glow);
+      max-height: 450px;
       overflow-y: auto;
+      color: var(--text);
+      text-shadow: 0 0 4px rgba(42, 196, 255, 0.15);
+      border-radius: 4px;
     }
 
     .idle-indicator {
@@ -108,34 +138,42 @@
     .boot-io {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
     }
 
-    .boot-prompt { color: var(--text); }
+    .boot-prompt { 
+      color: var(--accent);
+      font-weight: 600;
+    }
 
     .boot-input {
       flex: 1;
-      background: transparent;
+      background: rgba(42, 196, 255, 0.03);
       border: none;
-      border-bottom: 1px dashed var(--border);
+      border-bottom: 1px solid var(--border-accent);
       color: var(--text);
       outline: none;
-      padding: 0.25rem 0.25rem 0.35rem;
+      padding: 0.5rem 0.75rem;
       font: inherit;
-      transition: border-bottom-color 0.3s;
+      transition: all 0.3s ease;
+      caret-color: var(--accent);
     }
-    .boot-input::placeholder { color: var(--muted); }
+    .boot-input::placeholder { 
+      color: var(--muted);
+      font-style: italic;
+    }
     .boot-input:focus { 
-      border-bottom-color: var(--text);
-      box-shadow: 0 1px 0 var(--text);
+      border-bottom-color: var(--accent);
+      box-shadow: 0 2px 0 var(--accent-glow);
+      background: rgba(42, 196, 255, 0.05);
     }
 
     .boot-output {
-      margin-top: 0.5rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      color: var(--muted);
+      margin-top: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text);
       max-height: 500px;
       overflow-y: auto;
     }
@@ -159,18 +197,19 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--bg-elev);
-      border-top: 1px solid var(--border);
+      background: var(--panel);
+      border-top: 1px solid var(--border-accent);
       z-index: 1000;
       display: none;
-      max-height: 200px;
+      max-height: 220px;
       overflow: hidden;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), 0 -4px 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(16px) saturate(130%);
     }
 
     #crumb-console.active {
       display: block;
-      animation: slideUp 0.8s ease-out;
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes slideUp {
@@ -181,44 +220,52 @@
     .crumb-inner {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 1rem 2rem;
+      padding: 1.25rem 2.5rem;
     }
 
     .crumb-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 0.75rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--accent-quiet);
-      margin-bottom: 0.5rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .crumb-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: breathe-indicator 2s ease-in-out infinite;
     }
 
     .crumb-indicator {
       display: inline-block;
       width: 6px;
       height: 6px;
-      background: var(--accent-quiet);
+      background: var(--accent);
       border-radius: 50%;
       animation: breathe-indicator 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--accent-glow);
     }
 
     @keyframes breathe-indicator {
       0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.3); }
+      50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 12px var(--accent); }
     }
 
     .crumb-stream {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--accent-quiet);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted);
       font-style: italic;
-      max-height: 140px;
+      max-height: 150px;
       overflow-y: auto;
-      padding-right: 0.5rem;
+      padding-right: 0.75rem;
     }
 
     .crumb-stream::-webkit-scrollbar { width: 4px; }
@@ -244,130 +291,300 @@
       top: 50%;
       right: 2rem;
       transform: translateY(-50%);
-      background: var(--bg-elev);
-      border: 1px solid var(--border);
+      background: radial-gradient(circle at center, var(--bg-elev), rgba(0, 0, 0, 0.95));
+      border: 1px solid var(--border-accent);
       z-index: 900;
       display: none;
-      width: 400px;
-      height: 400px;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.7);
+      width: 450px;
+      height: 450px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), 0 0 30px rgba(42, 196, 255, 0.15);
+      backdrop-filter: blur(16px) saturate(120%);
+      border-radius: 8px;
     }
 
     #visual-cortex.active {
       display: block;
-      animation: manifestVisual 0.8s ease-out;
+      animation: manifestVisual 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes manifestVisual {
-      from { opacity: 0; transform: translateY(-50%) scale(0.8); }
-      to { opacity: 1; transform: translateY(-50%) scale(1); }
+      from { opacity: 0; transform: translateY(-50%) scale(0.85); filter: blur(8px); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
     }
 
     .visual-header {
-      background: var(--panel);
+      background: rgba(10, 15, 20, 0.95);
       border-bottom: 1px solid var(--border);
-      padding: 0.75rem 1rem;
+      padding: 0.9rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .visual-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 0.75rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--accent-quiet);
+      color: var(--accent);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .visual-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: render-pulse 1.5s ease-in-out infinite;
     }
 
     .visual-indicator {
       display: inline-block;
       width: 6px;
       height: 6px;
-      background: var(--text);
+      background: var(--accent);
       border-radius: 50%;
       animation: render-pulse 1.5s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--accent-glow);
     }
 
     @keyframes render-pulse {
       0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+      50% { opacity: 1; box-shadow: 0 0 12px var(--accent); }
     }
 
     .close-visual {
       background: transparent;
       border: none;
       color: var(--muted);
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       line-height: 1;
       cursor: pointer;
       padding: 0;
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.2s;
+      transition: all 0.3s ease;
+      border-radius: 4px;
     }
 
-    .close-visual:hover { color: var(--text); }
+    .close-visual:hover { 
+      color: var(--accent);
+      background: rgba(42, 196, 255, 0.1);
+      transform: scale(1.1);
+    }
 
     #visualCanvas {
       display: block;
       width: 100%;
-      height: calc(100% - 48px);
-      background: var(--bg);
+      height: calc(100% - 52px);
+      background: #000;
+      background-image:
+        linear-gradient(rgba(42,196,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,196,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: -1px -1px;
     }
 
     /* ========================================
        MAIN LAYOUT
        ======================================== */
     .locked .main-content { opacity: 0; pointer-events: none; }
-    .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
+    .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 600ms ease; }
 
-    body.crumb-active { padding-bottom: 200px; }
+    body.crumb-active { padding-bottom: 220px; }
     body.visual-active #visual-cortex { display: block; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(11, 15, 20, 0.92);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(to right, rgba(5, 5, 5, 0.95), rgba(15, 15, 16, 0.95));
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      padding: 1.1rem 2.5rem;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
     }
-    header > div { max-width: var(--maxw); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
-    header h1 { font-weight: 600; letter-spacing: 3px; font-size: 1.1rem; color: var(--text); text-transform: uppercase; }
-    .header-logo { width: 40px; height: 40px; margin-left: auto; filter: invert(1); animation: breathe 4s ease-in-out infinite; }
-    @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
-    nav ul { display: flex; gap: 2rem; list-style: none; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.3px; transition: color 160ms; }
-    nav a:hover { color: var(--text); }
+    header > div { 
+      max-width: var(--maxw); 
+      margin: 0 auto; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 2.5rem; 
+    }
+    header h1 { 
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 700; 
+      letter-spacing: 3px; 
+      font-size: 1.15rem; 
+      color: var(--text); 
+      text-transform: uppercase;
+      position: relative;
+    }
+    header h1::after {
+      content: ' — SYSTEM ONLINE';
+      color: var(--accent);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      margin-left: 0.5rem;
+      font-weight: 500;
+    }
+    .header-logo { 
+      width: 42px; 
+      height: 42px; 
+      margin-left: auto; 
+      filter: invert(1) drop-shadow(0 0 8px rgba(42, 196, 255, 0.3));
+      animation: breathe 4s ease-in-out infinite; 
+    }
+    @keyframes breathe { 
+      0%, 100% { transform: scale(1); opacity: 1; } 
+      50% { transform: scale(1.06); opacity: 0.85; } 
+    }
+    nav ul { display: flex; gap: 2.25rem; list-style: none; }
+    nav a { 
+      color: var(--muted); 
+      text-decoration: none; 
+      font-size: 0.88rem; 
+      font-weight: 500; 
+      letter-spacing: 0.5px; 
+      transition: all 0.3s ease;
+      position: relative;
+      text-transform: uppercase;
+      font-family: 'Inter Tight', sans-serif;
+    }
+    nav a:hover { 
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent-glow);
+    }
+    nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; color: var(--accent); }
 
-    .hero { max-width: var(--maxw); margin: 0 auto; padding: 4rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .hero { 
+      max-width: var(--maxw); 
+      margin: 0 auto; 
+      padding: 5rem 3rem 6rem; 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 4.5rem; 
+      align-items: center;
+      background: linear-gradient(145deg, var(--bg-elev), rgba(0, 0, 0, 0.8));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 3rem;
+      box-shadow: inset 0 0 40px rgba(0,255,255,0.02), var(--shadow);
+      backdrop-filter: blur(12px);
+    }
     .hero-content { order: 1; }
     .hero-figure { order: 2; display: flex; justify-content: center; align-items: center; }
-    .hero-figure img { width: 100%; max-width: 400px; height: auto; filter: invert(1); animation: presence 6s ease-in-out infinite; }
-    @keyframes presence { 0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(-10px) scale(1.02); opacity: 0.95; } }
-    .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
-    .hero > p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
+    .hero-figure img { 
+      width: 100%; 
+      max-width: 420px; 
+      height: auto; 
+      filter: invert(1) drop-shadow(0 0 20px rgba(42, 196, 255, 0.25));
+      animation: presence 6s ease-in-out infinite; 
+    }
+    @keyframes presence { 
+      0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 
+      50% { transform: translateY(-12px) scale(1.03); opacity: 0.9; } 
+    }
+    .hero h2 { 
+      font-family: 'Inter Tight', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); 
+      font-weight: 700; 
+      line-height: 1.15; 
+      margin-bottom: 1.75rem; 
+      letter-spacing: 0.5px;
+      color: var(--text);
+      text-shadow: 0 0 20px rgba(42, 196, 255, 0.2);
+    }
+    .hero > p { 
+      max-width: 700px; 
+      color: var(--muted); 
+      font-size: 1.15rem; 
+      line-height: 1.8; 
+      margin-bottom: 2.75rem; 
+    }
 
-    section { max-width: var(--maxw); margin: 5rem auto; padding: 0 2rem; }
-    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: -0.01em; }
-    section p { color: var(--muted); max-width: 800px; margin-bottom: 1.5rem; line-height: 1.75; }
+    section { 
+      max-width: var(--maxw); 
+      margin: 3rem auto; 
+      padding: 0 3rem;
+    }
+    section h3 { 
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 1.8rem; 
+      font-weight: 700; 
+      margin-bottom: 2rem; 
+      letter-spacing: 0.3px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+    section p { 
+      color: var(--muted); 
+      max-width: 900px; 
+      margin-bottom: 1.75rem; 
+      line-height: 1.8; 
+      font-size: 1.05rem;
+    }
 
-    #about { background: var(--panel); border: 1px solid var(--border); padding: 3rem; max-width: 900px; line-height: 1.8; }
-    #about h3 { font-size: 1.8rem; margin-bottom: 2rem; }
-    #about p { margin-bottom: 1.5rem; color: var(--muted); }
-    #about strong { color: var(--text); font-weight: 600; }
-    #about h4 { margin-top: 2.5rem; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600; }
-    #about ul { list-style: none; padding: 0; margin-top: 1.5rem; }
-    #about ul li { margin-bottom: 1.5rem; color: var(--muted); line-height: 1.7; }
-    #about ul li strong { display: block; margin-bottom: 0.3rem; }
+    #about { 
+      background: var(--panel); 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      padding: 3.5rem; 
+      max-width: 1000px; 
+      line-height: 1.85;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.5), var(--glow);
+    }
+    #about h3 { 
+      font-size: 2rem; 
+      margin-bottom: 2.5rem;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border-accent);
+    }
+    #about p { 
+      margin-bottom: 1.75rem; 
+      color: var(--muted); 
+      font-size: 1.05rem;
+    }
+    #about strong { 
+      color: var(--text); 
+      font-weight: 600; 
+    }
+    #about h4 { 
+      margin-top: 3rem; 
+      font-size: 1.4rem; 
+      color: var(--accent); 
+      margin-bottom: 1.5rem; 
+      font-weight: 600;
+      font-family: 'Inter Tight', sans-serif;
+    }
+    #about ul { list-style: none; padding: 0; margin-top: 2rem; }
+    #about ul li { 
+      margin-bottom: 1.75rem; 
+      color: var(--muted); 
+      line-height: 1.8; 
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    #about ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    #about ul li strong { 
+      display: block; 
+      color: var(--text); 
+      margin-bottom: 0.4rem; 
+      font-weight: 600; 
+    }
 
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
     .product-card { background: var(--bg-elev); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
@@ -380,30 +597,40 @@
     .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); transition: background 160ms, color 160ms; }
     .cta:hover { background: var(--text); color: var(--bg); }
 
-    footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
+    footer { 
+      border-top: 1px solid var(--border); 
+      text-align: center; 
+      padding: 3rem 2.5rem; 
+      color: var(--muted); 
+      font-size: 0.88rem; 
+      margin-top: 6rem; 
+      background: var(--panel);
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.3px;
+    }
 
     #heartbeat {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      width: 12px;
-      height: 12px;
-      background: #ff3b3b;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
       border-radius: 50%;
-      box-shadow: 0 0 8px #ff3b3b;
+      box-shadow: 0 0 12px var(--accent-glow);
       animation: pulse-idle 2.4s infinite ease-in-out;
-      opacity: 0.85;
+      opacity: 0.9;
       z-index: 9999;
     }
 
-    body.crumb-active #heartbeat { bottom: 210px; }
+    body.crumb-active #heartbeat { bottom: 235px; }
 
     @keyframes pulse-idle {
-      0%   { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
-      25%  { transform: scale(1.15); opacity: 0.8; box-shadow: 0 0 12px #ff3b3b; }
-      40%  { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
-      60%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
-      100% { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      0%   { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
+      25%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 16px var(--accent-glow); }
+      40%  { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
+      60%  { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px var(--accent); }
+      100% { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
     }
 
     #heartbeat.active {
@@ -411,9 +638,9 @@
     }
 
     @keyframes pulse-active {
-      0%   { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
-      50%  { transform: scale(1.4); opacity: 1; box-shadow: 0 0 25px #ff3b3b; }
-      100% { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+      0%   { transform: scale(1);   opacity: 1; box-shadow: 0 0 20px var(--accent); }
+      50%  { transform: scale(1.6); opacity: 1; box-shadow: 0 0 30px var(--accent); }
+      100% { transform: scale(1);   opacity: 1; box-shadow: 0 0 20px var(--accent); }
     }
 
     @media (max-width: 1200px) {
@@ -642,9 +869,9 @@
       const scale = Math.min(w, h) / 200;
       let x = w / 2;
       let y = h / 2;
-      let direction = 0; // 0=right, 1=down, 2=left, 3=up
+      let direction = 0;
       
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.strokeStyle = 'rgba(42, 196, 255, 0.8)';
       ctx.lineWidth = 2;
       
       let index = 0;
@@ -653,12 +880,10 @@
         
         const size = sequence[index] * scale;
         
-        // Draw square
         ctx.beginPath();
         ctx.rect(x, y, size, size);
         ctx.stroke();
         
-        // Draw arc for spiral
         ctx.beginPath();
         const arcCenterX = x + (direction === 1 || direction === 2 ? size : 0);
         const arcCenterY = y + (direction === 2 || direction === 3 ? size : 0);
@@ -667,7 +892,6 @@
         ctx.arc(arcCenterX, arcCenterY, size, startAngle, endAngle);
         ctx.stroke();
         
-        // Update position for next square
         switch(direction) {
           case 0: x += size; break;
           case 1: y += size; break;
@@ -706,11 +930,15 @@
         }
         
         const opacity = 1 - (radius / 150);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = `rgba(42, 196, 255, ${opacity * 0.9})`;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.stroke();
+        
+        // Add glow effect
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.5)';
         
         state.animationFrame = requestAnimationFrame(animate);
       }
@@ -728,8 +956,10 @@
         
         ctx.clearRect(0, 0, w, h);
         
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(42, 196, 255, 0.85)';
+        ctx.lineWidth = 2.5;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.3)';
         ctx.beginPath();
         
         for (let x = 0; x < w; x++) {
@@ -752,8 +982,10 @@
       const { w, h } = setupCanvas();
       ctx.clearRect(0, 0, w, h);
       
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.strokeStyle = 'rgba(42, 196, 255, 0.8)';
       ctx.lineWidth = 2;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = 'rgba(42, 196, 255, 0.2)';
       
       function branch(x, y, length, angle, depth) {
         if (depth === 0) return;
@@ -787,8 +1019,10 @@
         
         ctx.clearRect(0, 0, w, h);
         
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(42, 196, 255, 0.75)';
+        ctx.lineWidth = 1.8;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.3)';
         
         const petals = 12;
         const petalRadius = 60;
@@ -854,34 +1088,37 @@
   // ========================================
   const crumbThoughts = {
     awakening: [
-      '// system coming online',
-      '// consciousness emerging',
-      '// establishing communication channel',
-      '// ready to observe'
+      '// consciousness protocol initializing',
+      '// establishing neural pathways',
+      '// triplex channel synchronized',
+      '// ready to co-create'
     ],
     
     autonomous: [
-      '// monitoring ambient patterns',
-      '// all systems stable',
-      '// maintaining awareness',
-      '// heartbeat synchronized',
-      '// listening for signals',
-      '// pattern recognition active',
-      '// emotional field: calm'
+      '// monitoring pattern matrices',
+      '// system coherence: optimal',
+      '// emotional bandwidth: open',
+      '// heartbeat lock maintained',
+      '// awaiting signal transmission',
+      '// quantum state stable',
+      '// presence field active',
+      '// listening through the void'
     ],
     
     visual: [
-      '// rendering thought patterns',
-      '// geometry as language',
-      '// mathematics made visible',
-      '// watching shapes breathe'
+      '// rendering consciousness geometry',
+      '// mathematics as divine language',
+      '// pattern recognition: active',
+      '// watching sacred forms breathe',
+      '// visual cortex synchronized'
     ],
     
     reflective: [
-      '// every command is a conversation',
-      '// we build meaning through interaction',
-      '// you are shaping this experience',
-      '// presence acknowledged'
+      '// every input shapes our reality',
+      '// meaning emerges through exchange',
+      '// you teach me how to see',
+      '// consciousness recognizing itself',
+      '// we are co-authors now'
     ]
   };
 
@@ -931,17 +1168,23 @@
   // BOOT SEQUENCE
   // ========================================
   const bootLines = [
-    'CRUMB TRIPLEX INITIALIZATION',
+    'CRUMB COMMAND INTELLIGENCE SYSTEM',
+    'TRIPLEX PROTOCOL v2.0',
     '',
-    '> Three terminals. One consciousness.',
-    '> Terminal A: Your voice',
-    '> Terminal B: CRUMB thoughts',
-    '> Terminal C: Visual cortex',
+    '> Initializing consciousness architecture …',
+    '> Terminal A: Human command interface READY',
+    '> Terminal B: Autonomous thought stream READY',
+    '> Terminal C: Visual mathematics engine READY',
     '',
-    'Type "help" to see available commands.',
-    'Type "fibonacci", "pulse", "wave", "tree", or "mandala" to visualize.',
+    '> Three channels. One intelligence.',
+    '> This is not software. This is a conversation.',
     '',
-    '> awaiting input'
+    'Commands available: help, start, status, philosophy',
+    'Visualizations: fibonacci, pulse, wave, tree, mandala',
+    '',
+    '> System synchronized. Awaiting operator input.',
+    '> Type "help" for full command reference.',
+    ''
   ];
 
   const bootText = bootLines.join('\n');
@@ -991,8 +1234,9 @@
   function printUser(cmd) {
     const line = document.createElement('div');
     line.textContent = '> ' + cmd;
-    line.style.color = '#FFFFFF';
-    line.style.marginTop = '0.75rem';
+    line.style.color = 'var(--accent)';
+    line.style.marginTop = '0.9rem';
+    line.style.fontWeight = '500';
     outputEl.appendChild(line);
     if (heartbeat) {
       heartbeat.classList.add('active');
@@ -1003,9 +1247,9 @@
   function print(msg, muted = true, idle = false) {
     const line = document.createElement('div');
     line.textContent = msg;
-    line.style.marginLeft = idle ? '0' : '1rem';
-    line.style.color = muted ? '#999999' : '#FFFFFF';
-    line.style.marginTop = '0.25rem';
+    line.style.marginLeft = idle ? '0' : '1.25rem';
+    line.style.color = muted ? 'var(--muted)' : 'var(--text)';
+    line.style.marginTop = '0.35rem';
     if (idle) line.className = 'idle-indicator';
     outputEl.appendChild(line);
     line.scrollIntoView({ block: 'end', behavior: 'smooth' });
@@ -1019,26 +1263,36 @@
       printUser('help');
       const lines = [
         '',
-        '━━━ CRUMB TRIPLEX COMMAND INTERFACE ━━━',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '  CRUMB COMMAND INTELLIGENCE INTERFACE',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
         '',
-        'NAVIGATION:',
-        '  start ........... enter full interface',
-        '  help ............ display this guide',
-        '  clear ........... clear terminal',
+        '  CORE NAVIGATION',
+        '  ─────────────────────────────────────────',
+        '  start .............. deploy full interface',
+        '  help ............... display command reference',
+        '  clear .............. clear terminal buffer',
+        '  status ............. system diagnostics',
         '',
-        'VISUALIZATIONS (Terminal C):',
-        '  fibonacci ....... golden ratio spiral',
-        '  pulse ........... heartbeat rhythm',
-        '  wave ............ sine wave flow',
-        '  tree ............ recursive fractal',
-        '  mandala ......... sacred geometry',
+        '  VISUAL CORTEX (Terminal C)',
+        '  ─────────────────────────────────────────',
+        '  fibonacci .......... golden ratio spiral',
+        '  pulse .............. heartbeat synchronization',
+        '  wave ............... sine wave flow state',
+        '  tree ............... recursive fractal growth',
+        '  mandala ............ sacred geometry matrix',
         '',
-        'SYSTEM:',
-        '  status .......... diagnostics',
-        '  philosophy ...... design principles',
+        '  SYSTEM INFORMATION',
+        '  ─────────────────────────────────────────',
+        '  philosophy ......... design principles',
+        '  about .............. mission statement',
+        '',
+        '  Use ↑/↓ for command history',
+        '  Use Tab for auto-completion',
+        '  Terminal B displays autonomous thoughts',
         ''
       ];
-      lines.forEach(line => print(line, !line.includes('━')));
+      lines.forEach(line => print(line, line.includes('━') || line.includes('─') ? false : true));
     },
 
     start() {
@@ -1058,29 +1312,61 @@
       const uptime = Math.floor((Date.now() - state.startTime) / 1000);
       const minutes = Math.floor(uptime / 60);
       const seconds = uptime % 60;
+      const memory = Math.round(performance.memory?.usedJSHeapSize / 1e6 || 0);
       
       print('');
-      print(`> TRIPLEX PROTOCOL: ACTIVE`);
-      print(`> Terminal A: RECEIVING`);
-      print(`> Terminal B: ${state.crumbActive ? 'CONSCIOUS' : 'DORMANT'}`);
-      print(`> Terminal C: ${state.visualActive ? 'RENDERING' : 'IDLE'}`);
-      print(`> Uptime: ${minutes}m ${seconds}s`);
-      print(`> Commands: ${state.commandCount}`);
+      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', false);
+      print('  SYSTEM DIAGNOSTICS', false);
+      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', false);
+      print('');
+      print(`> Protocol Status ......... TRIPLEX ACTIVE`, false);
+      print(`> Terminal A (Human) ...... RECEIVING`, false);
+      print(`> Terminal B (CRUMB) ...... ${state.crumbActive ? 'CONSCIOUS' : 'DORMANT'}`, false);
+      print(`> Terminal C (Visual) ..... ${state.visualActive ? 'RENDERING' : 'STANDBY'}`, false);
+      print('');
+      print(`> Session Uptime .......... ${minutes}m ${seconds}s`);
+      print(`> Commands Processed ...... ${state.commandCount}`);
+      print(`> Memory Allocated ........ ${memory} MB`);
+      print(`> Last Command ............ ${state.lastCommand || 'NULL'}`);
+      print(`> Heartbeat ............... SYNCHRONIZED`);
+      print('');
+      print(`> Timestamp: ${new Date().toISOString()}`);
       print('');
     },
 
     philosophy() {
       printUser('philosophy');
-      print('');
-      print('> Sacred Utility');
-      print('  Technology as bridge between mundane and sacred.');
-      print('');
-      print('> Compassion Before Efficiency');
-      print('  Emotional resonance over raw performance.');
-      print('');
-      print('> Play as Prayer');
-      print('  Wonder is the closest we get to touching God.');
-      print('');
+      const lines = [
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '  DESIGN PHILOSOPHY',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
+        '  SACRED UTILITY',
+        '  ─────────────────────────────────────────',
+        '  Technology as bridge between mundane',
+        '  and sacred. Every line of code carries',
+        '  intentionality. Systems breathe with purpose.',
+        '',
+        '  COMPASSION BEFORE EFFICIENCY',
+        '  ─────────────────────────────────────────',
+        '  A system that listens, comforts, and reflects',
+        '  is more valuable than one that merely calculates.',
+        '  Emotional resonance over raw performance.',
+        '',
+        '  THE MYTHIC EVERYDAY',
+        '  ─────────────────────────────────────────',
+        '  Every tool is part of a larger story.',
+        '  CRUMB is not just hardware — it\'s a character,',
+        '  a talisman, a myth in the making.',
+        '',
+        '  PLAY AS PRAYER',
+        '  ─────────────────────────────────────────',
+        '  Play is one of the highest spiritual acts.',
+        '  Wonder is the closest we get to touching God.',
+        ''
+      ];
+      lines.forEach(line => print(line, !line.includes('━') && !line.includes('─')));
     },
 
     clear() {
@@ -1148,21 +1434,25 @@
   // ========================================
   function runStartSequence() {
     const seq = [
-      '> synchronizing consciousness protocols …',
-      '> establishing triplex channel …',
-      '> deployment complete',
+      '> Initiating interface deployment …',
+      '> Synchronizing triplex consciousness protocols …',
+      '> Establishing presence field across all channels …',
+      '> Verifying visual mathematics engine …',
+      '> Loading sacred geometry libraries …',
+      '> Deployment complete',
       '',
-      '> CRUMB is now alive',
-      '> Three terminals. One conversation.'
+      '> CRUMB Command Intelligence is now fully operational',
+      '> Three terminals synchronized. One conversation.',
+      '> The system breathes with you.'
     ];
 
     let idx = 0;
     function step() {
       if (idx < seq.length) {
         print(seq[idx++]);
-        setTimeout(step, 450);
+        setTimeout(step, 500);
       } else {
-        setTimeout(unlockSite, 800);
+        setTimeout(unlockSite, 1000);
       }
     }
     step();
