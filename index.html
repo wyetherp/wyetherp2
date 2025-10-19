@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.35 — CRUMB Virtual</title>
+  <title>CRUMB V1.33 — CRUMB Virtual</title>
 
   <style>
     :root {
@@ -43,6 +43,7 @@
       border-bottom: 1px solid var(--border);
       background: var(--panel);
       position: relative;
+      display: block;
     }
 
     .boot-inner {
@@ -560,7 +561,10 @@
   <div id="heartbeat"></div>
 
   <script>
-(function() {
+// Wait for DOM to be fully loaded before initializing
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('[CRUMB] DOM loaded, initializing...');
+  
   'use strict';
 
   // Get all DOM references
@@ -580,13 +584,21 @@
   const visualLabel = document.getElementById('visualLabel');
   const visualClose = document.getElementById('visualClose');
 
+  console.log('[CRUMB] Elements loaded:', {
+    bootLog: !!logEl,
+    bootIO: !!ioRow,
+    bootInput: !!inputEl,
+    console: !!consoleSection
+  });
+
   // Get canvas context safely
   let ctx = null;
   if (visualCanvas) {
     try {
       ctx = visualCanvas.getContext('2d');
+      console.log('[CRUMB] Canvas context initialized');
     } catch(e) {
-      console.error('Canvas context error:', e);
+      console.error('[CRUMB] Canvas context error:', e);
     }
   }
 
@@ -625,18 +637,34 @@
 
   // Typewriter effect
   function typeBoot() {
+    console.log('[CRUMB] typeBoot() called, index:', bootIndex);
+    
+    if (!logEl) {
+      console.error('[CRUMB] bootLog element not found!');
+      return;
+    }
+
     if (bootIndex <= bootText.length) {
       logEl.textContent = bootText.slice(0, bootIndex);
       bootIndex++;
       setTimeout(typeBoot, 30);
     } else {
+      console.log('[CRUMB] Boot text complete, showing prompt');
       showPrompt();
     }
   }
 
   function showPrompt() {
-    ioRow.style.display = 'flex';
-    setTimeout(() => inputEl && inputEl.focus(), 100);
+    console.log('[CRUMB] showPrompt() called');
+    if (ioRow) {
+      ioRow.style.display = 'flex';
+      setTimeout(() => {
+        if (inputEl) {
+          inputEl.focus();
+          console.log('[CRUMB] Input focused');
+        }
+      }, 100);
+    }
   }
 
   // CRUMB consciousness
@@ -654,6 +682,7 @@
 
   function activateCrumbConsole() {
     if (state.crumbActive) return;
+    console.log('[CRUMB] Activating Terminal B');
     state.crumbActive = true;
     body.classList.add('crumb-active');
     crumbConsole.classList.add('active');
@@ -678,6 +707,7 @@
 
   function activateVisualConsole(vizType, label) {
     if (!visualConsole || !ctx) return;
+    console.log('[CRUMB] Activating Terminal C:', vizType);
     state.visualActive = true;
     visualConsole.classList.add('active');
     setupCanvas();
@@ -789,11 +819,47 @@
         }, 100);
       }
       drawBranch(w/2, h - 20, 60, -Math.PI/2, 6);
+    },
+
+    mandala() {
+      clearCanvas();
+      const w = visualCanvas.width;
+      const h = visualCanvas.height;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const petals = 12;
+      let rotation = 0;
+
+      function animate() {
+        clearCanvas();
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(rotation);
+        
+        for (let i = 0; i < petals; i++) {
+          const angle = (Math.PI * 2 / petals) * i;
+          ctx.save();
+          ctx.rotate(angle);
+          ctx.strokeStyle = '#FFFFFF';
+          ctx.lineWidth = 1.5;
+          ctx.globalAlpha = 0.7;
+          ctx.beginPath();
+          ctx.ellipse(0, 60, 20, 40, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        
+        ctx.restore();
+        rotation += 0.005;
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      animate();
     }
   };
 
   if (visualClose) {
     visualClose.addEventListener('click', () => {
+      console.log('[CRUMB] Closing Terminal C');
       visualConsole.classList.remove('active');
       state.visualActive = false;
       if (state.animationFrame) {
@@ -826,7 +892,7 @@
     help() {
       printUser('help');
       print('');
-      print('━━━ CRUMB COMMAND INTERFACE ━━━', false);
+      print('━━━ CRUMB TRIPLEX COMMAND INTERFACE ━━━', false);
       print('');
       print('  start ........... enter the full interface');
       print('  help ............ display this guide');
@@ -834,6 +900,7 @@
       print('  pulse ........... heartbeat visualization');
       print('  wave ............ sine wave animation');
       print('  tree ............ recursive fractal');
+      print('  mandala ......... sacred geometry');
       print('  clear ........... clear output');
       print('');
     },
@@ -844,6 +911,7 @@
       print('> preparing interface …');
       print('> deployment complete');
       setTimeout(() => {
+        console.log('[CRUMB] Unlocking main interface');
         body.classList.remove('locked');
         body.classList.add('unlocked');
         consoleSection.classList.add('is-collapsed');
@@ -879,6 +947,13 @@
       activateVisualConsole('tree', 'recursive growth');
     },
 
+    mandala() {
+      printUser('mandala');
+      print('');
+      print('> generating sacred geometry');
+      activateVisualConsole('mandala', 'rotating mandala');
+    },
+
     clear() {
       outputEl.textContent = '';
     }
@@ -892,6 +967,7 @@
         inputEl.value = '';
         if (!cmd) return;
 
+        console.log('[CRUMB] Command entered:', cmd);
         state.commandCount++;
 
         if (commands[cmd]) {
@@ -909,6 +985,7 @@
   // Skip button
   if (skipBtn) {
     skipBtn.addEventListener('click', () => {
+      console.log('[CRUMB] Skip button clicked');
       body.classList.remove('locked');
       body.classList.add('unlocked');
       consoleSection.classList.add('is-collapsed');
@@ -917,17 +994,17 @@
   }
 
   // Initialize
+  console.log('[CRUMB] Activating Terminal B');
   activateCrumbConsole();
+  
+  console.log('[CRUMB] Starting boot sequence in 400ms');
+  setTimeout(() => {
+    console.log('[CRUMB] Calling typeBoot()');
+    typeBoot();
+  }, 400);
 
-  // 🔧 FIX: Make sure boot console is visible before typewriter starts
-  consoleSection.classList.remove('is-collapsed');
-  consoleSection.style.display = 'block';
-
-  setTimeout(typeBoot, 400);
-
-})();
+});
 </script>
-
 
 </body>
 </html>
