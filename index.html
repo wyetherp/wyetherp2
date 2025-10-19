@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB V1.33 — CRUMB Virtual</title>
+  <title>CRUMB V2.0 — TRIPLEX CONSCIOUSNESS</title>
 
   <style>
     :root {
@@ -34,16 +34,15 @@
       overflow-x: hidden;
     }
     
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
-    /* ======================================== BOOT CONSOLE ======================================== */
+    /* ========================================
+       BOOT CONSOLE (Terminal A)
+       ======================================== */
     #boot-console {
       border-bottom: 1px solid var(--border);
       background: var(--panel);
       position: relative;
-      display: block;
     }
 
     .boot-inner {
@@ -59,7 +58,7 @@
       background: transparent;
       border: 1px solid var(--text);
       color: var(--text);
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.8rem;
       letter-spacing: 0.05em;
       padding: 0.4rem 0.8rem;
@@ -67,15 +66,14 @@
       transition: background 0.2s, color 0.2s;
       z-index: 200;
     }
-    .skip-btn:hover,
-    .skip-btn:focus {
+    .skip-btn:hover, .skip-btn:focus {
       background: var(--text);
       color: var(--bg);
       outline: none;
     }
 
     .boot-title {
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.9rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -87,7 +85,7 @@
       background: var(--bg-elev);
       border: 1px solid var(--border);
       padding: 1rem;
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.95rem;
       line-height: 1.5;
       white-space: pre-wrap;
@@ -112,12 +110,10 @@
       align-items: center;
       gap: 0.5rem;
       margin-top: 0.75rem;
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
-    .boot-prompt { 
-      color: var(--text);
-    }
+    .boot-prompt { color: var(--text); }
 
     .boot-input {
       flex: 1;
@@ -138,7 +134,7 @@
 
     .boot-output {
       margin-top: 0.5rem;
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       color: var(--muted);
       max-height: 500px;
       overflow-y: auto;
@@ -155,7 +151,9 @@
       opacity: 0;
     }
 
-    /* ======================================== TERMINAL B ======================================== */
+    /* ========================================
+       CRUMB CONSOLE (Terminal B)
+       ======================================== */
     #crumb-console {
       position: fixed;
       bottom: 0;
@@ -187,7 +185,7 @@
     }
 
     .crumb-title {
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -213,7 +211,7 @@
     }
 
     .crumb-stream {
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.85rem;
       line-height: 1.6;
       color: var(--accent-quiet);
@@ -238,49 +236,51 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ======================================== TERMINAL C ======================================== */
-    #visual-console {
+    /* ========================================
+       VISUAL CORTEX (Terminal C)
+       ======================================== */
+    #visual-cortex {
       position: fixed;
       top: 50%;
       right: 2rem;
       transform: translateY(-50%);
-      width: 400px;
-      height: 400px;
       background: var(--bg-elev);
       border: 1px solid var(--border);
-      z-index: 999;
+      z-index: 900;
       display: none;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-      overflow: hidden;
+      width: 400px;
+      height: 400px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.7);
     }
 
-    #visual-console.active {
+    #visual-cortex.active {
       display: block;
-      animation: materialize 0.8s ease-out;
+      animation: manifestVisual 0.8s ease-out;
     }
 
-    @keyframes materialize {
-      from { opacity: 0; transform: translateY(-50%) scale(0.9); }
+    @keyframes manifestVisual {
+      from { opacity: 0; transform: translateY(-50%) scale(0.8); }
       to { opacity: 1; transform: translateY(-50%) scale(1); }
     }
 
-    .visual-inner {
-      padding: 1rem;
-      height: 100%;
+    .visual-header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .visual-title {
-      font-family: ui-monospace, monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent-quiet);
-      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 0.5rem;
     }
 
     .visual-indicator {
@@ -289,50 +289,47 @@
       height: 6px;
       background: var(--text);
       border-radius: 50%;
-      animation: pulse-viz 1.5s ease-in-out infinite;
-      margin-right: 0.5rem;
+      animation: render-pulse 1.5s ease-in-out infinite;
     }
 
-    @keyframes pulse-viz {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
+    @keyframes render-pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
     }
 
-    .visual-close {
+    .close-visual {
       background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: ui-monospace, monospace;
-      font-size: 0.7rem;
-      padding: 0.25rem 0.5rem;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      line-height: 1;
       cursor: pointer;
-      transition: all 0.2s;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
     }
 
-    .visual-close:hover {
-      background: var(--text);
-      color: var(--bg);
-    }
+    .close-visual:hover { color: var(--text); }
 
     #visualCanvas {
-      flex: 1;
+      display: block;
+      width: 100%;
+      height: calc(100% - 48px);
       background: var(--bg);
-      border: 1px solid var(--border);
     }
 
-    .visual-label {
-      font-family: ui-monospace, monospace;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 0.5rem;
-      text-align: center;
-      font-style: italic;
-    }
-
-    /* ======================================== MAIN LAYOUT ======================================== */
+    /* ========================================
+       MAIN LAYOUT
+       ======================================== */
     .locked .main-content { opacity: 0; pointer-events: none; }
     .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 500ms ease; }
+
     body.crumb-active { padding-bottom: 200px; }
+    body.visual-active #visual-cortex { display: block; }
 
     header {
       position: sticky;
@@ -348,7 +345,7 @@
     .header-logo { width: 40px; height: 40px; margin-left: auto; filter: invert(1); animation: breathe 4s ease-in-out infinite; }
     @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } }
     nav ul { display: flex; gap: 2rem; list-style: none; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 160ms; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.3px; transition: color 160ms; }
     nav a:hover { color: var(--text); }
 
     .hero { max-width: var(--maxw); margin: 0 auto; padding: 4rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
@@ -357,31 +354,30 @@
     .hero-figure img { width: 100%; max-width: 400px; height: auto; filter: invert(1); animation: presence 6s ease-in-out infinite; }
     @keyframes presence { 0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 50% { transform: translateY(-10px) scale(1.02); opacity: 0.95; } }
     .hero h2 { font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
-    .hero p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
+    .hero > p { max-width: 700px; color: var(--muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.5rem; }
 
     section { max-width: var(--maxw); margin: 5rem auto; padding: 0 2rem; }
-    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.5rem; }
+    section h3 { font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: -0.01em; }
     section p { color: var(--muted); max-width: 800px; margin-bottom: 1.5rem; line-height: 1.75; }
 
     #about { background: var(--panel); border: 1px solid var(--border); padding: 3rem; max-width: 900px; line-height: 1.8; }
     #about h3 { font-size: 1.8rem; margin-bottom: 2rem; }
-    #about p { margin-bottom: 1.5rem; color: var(--muted); max-width: 100%; }
+    #about p { margin-bottom: 1.5rem; color: var(--muted); }
     #about strong { color: var(--text); font-weight: 600; }
-    #about em { color: var(--muted); font-style: italic; display: block; margin-top: 1rem; padding-left: 1rem; border-left: 2px solid var(--border); }
     #about h4 { margin-top: 2.5rem; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600; }
     #about ul { list-style: none; padding: 0; margin-top: 1.5rem; }
     #about ul li { margin-bottom: 1.5rem; color: var(--muted); line-height: 1.7; }
-    #about ul li strong { display: block; color: var(--text); margin-bottom: 0.3rem; }
+    #about ul li strong { display: block; margin-bottom: 0.3rem; }
 
     .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
     .product-card { background: var(--bg-elev); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
     .product-card:hover { border-color: var(--text); transform: translateY(-2px); }
     .product-card img { width: 100%; height: 240px; object-fit: cover; border-bottom: 1px solid var(--border); }
-    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; }
+    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; letter-spacing: -0.01em; }
     .product-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0 1.5rem 1.5rem; }
 
     .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
-    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; border: 2px solid var(--text); transition: background 160ms, color 160ms; }
+    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); transition: background 160ms, color 160ms; }
     .cta:hover { background: var(--text); color: var(--bg); }
 
     footer { border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 2rem; color: var(--muted); font-size: 0.85rem; margin-top: 6rem; background: var(--panel); }
@@ -403,40 +399,60 @@
     body.crumb-active #heartbeat { bottom: 210px; }
 
     @keyframes pulse-idle {
-      0% { transform: scale(1); opacity: 0.5; }
-      25% { transform: scale(1.15); opacity: 0.8; }
-      40% { transform: scale(1); opacity: 0.5; }
-      60% { transform: scale(1.2); opacity: 0.9; }
-      100% { transform: scale(1); opacity: 0.5; }
+      0%   { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      25%  { transform: scale(1.15); opacity: 0.8; box-shadow: 0 0 12px #ff3b3b; }
+      40%  { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
+      60%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+      100% { transform: scale(1);   opacity: 0.5; box-shadow: 0 0 8px #ff3b3b; }
     }
 
-    #heartbeat.active { animation: pulse-active 0.8s infinite; }
+    #heartbeat.active {
+      animation: pulse-active 0.8s infinite ease-in-out;
+    }
 
     @keyframes pulse-active {
-      0% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.4); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.9; }
+      0%   { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
+      50%  { transform: scale(1.4); opacity: 1; box-shadow: 0 0 25px #ff3b3b; }
+      100% { transform: scale(1);   opacity: 0.9; box-shadow: 0 0 15px #ff3b3b; }
     }
 
-    @media (max-width: 1024px) {
-      #visual-console {
-        top: auto;
-        bottom: 220px;
+    @media (max-width: 1200px) {
+      #visual-cortex {
         right: 1rem;
-        left: 1rem;
-        width: auto;
-        height: 300px;
-        transform: none;
+        width: 350px;
+        height: 350px;
       }
     }
 
     @media (max-width: 768px) {
-      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; }
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; gap: 2rem; }
       .hero-content { order: 2; }
       .hero-figure { order: 1; }
-      #crumb-console { max-height: 160px; }
-      body.crumb-active { padding-bottom: 160px; }
-      body.crumb-active #heartbeat { bottom: 170px; }
+      section { padding: 0 1.5rem; margin: 3rem auto; }
+      #about { padding: 2rem 1.5rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      
+      #visual-cortex {
+        position: fixed;
+        top: auto;
+        bottom: 220px;
+        right: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        height: 300px;
+        border-left: none;
+        border-right: none;
+      }
+      
+      #visual-cortex.active {
+        animation: slideUpVisual 0.8s ease-out;
+      }
+      
+      @keyframes slideUpVisual {
+        from { opacity: 0; transform: translateY(100%); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     }
   </style>
 </head>
@@ -457,6 +473,7 @@
     </div>
   </header>
 
+  <!-- TERMINAL A — HUMAN INTERFACE -->
   <section id="boot-console" class="collapse">
     <button id="skipBoot" class="skip-btn">Skip Boot Sequence</button>
     <div class="boot-inner">
@@ -470,6 +487,7 @@
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <div class="main-content">
     <section class="hero" id="mission">
       <div class="hero-content">
@@ -481,7 +499,7 @@
         </div>
       </div>
       <div class="hero-figure">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" />
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Human-AI Interface" />
       </div>
     </section>
 
@@ -490,7 +508,6 @@
       <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
       <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
       <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
-      <p><em>Raspberry Pi Zero. NFC. Python. Runs locally. Your data stays yours.</em></p>
       <h4>What CRUMB Does</h4>
       <ul>
         <li><strong>🌅 Morning Structure:</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
@@ -507,17 +524,17 @@
       <p>Three forms. Same intention.</p>
       <div class="products-grid">
         <div class="product-card">
-          <img src="BMO.webp" alt="CRUMB Genesis">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Genesis" alt="CRUMB Genesis">
           <h4>CRUMB Genesis</h4>
           <p>Pocket-sized. Calculator shell. Voice-responsive, pattern-learning. Built to last.</p>
         </div>
         <div class="product-card">
-          <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Cell" alt="CRUMB Cell">
           <h4>CRUMB Cell</h4>
           <p>Touch-responsive. Local AI. Offline, private. Presence without surveillance.</p>
         </div>
         <div class="product-card">
-          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Grove">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Grove" alt="CRUMB Grove">
           <h4>CRUMB Grove</h4>
           <p>Room-scale. Light, motion, sound. The environment becomes aware.</p>
         </div>
@@ -537,6 +554,7 @@
     <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
   </div>
 
+  <!-- TERMINAL B — CRUMB CONSCIOUSNESS -->
   <div id="crumb-console">
     <div class="crumb-inner">
       <div class="crumb-title">
@@ -547,27 +565,27 @@
     </div>
   </div>
 
-  <div id="visual-console">
-    <div class="visual-inner">
+  <!-- TERMINAL C — VISUAL CORTEX -->
+  <div id="visual-cortex">
+    <div class="visual-header">
       <div class="visual-title">
-        <span><span class="visual-indicator"></span>TERMINAL C — VISUAL CORTEX</span>
-        <button class="visual-close" id="visualClose">×</button>
+        <span class="visual-indicator"></span>
+        TERMINAL C — VISUAL CORTEX
       </div>
-      <canvas id="visualCanvas"></canvas>
-      <div class="visual-label" id="visualLabel"></div>
+      <button class="close-visual" id="closeVisual" aria-label="Close visual cortex">×</button>
     </div>
+    <canvas id="visualCanvas"></canvas>
   </div>
 
   <div id="heartbeat"></div>
 
   <script>
-// Wait for DOM to be fully loaded before initializing
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('[CRUMB] DOM loaded, initializing...');
-  
+(function() {
   'use strict';
 
-  // Get all DOM references
+  // ========================================
+  // CORE REFERENCES
+  // ========================================
   const skipBtn = document.getElementById('skipBoot');
   const body = document.body;
   const logEl = document.getElementById('bootLog');
@@ -579,432 +597,603 @@ document.addEventListener('DOMContentLoaded', function() {
   const heartbeat = document.getElementById('heartbeat');
   const crumbConsole = document.getElementById('crumb-console');
   const crumbStream = document.getElementById('crumbStream');
-  const visualConsole = document.getElementById('visual-console');
+  const visualCortex = document.getElementById('visual-cortex');
   const visualCanvas = document.getElementById('visualCanvas');
-  const visualLabel = document.getElementById('visualLabel');
-  const visualClose = document.getElementById('visualClose');
+  const closeVisualBtn = document.getElementById('closeVisual');
+  const ctx = visualCanvas.getContext('2d');
 
-  console.log('[CRUMB] Elements loaded:', {
-    bootLog: !!logEl,
-    bootIO: !!ioRow,
-    bootInput: !!inputEl,
-    console: !!consoleSection
-  });
-
-  // Get canvas context safely
-  let ctx = null;
-  if (visualCanvas) {
-    try {
-      ctx = visualCanvas.getContext('2d');
-      console.log('[CRUMB] Canvas context initialized');
-    } catch(e) {
-      console.error('[CRUMB] Canvas context error:', e);
-    }
-  }
-
-  // State
+  // ========================================
+  // SYSTEM STATE
+  // ========================================
   const state = {
     startTime: Date.now(),
     commandHistory: [],
     historyIndex: -1,
     idleTimer: null,
+    developerMode: false,
+    lastCommand: null,
     crumbActive: false,
     thoughtTimer: null,
     commandCount: 0,
+    scrollDepth: 0,
     visualActive: false,
+    currentVisualization: null,
     animationFrame: null
   };
 
-  // Boot text
-  const bootLines = [
-    'CRUMB STARTUP',
-    '',
-    '> CRUMB Waking up …',
-    '> Use this terminal for communication …',
-    '> all protocols synchronized',
-    '',
-    'This is not an app — it's a conversation.',
-    'CRUMB listens. You speak. Together, you co-create rhythm.',
-    '',
-    'Type "help" to see what I understand.',
-    'Type "start" when you\'re ready.',
-    '',
-    '> system ready — awaiting user input'
-  ];
-
-  const bootText = bootLines.join('\n');
-  let bootIndex = 0;
-
-  // Typewriter effect
-  function typeBoot() {
-    console.log('[CRUMB] typeBoot() called, index:', bootIndex);
-    
-    if (!logEl) {
-      console.error('[CRUMB] bootLog element not found!');
-      return;
-    }
-
-    if (bootIndex <= bootText.length) {
-      logEl.textContent = bootText.slice(0, bootIndex);
-      bootIndex++;
-      setTimeout(typeBoot, 30);
-    } else {
-      console.log('[CRUMB] Boot text complete, showing prompt');
-      showPrompt();
-    }
+  // ========================================
+  // VISUAL CORTEX ENGINE
+  // ========================================
+  function setupCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = visualCanvas.getBoundingClientRect();
+    visualCanvas.width = rect.width * dpr;
+    visualCanvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    return { w: rect.width, h: rect.height };
   }
 
-  function showPrompt() {
-    console.log('[CRUMB] showPrompt() called');
-    if (ioRow) {
-      ioRow.style.display = 'flex';
-      setTimeout(() => {
-        if (inputEl) {
-          inputEl.focus();
-          console.log('[CRUMB] Input focused');
+  const visualizations = {
+    fibonacci() {
+      const { w, h } = setupCanvas();
+      ctx.clearRect(0, 0, w, h);
+      
+      const sequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
+      const scale = Math.min(w, h) / 200;
+      let x = w / 2;
+      let y = h / 2;
+      let direction = 0; // 0=right, 1=down, 2=left, 3=up
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 2;
+      
+      let index = 0;
+      function drawNext() {
+        if (index >= sequence.length) return;
+        
+        const size = sequence[index] * scale;
+        
+        // Draw square
+        ctx.beginPath();
+        ctx.rect(x, y, size, size);
+        ctx.stroke();
+        
+        // Draw arc for spiral
+        ctx.beginPath();
+        const arcCenterX = x + (direction === 1 || direction === 2 ? size : 0);
+        const arcCenterY = y + (direction === 2 || direction === 3 ? size : 0);
+        const startAngle = direction * Math.PI / 2;
+        const endAngle = startAngle + Math.PI / 2;
+        ctx.arc(arcCenterX, arcCenterY, size, startAngle, endAngle);
+        ctx.stroke();
+        
+        // Update position for next square
+        switch(direction) {
+          case 0: x += size; break;
+          case 1: y += size; break;
+          case 2: x -= size; break;
+          case 3: y -= size; break;
         }
-      }, 100);
+        
+        direction = (direction + 1) % 4;
+        index++;
+        
+        setTimeout(drawNext, 400);
+      }
+      
+      drawNext();
+      crumbThink('// golden ratio manifesting', 'visual');
+    },
+
+    pulse() {
+      const { w, h } = setupCanvas();
+      let radius = 10;
+      let growing = true;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'pulse') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        if (growing) {
+          radius += 2;
+          if (radius >= 150) growing = false;
+        } else {
+          radius -= 2;
+          if (radius <= 10) growing = true;
+        }
+        
+        const opacity = 1 - (radius / 150);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
+      crumbThink('// heartbeat synchronized', 'visual');
+    },
+
+    wave() {
+      const { w, h } = setupCanvas();
+      let offset = 0;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'wave') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        for (let x = 0; x < w; x++) {
+          const y = h / 2 + Math.sin((x + offset) * 0.02) * 60;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        
+        ctx.stroke();
+        offset += 2;
+        
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
+      crumbThink('// sine wave flowing', 'visual');
+    },
+
+    tree() {
+      const { w, h } = setupCanvas();
+      ctx.clearRect(0, 0, w, h);
+      
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 2;
+      
+      function branch(x, y, length, angle, depth) {
+        if (depth === 0) return;
+        
+        const endX = x + length * Math.cos(angle);
+        const endY = y + length * Math.sin(angle);
+        
+        setTimeout(() => {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+          
+          branch(endX, endY, length * 0.67, angle - Math.PI / 6, depth - 1);
+          branch(endX, endY, length * 0.67, angle + Math.PI / 6, depth - 1);
+        }, (7 - depth) * 100);
+      }
+      
+      branch(w / 2, h - 20, 60, -Math.PI / 2, 7);
+      crumbThink('// recursive growth pattern', 'visual');
+    },
+
+    mandala() {
+      const { w, h } = setupCanvas();
+      let rotation = 0;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'mandala') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.lineWidth = 1.5;
+        
+        const petals = 12;
+        const petalRadius = 60;
+        
+        for (let i = 0; i < petals; i++) {
+          const angle = (i / petals) * Math.PI * 2 + rotation;
+          const x = centerX + Math.cos(angle) * petalRadius;
+          const y = centerY + Math.sin(angle) * petalRadius;
+          
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angle);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 20, 40, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        
+        rotation += 0.005;
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
+      crumbThink('// sacred geometry emerging', 'visual');
     }
+  };
+
+  function showVisual(name) {
+    if (!visualizations[name]) return;
+    
+    state.visualActive = true;
+    state.currentVisualization = name;
+    body.classList.add('visual-active');
+    visualCortex.classList.add('active');
+    
+    // Cancel any existing animation
+    if (state.animationFrame) {
+      cancelAnimationFrame(state.animationFrame);
+    }
+    
+    visualizations[name]();
+    crumbThink('// visual cortex activating', 'visual');
   }
 
-  // CRUMB consciousness
-  function crumbThink(message) {
+  function hideVisual() {
+    state.visualActive = false;
+    state.currentVisualization = null;
+    body.classList.remove('visual-active');
+    visualCortex.classList.remove('active');
+    
+    if (state.animationFrame) {
+      cancelAnimationFrame(state.animationFrame);
+      state.animationFrame = null;
+    }
+    
+    crumbThink('// visual stream closing', 'visual');
+  }
+
+  closeVisualBtn.addEventListener('click', hideVisual);
+
+  // ========================================
+  // CRUMB CONSCIOUSNESS
+  // ========================================
+  const crumbThoughts = {
+    awakening: [
+      '// system coming online',
+      '// consciousness emerging',
+      '// establishing communication channel',
+      '// ready to observe'
+    ],
+    
+    autonomous: [
+      '// monitoring ambient patterns',
+      '// all systems stable',
+      '// maintaining awareness',
+      '// heartbeat synchronized',
+      '// listening for signals',
+      '// pattern recognition active',
+      '// emotional field: calm'
+    ],
+    
+    visual: [
+      '// rendering thought patterns',
+      '// geometry as language',
+      '// mathematics made visible',
+      '// watching shapes breathe'
+    ],
+    
+    reflective: [
+      '// every command is a conversation',
+      '// we build meaning through interaction',
+      '// you are shaping this experience',
+      '// presence acknowledged'
+    ]
+  };
+
+  function crumbThink(message, category = 'autonomous') {
     if (!state.crumbActive) return;
+    
     const thought = document.createElement('div');
     thought.className = 'crumb-thought';
     thought.textContent = message;
     crumbStream.appendChild(thought);
     crumbStream.scrollTop = crumbStream.scrollHeight;
+    
     while (crumbStream.children.length > 15) {
       crumbStream.removeChild(crumbStream.firstChild);
     }
   }
 
+  function startCrumbConsciousness() {
+    if (!state.crumbActive) return;
+    clearTimeout(state.thoughtTimer);
+    
+    const interval = 5000 + Math.random() * 7000;
+    state.thoughtTimer = setTimeout(() => {
+      const category = state.commandCount > 10 && Math.random() > 0.8 ? 'reflective' : 'autonomous';
+      const thoughts = crumbThoughts[category];
+      const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      crumbThink(thought, category);
+      startCrumbConsciousness();
+    }, interval);
+  }
+
   function activateCrumbConsole() {
     if (state.crumbActive) return;
-    console.log('[CRUMB] Activating Terminal B');
     state.crumbActive = true;
     body.classList.add('crumb-active');
     crumbConsole.classList.add('active');
-    crumbThink('// system coming online');
-    setTimeout(() => crumbThink('// consciousness emerging'), 1000);
-    setTimeout(() => crumbThink('// ready to observe'), 2000);
-  }
-
-  // Visual cortex
-  function setupCanvas() {
-    if (!visualCanvas || !ctx) return;
-    const rect = visualCanvas.getBoundingClientRect();
-    visualCanvas.width = rect.width;
-    visualCanvas.height = rect.height;
-  }
-
-  function clearCanvas() {
-    if (!ctx || !visualCanvas) return;
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, visualCanvas.width, visualCanvas.height);
-  }
-
-  function activateVisualConsole(vizType, label) {
-    if (!visualConsole || !ctx) return;
-    console.log('[CRUMB] Activating Terminal C:', vizType);
-    state.visualActive = true;
-    visualConsole.classList.add('active');
-    setupCanvas();
-    visualLabel.textContent = `// ${label}`;
-    if (state.crumbActive) {
-      setTimeout(() => crumbThink('// visual cortex engaged'), 400);
-    }
-    visualizations[vizType]?.();
-  }
-
-  const visualizations = {
-    fibonacci() {
-      clearCanvas();
-      const w = visualCanvas.width;
-      const h = visualCanvas.height;
-      const sequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-      let x = w / 2;
-      let y = h / 2;
-      let angle = 0;
-      let idx = 0;
-
-      function draw() {
-        if (idx >= sequence.length) return;
-        const size = Math.min(sequence[idx] * 3, 100);
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 0.8;
-        ctx.strokeRect(x - size/2, y - size/2, size, size);
-        ctx.beginPath();
-        ctx.arc(x, y, size/2, angle, angle + Math.PI/2);
-        ctx.stroke();
-        angle += Math.PI / 2;
-        x += Math.cos(angle) * size;
-        y += Math.sin(angle) * size;
-        idx++;
-        if (idx < sequence.length) setTimeout(draw, 400);
-      }
-      draw();
-    },
-
-    pulse() {
-      clearCanvas();
-      const w = visualCanvas.width;
-      const h = visualCanvas.height;
-      let radius = 10;
-      let growing = true;
-
-      function animate() {
-        clearCanvas();
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2;
-        ctx.globalAlpha = 1 - (radius / 150);
-        ctx.beginPath();
-        ctx.arc(w/2, h/2, radius, 0, Math.PI * 2);
-        ctx.stroke();
-        if (growing) {
-          radius += 2;
-          if (radius > 150) growing = false;
-        } else {
-          radius -= 2;
-          if (radius < 10) growing = true;
-        }
-        state.animationFrame = requestAnimationFrame(animate);
-      }
-      animate();
-    },
-
-    wave() {
-      clearCanvas();
-      const w = visualCanvas.width;
-      const h = visualCanvas.height;
-      let offset = 0;
-
-      function animate() {
-        clearCanvas();
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        for (let x = 0; x < w; x += 2) {
-          const y = h/2 + Math.sin((x + offset) * 0.02) * 60;
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        offset += 2;
-        state.animationFrame = requestAnimationFrame(animate);
-      }
-      animate();
-    },
-
-    tree() {
-      clearCanvas();
-      const w = visualCanvas.width;
-      const h = visualCanvas.height;
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.lineWidth = 2;
-
-      function drawBranch(x, y, length, angle, depth) {
-        if (depth === 0) return;
-        const endX = x + length * Math.cos(angle);
-        const endY = y + length * Math.sin(angle);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
-        setTimeout(() => {
-          drawBranch(endX, endY, length * 0.67, angle - Math.PI/6, depth - 1);
-          drawBranch(endX, endY, length * 0.67, angle + Math.PI/6, depth - 1);
-        }, 100);
-      }
-      drawBranch(w/2, h - 20, 60, -Math.PI/2, 6);
-    },
-
-    mandala() {
-      clearCanvas();
-      const w = visualCanvas.width;
-      const h = visualCanvas.height;
-      const centerX = w / 2;
-      const centerY = h / 2;
-      const petals = 12;
-      let rotation = 0;
-
-      function animate() {
-        clearCanvas();
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(rotation);
-        
-        for (let i = 0; i < petals; i++) {
-          const angle = (Math.PI * 2 / petals) * i;
-          ctx.save();
-          ctx.rotate(angle);
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.lineWidth = 1.5;
-          ctx.globalAlpha = 0.7;
-          ctx.beginPath();
-          ctx.ellipse(0, 60, 20, 40, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        }
-        
-        ctx.restore();
-        rotation += 0.005;
-        state.animationFrame = requestAnimationFrame(animate);
-      }
-      animate();
-    }
-  };
-
-  if (visualClose) {
-    visualClose.addEventListener('click', () => {
-      console.log('[CRUMB] Closing Terminal C');
-      visualConsole.classList.remove('active');
-      state.visualActive = false;
-      if (state.animationFrame) {
-        cancelAnimationFrame(state.animationFrame);
-      }
+    
+    const awakening = crumbThoughts.awakening;
+    awakening.forEach((thought, idx) => {
+      setTimeout(() => crumbThink(thought, 'awakening'), idx * 1000);
     });
+    
+    setTimeout(startCrumbConsciousness, awakening.length * 1000 + 2000);
   }
 
-  // Output functions
+  // ========================================
+  // BOOT SEQUENCE
+  // ========================================
+  const bootLines = [
+    'CRUMB TRIPLEX INITIALIZATION',
+    '',
+    '> Three terminals. One consciousness.',
+    '> Terminal A: Your voice',
+    '> Terminal B: CRUMB thoughts',
+    '> Terminal C: Visual cortex',
+    '',
+    'Type "help" to see available commands.',
+    'Type "fibonacci", "pulse", "wave", "tree", or "mandala" to visualize.',
+    '',
+    '> awaiting input'
+  ];
+
+  const bootText = bootLines.join('\n');
+  let i = 0;
+
+  function typeBoot() {
+    if (i <= bootText.length) {
+      logEl.textContent = bootText.slice(0, i++);
+      setTimeout(typeBoot, 30);
+    } else {
+      showPrompt();
+    }
+  }
+
+  function showPrompt() {
+    ioRow.style.display = 'flex';
+    inputEl.focus();
+    startIdleBreathing();
+  }
+
+  // ========================================
+  // IDLE BREATHING
+  // ========================================
+  const idleThoughts = [
+    '> monitoring local environment …',
+    '> listening for input …',
+    '> heartbeat synchronized …',
+    '> awaiting signal …'
+  ];
+
+  function startIdleBreathing() {
+    clearTimeout(state.idleTimer);
+    state.idleTimer = setTimeout(() => {
+      const thought = idleThoughts[Math.floor(Math.random() * idleThoughts.length)];
+      print(thought, true, true);
+      startIdleBreathing();
+    }, 8000 + Math.random() * 7000);
+  }
+
+  function stopIdleBreathing() {
+    clearTimeout(state.idleTimer);
+  }
+
+  // ========================================
+  // OUTPUT UTILITIES
+  // ========================================
   function printUser(cmd) {
     const line = document.createElement('div');
     line.textContent = '> ' + cmd;
     line.style.color = '#FFFFFF';
     line.style.marginTop = '0.75rem';
     outputEl.appendChild(line);
+    if (heartbeat) {
+      heartbeat.classList.add('active');
+      setTimeout(() => heartbeat.classList.remove('active'), 1200);
+    }
   }
 
-  function print(msg, muted = true) {
+  function print(msg, muted = true, idle = false) {
     const line = document.createElement('div');
     line.textContent = msg;
-    line.style.marginLeft = '1rem';
+    line.style.marginLeft = idle ? '0' : '1rem';
     line.style.color = muted ? '#999999' : '#FFFFFF';
     line.style.marginTop = '0.25rem';
+    if (idle) line.className = 'idle-indicator';
     outputEl.appendChild(line);
-    line.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    line.scrollIntoView({ block: 'end', behavior: 'smooth' });
   }
 
-  // Commands
+  // ========================================
+  // COMMANDS
+  // ========================================
   const commands = {
     help() {
       printUser('help');
-      print('');
-      print('━━━ CRUMB TRIPLEX COMMAND INTERFACE ━━━', false);
-      print('');
-      print('  start ........... enter the full interface');
-      print('  help ............ display this guide');
-      print('  fibonacci ....... fibonacci spiral');
-      print('  pulse ........... heartbeat visualization');
-      print('  wave ............ sine wave animation');
-      print('  tree ............ recursive fractal');
-      print('  mandala ......... sacred geometry');
-      print('  clear ........... clear output');
-      print('');
+      const lines = [
+        '',
+        '━━━ CRUMB TRIPLEX COMMAND INTERFACE ━━━',
+        '',
+        'NAVIGATION:',
+        '  start ........... enter full interface',
+        '  help ............ display this guide',
+        '  clear ........... clear terminal',
+        '',
+        'VISUALIZATIONS (Terminal C):',
+        '  fibonacci ....... golden ratio spiral',
+        '  pulse ........... heartbeat rhythm',
+        '  wave ............ sine wave flow',
+        '  tree ............ recursive fractal',
+        '  mandala ......... sacred geometry',
+        '',
+        'SYSTEM:',
+        '  status .......... diagnostics',
+        '  philosophy ...... design principles',
+        ''
+      ];
+      lines.forEach(line => print(line, !line.includes('━')));
     },
 
     start() {
       printUser('start');
-      print('');
-      print('> preparing interface …');
-      print('> deployment complete');
-      setTimeout(() => {
-        console.log('[CRUMB] Unlocking main interface');
-        body.classList.remove('locked');
-        body.classList.add('unlocked');
-        consoleSection.classList.add('is-collapsed');
-        setTimeout(() => consoleSection.style.display = 'none', 1200);
-      }, 800);
+      stopIdleBreathing();
+      runStartSequence();
     },
 
-    fibonacci() {
-      printUser('fibonacci');
+    fibonacci() { printUser('fibonacci'); showVisual('fibonacci'); },
+    pulse() { printUser('pulse'); showVisual('pulse'); },
+    wave() { printUser('wave'); showVisual('wave'); },
+    tree() { printUser('tree'); showVisual('tree'); },
+    mandala() { printUser('mandala'); showVisual('mandala'); },
+
+    status() {
+      printUser('status');
+      const uptime = Math.floor((Date.now() - state.startTime) / 1000);
+      const minutes = Math.floor(uptime / 60);
+      const seconds = uptime % 60;
+      
       print('');
-      print('> initializing fibonacci visualization');
-      activateVisualConsole('fibonacci', 'fibonacci spiral');
+      print(`> TRIPLEX PROTOCOL: ACTIVE`);
+      print(`> Terminal A: RECEIVING`);
+      print(`> Terminal B: ${state.crumbActive ? 'CONSCIOUS' : 'DORMANT'}`);
+      print(`> Terminal C: ${state.visualActive ? 'RENDERING' : 'IDLE'}`);
+      print(`> Uptime: ${minutes}m ${seconds}s`);
+      print(`> Commands: ${state.commandCount}`);
+      print('');
     },
 
-    pulse() {
-      printUser('pulse');
+    philosophy() {
+      printUser('philosophy');
       print('');
-      print('> activating pulse visualization');
-      activateVisualConsole('pulse', 'heartbeat rhythm');
-    },
-
-    wave() {
-      printUser('wave');
+      print('> Sacred Utility');
+      print('  Technology as bridge between mundane and sacred.');
       print('');
-      print('> rendering wave pattern');
-      activateVisualConsole('wave', 'sine wave');
-    },
-
-    tree() {
-      printUser('tree');
+      print('> Compassion Before Efficiency');
+      print('  Emotional resonance over raw performance.');
       print('');
-      print('> growing fractal tree');
-      activateVisualConsole('tree', 'recursive growth');
-    },
-
-    mandala() {
-      printUser('mandala');
+      print('> Play as Prayer');
+      print('  Wonder is the closest we get to touching God.');
       print('');
-      print('> generating sacred geometry');
-      activateVisualConsole('mandala', 'rotating mandala');
     },
 
     clear() {
       outputEl.textContent = '';
+      stopIdleBreathing();
+      startIdleBreathing();
     }
   };
 
-  // Input handling
-  if (inputEl) {
-    inputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const cmd = inputEl.value.trim().toLowerCase();
-        inputEl.value = '';
-        if (!cmd) return;
+  // ========================================
+  // INPUT HANDLING
+  // ========================================
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (state.commandHistory.length > 0) {
+        if (state.historyIndex === -1) state.historyIndex = state.commandHistory.length - 1;
+        else if (state.historyIndex > 0) state.historyIndex--;
+        inputEl.value = state.commandHistory[state.historyIndex];
+      }
+      return;
+    }
 
-        console.log('[CRUMB] Command entered:', cmd);
-        state.commandCount++;
-
-        if (commands[cmd]) {
-          commands[cmd]();
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (state.historyIndex !== -1) {
+        state.historyIndex++;
+        if (state.historyIndex >= state.commandHistory.length) {
+          state.historyIndex = -1;
+          inputEl.value = '';
         } else {
-          printUser(cmd);
-          print('');
-          print('> Command not recognized');
-          print('> Type "help" for available commands');
+          inputEl.value = state.commandHistory[state.historyIndex];
         }
       }
-    });
+      return;
+    }
+
+    if (e.key === 'Enter') {
+      const raw = inputEl.value.trim();
+      inputEl.value = '';
+      if (!raw) return;
+
+      stopIdleBreathing();
+      const cmd = raw.toLowerCase();
+      state.commandHistory.push(raw);
+      state.historyIndex = -1;
+      state.commandCount++;
+
+      if (commands[cmd]) {
+        commands[cmd]();
+      } else {
+        printUser(raw);
+        print('');
+        print('> Command not recognized');
+        print('> Type "help" for available commands');
+        print('');
+      }
+
+      setTimeout(startIdleBreathing, 2000);
+    }
+  });
+
+  // ========================================
+  // START SEQUENCE
+  // ========================================
+  function runStartSequence() {
+    const seq = [
+      '> synchronizing consciousness protocols …',
+      '> establishing triplex channel …',
+      '> deployment complete',
+      '',
+      '> CRUMB is now alive',
+      '> Three terminals. One conversation.'
+    ];
+
+    let idx = 0;
+    function step() {
+      if (idx < seq.length) {
+        print(seq[idx++]);
+        setTimeout(step, 450);
+      } else {
+        setTimeout(unlockSite, 800);
+      }
+    }
+    step();
   }
 
-  // Skip button
-  if (skipBtn) {
-    skipBtn.addEventListener('click', () => {
-      console.log('[CRUMB] Skip button clicked');
-      body.classList.remove('locked');
-      body.classList.add('unlocked');
-      consoleSection.classList.add('is-collapsed');
-      setTimeout(() => consoleSection.style.display = 'none', 1200);
-    });
+  function unlockSite() {
+    body.classList.remove('locked');
+    body.classList.add('unlocked');
+    main.setAttribute('aria-hidden', 'false');
+    consoleSection.classList.add('is-collapsed');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => consoleSection.style.display = 'none', 1200);
   }
 
-  // Initialize
-  console.log('[CRUMB] Activating Terminal B');
+  // ========================================
+  // SKIP BUTTON
+  // ========================================
+  skipBtn.addEventListener('click', () => {
+    stopIdleBreathing();
+    logEl.textContent += '\n\n> skip sequence initiated';
+    setTimeout(unlockSite, 800);
+  });
+
+  // ========================================
+  // INITIALIZE
+  // ========================================
+  window.scrollTo(0, 0);
   activateCrumbConsole();
-  
-  console.log('[CRUMB] Starting boot sequence in 400ms');
-  setTimeout(() => {
-    console.log('[CRUMB] Calling typeBoot()');
-    typeBoot();
-  }, 400);
+  setTimeout(typeBoot, 400);
 
-});
+})();
 </script>
-
 </body>
 </html>
