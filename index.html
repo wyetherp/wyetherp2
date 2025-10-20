@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — Consciousness Interface</title>
+  <title>CRUMB — V2.51</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -277,6 +277,21 @@
       color: rgba(242, 237, 231, 0.7);
       opacity: 0;
       animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    /* Visual Canvas */
+    #visualCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #visualCanvas.active {
+      opacity: 1;
     }
 
     /* Trinity Symbol */
@@ -865,6 +880,8 @@
     '',
     '> Initializing human interface channel...',
     '> Terminal A: Command consciousness READY',
+    '> Type "help" to see available commands',
+    '> Type "start" to enter the full interface',
     '> Awaiting sacred input...',
     ''
   ];
