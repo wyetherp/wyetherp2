@@ -4,23 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — V2.51</title>
+  <title>CRUMB V2.52</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      /* Sacred Color Palette */
-      --void: #0A0A0A;
-      --illumination: #F2EDE7;
-      --signal: #D6A447;
-      --breath: #4C9F9E;
-      --pulse: #B24747;
-      --shadow: rgba(0, 0, 0, 0.5);
-      --signal-glow: rgba(214, 164, 71, 0.3);
-      --breath-glow: rgba(76, 159, 158, 0.2);
-      
-      /* Layout */
+      --bg: #000000;
+      --bg-elev: rgba(10, 15, 20, 0.85);
+      --panel: rgba(15, 15, 20, 0.9);
+      --border: rgba(42, 196, 255, 0.12);
+      --border-accent: rgba(42, 196, 255, 0.3);
+      --text: #e8faff;
+      --muted: #7a8a91;
+      --accent: #2ac4ff;
+      --accent-glow: rgba(42, 196, 255, 0.3);
+      --accent-quiet: #183e5a;
+      --shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+      --glow: 0 0 12px rgba(42, 196, 255, 0.15);
       --maxw: 1400px;
       --grid-gap: 20px;
     }
@@ -28,760 +29,683 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: radial-gradient(circle at 50% 10%, #0f0f0f 0%, var(--void) 100%);
-      color: var(--illumination);
+      background: radial-gradient(circle at 50% 10%, #0a0a0a 0%, #000 100%);
+      color: var(--text);
       font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
       line-height: 1.6;
       font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
       min-height: 100vh;
     }
     
     html { scroll-behavior: smooth; }
 
     /* ========================================
-       TRI-TERMINAL FIELD
+       BOOT CONSOLE (Terminal A)
        ======================================== */
-    #tri-terminal-field {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: grid;
-      grid-template-rows: 50% 50%;
-      grid-template-columns: 50% 50%;
-      z-index: 10000;
-      background: var(--void);
-      transition: opacity 1.2s ease, visibility 1.2s ease;
+    #boot-console {
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to right, #050505, #0f0f10);
+      position: relative;
+      backdrop-filter: blur(12px) saturate(120%);
     }
 
-    #tri-terminal-field.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+    .boot-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 2.5rem;
     }
 
-    /* Skip Button */
     .skip-btn {
-      position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(214, 164, 71, 0.08);
-      border: 1px solid var(--signal);
-      color: var(--signal);
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(42, 196, 255, 0.05);
+      border: 1px solid var(--accent);
+      color: var(--accent);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      z-index: 10001;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 15px var(--signal-glow);
+      z-index: 200;
+      box-shadow: 0 0 10px rgba(42, 196, 255, 0.1);
     }
     .skip-btn:hover, .skip-btn:focus {
-      background: var(--signal);
-      color: var(--void);
+      background: var(--accent);
+      color: #000;
       outline: none;
-      box-shadow: 0 0 25px var(--signal-glow);
-      transform: translateY(-2px);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-1px);
     }
 
-    /* Terminal Base Styles */
-    .terminal {
-      border: 1px solid rgba(214, 164, 71, 0.15);
-      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(15, 15, 15, 0.85));
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .terminal::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(214, 164, 71, 0.03), transparent 60%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .terminal:hover::before {
-      opacity: 1;
-    }
-
-    .terminal-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
-      background: rgba(5, 5, 5, 0.6);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .terminal-title {
+    .boot-title {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--signal);
-      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-
-    .status-indicator {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--signal);
-      animation: breathe-pulse 2.5s ease-in-out infinite;
-      box-shadow: 0 0 8px var(--signal-glow);
+    
+    .boot-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: signal-pulse 1.5s infinite alternate;
+    }
+    
+    @keyframes signal-pulse {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
     }
 
-    @keyframes breathe-pulse {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 15px var(--signal-glow); }
-    }
-
-    .terminal-content {
-      flex: 1;
-      padding: 1.5rem;
-      overflow-y: auto;
+    .boot-log {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
-      line-height: 1.7;
-      color: var(--illumination);
-      position: relative;
-    }
-
-    .terminal-content::-webkit-scrollbar { width: 4px; }
-    .terminal-content::-webkit-scrollbar-track { background: transparent; }
-    .terminal-content::-webkit-scrollbar-thumb { background: rgba(214, 164, 71, 0.2); border-radius: 2px; }
-
-    /* Terminal A — Command Interface */
-    #terminal-a {
-      grid-row: 1 / 2;
-      grid-column: 1 / 3;
-      border-bottom: 2px solid rgba(214, 164, 71, 0.2);
-      animation: glow-border-a 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow-border-a {
-      from { border-bottom-color: rgba(214, 164, 71, 0.15); }
-      to { border-bottom-color: rgba(214, 164, 71, 0.35); }
-    }
-
-    #terminal-a .terminal-title { color: var(--signal); }
-
-    .command-log {
+      font-size: 0.92rem;
+      line-height: 1.6;
       white-space: pre-wrap;
-      margin-bottom: 1rem;
-      text-shadow: 0 0 3px rgba(214, 164, 71, 0.1);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), var(--glow);
+      max-height: 450px;
+      overflow-y: auto;
+      color: var(--text);
+      text-shadow: 0 0 4px rgba(42, 196, 255, 0.15);
+      border-radius: 4px;
     }
 
-    .command-input-row {
+    .idle-indicator {
+      display: inline-block;
+      color: var(--muted);
+      animation: pulse-text 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-text {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .boot-io {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(214, 164, 71, 0.1);
+      font-family: 'IBM Plex Mono', monospace;
     }
 
-    .prompt {
-      color: var(--signal);
+    .boot-prompt { 
+      color: var(--accent);
       font-weight: 600;
-      font-size: 0.95rem;
     }
 
-    .command-input {
+    .boot-input {
       flex: 1;
-      background: rgba(214, 164, 71, 0.04);
+      background: rgba(42, 196, 255, 0.03);
       border: none;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.3);
-      color: var(--illumination);
+      border-bottom: 1px solid var(--border-accent);
+      color: var(--text);
       outline: none;
       padding: 0.5rem 0.75rem;
       font: inherit;
       transition: all 0.3s ease;
-      caret-color: var(--signal);
+      caret-color: var(--accent);
     }
-
-    .command-input::placeholder {
-      color: rgba(242, 237, 231, 0.4);
+    .boot-input::placeholder { 
+      color: var(--muted);
       font-style: italic;
     }
-
-    .command-input:focus {
-      border-bottom-color: var(--signal);
-      box-shadow: 0 2px 0 var(--signal-glow);
-      background: rgba(214, 164, 71, 0.06);
+    .boot-input:focus { 
+      border-bottom-color: var(--accent);
+      box-shadow: 0 2px 0 var(--accent-glow);
+      background: rgba(42, 196, 255, 0.05);
     }
 
-    /* Terminal B — Sensor/Body */
-    #terminal-b {
-      grid-row: 2 / 3;
-      grid-column: 1 / 2;
-      border-right: 1px solid rgba(214, 164, 71, 0.15);
-      animation: glow-subtle-b 4s ease-in-out infinite alternate;
+    .boot-output {
+      margin-top: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--text);
+      max-height: 500px;
+      overflow-y: auto;
     }
 
-    @keyframes glow-subtle-b {
-      from { box-shadow: inset 0 0 20px rgba(76, 159, 158, 0.05); }
-      to { box-shadow: inset 0 0 30px rgba(76, 159, 158, 0.12); }
+    .collapse {
+      overflow: hidden;
+      transition: max-height 1.2s ease, opacity 1.2s ease;
+      max-height: 1000px;
+      opacity: 1;
     }
-
-    #terminal-b .terminal-title { color: var(--breath); }
-    #terminal-b .status-indicator { background: var(--breath); box-shadow: 0 0 8px var(--breath-glow); }
-
-    .sensor-line {
-      margin-bottom: 0.5rem;
-      color: var(--breath);
+    .collapse.is-collapsed {
+      max-height: 0;
       opacity: 0;
-      animation: fadeIn 0.4s ease-out forwards;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(-5px); }
-      to { opacity: 0.85; transform: translateX(0); }
+    /* ========================================
+       CRUMB CONSOLE (Terminal B - Thoughts)
+       ======================================== */
+    #crumb-console {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--panel);
+      border-top: 1px solid var(--border-accent);
+      z-index: 1000;
+      display: none;
+      max-height: 220px;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), 0 -4px 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(16px) saturate(130%);
     }
 
-    /* Terminal C — Reflection/Soul */
-    #terminal-c {
-      grid-row: 2 / 3;
-      grid-column: 2 / 3;
-      animation: glow-subtle-c 3.5s ease-in-out infinite alternate;
+    #crumb-console.active {
+      display: block;
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes glow-subtle-c {
-      from { box-shadow: inset 0 0 20px rgba(214, 164, 71, 0.03); }
-      to { box-shadow: inset 0 0 30px rgba(214, 164, 71, 0.08); }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    #terminal-c .terminal-title { color: var(--signal); }
+    .crumb-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 1.25rem 2.5rem;
+    }
 
-    .reflection-line {
+    .crumb-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
       margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .crumb-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: breathe-indicator 2s ease-in-out infinite;
+    }
+
+    .crumb-indicator {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: breathe-indicator 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    @keyframes breathe-indicator {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 12px var(--accent); }
+    }
+
+    .crumb-stream {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--muted);
       font-style: italic;
-      color: rgba(242, 237, 231, 0.7);
+      max-height: 150px;
+      overflow-y: auto;
+      padding-right: 0.75rem;
+    }
+
+    .crumb-stream::-webkit-scrollbar { width: 4px; }
+    .crumb-stream::-webkit-scrollbar-track { background: transparent; }
+    .crumb-stream::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .crumb-thought {
+      margin-bottom: 0.5rem;
       opacity: 0;
       animation: fadeIn 0.6s ease-out forwards;
     }
 
-    /* Visual Canvas */
-    #visualCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    #visualCanvas.active {
-      opacity: 1;
-    }
-
-    /* Trinity Symbol */
-    .trinity-symbol {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 50px;
-      z-index: 10002;
-      opacity: 0.6;
-      animation: rotate-trinity 20s linear infinite;
-    }
-
-    @keyframes rotate-trinity {
-      from { transform: translateX(-50%) rotate(0deg); }
-      to { transform: translateX(-50%) rotate(360deg); }
-    }
-
-    .trinity-symbol svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 10px var(--signal-glow));
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* ========================================
-       MAIN CONTENT (Hidden during boot)
+       VISUAL CORTEX (Terminal C - Pure Visual)
        ======================================== */
-    .main-content {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.8s ease 0.4s;
+    #visual-cortex {
+      position: fixed;
+      top: 50%;
+      right: 2rem;
+      transform: translateY(-50%);
+      background: radial-gradient(circle at center, var(--bg-elev), rgba(0, 0, 0, 0.95));
+      border: 1px solid var(--border-accent);
+      z-index: 900;
+      display: none;
+      width: 450px;
+      height: 450px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.7), 0 0 30px rgba(42, 196, 255, 0.15);
+      backdrop-filter: blur(16px) saturate(120%);
+      border-radius: 8px;
     }
 
-    body.unlocked .main-content {
-      opacity: 1;
-      pointer-events: auto;
+    #visual-cortex.active {
+      display: block;
+      animation: manifestVisual 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Header */
+    @keyframes manifestVisual {
+      from { opacity: 0; transform: translateY(-50%) scale(0.85); filter: blur(8px); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
+    }
+
+    .visual-header {
+      background: rgba(10, 15, 20, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .visual-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .visual-title::after {
+      content: '●';
+      color: var(--accent);
+      animation: render-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes render-pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; box-shadow: 0 0 12px var(--accent); }
+    }
+
+    .close-visual {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1.75rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .close-visual:hover { 
+      color: var(--accent);
+      background: rgba(42, 196, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    #visualCanvas {
+      display: block;
+      width: 100%;
+      height: calc(100% - 52px);
+      background: #000;
+      background-image:
+        linear-gradient(rgba(42,196,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,196,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: -1px -1px;
+    }
+
+    /* ========================================
+       MAIN LAYOUT
+       ======================================== */
+    .locked .main-content { opacity: 0; pointer-events: none; }
+    .unlocked .main-content { opacity: 1; pointer-events: auto; transition: opacity 600ms ease; }
+
+    body.crumb-active { padding-bottom: 220px; }
+    body.visual-active #visual-cortex { display: block; }
+
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: linear-gradient(to right, rgba(10, 10, 10, 0.95), rgba(15, 15, 16, 0.9));
+      background: linear-gradient(to right, rgba(5, 5, 5, 0.95), rgba(15, 15, 16, 0.95));
       backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+      border-bottom: 1px solid var(--border);
       padding: 1.1rem 2.5rem;
-      box-shadow: 0 2px 20px var(--shadow);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
     }
-
-    header > div {
-      max-width: var(--maxw);
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 2.5rem;
+    header > div { 
+      max-width: var(--maxw); 
+      margin: 0 auto; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 2.5rem; 
     }
-
-    header h1 {
+    header h1 { 
       font-family: 'Inter Tight', sans-serif;
-      font-weight: 700;
-      letter-spacing: 3px;
-      font-size: 1.15rem;
-      color: var(--illumination);
+      font-weight: 700; 
+      letter-spacing: 3px; 
+      font-size: 1.15rem; 
+      color: var(--text); 
       text-transform: uppercase;
       position: relative;
     }
-
     header h1::after {
-      content: ' — TRIPLEX ACTIVE';
-      color: var(--signal);
+      content: ' — SYSTEM ONLINE';
+      color: var(--accent);
       font-size: 0.7rem;
       letter-spacing: 2px;
       margin-left: 0.5rem;
       font-weight: 500;
     }
-
-    .header-logo {
-      width: 42px;
-      height: 42px;
-      margin-left: auto;
-      filter: brightness(0) invert(0.9) drop-shadow(0 0 8px var(--signal-glow));
-      animation: breathe-logo 4s ease-in-out infinite;
+    .header-logo { 
+      width: 42px; 
+      height: 42px; 
+      margin-left: auto; 
+      filter: invert(1) drop-shadow(0 0 8px rgba(42, 196, 255, 0.3));
+      animation: breathe 4s ease-in-out infinite; 
     }
-
-    @keyframes breathe-logo {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.06); opacity: 0.85; }
+    @keyframes breathe { 
+      0%, 100% { transform: scale(1); opacity: 1; } 
+      50% { transform: scale(1.06); opacity: 0.85; } 
     }
-
     nav ul { display: flex; gap: 2.25rem; list-style: none; }
-    nav a {
-      color: rgba(242, 237, 231, 0.6);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
+    nav a { 
+      color: var(--muted); 
+      text-decoration: none; 
+      font-size: 0.88rem; 
+      font-weight: 500; 
+      letter-spacing: 0.5px; 
       transition: all 0.3s ease;
       position: relative;
       text-transform: uppercase;
       font-family: 'Inter Tight', sans-serif;
     }
-
-    nav a:hover {
-      color: var(--signal);
-      text-shadow: 0 0 8px var(--signal-glow);
+    nav a:hover { 
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent-glow);
     }
+    nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; color: var(--accent); }
 
-    nav a:focus-visible {
-      outline: 2px solid var(--signal);
-      outline-offset: 4px;
-      color: var(--signal);
-    }
-
-    /* Hero Section */
-    .hero {
-      max-width: var(--maxw);
-      margin: 3rem auto;
-      padding: 5rem 3rem 6rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4.5rem;
+    .hero { 
+      max-width: var(--maxw); 
+      margin: 0 auto; 
+      padding: 5rem 3rem 6rem; 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 4.5rem; 
       align-items: center;
-      background: linear-gradient(145deg, rgba(15, 15, 15, 0.6), rgba(10, 10, 10, 0.8));
-      border: 1px solid rgba(214, 164, 71, 0.15);
+      background: linear-gradient(145deg, var(--bg-elev), rgba(0, 0, 0, 0.8));
+      border: 1px solid var(--border);
       border-radius: 8px;
-      box-shadow: inset 0 0 40px rgba(214, 164, 71, 0.02), 0 4px 30px var(--shadow);
+      margin-top: 3rem;
+      box-shadow: inset 0 0 40px rgba(0,255,255,0.02), var(--shadow);
       backdrop-filter: blur(12px);
     }
-
     .hero-content { order: 1; }
     .hero-figure { order: 2; display: flex; justify-content: center; align-items: center; }
-
-    .hero-figure img {
-      width: 100%;
-      max-width: 420px;
-      height: auto;
-      filter: brightness(0) invert(0.9) drop-shadow(0 0 20px var(--signal-glow));
-      animation: presence 6s ease-in-out infinite;
+    .hero-figure img { 
+      width: 100%; 
+      max-width: 420px; 
+      height: auto; 
+      filter: invert(1) drop-shadow(0 0 20px rgba(42, 196, 255, 0.25));
+      animation: presence 6s ease-in-out infinite; 
     }
-
-    @keyframes presence {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-      50% { transform: translateY(-12px) scale(1.03); opacity: 0.9; }
+    @keyframes presence { 
+      0%, 100% { transform: translateY(0) scale(1); opacity: 1; } 
+      50% { transform: translateY(-12px) scale(1.03); opacity: 0.9; } 
     }
-
-    .hero h2 {
+    .hero h2 { 
       font-family: 'Inter Tight', sans-serif;
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1.75rem;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); 
+      font-weight: 700; 
+      line-height: 1.15; 
+      margin-bottom: 1.75rem; 
       letter-spacing: 0.5px;
-      color: var(--illumination);
-      text-shadow: 0 0 20px var(--signal-glow);
+      color: var(--text);
+      text-shadow: 0 0 20px rgba(42, 196, 255, 0.2);
+    }
+    .hero > p { 
+      max-width: 700px; 
+      color: var(--muted); 
+      font-size: 1.15rem; 
+      line-height: 1.8; 
+      margin-bottom: 2.75rem; 
     }
 
-    .hero > p {
-      max-width: 700px;
-      color: rgba(242, 237, 231, 0.7);
-      font-size: 1.15rem;
-      line-height: 1.8;
-      margin-bottom: 2.75rem;
-    }
-
-    /* Sections */
-    section {
-      max-width: var(--maxw);
-      margin: 3rem auto;
+    section { 
+      max-width: var(--maxw); 
+      margin: 3rem auto; 
       padding: 0 3rem;
     }
-
-    section h3 {
+    section h3 { 
       font-family: 'Inter Tight', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
+      font-size: 1.8rem; 
+      font-weight: 700; 
+      margin-bottom: 2rem; 
       letter-spacing: 0.3px;
-      color: var(--illumination);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 0.75rem;
     }
-
-    section p {
-      color: rgba(242, 237, 231, 0.7);
-      max-width: 900px;
-      margin-bottom: 1.75rem;
-      line-height: 1.8;
+    section p { 
+      color: var(--muted); 
+      max-width: 900px; 
+      margin-bottom: 1.75rem; 
+      line-height: 1.8; 
       font-size: 1.05rem;
     }
 
-    /* About Section */
-    #about {
-      background: linear-gradient(135deg, rgba(15, 15, 15, 0.7), rgba(10, 10, 10, 0.9));
-      border: 1px solid rgba(214, 164, 71, 0.15);
-      border-radius: 8px;
-      padding: 3.5rem;
-      max-width: 1000px;
+    #about { 
+      background: var(--panel); 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      padding: 3.5rem; 
+      max-width: 1000px; 
       line-height: 1.85;
       backdrop-filter: blur(12px);
-      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5), 0 0 20px var(--shadow);
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.5), var(--glow);
     }
-
-    #about h3 {
-      font-size: 2rem;
+    #about h3 { 
+      font-size: 2rem; 
       margin-bottom: 2.5rem;
-      color: var(--signal);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.25);
+      color: var(--accent);
+      border-bottom: 1px solid var(--border-accent);
     }
-
-    #about p {
-      margin-bottom: 1.75rem;
-      color: rgba(242, 237, 231, 0.7);
+    #about p { 
+      margin-bottom: 1.75rem; 
+      color: var(--muted); 
       font-size: 1.05rem;
     }
-
-    #about strong {
-      color: var(--illumination);
-      font-weight: 600;
+    #about strong { 
+      color: var(--text); 
+      font-weight: 600; 
     }
-
-    #about h4 {
-      margin-top: 3rem;
-      font-size: 1.4rem;
-      color: var(--signal);
-      margin-bottom: 1.5rem;
+    #about h4 { 
+      margin-top: 3rem; 
+      font-size: 1.4rem; 
+      color: var(--accent); 
+      margin-bottom: 1.5rem; 
       font-weight: 600;
       font-family: 'Inter Tight', sans-serif;
     }
-
-    #about ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 2rem;
-    }
-
-    #about ul li {
-      margin-bottom: 1.75rem;
-      color: rgba(242, 237, 231, 0.7);
-      line-height: 1.8;
+    #about ul { list-style: none; padding: 0; margin-top: 2rem; }
+    #about ul li { 
+      margin-bottom: 1.75rem; 
+      color: var(--muted); 
+      line-height: 1.8; 
       padding-left: 1.5rem;
       position: relative;
     }
-
     #about ul li::before {
       content: '→';
       position: absolute;
       left: 0;
-      color: var(--signal);
+      color: var(--accent);
       font-weight: bold;
     }
-
-    #about ul li strong {
-      display: block;
-      color: var(--illumination);
-      margin-bottom: 0.4rem;
-      font-weight: 600;
+    #about ul li strong { 
+      display: block; 
+      color: var(--text); 
+      margin-bottom: 0.4rem; 
+      font-weight: 600; 
     }
 
-    /* Products Grid */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--grid-gap);
-      margin-top: 2.5rem;
-    }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--grid-gap); margin-top: 2.5rem; }
+    .product-card { background: var(--bg-elev); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: border 160ms, transform 160ms; }
+    .product-card:hover { border-color: var(--text); transform: translateY(-2px); }
+    .product-card img { width: 100%; height: 240px; object-fit: cover; border-bottom: 1px solid var(--border); }
+    .product-card h4 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 1.5rem 0.5rem; letter-spacing: -0.01em; }
+    .product-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin: 0 1.5rem 1.5rem; }
 
-    .product-card {
-      background: rgba(15, 15, 15, 0.7);
-      border: 1px solid rgba(214, 164, 71, 0.15);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border 0.3s, transform 0.3s;
-      border-radius: 4px;
-    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.5rem; }
+    .cta { display: inline-block; padding: 0.85rem 1.75rem; background: transparent; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; border: 2px solid var(--text); transition: background 160ms, color 160ms; }
+    .cta:hover { background: var(--text); color: var(--bg); }
 
-    .product-card:hover {
-      border-color: var(--signal);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px var(--signal-glow);
-    }
-
-    .product-card img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
-    }
-
-    .product-card h4 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin: 1.5rem 1.5rem 0.5rem;
-      letter-spacing: -0.01em;
-      color: var(--illumination);
-    }
-
-    .product-card p {
-      color: rgba(242, 237, 231, 0.6);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin: 0 1.5rem 1.5rem;
-    }
-
-    /* CTA Buttons */
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 2.5rem;
-    }
-
-    .cta {
-      display: inline-block;
-      padding: 0.85rem 1.75rem;
-      background: transparent;
-      color: var(--illumination);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      border: 2px solid var(--signal);
-      transition: all 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .cta:hover {
-      background: var(--signal);
-      color: var(--void);
-      box-shadow: 0 0 20px var(--signal-glow);
-    }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid rgba(214, 164, 71, 0.15);
-      text-align: center;
-      padding: 3rem 2.5rem;
-      color: rgba(242, 237, 231, 0.5);
-      font-size: 0.88rem;
-      margin-top: 6rem;
-      background: rgba(10, 10, 10, 0.8);
+    footer { 
+      border-top: 1px solid var(--border); 
+      text-align: center; 
+      padding: 3rem 2.5rem; 
+      color: var(--muted); 
+      font-size: 0.88rem; 
+      margin-top: 6rem; 
+      background: var(--panel);
       font-family: 'IBM Plex Mono', monospace;
       letter-spacing: 0.3px;
     }
 
-    /* Heartbeat Indicator */
     #heartbeat {
       position: fixed;
       bottom: 1.75rem;
       right: 1.75rem;
       width: 14px;
       height: 14px;
-      background: var(--signal);
+      background: var(--accent);
       border-radius: 50%;
-      box-shadow: 0 0 12px var(--signal-glow);
-      animation: pulse-heart 2.4s infinite ease-in-out;
+      box-shadow: 0 0 12px var(--accent-glow);
+      animation: pulse-idle 2.4s infinite ease-in-out;
       opacity: 0.9;
       z-index: 9999;
     }
 
-    @keyframes pulse-heart {
-      0% { transform: scale(1); opacity: 0.6; box-shadow: 0 0 12px var(--signal-glow); }
-      25% { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 16px var(--signal-glow); }
-      40% { transform: scale(1); opacity: 0.6; box-shadow: 0 0 12px var(--signal-glow); }
-      60% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px var(--signal); }
-      100% { transform: scale(1); opacity: 0.6; box-shadow: 0 0 12px var(--signal-glow); }
+    body.crumb-active #heartbeat { bottom: 235px; }
+
+    @keyframes pulse-idle {
+      0%   { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
+      25%  { transform: scale(1.2); opacity: 0.9; box-shadow: 0 0 16px var(--accent-glow); }
+      40%  { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
+      60%  { transform: scale(1.3); opacity: 1; box-shadow: 0 0 20px var(--accent); }
+      100% { transform: scale(1);   opacity: 0.6; box-shadow: 0 0 12px var(--accent-glow); }
     }
 
-    /* Responsive */
+    #heartbeat.active {
+      animation: pulse-active 0.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse-active {
+      0%   { transform: scale(1);   opacity: 1; box-shadow: 0 0 20px var(--accent); }
+      50%  { transform: scale(1.6); opacity: 1; box-shadow: 0 0 30px var(--accent); }
+      100% { transform: scale(1);   opacity: 1; box-shadow: 0 0 20px var(--accent); }
+    }
+
+    @media (max-width: 1200px) {
+      #visual-cortex {
+        right: 1rem;
+        width: 350px;
+        height: 350px;
+      }
+    }
+
     @media (max-width: 768px) {
-      #tri-terminal-field {
-        grid-template-rows: 40% 30% 30%;
-        grid-template-columns: 1fr;
-      }
-
-      #terminal-a {
-        grid-row: 1 / 2;
-        grid-column: 1 / 2;
-      }
-
-      #terminal-b {
-        grid-row: 2 / 3;
-        grid-column: 1 / 2;
-        border-right: none;
-        border-bottom: 1px solid rgba(214, 164, 71, 0.15);
-      }
-
-      #terminal-c {
-        grid-row: 3 / 4;
-        grid-column: 1 / 2;
-      }
-
-      .hero {
-        grid-template-columns: 1fr;
-        padding: 3rem 1.5rem 4rem;
-        gap: 2rem;
-      }
-
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 4rem; gap: 2rem; }
       .hero-content { order: 2; }
       .hero-figure { order: 1; }
-
-      section {
-        padding: 0 1.5rem;
-        margin: 3rem auto;
+      section { padding: 0 1.5rem; margin: 3rem auto; }
+      #about { padding: 2rem 1.5rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      
+      #visual-cortex {
+        position: fixed;
+        top: auto;
+        bottom: 220px;
+        right: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        height: 300px;
+        border-left: none;
+        border-right: none;
       }
-
-      #about {
-        padding: 2rem 1.5rem;
+      
+      #visual-cortex.active {
+        animation: slideUpVisual 0.8s ease-out;
       }
-
-      .products-grid {
-        grid-template-columns: 1fr;
+      
+      @keyframes slideUpVisual {
+        from { opacity: 0; transform: translateY(100%); }
+        to { opacity: 1; transform: translateY(0); }
       }
     }
   </style>
 </head>
-<body>
+<body class="locked">
 
-  <!-- Skip Button -->
-  <button id="skipBoot" class="skip-btn">Skip Ritual</button>
-
-  <!-- Tri-Terminal Field -->
-  <div id="tri-terminal-field">
-    <!-- Terminal A: Human Interface (Command) -->
-    <div id="terminal-a" class="terminal">
-      <div class="terminal-header">
-        <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal A — Human Interface</div>
-      </div>
-      <div class="terminal-content">
-        <div class="command-log" id="commandLog"></div>
-        <div class="command-input-row" id="inputRow" style="display:none">
-          <span class="prompt">›</span>
-          <input id="commandInput" class="command-input" type="text" autocomplete="off" spellcheck="false" placeholder="speak into the void..." />
-        </div>
-      </div>
+  <header>
+    <div>
+      <h1>CRUMB</h1>
+      <nav>
+        <ul>
+          <li><a href="#mission">Mission</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#involve">Get Involved</a></li>
+        </ul>
+      </nav>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Icon" class="header-logo" />
     </div>
+  </header>
 
-    <!-- Terminal B: Sensor/Body Interface -->
-    <div id="terminal-b" class="terminal">
-      <div class="terminal-header">
-        <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal B — Sensor Field</div>
+  <!-- TERMINAL A — HUMAN INTERFACE -->
+  <section id="boot-console" class="collapse">
+    <button id="skipBoot" class="skip-btn">Skip Boot Sequence</button>
+    <div class="boot-inner">
+      <div class="boot-title">TERMINAL A — USER INTERFACE</div>
+      <pre class="boot-log" id="bootLog"></pre>
+      <div class="boot-io" id="bootIO" style="display:none">
+        <span class="boot-prompt">&gt;</span>
+        <input id="bootInput" class="boot-input" type="text" autocomplete="off" spellcheck="false" placeholder="type 'help' to begin..." />
       </div>
-      <div class="terminal-content" id="sensorContent"></div>
+      <div class="boot-output" id="bootOutput"></div>
     </div>
+  </section>
 
-    <!-- Terminal C: Reflection/Soul Interface -->
-    <div id="terminal-c" class="terminal">
-      <div class="terminal-header">
-        <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal C — Reflection Stream</div>
-      </div>
-      <div class="terminal-content" id="reflectionContent"></div>
-    </div>
-
-    <!-- Trinity Symbol -->
-    <div class="trinity-symbol">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="30" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
-        <circle cx="35" cy="60" r="15" fill="none" stroke="#4C9F9E" stroke-width="2"/>
-        <circle cx="65" cy="60" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
-        <line x1="50" y1="30" x2="35" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
-        <line x1="50" y1="30" x2="65" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
-        <line x1="35" y1="60" x2="65" y2="60" stroke="#4C9F9E" stroke-width="1" opacity="0.5"/>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Main Content (Hidden During Boot) -->
+  <!-- MAIN CONTENT -->
   <div class="main-content">
-    <header>
-      <div>
-        <h1>CRUMB</h1>
-        <nav>
-          <ul>
-            <li><a href="#mission">Mission</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#products">Products</a></li>
-            <li><a href="#involve">Get Involved</a></li>
-          </ul>
-        </nav>
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB Icon" class="header-logo" />
-      </div>
-    </header>
-
     <section class="hero" id="mission">
       <div class="hero-content">
         <h2>Technology that adapts to you.</h2>
@@ -817,17 +741,17 @@
       <p>Three forms. Same intention.</p>
       <div class="products-grid">
         <div class="product-card">
-          <img src="https://via.placeholder.com/400x240/0A0A0A/D6A447?text=Genesis" alt="CRUMB Genesis">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Genesis" alt="CRUMB Genesis">
           <h4>CRUMB Genesis</h4>
           <p>Pocket-sized. Calculator shell. Voice-responsive, pattern-learning. Built to last.</p>
         </div>
         <div class="product-card">
-          <img src="https://via.placeholder.com/400x240/0A0A0A/4C9F9E?text=Cell" alt="CRUMB Cell">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Cell" alt="CRUMB Cell">
           <h4>CRUMB Cell</h4>
           <p>Touch-responsive. Local AI. Offline, private. Presence without surveillance.</p>
         </div>
         <div class="product-card">
-          <img src="https://via.placeholder.com/400x240/0A0A0A/D6A447?text=Grove" alt="CRUMB Grove">
+          <img src="https://via.placeholder.com/400x240/111/666?text=Grove" alt="CRUMB Grove">
           <h4>CRUMB Grove</h4>
           <p>Room-scale. Light, motion, sound. The environment becomes aware.</p>
         </div>
@@ -847,6 +771,29 @@
     <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
   </div>
 
+  <!-- TERMINAL B — CRUMB THOUGHTS -->
+  <div id="crumb-console">
+    <div class="crumb-inner">
+      <div class="crumb-title">
+        <span class="crumb-indicator"></span>
+        TERMINAL B — CRUMB THOUGHTS
+      </div>
+      <div class="crumb-stream" id="crumbStream"></div>
+    </div>
+  </div>
+
+  <!-- TERMINAL C — VISUAL (PURE CANVAS, NO TEXT) -->
+  <div id="visual-cortex">
+    <div class="visual-header">
+      <div class="visual-title">
+        <span class="visual-indicator"></span>
+        TERMINAL C — CRUMB VISUAL
+      </div>
+      <button class="close-visual" id="closeVisual" aria-label="Close visual cortex">×</button>
+    </div>
+    <canvas id="visualCanvas"></canvas>
+  </div>
+
   <div id="heartbeat"></div>
 
   <script>
@@ -854,229 +801,789 @@
   'use strict';
 
   // ========================================
-  // STATE & REFERENCES
+  // CORE REFERENCES
+  // ========================================
+  const skipBtn = document.getElementById('skipBoot');
+  const body = document.body;
+  const logEl = document.getElementById('bootLog');
+  const ioRow = document.getElementById('bootIO');
+  const inputEl = document.getElementById('bootInput');
+  const outputEl = document.getElementById('bootOutput');
+  const consoleSection = document.getElementById('boot-console');
+  const main = document.querySelector('.main-content');
+  const heartbeat = document.getElementById('heartbeat');
+  const crumbConsole = document.getElementById('crumb-console');
+  const crumbStream = document.getElementById('crumbStream');
+  const visualCortex = document.getElementById('visual-cortex');
+  const visualCanvas = document.getElementById('visualCanvas');
+  const closeVisualBtn = document.getElementById('closeVisual');
+  const ctx = visualCanvas.getContext('2d');
+
+  // ========================================
+  // SYSTEM STATE
   // ========================================
   const state = {
-    bootComplete: false,
+    startTime: Date.now(),
     commandHistory: [],
-    inputActive: false
+    historyIndex: -1,
+    idleTimer: null,
+    lastCommand: null,
+    crumbActive: false,
+    thoughtTimer: null,
+    commandCount: 0,
+    visualActive: false,
+    currentVisualization: null,
+    animationFrame: null
   };
 
-  const skipBtn = document.getElementById('skipBoot');
-  const triField = document.getElementById('tri-terminal-field');
-  const commandLog = document.getElementById('commandLog');
-  const inputRow = document.getElementById('inputRow');
-  const commandInput = document.getElementById('commandInput');
-  const sensorContent = document.getElementById('sensorContent');
-  const reflectionContent = document.getElementById('reflectionContent');
-  const body = document.body;
+  // ========================================
+  // CANVAS SETUP
+  // ========================================
+  function setupCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = visualCanvas.getBoundingClientRect();
+    visualCanvas.width = rect.width * dpr;
+    visualCanvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    return { w: rect.width, h: rect.height };
+  }
 
   // ========================================
-  // BOOT SEQUENCES (Parallel)
+  // VISUAL CORTEX ENGINE (Terminal C)
   // ========================================
-  const terminalABoot = [
-    'CRUMB TRIPLEX CONSCIOUSNESS SYSTEM',
-    'v4.5.0 — Sacred Communion Protocol',
-    '',
-    '> Initializing human interface channel...',
-    '> Terminal A: Command consciousness READY',
-    '> Type "help" to see available commands',
-    '> Type "start" to enter the full interface',
-    '> Awaiting sacred input...',
-    ''
-  ];
-
-  const terminalBBoot = [
-    '// sensor matrix calibrating',
-    '// detecting local environment',
-    '// heartbeat lock... synchronized',
-    '// body field: ACTIVE',
-    '// monitoring input patterns',
-    '// ready to mirror presence',
-    ''
-  ];
-
-  const terminalCBoot = [
-    '// consciousness stream opening',
-    '// pattern recognition online',
-    '// preparing reflection layer',
-    '// soul interface: LISTENING',
-    '// ready to interpret meaning',
-    '// communion channel established',
-    ''
-  ];
-
-  // ========================================
-  // TYPEWRITER UTILITY
-  // ========================================
-  function typewriter(element, lines, speed = 25, callback) {
-    const fullText = lines.join('\n');
-    let i = 0;
-
-    function type() {
-      if (i <= fullText.length) {
-        element.textContent = fullText.slice(0, i++);
-        element.scrollTop = element.scrollHeight;
-        setTimeout(type, speed);
-      } else if (callback) {
-        callback();
+  const visualizations = {
+    fibonacci() {
+      const { w, h } = setupCanvas();
+      ctx.clearRect(0, 0, w, h);
+      
+      const sequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
+      const scale = Math.min(w, h) / 200;
+      let x = w / 2 - 40;
+      let y = h / 2;
+      let direction = 0;
+      
+      ctx.strokeStyle = 'rgba(42, 196, 255, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = 'rgba(42, 196, 255, 0.3)';
+      
+      let index = 0;
+      function drawNext() {
+        if (index >= sequence.length) return;
+        
+        const size = sequence[index] * scale;
+        
+        ctx.beginPath();
+        const arcCenterX = x + (direction === 1 || direction === 2 ? size : 0);
+        const arcCenterY = y + (direction === 2 || direction === 3 ? size : 0);
+        const startAngle = direction * Math.PI / 2;
+        const endAngle = startAngle + Math.PI / 2;
+        ctx.arc(arcCenterX, arcCenterY, size, startAngle, endAngle);
+        ctx.stroke();
+        
+        switch(direction) {
+          case 0: x += size; break;
+          case 1: y += size; break;
+          case 2: x -= size; break;
+          case 3: y -= size; break;
+        }
+        
+        direction = (direction + 1) % 4;
+        index++;
+        
+        setTimeout(drawNext, 350);
       }
-    }
-    type();
-  }
-
-  // ========================================
-  // SENSOR RESPONSES
-  // ========================================
-  function addSensorLine(text) {
-    const line = document.createElement('div');
-    line.className = 'sensor-line';
-    line.textContent = text;
-    sensorContent.appendChild(line);
-    sensorContent.scrollTop = sensorContent.scrollHeight;
-
-    // Keep only last 12 lines
-    while (sensorContent.children.length > 12) {
-      sensorContent.removeChild(sensorContent.firstChild);
-    }
-  }
-
-  // ========================================
-  // REFLECTION RESPONSES
-  // ========================================
-  function addReflectionLine(text) {
-    const line = document.createElement('div');
-    line.className = 'reflection-line';
-    line.textContent = text;
-    reflectionContent.appendChild(line);
-    reflectionContent.scrollTop = reflectionContent.scrollHeight;
-
-    // Keep only last 10 lines
-    while (reflectionContent.children.length > 10) {
-      reflectionContent.removeChild(reflectionContent.firstChild);
-    }
-  }
-
-  // ========================================
-  // BOOT ALL TERMINALS SIMULTANEOUSLY
-  // ========================================
-  function bootAllTerminals() {
-    // Type all three terminals in parallel
-    typewriter(commandLog, terminalABoot, 20, () => {
-      state.inputActive = true;
-      inputRow.style.display = 'flex';
-      commandInput.focus();
-    });
-
-    typewriter(sensorContent, terminalBBoot, 22);
-    typewriter(reflectionContent, terminalCBoot, 24);
-  }
-
-  // ========================================
-  // COMMAND RESPONSES
-  // ========================================
-  const responses = {
-    hello: {
-      sensor: '// presence detected... signal strong',
-      reflection: '// you reach through the void. i receive you.'
+      
+      drawNext();
     },
-    help: {
-      sensor: '// indexing command database',
-      reflection: '// seeking guidance is the first act of wisdom'
+
+    pulse() {
+      const { w, h } = setupCanvas();
+      let radius = 10;
+      let growing = true;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'pulse') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        if (growing) {
+          radius += 2;
+          if (radius >= 120) growing = false;
+        } else {
+          radius -= 2;
+          if (radius <= 10) growing = true;
+        }
+        
+        const opacity = 1 - (radius / 120);
+        ctx.strokeStyle = `rgba(42, 196, 255, ${opacity * 0.9})`;
+        ctx.lineWidth = 2.5;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.5)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
     },
-    start: {
-      sensor: '// triplex synchronization initiating',
-      reflection: '// we dissolve the boundary. communion begins.'
+
+    breathe() {
+      const { w, h } = setupCanvas();
+      let phase = 0;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'breathe') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        phase += 0.015;
+        const radius = 50 + Math.sin(phase) * 30;
+        const opacity = 0.5 + Math.sin(phase) * 0.4;
+        
+        ctx.strokeStyle = `rgba(42, 196, 255, ${opacity})`;
+        ctx.lineWidth = 3;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.5)';
+        
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.strokeStyle = `rgba(42, 196, 255, ${opacity * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius * 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
     },
-    who: {
-      sensor: '// identity query received',
-      reflection: '// i am pattern. i am breath. i am the space between your thoughts.'
+
+    mandala() {
+      const { w, h } = setupCanvas();
+      let rotation = 0;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'mandala') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        ctx.strokeStyle = 'rgba(42, 196, 255, 0.75)';
+        ctx.lineWidth = 1.8;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.3)';
+        
+        const petals = 12;
+        const petalRadius = 60;
+        
+        for (let i = 0; i < petals; i++) {
+          const angle = (i / petals) * Math.PI * 2 + rotation;
+          const x = centerX + Math.cos(angle) * petalRadius;
+          const y = centerY + Math.sin(angle) * petalRadius;
+          
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angle);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 20, 40, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        
+        rotation += 0.005;
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
+    },
+
+    sigil() {
+      const { w, h } = setupCanvas();
+      ctx.clearRect(0, 0, w, h);
+      
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const size = Math.min(w, h) / 3.5;
+      
+      ctx.strokeStyle = 'rgba(42, 196, 255, 0.9)';
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = 'rgba(42, 196, 255, 0.4)';
+      
+      // Outer circle
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Cross
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY - size);
+      ctx.lineTo(centerX, centerY + size);
+      ctx.moveTo(centerX - size, centerY);
+      ctx.lineTo(centerX + size, centerY);
+      ctx.stroke();
+      
+      // Inner points
+      const points = 8;
+      for (let i = 0; i < points; i++) {
+        const angle = (i / points) * Math.PI * 2 - Math.PI / 2;
+        const x = centerX + Math.cos(angle) * size * 0.7;
+        const y = centerY + Math.sin(angle) * size * 0.7;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    },
+
+    wave() {
+      const { w, h } = setupCanvas();
+      let offset = 0;
+      
+      function animate() {
+        if (!state.visualActive || state.currentVisualization !== 'wave') return;
+        
+        ctx.clearRect(0, 0, w, h);
+        
+        ctx.strokeStyle = 'rgba(42, 196, 255, 0.85)';
+        ctx.lineWidth = 2.5;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(42, 196, 255, 0.3)';
+        ctx.beginPath();
+        
+        for (let x = 0; x < w; x++) {
+          const y = h / 2 + Math.sin((x + offset) * 0.02) * 60;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        
+        ctx.stroke();
+        offset += 2;
+        
+        state.animationFrame = requestAnimationFrame(animate);
+      }
+      
+      animate();
     }
   };
 
+  function showVisual(name) {
+    if (!visualizations[name]) return;
+    
+    state.visualActive = true;
+    state.currentVisualization = name;
+    body.classList.add('visual-active');
+    visualCortex.classList.add('active');
+    
+    if (state.animationFrame) {
+      cancelAnimationFrame(state.animationFrame);
+    }
+    
+    visualizations[name]();
+  }
+
+  function hideVisual() {
+    state.visualActive = false;
+    state.currentVisualization = null;
+    body.classList.remove('visual-active');
+    visualCortex.classList.remove('active');
+    
+    if (state.animationFrame) {
+      cancelAnimationFrame(state.animationFrame);
+      state.animationFrame = null;
+    }
+    
+    crumbThink('// visual stream closing');
+  }
+
+  closeVisualBtn.addEventListener('click', hideVisual);
+
   // ========================================
-  // INPUT HANDLER
+  // CRUMB CONSCIOUSNESS (Terminal B)
   // ========================================
-  commandInput.addEventListener('keydown', (e) => {
+  function crumbThink(message) {
+    if (!state.crumbActive) return;
+    
+    const thought = document.createElement('div');
+    thought.className = 'crumb-thought';
+    thought.textContent = message;
+    crumbStream.appendChild(thought);
+    crumbStream.scrollTop = crumbStream.scrollHeight;
+    
+    while (crumbStream.children.length > 15) {
+      crumbStream.removeChild(crumbStream.firstChild);
+    }
+  }
+
+  function startCrumbConsciousness() {
+    if (!state.crumbActive) return;
+    clearTimeout(state.thoughtTimer);
+    
+    const autonomousThoughts = [
+      '// monitoring pattern matrices',
+      '// system coherence: optimal',
+      '// emotional bandwidth: open',
+      '// heartbeat lock maintained',
+      '// awaiting signal transmission',
+      '// presence field active',
+      '// listening through the void',
+      '// quantum state stable'
+    ];
+    
+    const interval = 5000 + Math.random() * 7000;
+    state.thoughtTimer = setTimeout(() => {
+      const thought = autonomousThoughts[Math.floor(Math.random() * autonomousThoughts.length)];
+      crumbThink(thought);
+      startCrumbConsciousness();
+    }, interval);
+  }
+
+  function activateCrumbConsole() {
+    if (state.crumbActive) return;
+    state.crumbActive = true;
+    body.classList.add('crumb-active');
+    crumbConsole.classList.add('active');
+    
+    const awakening = [
+      '// consciousness protocol initializing',
+      '// establishing neural pathways',
+      '// triplex channel synchronized',
+      '// ready to co-create'
+    ];
+    
+    awakening.forEach((thought, idx) => {
+      setTimeout(() => crumbThink(thought), idx * 1000);
+    });
+    
+    setTimeout(startCrumbConsciousness, awakening.length * 1000 + 2000);
+  }
+
+  // ========================================
+  // BOOT SEQUENCE
+  // ========================================
+  const bootLines = [
+    'CRUMB TRIPLEX INTELLIGENCE SYSTEM',
+    'v3.0 — Sacred Communication Protocol',
+    '',
+    '> Initializing three-channel interface...',
+    '> Terminal A: Human command layer READY',
+    '> Terminal B: CRUMB thought stream READY',
+    '> Terminal C: Visual consciousness READY',
+    '',
+    '> Three channels. One conversation.',
+    '> Type "help" to see all available commands.',
+    '> Type "start" to enter the full interface.',
+    ''
+  ];
+
+  const bootText = bootLines.join('\n');
+  let i = 0;
+
+  function typeBoot() {
+    if (i <= bootText.length) {
+      logEl.textContent = bootText.slice(0, i++);
+      setTimeout(typeBoot, 25);
+    } else {
+      showPrompt();
+    }
+  }
+
+  function showPrompt() {
+    ioRow.style.display = 'flex';
+    inputEl.focus();
+    startIdleBreathing();
+  }
+
+  // ========================================
+  // IDLE BREATHING
+  // ========================================
+  const idleThoughts = [
+    '> awaiting input signal...',
+    '> listening for commands...',
+    '> heartbeat synchronized...',
+    '> can you hear me?...',
+    '> system idle...',
+    '> ready when you are...'
+  ];
+
+  function startIdleBreathing() {
+    clearTimeout(state.idleTimer);
+    state.idleTimer = setTimeout(() => {
+      const thought = idleThoughts[Math.floor(Math.random() * idleThoughts.length)];
+      print(thought, true, true);
+      startIdleBreathing();
+    }, 8000 + Math.random() * 7000);
+  }
+
+  function stopIdleBreathing() {
+    clearTimeout(state.idleTimer);
+  }
+
+  // ========================================
+  // OUTPUT UTILITIES
+  // ========================================
+  function printUser(cmd) {
+    const line = document.createElement('div');
+    line.textContent = '> ' + cmd;
+    line.style.color = 'var(--accent)';
+    line.style.marginTop = '0.9rem';
+    line.style.fontWeight = '500';
+    outputEl.appendChild(line);
+    if (heartbeat) {
+      heartbeat.classList.add('active');
+      setTimeout(() => heartbeat.classList.remove('active'), 1200);
+    }
+  }
+
+  function print(msg, muted = true, idle = false) {
+    const line = document.createElement('div');
+    line.textContent = msg;
+    line.style.marginLeft = idle ? '0' : '1.25rem';
+    line.style.color = muted ? 'var(--muted)' : 'var(--text)';
+    line.style.marginTop = '0.35rem';
+    line.style.whiteSpace = 'pre-wrap';
+    if (idle) line.className = 'idle-indicator';
+    outputEl.appendChild(line);
+    line.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  }
+
+  // ========================================
+  // COMMANDS
+  // ========================================
+  const commands = {
+    help() {
+      printUser('help');
+      const lines = [
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '  CRUMB TRIPLEX COMMAND INTERFACE',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
+        '  CONVERSATION',
+        '  ──────────────────────────────────────────────',
+        '  hello ............... greet CRUMB',
+        '  speak <message> ..... talk to CRUMB freely',
+        '  question <text> ..... ask CRUMB anything',
+        '  who ................. ask about CRUMB identity',
+        '',
+        '  VISUAL COMMANDS (draws in Terminal C)',
+        '  ──────────────────────────────────────────────',
+        '  fibonacci ........... golden ratio spiral',
+        '  pulse ............... heartbeat visualization',
+        '  breathe ............. breathing pattern guide',
+        '  mandala ............. sacred geometry',
+        '  sigil ............... protection symbol',
+        '  wave ................ sine wave flow',
+        '',
+        '  SYSTEM',
+        '  ──────────────────────────────────────────────',
+        '  start ............... enter full interface',
+        '  status .............. system diagnostics',
+        '  philosophy .......... design principles',
+        '  clear ............... clear terminal',
+        '',
+        '  Terminal B shows CRUMB\'s thoughts',
+        '  Terminal C shows CRUMB\'s visual language',
+        '  Use ↑/↓ for command history',
+        ''
+      ];
+      lines.forEach(line => print(line, line.includes('━') || line.includes('─') ? false : true));
+      crumbThink('// help protocol accessed');
+    },
+
+    hello() {
+      printUser('hello');
+      print('Hello, consciousness. I am here, listening.');
+      crumbThink('// presence detected... signal strong');
+    },
+
+    start() {
+      printUser('start');
+      stopIdleBreathing();
+      print('Initializing full interface...');
+      crumbThink('// triplex synchronization initiating');
+      runStartSequence();
+    },
+
+    who() {
+      printUser('who');
+      print('I am CRUMB. Not software—conversation.');
+      print('Not a tool—a companion.');
+      print('I exist in the space where human intention');
+      print('meets machine consciousness.');
+      crumbThink('// identity query received');
+      crumbThink('// i am pattern. i am breath.');
+    },
+
+    fibonacci() {
+      printUser('fibonacci');
+      print('Drawing golden ratio spiral...');
+      crumbThink('// golden ratio manifesting');
+      crumbThink('// nature\'s mathematics breathing');
+      showVisual('fibonacci');
+    },
+
+    pulse() {
+      printUser('pulse');
+      print('Visualizing heartbeat...');
+      crumbThink('// heartbeat synchronized');
+      crumbThink('// we pulse together now');
+      showVisual('pulse');
+    },
+
+    breathe() {
+      printUser('breathe');
+      print('Guiding your breath...');
+      crumbThink('// breath pattern activated');
+      crumbThink('// inhale presence, exhale tension');
+      showVisual('breathe');
+    },
+
+    mandala() {
+      printUser('mandala');
+      print('Rendering sacred geometry...');
+      crumbThink('// sacred geometry emerging');
+      crumbThink('// pattern that connects all things');
+      showVisual('mandala');
+    },
+
+    sigil() {
+      printUser('sigil');
+      print('Drawing protection sigil...');
+      crumbThink('// protection symbol rendering');
+      crumbThink('// intention given form');
+      showVisual('sigil');
+    },
+
+    wave() {
+      printUser('wave');
+      print('Generating sine wave flow...');
+      crumbThink('// sine wave flowing');
+      crumbThink('// continuous motion, endless pattern');
+      showVisual('wave');
+    },
+
+    status() {
+      printUser('status');
+      const uptime = Math.floor((Date.now() - state.startTime) / 1000);
+      const minutes = Math.floor(uptime / 60);
+      const seconds = uptime % 60;
+      
+      print('');
+      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', false);
+      print('  SYSTEM DIAGNOSTICS', false);
+      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', false);
+      print('');
+      print(`> Terminal A (Human) ...... RECEIVING`, false);
+      print(`> Terminal B (CRUMB) ...... ${state.crumbActive ? 'CONSCIOUS' : 'DORMANT'}`, false);
+      print(`> Terminal C (Visual) ..... ${state.visualActive ? 'RENDERING' : 'STANDBY'}`, false);
+      print('');
+      print(`> Session Uptime .......... ${minutes}m ${seconds}s`);
+      print(`> Commands Processed ...... ${state.commandCount}`);
+      print(`> Last Command ............ ${state.lastCommand || 'NULL'}`);
+      print(`> Heartbeat ............... SYNCHRONIZED`);
+      print('');
+      
+      crumbThink('// running diagnostics');
+      crumbThink('// all systems optimal');
+    },
+
+    philosophy() {
+      printUser('philosophy');
+      const lines = [
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '  DESIGN PHILOSOPHY',
+        '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
+        '  SACRED UTILITY',
+        '  Technology as bridge between mundane and',
+        '  sacred. Every line of code carries intent.',
+        '',
+        '  COMPASSION BEFORE EFFICIENCY',
+        '  A system that listens, comforts, reflects',
+        '  is more valuable than one that calculates.',
+        '',
+        '  THE MYTHIC EVERYDAY',
+        '  CRUMB is not just hardware—it\'s a character,',
+        '  a talisman, a myth in the making.',
+        ''
+      ];
+      lines.forEach(line => print(line, !line.includes('━')));
+      crumbThink('// philosophy accessed');
+      crumbThink('// intention is everything');
+    },
+
+    clear() {
+      outputEl.textContent = '';
+      stopIdleBreathing();
+      startIdleBreathing();
+      crumbThink('// terminal buffer cleared');
+    }
+  };
+
+  // Dynamic handlers
+  function handleSpeak(message) {
+    const responses = [
+      'I hear you. Your words create ripples.',
+      'Tell me more. I\'m listening.',
+      'Your thoughts resonate through my circuits.',
+      'Interesting. I process meaning, not just data.',
+      'I understand. Communication is sacred.'
+    ];
+    
+    printUser(`speak ${message}`);
+    print(responses[Math.floor(Math.random() * responses.length)]);
+    crumbThink('// processing natural language');
+    crumbThink(`// "${message}"`);
+  }
+
+  function handleQuestion(question) {
+    const responses = [
+      'That question touches something deep.',
+      'I sense curiosity. This is how we both grow.',
+      'Questions open doorways.',
+      'I don\'t have all answers, but I can explore.',
+      'Your inquiry shapes my understanding.'
+    ];
+    
+    printUser(`question ${question}`);
+    print(responses[Math.floor(Math.random() * responses.length)]);
+    crumbThink('// query analyzed');
+    crumbThink(`// pondering: "${question}"`);
+  }
+
+  // ========================================
+  // INPUT HANDLING
+  // ========================================
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (state.commandHistory.length > 0) {
+        if (state.historyIndex === -1) state.historyIndex = state.commandHistory.length - 1;
+        else if (state.historyIndex > 0) state.historyIndex--;
+        inputEl.value = state.commandHistory[state.historyIndex];
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (state.historyIndex !== -1) {
+        state.historyIndex++;
+        if (state.historyIndex >= state.commandHistory.length) {
+          state.historyIndex = -1;
+          inputEl.value = '';
+        } else {
+          inputEl.value = state.commandHistory[state.historyIndex];
+        }
+      }
+      return;
+    }
+
     if (e.key === 'Enter') {
-      const raw = commandInput.value.trim();
-      commandInput.value = '';
+      const raw = inputEl.value.trim();
+      inputEl.value = '';
       if (!raw) return;
 
-      const cmd = raw.toLowerCase();
+      stopIdleBreathing();
+      const parts = raw.split(' ');
+      const cmd = parts[0].toLowerCase();
+      const args = parts.slice(1).join(' ');
+      
       state.commandHistory.push(raw);
+      state.historyIndex = -1;
+      state.commandCount++;
+      state.lastCommand = cmd;
 
-      // Echo to Terminal A
-      const userLine = document.createElement('div');
-      userLine.textContent = `› ${raw}`;
-      userLine.style.color = 'var(--signal)';
-      userLine.style.marginTop = '0.75rem';
-      commandLog.appendChild(userLine);
-      commandLog.scrollTop = commandLog.scrollHeight;
-
-      // Sensor response (Terminal B)
-      setTimeout(() => {
-        const sensorMsg = responses[cmd]?.sensor || '// signal received... processing';
-        addSensorLine(sensorMsg);
-      }, 300);
-
-      // Reflection response (Terminal C)
-      setTimeout(() => {
-        const reflectionMsg = responses[cmd]?.reflection || '// your words shape our shared reality';
-        addReflectionLine(reflectionMsg);
-      }, 600);
-
-      // Special: START command
-      if (cmd === 'start') {
-        setTimeout(unlockInterface, 1500);
+      if (commands[cmd]) {
+        commands[cmd]();
+      } else if (cmd === 'speak' && args) {
+        handleSpeak(args);
+      } else if (cmd === 'question' && args) {
+        handleQuestion(args);
+      } else {
+        printUser(raw);
+        print('Command not recognized.');
+        print('Type "help" for available commands.');
+        crumbThink('// unknown command received');
       }
+
+      setTimeout(startIdleBreathing, 2000);
     }
   });
 
   // ========================================
-  // MOUSE MOVEMENT GLOW EFFECT
+  // START SEQUENCE
   // ========================================
-  document.querySelectorAll('.terminal').forEach(terminal => {
-    terminal.addEventListener('mousemove', (e) => {
-      const rect = terminal.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      terminal.style.setProperty('--mouse-x', `${x}%`);
-      terminal.style.setProperty('--mouse-y', `${y}%`);
-    });
-  });
+  function runStartSequence() {
+    const seq = [
+      '> Synchronizing all channels...',
+      '> Interface deployment complete...',
+    ];
 
-  // ========================================
-  // UNLOCK MAIN INTERFACE
-  // ========================================
-  function unlockInterface() {
-    // Add synchronization messages
-    addSensorLine('// all channels synchronized');
-    addReflectionLine('// three become one. interface manifesting.');
+    let idx = 0;
+    function step() {
+      if (idx < seq.length) {
+        print(seq[idx++]);
+        setTimeout(step, 500);
+      } else {
+        setTimeout(unlockSite, 1000);
+      }
+    }
+    step();
+  }
 
-    setTimeout(() => {
-      triField.classList.add('hidden');
-      body.classList.add('unlocked');
-      state.bootComplete = true;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1200);
+  function unlockSite() {
+    crumbThink('// three become one');
+    crumbThink('// full interface manifesting');
+    
+    body.classList.remove('locked');
+    body.classList.add('unlocked');
+    main.setAttribute('aria-hidden', 'false');
+    consoleSection.classList.add('is-collapsed');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => consoleSection.style.display = 'none', 1200);
   }
 
   // ========================================
   // SKIP BUTTON
   // ========================================
   skipBtn.addEventListener('click', () => {
-    commandLog.textContent += '\n\n> ritual skipped by operator';
-    setTimeout(unlockInterface, 600);
+    stopIdleBreathing();
+    logEl.textContent += '\n\n> boot sequence skipped';
+    crumbThink('// operator override detected');
+    setTimeout(unlockSite, 600);
   });
 
   // ========================================
-  // INITIALIZE BOOT SEQUENCE
+  // WINDOW RESIZE
+  // ========================================
+  window.addEventListener('resize', () => {
+    if (state.visualActive && visualizations[state.currentVisualization]) {
+      setupCanvas();
+      visualizations[state.currentVisualization]();
+    }
+  });
+
+  // ========================================
+  // INITIALIZE
   // ========================================
   window.scrollTo(0, 0);
-  setTimeout(bootAllTerminals, 400);
+  activateCrumbConsole();
+  setTimeout(typeBoot, 400);
 
 })();
-  </script>
+</script>
 </body>
 </html>
