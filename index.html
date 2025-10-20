@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — V2.54</title>
+  <title>CRUMB — V2.55</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -477,6 +477,52 @@
       color: var(--signal);
     }
 
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 2.5rem;
+    }
+
+    .product-card {
+      background: rgba(15, 15, 15, 0.7);
+      border: 1px solid rgba(214, 164, 71, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border 0.3s, transform 0.3s;
+      border-radius: 4px;
+    }
+
+    .product-card:hover {
+      border-color: var(--signal);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px var(--signal-glow);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+    }
+
+    .product-card h4 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 1.5rem 1.5rem 0.5rem;
+      letter-spacing: -0.01em;
+      color: var(--illumination);
+    }
+
+    .product-card p {
+      color: rgba(242, 237, 231, 0.6);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0 1.5rem 1.5rem;
+    }
+
     .cta-row {
       display: flex;
       gap: 1rem;
@@ -544,7 +590,7 @@
 </head>
 <body>
 
-  <button id="skipBoot" class="skip-btn">Skip Terminal</button>
+  <button id="skipBoot" class="skip-btn">Skip Ritual</button>
 
   <div id="tri-terminal-field">
     <!-- Terminal A: Your Commands -->
@@ -575,7 +621,7 @@
     <div id="terminal-c" class="terminal">
       <div class="terminal-header">
         <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal C — CRUMB Visual Language</div>
+        <div class="terminal-title">Terminal C — Visual Language</div>
       </div>
       <div class="terminal-content">
         <canvas id="visualCanvas"></canvas>
@@ -603,10 +649,11 @@
           <ul>
             <li><a href="#mission">Mission</a></li>
             <li><a href="#about">About</a></li>
+            <li><a href="#products">Products</a></li>
             <li><a href="#involve">Get Involved</a></li>
           </ul>
         </nav>
-        <img src="Gemini_Generated_Image_tbdb5ktbdb5ktbdb.png' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" class="header-logo" />
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" class="header-logo" />
       </div>
     </header>
 
@@ -620,7 +667,7 @@
         </div>
       </div>
       <div class="hero-figure">
-        <img src="Gemini_Generated_Image_tbdb5ktbdb5ktbdb.png' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Interface" style="width:100%;max-width:420px;filter:brightness(0) invert(0.9) drop-shadow(0 0 20px rgba(214,164,71,0.25));animation:presence 6s ease-in-out infinite" />
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="Interface" style="width:100%;max-width:420px;filter:brightness(0) invert(0.9) drop-shadow(0 0 20px rgba(214,164,71,0.25));animation:presence 6s ease-in-out infinite" />
       </div>
     </section>
 
@@ -638,6 +685,28 @@
         <li><strong>💊 Reminders:</strong> Set once. Daily pulse. Button to confirm.</li>
         <li><strong>🔗 Contact Sharing:</strong> Tap two CRUMBs together. NFC transfer. No permissions.</li>
       </ul>
+    </section>
+
+    <section id="products">
+      <h3>Products</h3>
+      <p>Three forms. Same intention.</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src="https://via.placeholder.com/400x240/0A0A0A/D6A447?text=Genesis" alt="CRUMB Genesis">
+          <h4>CRUMB Genesis</h4>
+          <p>Pocket-sized. Calculator shell. Voice-responsive, pattern-learning. Built to last.</p>
+        </div>
+        <div class="product-card">
+          <img src="https://via.placeholder.com/400x240/0A0A0A/4C9F9E?text=Cell" alt="CRUMB Cell">
+          <h4>CRUMB Cell</h4>
+          <p>Touch-responsive. Local AI. Offline, private. Presence without surveillance.</p>
+        </div>
+        <div class="product-card">
+          <img src="https://via.placeholder.com/400x240/0A0A0A/D6A447?text=Grove" alt="CRUMB Grove">
+          <h4>CRUMB Grove</h4>
+          <p>Room-scale. Light, motion, sound. The environment becomes aware.</p>
+        </div>
+      </div>
     </section>
 
     <section id="involve">
