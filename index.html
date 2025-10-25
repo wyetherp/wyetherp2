@@ -1,11 +1,10 @@
-<!-- Greetings Traveler. I see you know how to inspect element! Welcome to my code, feel free to explore. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — V2.58</title>
+  <title>CRUMB — V2.59</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -31,6 +30,7 @@
 
     body {
       background: radial-gradient(circle at 50% 10%, #0f0f0f 0%, var(--void) 100%);
+      background-attachment: fixed;
       color: var(--illumination);
       font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
       line-height: 1.6;
@@ -39,6 +39,12 @@
       -moz-osx-font-smoothing: grayscale;
       overflow: hidden;
       min-height: 100vh;
+    }
+
+    /* Allow scrolling after ritual completion */
+    body.unlocked {
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     /* Accessibility: Larger text option */
@@ -353,6 +359,8 @@
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.8s ease, transform 0.8s ease;
+      position: relative;
+      z-index: 1;
     }
 
     body.unlocked .main-site {
