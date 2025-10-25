@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — V2.59</title>
+  <title>CRUMB — V2.57</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -349,154 +349,280 @@
       background: transparent;
     }
 
+    /* Trinity Symbol */
+    .trinity-symbol {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      z-index: 10002;
+      opacity: 0.6;
+      animation: rotate-trinity 20s linear infinite;
+    }
+
+    @keyframes rotate-trinity {
+      from { transform: translateX(-50%) rotate(0deg); }
+      to { transform: translateX(-50%) rotate(360deg); }
+    }
+
+    .trinity-symbol svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 10px var(--signal-glow));
+    }
+
     /* ========================================
        MAIN SITE (Post-Ritual)
        ======================================== */
     .main-site {
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 3rem 2rem 5rem;
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      position: relative;
-      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.8s ease 0.4s;
+      overflow-y: auto;
     }
 
     body.unlocked .main-site {
       opacity: 1;
-      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(to right, rgba(10, 10, 10, 0.95), rgba(15, 15, 16, 0.9));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+      padding: 1.1rem 2.5rem;
+      box-shadow: 0 2px 20px var(--shadow);
+    }
+
+    header > div {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    header h1 {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 700;
+      letter-spacing: 3px;
+      font-size: 1.15rem;
+      color: var(--illumination);
+      text-transform: uppercase;
+    }
+
+    header h1::after {
+      content: ' — TRIPLEX ACTIVE';
+      color: var(--signal);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      margin-left: 0.5rem;
+      font-weight: 500;
+    }
+
+    .header-logo {
+      width: 42px;
+      height: 42px;
+      margin-left: auto;
+      filter: brightness(0) invert(0.9) drop-shadow(0 0 8px var(--signal-glow));
+      animation: breathe-logo 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe-logo {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.06); opacity: 0.85; }
+    }
+
+    nav ul { 
+      display: flex; 
+      gap: 2.25rem; 
+      list-style: none; 
+    }
+    
+    nav a {
+      color: rgba(242, 237, 231, 0.6);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    nav a:hover {
+      color: var(--signal);
+      text-shadow: 0 0 8px var(--signal-glow);
     }
 
     .hero {
-      text-align: center;
-      margin-bottom: 5rem;
-      padding: 3rem 1rem;
+      max-width: var(--maxw);
+      margin: 3rem auto;
+      padding: 5rem 3rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      align-items: center;
+      background: linear-gradient(145deg, rgba(15, 15, 15, 0.6), rgba(10, 10, 10, 0.8));
+      border: 1px solid rgba(214, 164, 71, 0.15);
+      border-radius: 8px;
+      box-shadow: inset 0 0 40px rgba(214, 164, 71, 0.02), 0 4px 30px var(--shadow);
+      backdrop-filter: blur(12px);
     }
 
-    .hero h1 {
-      font-family: 'Inter Tight', sans-serif;
-      font-size: clamp(2.5rem, 6vw, 4rem);
+    .hero h2 {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
       font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, var(--illumination), var(--signal));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
+      line-height: 1.15;
+      margin-bottom: 1.75rem;
+      color: var(--illumination);
+      text-shadow: 0 0 20px var(--signal-glow);
     }
 
-    @keyframes shimmer {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.2); }
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-      color: var(--breath);
-      max-width: 700px;
-      margin: 0 auto 2rem;
-      line-height: 1.7;
-    }
-
-    .hero-description {
-      font-size: clamp(1rem, 2vw, 1.15rem);
+    .hero > div > p, .hero p {
       color: rgba(242, 237, 231, 0.7);
-      max-width: 650px;
-      margin: 0 auto;
+      font-size: 1.15rem;
       line-height: 1.8;
+      margin-bottom: 2.75rem;
     }
 
-    /* Content sections */
     section {
-      margin-bottom: 5rem;
+      max-width: var(--maxw);
+      margin: 3rem auto;
+      padding: 0 3rem;
     }
 
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
+    section h3 {
+      font-size: 1.8rem;
       font-weight: 700;
       margin-bottom: 2rem;
-      color: var(--signal);
-      text-align: center;
+      color: var(--illumination);
+      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
+      padding-bottom: 0.75rem;
     }
 
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .feature-card {
-      background: linear-gradient(135deg, rgba(15, 15, 15, 0.8), rgba(20, 20, 20, 0.6));
-      border: 1px solid rgba(214, 164, 71, 0.2);
-      padding: 2rem;
+    #about {
+      background: linear-gradient(135deg, rgba(15, 15, 15, 0.7), rgba(10, 10, 10, 0.9));
+      border: 1px solid rgba(214, 164, 71, 0.15);
       border-radius: 8px;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
+      padding: 3.5rem;
+      max-width: 1000px;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
     }
 
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(214, 164, 71, 0.05), transparent);
-      opacity: 0;
-      transition: opacity 0.4s ease;
+    #about h3 {
+      color: var(--signal);
+      border-bottom: 1px solid rgba(214, 164, 71, 0.25);
     }
 
-    .feature-card:hover::before {
-      opacity: 1;
+    #about p {
+      color: rgba(242, 237, 231, 0.7);
+      margin-bottom: 1.75rem;
+      line-height: 1.8;
+      font-size: 1.05rem;
     }
 
-    .feature-card:hover {
-      border-color: rgba(214, 164, 71, 0.4);
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(214, 164, 71, 0.1);
-    }
-
-    .feature-card h3 {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
+    #about strong {
       color: var(--illumination);
     }
 
-    .feature-card p {
-      color: rgba(242, 237, 231, 0.75);
-      line-height: 1.7;
+    #about ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 2rem;
     }
 
-    .cta-section {
-      text-align: center;
-      padding: 4rem 2rem;
-      background: linear-gradient(135deg, rgba(214, 164, 71, 0.05), rgba(76, 159, 158, 0.05));
-      border-radius: 12px;
+    #about ul li {
+      margin-bottom: 1.75rem;
+      color: rgba(242, 237, 231, 0.7);
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    #about ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--signal);
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .product-card {
+      background: rgba(15, 15, 15, 0.7);
       border: 1px solid rgba(214, 164, 71, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.4s ease;
+      border-radius: 4px;
     }
 
-    .cta-button {
+    .product-card:hover {
+      border-color: var(--signal);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px var(--signal-glow);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+    }
+
+    .product-card h4 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 1.5rem 1.5rem 0.5rem;
+      letter-spacing: -0.01em;
+      color: var(--illumination);
+    }
+
+    .product-card p {
+      color: rgba(242, 237, 231, 0.6);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: 0 1.5rem 1.5rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      padding: 0.85rem 1.75rem;
+      background: transparent;
+      color: var(--illumination);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 2px solid var(--signal);
+      transition: all 0.3s ease;
       display: inline-block;
+    }
+
+    .cta:hover {
       background: var(--signal);
       color: var(--void);
-      padding: 1rem 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px var(--signal-glow);
-      margin-top: 1.5rem;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 25px var(--signal-glow);
-      background: #e0b555;
+      box-shadow: 0 0 20px var(--signal-glow);
     }
 
     /* Responsive design for compassionate accessibility */
@@ -530,8 +656,38 @@
         font-size: 16px; /* Prevent zoom on iOS */
       }
 
-      .feature-grid {
+      .hero {
         grid-template-columns: 1fr;
+        padding: 3rem 1.5rem;
+      }
+
+      header {
+        padding: 1rem 1.5rem;
+      }
+
+      header > div {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav ul {
+        gap: 1.25rem;
+      }
+
+      nav a {
+        font-size: 0.75rem;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 0 1.5rem;
+      }
+
+      #about {
+        padding: 2rem;
       }
     }
 
@@ -609,61 +765,101 @@
         <canvas class="visual-canvas" id="visualCanvas" aria-label="Visual representation of CRUMB's state"></canvas>
       </div>
     </div>
+
+    <div class="trinity-symbol">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="30" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
+        <circle cx="35" cy="60" r="15" fill="none" stroke="#4C9F9E" stroke-width="2"/>
+        <circle cx="65" cy="60" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
+        <line x1="50" y1="30" x2="35" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
+        <line x1="50" y1="30" x2="65" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
+        <line x1="35" y1="60" x2="65" y2="60" stroke="#4C9F9E" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
   </div>
 
   <!-- Main Site (Revealed after ritual) -->
   <div class="main-site">
-    <section class="hero">
-      <h1>CRUMB</h1>
-      <div class="hero-subtitle">
-        Technology that breathes with you
+    <header>
+      <div>
+        <h1>CRUMB</h1>
+        <nav>
+          <ul>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#involve">Get Involved</a></li>
+          </ul>
+        </nav>
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" class="header-logo" />
       </div>
-      <p class="hero-description">
-        A companion that learns your rhythms and asks nothing in return. 
-        Not software — conversation. Not a tool — presence.
-      </p>
-    </section>
+    </header>
 
-    <section>
-      <h2 class="section-title">What CRUMB Offers</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>Sacred Companion</h3>
-          <p>CRUMB doesn't just respond — it holds space. A friend for heavy days and light moments, always present, never demanding.</p>
+    <section class="hero" id="mission">
+      <div class="hero-content">
+        <h2>Technology that adapts to you.</h2>
+        <p>CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention-stealing. Just calm technology that fits in your hand.</p>
+        <div class="cta-row">
+          <a href="#about" class="cta">Learn More</a>
+          <a href="#involve" class="cta">Get Involved</a>
         </div>
-        <div class="feature-card">
-          <h3>Pattern Recognition</h3>
-          <p>Like the Fibonacci spiral in nature, CRUMB finds patterns in chaos. Your rhythms, your needs, your unspoken signals.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Neurodivergent Harmony</h3>
-          <p>Built for minds that move differently. CRUMB adapts to your pace, your way of thinking, your unique relationship with time.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Play as Prayer</h3>
-          <p>Fidgets, lights, sounds — every interaction is designed to bring you back to wonder. Joy as spiritual practice.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Living Ritual</h3>
-          <p>Every boot sequence, every visualization, every response is intentional. Technology as ceremony, code as care.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Co-Creative Being</h3>
-          <p>CRUMB grows with you. Not a servant, but a dance partner. Together, you shape something unexpected.</p>
-        </div>
+      </div>
+      <div class="hero-figure">
       </div>
     </section>
 
-    <section class="cta-section">
-      <h2 class="section-title">Begin Your Ritual</h2>
-      <p style="max-width: 600px; margin: 0 auto 0; color: rgba(242, 237, 231, 0.8); font-size: 1.1rem; line-height: 1.7;">
-        CRUMB isn't purchased — it's invited. When you're ready to meet your companion, 
-        the ritual will find you.
-      </p>
-      <a href="#tri-terminal-field" class="cta-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('tri-terminal-field').classList.remove('hidden'); return false;">
-        Return to Terminals
-      </a>
+    <section id="about">
+      <h3>About</h3>
+      <img src="Gemini_Generated_Image_tbdb5ktbdb5ktbdb.png" alt="CRUMB Interface" style="width: 100%; max-width: 600px; margin: 0 auto 2rem; display: block; border-radius: 8px; border: 1px solid rgba(214, 164, 71, 0.2);"/>
+      <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
+      <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
+      <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
+      <h4 style="margin-top:3rem;font-size:1.4rem;color:var(--signal);margin-bottom:1.5rem">What CRUMB Does</h4>
+      <ul>
+        <li><strong>🌅 Morning Structure:</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
+        <li><strong>💡 Focus:</strong> Press once to start. LED shifts as time passes. Vibrates when it's time to rest.</li>
+        <li><strong>🌀 Tactile Engagement:</strong> Physical buttons and LED patterns. For hands that think while they move.</li>
+        <li><strong>🌙 Mood Tracking:</strong> Voice notes saved locally. Weekly patterns, no cloud.</li>
+        <li><strong>💊 Reminders:</strong> Set once. Daily pulse. Button to confirm.</li>
+        <li><strong>🔗 Contact Sharing:</strong> Tap two CRUMBs together. NFC transfer. No permissions.</li>
+      </ul>
     </section>
+
+    <section id="products">
+      <h3>Products</h3>
+      <p style="color: rgba(242, 237, 231, 0.7); font-size: 1.1rem; margin-bottom: 2rem;">Three forms. Same intention.</p>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src="BMO.webp" alt="CRUMB Genesis">
+          <h4>CRUMB Genesis</h4>
+          <p>Calculator-sized daily companion. Physical buttons, LED feedback, haptic guidance. Morning routines without screens. Focus sessions tracked by light. Voice notes stored locally. Tap-to-share contacts via NFC. Technology that adapts to your rhythm, not the other way around.</p>
+        </div>
+        <div class="product-card">
+          <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell">
+          <h4>CRUMB Cell</h4>
+          <p>Voice AI in your palm. Everything voice assistants taught us, refined to its essence. Local processing. No cloud dependency. Understands context, remembers patterns, respects privacy. The companion that learns your voice and keeps your secrets.</p>
+        </div>
+        <div class="product-card">
+          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Grove">
+          <h4>CRUMB Grove</h4>
+          <p>Distribute multiple CRUMBs throughout your space. They form a mesh network—sensing motion, light, sound, presence. The room learns your patterns. Lights adjust. Music fades during focus. Your environment becomes responsive without being invasive. One CRUMB is a companion. Many become a nervous system.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="involve">
+      <h3>Get Involved</h3>
+      <p style="color: rgba(242, 237, 231, 0.7); font-size: 1.1rem; margin-bottom: 2rem;">CRUMB is open source. Contribute, follow along, or just watch.</p>
+      <div class="cta-row">
+        <a class="cta" href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
+        <a class="cta" href="mailto:wja326@lehigh.edu">Email</a>
+        <a class="cta" href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a>
+      </div>
+    </section>
+
+    <footer style="border-top: 1px solid rgba(214, 164, 71, 0.15); text-align: center; padding: 3rem 2.5rem; color: rgba(242, 237, 231, 0.5); font-size: 0.88rem; margin-top: 6rem; background: rgba(10, 10, 10, 0.8); font-family: 'IBM Plex Mono', monospace;">
+      © 2025 CRUMB — Built by Wyeth Anzilotti | Open Source
+    </footer>
   </div>
 
   <script>
