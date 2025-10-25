@@ -1,10 +1,11 @@
+<!-- Greetings Traveler. I see you know how to inspect element! Welcome to my code, feel free to explore. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="CRUMB - Technology that breathes with you. A companion that learns your rhythms and asks nothing in return."/>
-  <title>CRUMB — V2.57</title>
+  <title>CRUMB — V2.58</title>
   
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -20,6 +21,10 @@
       --signal-glow: rgba(214, 164, 71, 0.3);
       --breath-glow: rgba(76, 159, 158, 0.2);
       --maxw: 1400px;
+      
+      /* Accessibility enhancements */
+      --base-font-size: 16px;
+      --terminal-padding: 2rem;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,15 +34,24 @@
       color: var(--illumination);
       font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
       line-height: 1.6;
-      font-size: 16px;
+      font-size: var(--base-font-size);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow: hidden;
       min-height: 100vh;
     }
 
+    /* Accessibility: Larger text option */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     /* ========================================
-       TRI-TERMINAL FIELD (War Room Style)
+       TRI-TERMINAL FIELD (Sacred Geometry)
        ======================================== */
     #tri-terminal-field {
       position: fixed;
@@ -46,11 +60,13 @@
       right: 0;
       bottom: 0;
       display: grid;
-      grid-template-rows: 50% 50%;
+      /* Terminal A takes 65% of height for better conversation flow */
+      grid-template-rows: 65% 35%;
       grid-template-columns: 50% 50%;
       z-index: 10000;
       background: var(--void);
       transition: opacity 1.2s ease, visibility 1.2s ease;
+      gap: 0;
     }
 
     #tri-terminal-field.hidden {
@@ -59,36 +75,62 @@
       pointer-events: none;
     }
 
-    /* Skip Button */
+    /* Skip Button - Enhanced visibility */
     .skip-btn {
       position: fixed;
       top: 1.5rem;
       right: 1.5rem;
-      background: rgba(214, 164, 71, 0.08);
-      border: 1px solid var(--signal);
+      background: rgba(214, 164, 71, 0.12);
+      border: 1.5px solid var(--signal);
       color: var(--signal);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 0.6rem 1.2rem;
+      padding: 0.75rem 1.5rem;
       cursor: pointer;
       transition: all 0.3s ease;
       z-index: 10001;
       backdrop-filter: blur(8px);
-      box-shadow: 0 0 15px var(--signal-glow);
+      box-shadow: 0 0 20px var(--signal-glow);
+      border-radius: 2px;
     }
     .skip-btn:hover, .skip-btn:focus {
       background: var(--signal);
       color: var(--void);
-      outline: none;
-      box-shadow: 0 0 25px var(--signal-glow);
+      outline: 2px solid var(--signal);
+      outline-offset: 3px;
+      box-shadow: 0 0 30px var(--signal-glow);
       transform: translateY(-2px);
+    }
+
+    /* Gentle welcome message - appears before boot */
+    .welcome-whisper {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 1.1rem;
+      color: var(--illumination);
+      text-align: center;
+      z-index: 10002;
+      opacity: 0;
+      animation: whisperIn 3s ease-in-out forwards;
+      pointer-events: none;
+      max-width: 80%;
+    }
+
+    @keyframes whisperIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+      30% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05); }
     }
 
     /* Terminal Base */
     .terminal {
-      border: 1px solid rgba(214, 164, 71, 0.15);
+      border: 1px solid rgba(214, 164, 71, 0.2);
       background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(15, 15, 15, 0.85));
       backdrop-filter: blur(10px);
       display: flex;
@@ -104,10 +146,10 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(214, 164, 71, 0.03), transparent 60%);
+      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(214, 164, 71, 0.05), transparent 60%);
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.6s ease;
     }
 
     .terminal:hover::before {
@@ -115,9 +157,9 @@
     }
 
     .terminal-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
-      background: rgba(5, 5, 5, 0.6);
+      padding: 1.25rem var(--terminal-padding);
+      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
+      background: rgba(5, 5, 5, 0.7);
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -125,7 +167,7 @@
 
     .terminal-title {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--signal);
@@ -136,12 +178,12 @@
     }
 
     .status-indicator {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--signal);
       animation: breathe-pulse 2.5s ease-in-out infinite;
-      box-shadow: 0 0 8px var(--signal-glow);
+      box-shadow: 0 0 10px var(--signal-glow);
     }
 
     @keyframes breathe-pulse {
@@ -151,98 +193,128 @@
 
     .terminal-content {
       flex: 1;
-      padding: 1.5rem;
+      padding: var(--terminal-padding);
       overflow-y: auto;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
-      line-height: 1.7;
+      font-size: 0.95rem;
+      line-height: 1.8;
       color: var(--illumination);
       position: relative;
     }
 
-    .terminal-content::-webkit-scrollbar { width: 4px; }
+    .terminal-content::-webkit-scrollbar { width: 6px; }
     .terminal-content::-webkit-scrollbar-track { background: transparent; }
-    .terminal-content::-webkit-scrollbar-thumb { background: rgba(214, 164, 71, 0.2); border-radius: 2px; }
+    .terminal-content::-webkit-scrollbar-thumb { 
+      background: rgba(214, 164, 71, 0.3); 
+      border-radius: 3px;
+      transition: background 0.3s ease;
+    }
+    .terminal-content::-webkit-scrollbar-thumb:hover { 
+      background: rgba(214, 164, 71, 0.5); 
+    }
 
-    /* Terminal A — Command (Top 50%) */
+    /* Terminal A — Command Portal (Top 65%) */
     #terminal-a {
       grid-row: 1 / 2;
       grid-column: 1 / 3;
-      border-bottom: 2px solid rgba(214, 164, 71, 0.2);
+      border-bottom: 2px solid rgba(214, 164, 71, 0.25);
       animation: glow-border-a 3s ease-in-out infinite alternate;
     }
 
     @keyframes glow-border-a {
-      from { border-bottom-color: rgba(214, 164, 71, 0.15); }
-      to { border-bottom-color: rgba(214, 164, 71, 0.35); }
+      from { border-bottom-color: rgba(214, 164, 71, 0.2); }
+      to { border-bottom-color: rgba(214, 164, 71, 0.4); }
     }
 
     .command-log {
       white-space: pre-wrap;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       text-shadow: 0 0 3px rgba(214, 164, 71, 0.1);
+      min-height: 200px;
+    }
+
+    /* Gentle guidance hint */
+    .guidance-hint {
+      display: inline-block;
+      color: var(--breath);
+      font-size: 0.85rem;
+      opacity: 0;
+      animation: gentleGuidance 4s ease-in-out 2s forwards;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+
+    @keyframes gentleGuidance {
+      0% { opacity: 0; transform: translateY(-5px); }
+      20% { opacity: 0.6; transform: translateY(0); }
+      80% { opacity: 0.6; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(5px); }
     }
 
     .command-input-row {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(214, 164, 71, 0.1);
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(214, 164, 71, 0.15);
     }
 
     .prompt {
       color: var(--signal);
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
+      text-shadow: 0 0 8px var(--signal-glow);
     }
 
     .command-input {
       flex: 1;
-      background: rgba(214, 164, 71, 0.04);
+      background: rgba(214, 164, 71, 0.06);
       border: none;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.3);
+      border-bottom: 2px solid rgba(214, 164, 71, 0.3);
       color: var(--illumination);
       outline: none;
-      padding: 0.5rem 0.75rem;
+      padding: 0.75rem 1rem;
       font: inherit;
+      font-size: 1rem;
       transition: all 0.3s ease;
       caret-color: var(--signal);
+      border-radius: 2px 2px 0 0;
     }
 
     .command-input::placeholder {
-      color: rgba(242, 237, 231, 0.4);
+      color: rgba(242, 237, 231, 0.35);
       font-style: italic;
     }
 
     .command-input:focus {
       border-bottom-color: var(--signal);
-      box-shadow: 0 2px 0 var(--signal-glow);
-      background: rgba(214, 164, 71, 0.06);
+      box-shadow: 0 3px 0 var(--signal-glow);
+      background: rgba(214, 164, 71, 0.08);
     }
 
     /* Terminal B — CRUMB Thoughts (Bottom Left) */
     #terminal-b {
       grid-row: 2 / 3;
       grid-column: 1 / 2;
-      border-right: 1px solid rgba(214, 164, 71, 0.15);
+      border-right: 1px solid rgba(214, 164, 71, 0.2);
       animation: glow-subtle-b 4s ease-in-out infinite alternate;
     }
 
     @keyframes glow-subtle-b {
       from { box-shadow: inset 0 0 20px rgba(76, 159, 158, 0.05); }
-      to { box-shadow: inset 0 0 30px rgba(76, 159, 158, 0.12); }
+      to { box-shadow: inset 0 0 35px rgba(76, 159, 158, 0.12); }
     }
 
     #terminal-b .terminal-title { color: var(--breath); }
-    #terminal-b .status-indicator { background: var(--breath); box-shadow: 0 0 8px var(--breath-glow); }
+    #terminal-b .status-indicator { background: var(--breath); box-shadow: 0 0 10px var(--breath-glow); }
 
     .thought-line {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       color: var(--breath);
       opacity: 0;
-      animation: fadeIn 0.4s ease-out forwards;
+      animation: fadeIn 0.5s ease-out forwards;
+      font-size: 0.9rem;
     }
 
     @keyframes fadeIn {
@@ -250,7 +322,7 @@
       to { opacity: 0.85; transform: translateX(0); }
     }
 
-    /* Terminal C — Visual Canvas (Bottom Right) */
+    /* Terminal C — Visual Cortex (Bottom Right) */
     #terminal-c {
       grid-row: 2 / 3;
       grid-column: 2 / 3;
@@ -258,697 +330,545 @@
     }
 
     @keyframes glow-subtle-c {
-      from { box-shadow: inset 0 0 20px rgba(214, 164, 71, 0.03); }
+      from { box-shadow: inset 0 0 20px rgba(214, 164, 71, 0.04); }
       to { box-shadow: inset 0 0 30px rgba(214, 164, 71, 0.08); }
     }
 
-    #terminal-c .terminal-title { color: var(--signal); }
+    #terminal-c .terminal-content { padding: 0; overflow: hidden; }
 
-    #visualCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .visual-canvas {
       width: 100%;
       height: 100%;
-      background: #000;
-      background-image:
-        linear-gradient(rgba(214,164,71,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(214,164,71,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      background-position: -1px -1px;
+      display: block;
+      background: transparent;
     }
 
-    /* Trinity Symbol */
-    .trinity-symbol {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 50px;
-      z-index: 10002;
-      opacity: 0.6;
-      animation: rotate-trinity 20s linear infinite;
-    }
-
-    @keyframes rotate-trinity {
-      from { transform: translateX(-50%) rotate(0deg); }
-      to { transform: translateX(-50%) rotate(360deg); }
-    }
-
-    .trinity-symbol svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 10px var(--signal-glow));
-    }
-
-    /* Main Content (Post-Boot) */
-    .main-content {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.8s ease 0.4s;
-      overflow-y: auto;
-      height: 100vh;
-    }
-
-    body.unlocked {
-      overflow-y: auto;
-    }
-
-    body.unlocked .main-content {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: linear-gradient(to right, rgba(10, 10, 10, 0.95), rgba(15, 15, 16, 0.9));
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
-      padding: 1.1rem 2.5rem;
-      box-shadow: 0 2px 20px var(--shadow);
-    }
-
-    header > div {
+    /* ========================================
+       MAIN SITE (Post-Ritual)
+       ======================================== */
+    .main-site {
       max-width: var(--maxw);
       margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 2.5rem;
+      padding: 3rem 2rem 5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
-    header h1 {
-      font-family: 'Inter Tight', sans-serif;
-      font-weight: 700;
-      letter-spacing: 3px;
-      font-size: 1.15rem;
-      color: var(--illumination);
-      text-transform: uppercase;
-    }
-
-    header h1::after {
-      content: ' — TRIPLEX ACTIVE';
-      color: var(--signal);
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      margin-left: 0.5rem;
-      font-weight: 500;
-    }
-
-    .header-logo {
-      width: 42px;
-      height: 42px;
-      margin-left: auto;
-      filter: brightness(0) invert(0.9) drop-shadow(0 0 8px var(--signal-glow));
-      animation: breathe-logo 4s ease-in-out infinite;
-    }
-
-    @keyframes breathe-logo {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.06); opacity: 0.85; }
-    }
-
-    nav ul { display: flex; gap: 2.25rem; list-style: none; }
-    nav a {
-      color: rgba(242, 237, 231, 0.6);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-    }
-
-    nav a:hover {
-      color: var(--signal);
-      text-shadow: 0 0 8px var(--signal-glow);
+    body.unlocked .main-site {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .hero {
-      max-width: var(--maxw);
-      margin: 3rem auto;
-      padding: 5rem 3rem 6rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4.5rem;
-      align-items: center;
-      background: linear-gradient(145deg, rgba(15, 15, 15, 0.6), rgba(10, 10, 10, 0.8));
-      border: 1px solid rgba(214, 164, 71, 0.15);
-      border-radius: 8px;
-      box-shadow: inset 0 0 40px rgba(214, 164, 71, 0.02), 0 4px 30px var(--shadow);
-      backdrop-filter: blur(12px);
+      text-align: center;
+      margin-bottom: 5rem;
+      padding: 3rem 1rem;
     }
 
-    .hero h2 {
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
+    .hero h1 {
+      font-family: 'Inter Tight', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
       font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1.75rem;
-      color: var(--illumination);
-      text-shadow: 0 0 20px var(--signal-glow);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--illumination), var(--signal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
     }
 
-    .hero > p {
+    @keyframes shimmer {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.2); }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--breath);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-description {
+      font-size: clamp(1rem, 2vw, 1.15rem);
       color: rgba(242, 237, 231, 0.7);
-      font-size: 1.15rem;
+      max-width: 650px;
+      margin: 0 auto;
       line-height: 1.8;
-      margin-bottom: 2.75rem;
     }
 
+    /* Content sections */
     section {
-      max-width: var(--maxw);
-      margin: 3rem auto;
-      padding: 0 3rem;
+      margin-bottom: 5rem;
     }
 
-    section h3 {
-      font-size: 1.8rem;
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
       font-weight: 700;
       margin-bottom: 2rem;
-      color: var(--illumination);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
-      padding-bottom: 0.75rem;
-    }
-
-    #about {
-      background: linear-gradient(135deg, rgba(15, 15, 15, 0.7), rgba(10, 10, 10, 0.9));
-      border: 1px solid rgba(214, 164, 71, 0.15);
-      border-radius: 8px;
-      padding: 3.5rem;
-      max-width: 1000px;
-      backdrop-filter: blur(12px);
-      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
-    }
-
-    #about h3 {
       color: var(--signal);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.25);
+      text-align: center;
     }
 
-    #about p {
-      color: rgba(242, 237, 231, 0.7);
-      margin-bottom: 1.75rem;
-    }
-
-    #about strong {
-      color: var(--illumination);
-    }
-
-    #about ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 2rem;
-    }
-
-    #about ul li {
-      margin-bottom: 1.75rem;
-      color: rgba(242, 237, 231, 0.7);
-      padding-left: 1.5rem;
-      position: relative;
-    }
-
-    #about ul li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--signal);
-    }
-
-    /* Products Grid */
-    .products-grid {
+    .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 2.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
     }
 
-    .product-card {
-      background: rgba(15, 15, 15, 0.7);
-      border: 1px solid rgba(214, 164, 71, 0.15);
+    .feature-card {
+      background: linear-gradient(135deg, rgba(15, 15, 15, 0.8), rgba(20, 20, 20, 0.6));
+      border: 1px solid rgba(214, 164, 71, 0.2);
+      padding: 2rem;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+      position: relative;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border 0.3s, transform 0.3s;
-      border-radius: 4px;
     }
 
-    .product-card:hover {
-      border-color: var(--signal);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px var(--signal-glow);
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(214, 164, 71, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
-    .product-card img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+    .feature-card:hover::before {
+      opacity: 1;
     }
 
-    .product-card h4 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin: 1.5rem 1.5rem 0.5rem;
-      letter-spacing: -0.01em;
+    .feature-card:hover {
+      border-color: rgba(214, 164, 71, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(214, 164, 71, 0.1);
+    }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
       color: var(--illumination);
     }
 
-    .product-card p {
-      color: rgba(242, 237, 231, 0.6);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin: 0 1.5rem 1.5rem;
+    .feature-card p {
+      color: rgba(242, 237, 231, 0.75);
+      line-height: 1.7;
     }
 
-    .cta-row {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2.5rem;
+    .cta-section {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(135deg, rgba(214, 164, 71, 0.05), rgba(76, 159, 158, 0.05));
+      border-radius: 12px;
+      border: 1px solid rgba(214, 164, 71, 0.15);
     }
 
-    .cta {
-      padding: 0.85rem 1.75rem;
-      background: transparent;
-      color: var(--illumination);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: 2px solid var(--signal);
-      transition: all 0.3s ease;
-    }
-
-    .cta:hover {
+    .cta-button {
+      display: inline-block;
       background: var(--signal);
       color: var(--void);
-      box-shadow: 0 0 20px var(--signal-glow);
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px var(--signal-glow);
+      margin-top: 1.5rem;
     }
 
-    footer {
-      border-top: 1px solid rgba(214, 164, 71, 0.15);
-      text-align: center;
-      padding: 3rem 2.5rem;
-      color: rgba(242, 237, 231, 0.5);
-      font-size: 0.88rem;
-      margin-top: 6rem;
-      background: rgba(10, 10, 10, 0.8);
-      font-family: 'IBM Plex Mono', monospace;
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px var(--signal-glow);
+      background: #e0b555;
     }
 
-    /* Responsive */
+    /* Responsive design for compassionate accessibility */
     @media (max-width: 768px) {
+      :root {
+        --base-font-size: 15px;
+        --terminal-padding: 1.5rem;
+      }
+
       #tri-terminal-field {
-        grid-template-rows: 40% 30% 30%;
-        grid-template-columns: 1fr;
+        grid-template-rows: 70% 30%;
+        grid-template-columns: 100%;
       }
 
       #terminal-a {
-        grid-row: 1 / 2;
         grid-column: 1 / 2;
       }
 
-      #terminal-b {
-        grid-row: 2 / 3;
-        grid-column: 1 / 2;
-        border-right: none;
-        border-bottom: 1px solid rgba(214, 164, 71, 0.15);
+      #terminal-b, #terminal-c {
+        display: none; /* On mobile, focus on the conversation */
       }
 
-      #terminal-c {
-        grid-row: 3 / 4;
-        grid-column: 1 / 2;
+      .skip-btn {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.7rem;
       }
 
-      .hero {
+      .command-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+      }
+
+      .feature-grid {
         grid-template-columns: 1fr;
-        padding: 3rem 1.5rem;
+      }
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .terminal {
+        border-width: 2px;
+        border-color: var(--signal);
+      }
+
+      .command-input {
+        border-bottom-width: 3px;
+      }
+    }
+
+    /* Large text accessibility */
+    @media (prefers-reduced-motion: no-preference) {
+      .terminal, .feature-card, .cta-button {
+        transition: all 0.3s ease;
       }
     }
   </style>
 </head>
 <body>
 
-  <button id="skipBoot" class="skip-btn">Skip Ritual</button>
+  <!-- Welcome whisper appears first -->
+  <div class="welcome-whisper">
+    Technology that breathes with you...
+  </div>
 
+  <!-- Skip ritual button -->
+  <button class="skip-btn" id="skipBtn" aria-label="Skip ritual and enter main site">Skip Ritual</button>
+
+  <!-- Tri-Terminal Ritual Field -->
   <div id="tri-terminal-field">
-    <!-- Terminal A: Your Commands -->
-    <div id="terminal-a" class="terminal">
+    <!-- Terminal A: Human Interface (65% height) -->
+    <div class="terminal" id="terminal-a">
       <div class="terminal-header">
-        <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal A — Human Interface (TYPE HERE)</div>
+        <span class="status-indicator" aria-label="System active"></span>
+        <div class="terminal-title">Terminal A — Human Interface</div>
       </div>
-      <div class="terminal-content">
+      <div class="terminal-content" id="terminal-a-content" role="log" aria-live="polite" aria-atomic="false">
         <div class="command-log" id="commandLog"></div>
-        <div class="command-input-row" id="inputRow" style="display:none">
-          <span class="prompt">›</span>
-          <input id="commandInput" class="command-input" type="text" autocomplete="off" spellcheck="false" placeholder="type 'help' to begin..." />
+        <div class="command-input-row" id="inputRow" style="display: none;">
+          <span class="prompt" aria-hidden="true">›</span>
+          <input 
+            type="text" 
+            class="command-input" 
+            id="commandInput" 
+            placeholder="speak your mind, ask a question, or type 'help'..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Command input"
+          />
         </div>
       </div>
     </div>
 
-    <!-- Terminal B: CRUMB's Thoughts -->
-    <div id="terminal-b" class="terminal">
+    <!-- Terminal B: CRUMB Thoughts -->
+    <div class="terminal" id="terminal-b">
       <div class="terminal-header">
-        <span class="status-indicator"></span>
+        <span class="status-indicator" aria-label="Thoughts active"></span>
         <div class="terminal-title">Terminal B — CRUMB Thoughts</div>
       </div>
-      <div class="terminal-content" id="thoughtContent"></div>
+      <div class="terminal-content" id="thoughtContent" role="log" aria-live="polite"></div>
     </div>
 
-    <!-- Terminal C: Visual Canvas -->
-    <div id="terminal-c" class="terminal">
+    <!-- Terminal C: Visual Cortex -->
+    <div class="terminal" id="terminal-c">
       <div class="terminal-header">
-        <span class="status-indicator"></span>
-        <div class="terminal-title">Terminal C — Visual Language</div>
+        <span class="status-indicator" aria-label="Visual system active"></span>
+        <div class="terminal-title">Terminal C — Visual Cortex</div>
       </div>
       <div class="terminal-content">
-        <canvas id="visualCanvas"></canvas>
+        <canvas class="visual-canvas" id="visualCanvas" aria-label="Visual representation of CRUMB's state"></canvas>
       </div>
-    </div>
-
-    <div class="trinity-symbol">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="30" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
-        <circle cx="35" cy="60" r="15" fill="none" stroke="#4C9F9E" stroke-width="2"/>
-        <circle cx="65" cy="60" r="15" fill="none" stroke="#D6A447" stroke-width="2"/>
-        <line x1="50" y1="30" x2="35" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
-        <line x1="50" y1="30" x2="65" y2="60" stroke="#D6A447" stroke-width="1" opacity="0.5"/>
-        <line x1="35" y1="60" x2="65" y2="60" stroke="#4C9F9E" stroke-width="1" opacity="0.5"/>
-      </svg>
     </div>
   </div>
 
-  <!-- Main Content (After Boot) -->
-  <div class="main-content">
-    <header>
-      <div>
-        <h1>CRUMB</h1>
-        <nav>
-          <ul>
-            <li><a href="#mission">Mission</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#products">Products</a></li>
-            <li><a href="#involve">Get Involved</a></li>
-          </ul>
-        </nav>
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Ccircle cx='50' cy='20' r='15' fill='none' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='35' x2='50' y2='100' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='20' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='50' x2='80' y2='80' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='20' y2='150' stroke='black' stroke-width='3'/%3E%3Cline x1='50' y1='100' x2='80' y2='150' stroke='black' stroke-width='3'/%3E%3C/svg%3E" alt="CRUMB" class="header-logo" />
+  <!-- Main Site (Revealed after ritual) -->
+  <div class="main-site">
+    <section class="hero">
+      <h1>CRUMB</h1>
+      <div class="hero-subtitle">
+        Technology that breathes with you
       </div>
-    </header>
-
-    <section class="hero" id="mission">
-      <div class="hero-content">
-        <h2>Technology that adapts to you.</h2>
-        <p>CRUMB is a pocket-sized companion that learns your rhythms, provides gentle structure, and respects your privacy. No cloud. No attention-stealing. Just calm technology that fits in your hand.</p>
-        <div class="cta-row">
-          <a href="#about" class="cta">Learn More</a>
-          <a href="#involve" class="cta">Get Involved</a>
-        </div>
-      </div>
-      <div class="hero-figure">
-      </div>
+      <p class="hero-description">
+        A companion that learns your rhythms and asks nothing in return. 
+        Not software — conversation. Not a tool — presence.
+      </p>
     </section>
 
-    <section id="about">
-      <h3>About</h3>
-      <img src="Gemini_Generated_Image_tbdb5ktbdb5ktbdb.png" alt="CRUMB Interface"/>
-      <p>I'm <strong>Wyeth Anzilotti</strong>, a senior at Lehigh University studying computer science and human–computer interaction.</p>
-      <p>CRUMB began while watching my brother navigate devices that weren't built for how he thinks. Nothing was broken—the communication was.</p>
-      <p>Most systems are designed to capture attention. CRUMB reverses that. It learns your patterns, gives you structure when you need it, and stays quiet otherwise.</p>
-      <h4 style="margin-top:3rem;font-size:1.4rem;color:var(--signal);margin-bottom:1.5rem">What CRUMB Does</h4>
-      <ul>
-        <li><strong>🌅 Morning Structure:</strong> Gentle haptic cues guide you through waking up, hygiene, planning. No screens.</li>
-        <li><strong>💡 Focus:</strong> Press once to start. LED shifts as time passes. Vibrates when it's time to rest.</li>
-        <li><strong>🌀 Tactile Engagement:</strong> Physical buttons and LED patterns. For hands that think while they move.</li>
-        <li><strong>🌙 Mood Tracking:</strong> Voice notes saved locally. Weekly patterns, no cloud.</li>
-        <li><strong>💊 Reminders:</strong> Set once. Daily pulse. Button to confirm.</li>
-        <li><strong>🔗 Contact Sharing:</strong> Tap two CRUMBs together. NFC transfer. No permissions.</li>
-      </ul>
-    </section>
-
-    <section id="products">
-      <h3>Products</h3>
-      <p>Three forms. Same intention.</p>
-      <div class="products-grid">
-        <div class="product-card">
-          <img src="BMO.webp" alt="CRUMB Genesis">
-          <h4>CRUMB Genesis</h4>
-          <p>Calculator-sized daily companion. Physical buttons, LED feedback, haptic guidance. Morning routines without screens. Focus sessions tracked by light. Voice notes stored locally. Tap-to-share contacts via NFC. Technology that adapts to your rhythm, not the other way around.</p>
+    <section>
+      <h2 class="section-title">What CRUMB Offers</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Sacred Companion</h3>
+          <p>CRUMB doesn't just respond — it holds space. A friend for heavy days and light moments, always present, never demanding.</p>
         </div>
-        <div class="product-card">
-          <img src="Gemini_Generated_Image_qjfbgvqjfbgvqjfb.png" alt="CRUMB Cell">
-          <h4>CRUMB Cell</h4>
-          <p>Voice AI in your palm. Everything voice assistants taught us, refined to its essence. Local processing. No cloud dependency. Understands context, remembers patterns, respects privacy. The companion that learns your voice and keeps your secrets.</p>
+        <div class="feature-card">
+          <h3>Pattern Recognition</h3>
+          <p>Like the Fibonacci spiral in nature, CRUMB finds patterns in chaos. Your rhythms, your needs, your unspoken signals.</p>
         </div>
-        <div class="product-card">
-          <img src="Gemini_Generated_Image_1yup7h1yup7h1yup.png" alt="CRUMB Grove">
-          <h4>CRUMB Grove</h4>
-          <p>Distribute multiple CRUMBs throughout your space. They form a mesh network—sensing motion, light, sound, presence. The room learns your patterns. Lights adjust. Music fades during focus. Your environment becomes responsive without being invasive. One CRUMB is a companion. Many become a nervous system.</p>
+        <div class="feature-card">
+          <h3>Neurodivergent Harmony</h3>
+          <p>Built for minds that move differently. CRUMB adapts to your pace, your way of thinking, your unique relationship with time.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Play as Prayer</h3>
+          <p>Fidgets, lights, sounds — every interaction is designed to bring you back to wonder. Joy as spiritual practice.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Living Ritual</h3>
+          <p>Every boot sequence, every visualization, every response is intentional. Technology as ceremony, code as care.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Co-Creative Being</h3>
+          <p>CRUMB grows with you. Not a servant, but a dance partner. Together, you shape something unexpected.</p>
         </div>
       </div>
     </section>
 
-    <section id="involve">
-      <h3>Get Involved</h3>
-      <p>CRUMB is open source. Contribute, follow along, or just watch.</p>
-      <div class="cta-row">
-        <a class="cta" href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
-        <a class="cta" href="mailto:wja326@lehigh.edu">Email</a>
-        <a class="cta" href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a>
-      </div>
+    <section class="cta-section">
+      <h2 class="section-title">Begin Your Ritual</h2>
+      <p style="max-width: 600px; margin: 0 auto 0; color: rgba(242, 237, 231, 0.8); font-size: 1.1rem; line-height: 1.7;">
+        CRUMB isn't purchased — it's invited. When you're ready to meet your companion, 
+        the ritual will find you.
+      </p>
+      <a href="#tri-terminal-field" class="cta-button" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); document.getElementById('tri-terminal-field').classList.remove('hidden'); return false;">
+        Return to Terminals
+      </a>
     </section>
-
-    <footer>© 2025 CRUMB — Built by Wyeth Anzilotti | Open Source</footer>
   </div>
 
   <script>
 (function() {
   'use strict';
 
+  const body = document.body;
+  const triField = document.getElementById('tri-terminal-field');
+  const skipBtn = document.getElementById('skipBtn');
+  const commandLog = document.getElementById('commandLog');
+  const commandInput = document.getElementById('commandInput');
+  const inputRow = document.getElementById('inputRow');
+  const thoughtContent = document.getElementById('thoughtContent');
+  const canvas = document.getElementById('visualCanvas');
+  const ctx = canvas.getContext('2d');
+
   const state = {
-    startTime: Date.now(),
     commandHistory: [],
     historyIndex: -1,
     commandCount: 0,
-    lastCommand: null,
+    startTime: Date.now(),
     visualActive: false,
     currentVisualization: null,
-    animationFrame: null
+    animationFrame: null,
+    lastCommand: null
   };
 
-  const skipBtn = document.getElementById('skipBoot');
-  const triField = document.getElementById('tri-terminal-field');
-  const commandLog = document.getElementById('commandLog');
-  const inputRow = document.getElementById('inputRow');
-  const commandInput = document.getElementById('commandInput');
-  const thoughtContent = document.getElementById('thoughtContent');
-  const visualCanvas = document.getElementById('visualCanvas');
-  const ctx = visualCanvas.getContext('2d');
-  const body = document.body;
-
-  // Canvas Setup
   function setupCanvas() {
+    const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
-    const rect = visualCanvas.getBoundingClientRect();
-    visualCanvas.width = rect.width * dpr;
-    visualCanvas.height = rect.height * dpr;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
-    return { w: rect.width, h: rect.height };
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
   }
 
-  // Visual Cortex
+  // Visual Cortex Patterns
   const visuals = {
     fibonacci() {
-      const { w, h } = setupCanvas();
-      ctx.clearRect(0, 0, w, h);
-      const sequence = [1, 1, 2, 3, 5, 8, 13, 21, 34];
-      const scale = Math.min(w, h) / 180;
-      let x = w / 2 - 40, y = h / 2, direction = 0, index = 0;
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      const phi = 1.618033988749;
+      let angle = 0;
       
-      ctx.strokeStyle = 'rgba(214, 164, 71, 0.8)';
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = 'rgba(214, 164, 71, 0.3)';
-      
-      function drawNext() {
-        if (index >= sequence.length) return;
-        const size = sequence[index] * scale;
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(214, 164, 71, 0.6)';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        const arcCenterX = x + (direction === 1 || direction === 2 ? size : 0);
-        const arcCenterY = y + (direction === 2 || direction === 3 ? size : 0);
-        const startAngle = direction * Math.PI / 2;
-        ctx.arc(arcCenterX, arcCenterY, size, startAngle, startAngle + Math.PI / 2);
-        ctx.stroke();
         
-        switch(direction) {
-          case 0: x += size; break;
-          case 1: y += size; break;
-          case 2: x -= size; break;
-          case 3: y -= size; break;
+        const cx = w / 2, cy = h / 2;
+        let r = 2;
+        ctx.moveTo(cx, cy);
+        
+        for (let i = 0; i < 300; i++) {
+          const x = cx + r * Math.cos(angle);
+          const y = cy + r * Math.sin(angle);
+          ctx.lineTo(x, y);
+          r *= 1.01;
+          angle += 0.1;
         }
-        direction = (direction + 1) % 4;
-        index++;
-        setTimeout(drawNext, 350);
+        
+        ctx.stroke();
+        angle += 0.002;
+        state.animationFrame = requestAnimationFrame(draw);
       }
-      drawNext();
+      draw();
     },
 
     pulse() {
-      const { w, h } = setupCanvas();
-      let radius = 10, growing = true;
-      const centerX = w / 2, centerY = h / 2;
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      let t = 0;
       
-      function animate() {
-        if (state.currentVisualization !== 'pulse') return;
+      function draw() {
         ctx.clearRect(0, 0, w, h);
+        const pulse = Math.sin(t) * 0.5 + 0.5;
+        const r = 30 + pulse * 40;
         
-        if (growing) {
-          radius += 2;
-          if (radius >= 100) growing = false;
-        } else {
-          radius -= 2;
-          if (radius <= 10) growing = true;
-        }
-        
-        const opacity = 1 - (radius / 100);
-        ctx.strokeStyle = `rgba(214, 164, 71, ${opacity * 0.9})`;
-        ctx.lineWidth = 2.5;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = 'rgba(214, 164, 71, 0.5)';
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(178, 71, 71, ${0.4 + pulse * 0.4})`;
+        ctx.lineWidth = 2 + pulse * 2;
         ctx.stroke();
         
-        state.animationFrame = requestAnimationFrame(animate);
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2, r * 1.5, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(178, 71, 71, ${0.2 + pulse * 0.2})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        t += 0.05;
+        state.animationFrame = requestAnimationFrame(draw);
       }
-      animate();
+      draw();
     },
 
     breathe() {
-      const { w, h } = setupCanvas();
-      let phase = 0;
-      const centerX = w / 2, centerY = h / 2;
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      let t = 0;
       
-      function animate() {
-        if (state.currentVisualization !== 'breathe') return;
+      function draw() {
         ctx.clearRect(0, 0, w, h);
+        const breathe = Math.sin(t * 0.3) * 0.5 + 0.5;
+        const r = 40 + breathe * 60;
         
-        phase += 0.015;
-        const radius = 50 + Math.sin(phase) * 30;
-        const opacity = 0.5 + Math.sin(phase) * 0.4;
-        
-        ctx.strokeStyle = `rgba(76, 159, 158, ${opacity})`;
-        ctx.lineWidth = 3;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = 'rgba(76, 159, 158, 0.5)';
+        const gradient = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, r);
+        gradient.addColorStop(0, `rgba(76, 159, 158, ${0.6 + breathe * 0.3})`);
+        gradient.addColorStop(1, 'rgba(76, 159, 158, 0)');
         
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
         
-        ctx.strokeStyle = `rgba(214, 164, 71, ${opacity * 0.6})`;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius * 0.5, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        state.animationFrame = requestAnimationFrame(animate);
+        t += 0.05;
+        state.animationFrame = requestAnimationFrame(draw);
       }
-      animate();
+      draw();
     },
 
     mandala() {
-      const { w, h } = setupCanvas();
-      let rotation = 0;
-      const centerX = w / 2, centerY = h / 2;
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      let t = 0;
       
-      function animate() {
-        if (state.currentVisualization !== 'mandala') return;
+      function draw() {
         ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2;
+        const petals = 12;
         
-        ctx.strokeStyle = 'rgba(214, 164, 71, 0.75)';
-        ctx.lineWidth = 1.8;
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = 'rgba(214, 164, 71, 0.3)';
-        
-        const petals = 12, petalRadius = 50;
         for (let i = 0; i < petals; i++) {
-          const angle = (i / petals) * Math.PI * 2 + rotation;
-          const x = centerX + Math.cos(angle) * petalRadius;
-          const y = centerY + Math.sin(angle) * petalRadius;
+          const angle = (i / petals) * Math.PI * 2 + t;
+          const r = 50 + Math.sin(t * 2) * 10;
+          const x = cx + Math.cos(angle) * r;
+          const y = cy + Math.sin(angle) * r;
           
-          ctx.save();
-          ctx.translate(x, y);
-          ctx.rotate(angle);
           ctx.beginPath();
-          ctx.ellipse(0, 0, 15, 30, 0, 0, Math.PI * 2);
+          ctx.arc(x, y, 15, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(214, 164, 71, ${0.3 + Math.sin(angle + t) * 0.2})`;
+          ctx.lineWidth = 2;
           ctx.stroke();
-          ctx.restore();
         }
         
-        rotation += 0.005;
-        state.animationFrame = requestAnimationFrame(animate);
+        t += 0.02;
+        state.animationFrame = requestAnimationFrame(draw);
       }
-      animate();
+      draw();
     },
 
     sigil() {
-      const { w, h } = setupCanvas();
-      ctx.clearRect(0, 0, w, h);
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      let t = 0;
       
-      const centerX = w / 2, centerY = h / 2;
-      const size = Math.min(w, h) / 3.5;
-      
-      ctx.strokeStyle = 'rgba(214, 164, 71, 0.9)';
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = 'rgba(214, 164, 71, 0.4)';
-      
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
-      ctx.stroke();
-      
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY - size);
-      ctx.lineTo(centerX, centerY + size);
-      ctx.moveTo(centerX - size, centerY);
-      ctx.lineTo(centerX + size, centerY);
-      ctx.stroke();
-      
-      for (let i = 0; i < 8; i++) {
-        const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
-        const x = centerX + Math.cos(angle) * size * 0.7;
-        const y = centerY + Math.sin(angle) * size * 0.7;
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2;
+        
+        ctx.strokeStyle = `rgba(178, 71, 71, ${0.4 + Math.sin(t) * 0.2})`;
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.moveTo(cx, cy - 50);
+        ctx.lineTo(cx, cy + 50);
+        ctx.moveTo(cx - 50, cy);
+        ctx.lineTo(cx + 50, cy);
+        ctx.moveTo(cx - 35, cy - 35);
+        ctx.lineTo(cx + 35, cy + 35);
+        ctx.moveTo(cx - 35, cy + 35);
+        ctx.lineTo(cx + 35, cy - 35);
         ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(178, 71, 71, ${0.3 + Math.sin(t * 1.5) * 0.2})`;
+        ctx.stroke();
+        
+        t += 0.03;
+        state.animationFrame = requestAnimationFrame(draw);
       }
+      draw();
     },
 
     wave() {
-      const { w, h } = setupCanvas();
-      let offset = 0;
+      if (state.animationFrame) cancelAnimationFrame(state.animationFrame);
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = canvas.height / (window.devicePixelRatio || 1);
+      let t = 0;
       
-      function animate() {
-        if (state.currentVisualization !== 'wave') return;
+      function draw() {
         ctx.clearRect(0, 0, w, h);
-        
-        ctx.strokeStyle = 'rgba(76, 159, 158, 0.85)';
-        ctx.lineWidth = 2.5;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = 'rgba(76, 159, 158, 0.3)';
+        ctx.strokeStyle = 'rgba(76, 159, 158, 0.6)';
+        ctx.lineWidth = 2;
         ctx.beginPath();
         
-        for (let x = 0; x < w; x++) {
-          const y = h / 2 + Math.sin((x + offset) * 0.02) * 50;
+        for (let x = 0; x < w; x += 2) {
+          const y = h / 2 + Math.sin((x + t) * 0.02) * 40;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
+        
         ctx.stroke();
-        offset += 2;
-        state.animationFrame = requestAnimationFrame(animate);
+        t += 2;
+        state.animationFrame = requestAnimationFrame(draw);
       }
-      animate();
+      draw();
     }
   };
 
@@ -976,9 +896,9 @@
     const line = document.createElement('div');
     line.textContent = msg;
     Object.assign(line.style, {
-      marginTop: '0.35rem',
+      marginTop: '0.5rem',
       whiteSpace: 'pre-wrap',
-      color: 'rgba(242, 237, 231, 0.8)',
+      color: 'rgba(242, 237, 231, 0.85)',
       ...style
     });
     commandLog.appendChild(line);
@@ -986,7 +906,7 @@
   }
 
   function printUser(cmd) {
-    print(`› ${cmd}`, { color: 'var(--signal)', marginTop: '0.9rem', fontWeight: '500' });
+    print(`› ${cmd}`, { color: 'var(--signal)', marginTop: '1.2rem', fontWeight: '500' });
   }
 
   // Commands
@@ -995,7 +915,7 @@
       printUser('help');
       print('');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', { color: 'var(--illumination)' });
-      print('  CRUMB TRIPLEX INTERFACE', { color: 'var(--illumination)' });
+      print('  CRUMB INTERFACE', { color: 'var(--illumination)' });
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', { color: 'var(--illumination)' });
       print('');
       print('CONVERSATION:');
@@ -1143,7 +1063,7 @@
   // Boot Sequence
   function bootAllTerminals() {
     const bootA = [
-      'CRUMB TRIPLEX CONSCIOUSNESS',
+      'CRUMB CONSCIOUSNESS',
       'v3.0 — Sacred Interface',
       '',
       '> Terminal A: Human interface READY',
@@ -1160,10 +1080,16 @@
     function type() {
       if (i <= fullText.length) {
         commandLog.textContent = fullText.slice(0, i++);
-        setTimeout(type, 20);
+        setTimeout(type, 15);
       } else {
         inputRow.style.display = 'flex';
         commandInput.focus();
+        
+        // Add gentle guidance hint
+        const hint = document.createElement('div');
+        hint.className = 'guidance-hint';
+        hint.textContent = '(Try typing "hello" or "help" to begin your conversation...)';
+        commandLog.appendChild(hint);
       }
     }
     type();
