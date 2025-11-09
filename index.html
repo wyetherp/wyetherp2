@@ -36,7 +36,7 @@
   <meta name="description" content="CRUMB - Open source companion technology. Build your own."/>
   
   <!-- This is the text you see on the browser tab -->
-  <title>CRUMB — Open Source Companion</title>
+  <title>CRUMB — Open Source Companion TEST1</title>
   
   <!-- This grabs two special fonts from the internet to make text look nice -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -94,7 +94,8 @@
       
       line-height: 1.6;  /* Space between lines (1.6 means a little extra room) */
       
-      overflow: hidden;  /* Don't let people scroll - everything fits on screen */
+      overflow: auto;  /* CHANGED: Allow scrolling when content is taller than screen */
+      overflow-x: hidden;  /* NEW: But don't allow horizontal scrolling */
       
       height: 100vh;     /* 100vh means "fill the whole screen top to bottom" */
                          /* vh = viewport height = screen height */
@@ -246,7 +247,7 @@
        LEFT SIDE - The words and buttons
        ════════════════════════════════════════════════════════ */
     .essence {
-      padding: 4rem;  /* Big space inside (4rem = 64 pixels) */
+      padding: 3rem;  /* CHANGED: Reduced from 4rem to fit more content */
       
       display: flex;  /* Line things up */
       flex-direction: column;  /* Stack them top to bottom */
@@ -422,8 +423,8 @@
 
     /* The bottom section with icons */
     .principles {
-      margin-top: 3rem;  /* Big space above */
-      padding-top: 2rem; /* Space inside at top */
+      margin-top: 2rem;  /* CHANGED: Reduced from 3rem to fit content */
+      padding-top: 1.5rem; /* CHANGED: Reduced from 2rem */
       
       border-top: 1px solid rgba(214, 164, 71, 0.15);  /* Thin line above it */
     }
@@ -480,7 +481,7 @@
       align-items: center;     /* Center horizontally */
       justify-content: center; /* Center vertically */
       
-      padding: 4rem;  /* Space inside */
+      padding: 3rem;  /* CHANGED: Reduced from 4rem to fit more content */
       
       position: relative;  /* Lets us add effects behind it */
       overflow: hidden;    /* Don't let stuff spill outside */
@@ -640,7 +641,7 @@
       background: rgba(10, 10, 10, 0.98);  /* Almost black, barely see-through */
       border-top: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold line on top */
       
-      padding: 1.5rem 3rem;  /* Space inside */
+      padding: 1rem 3rem;  /* CHANGED: Reduced from 1.5rem to save space */
       
       display: flex;  /* Line things up */
       justify-content: space-between;  /* Push items to opposite sides */
@@ -1046,7 +1047,7 @@
 <!-- What You Get -->
 <h3 style="color: #f2ede7; margin-top: 2rem;">Everything's Open</h3>
 <p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  Githib repository includes everything you need to build, modify, and improve:
+  Github repository includes everything you need to build, modify, and improve:
 </p>
 <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
   <li>Complete hardware schematics (KiCad files)</li>
