@@ -101,6 +101,41 @@
       
       display: flex;     /* "flex" is a way to line things up nicely */
       flex-direction: column;  /* Stack things on top of each other (like pancakes) */
+      
+      position: relative;  /* Let us add floating stars */
+    }
+    
+    /* ════════════════════════════════════════════════════════
+       FLOATING STARS - Like Mario Galaxy's star bits
+       Gentle sparkles that float around
+       ════════════════════════════════════════════════════════ */
+    body::before {
+      content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧';  /* Star symbols */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 2rem;
+      color: var(--signal);
+      opacity: 0.15;  /* Very faint */
+      pointer-events: none;  /* Don't block clicks */
+      animation: float-stars 60s linear infinite;  /* Slow drift */
+      letter-spacing: 15vw;  /* Spread them across screen */
+      line-height: 20vh;  /* Spread them down screen */
+      z-index: 1;
+    }
+    
+    /* Make the stars slowly drift */
+    @keyframes float-stars {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-30px) rotate(360deg); }
+    }
+    
+    /* Make sure content appears above stars */
+    header, main, footer {
+      position: relative;
+      z-index: 2;
     }
 
     /* ════════════════════════════════════════════════════════
@@ -156,6 +191,20 @@
       
       text-shadow: 0 0 20px var(--signal-glow);  /* Make it glow! */
                                                   /* 0 0 20px means: no offset, 20px blur */
+      
+      animation: gentle-arrive 2s ease-out;  /* Gentle entrance */
+    }
+    
+    /* Make the logo gently arrive */
+    @keyframes gentle-arrive {
+      0% { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+      }
     }
 
     /* The "GPL-3.0 OPEN SOURCE" box in the top right */
@@ -245,6 +294,46 @@
       
       color: var(--illumination);  /* Light color so you can read it */
       text-shadow: 0 0 30px rgba(214, 164, 71, 0.2);  /* Soft glow around text */
+      
+      animation: text-arrive 2.5s ease-out;  /* Gentle arrival */
+      position: relative;  /* Let the welcome message float above it */
+    }
+    
+    /* Text arrives gently */
+    @keyframes text-arrive {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      40% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Welcome message - appears briefly then fades */
+    .tagline::before {
+      content: 'Welcome home. ✦';
+      position: absolute;
+      top: -3rem;
+      left: 0;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--breath);
+      opacity: 0;
+      animation: welcome-whisper 5s ease-in-out;
+      pointer-events: none;
+    }
+    
+    /* Whisper hello, then fade away */
+    @keyframes welcome-whisper {
+      0% { opacity: 0; transform: translateY(10px); }
+      20% { opacity: 0.8; transform: translateY(0); }
+      70% { opacity: 0.8; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
     }
 
     /* The paragraph under the headline */
@@ -307,6 +396,14 @@
       
       box-shadow: 0 0 30px var(--signal-glow);  /* Glow MORE! */
       transform: translateY(-2px);  /* Move up 2 pixels (makes it feel like it lifts) */
+      animation: button-joy 0.6s ease-in-out;  /* Little bounce of happiness */
+    }
+    
+    /* Button does a little happy bounce when you hover */
+    @keyframes button-joy {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.02); }  /* Jump! */
+      100% { transform: translateY(-2px) scale(1); }
     }
 
     /* The less important buttons */
@@ -351,6 +448,14 @@
       font-size: 2rem;  /* Big emoji */
       margin-bottom: 0.5rem;  /* Space below */
       opacity: 0.8;  /* Slightly see-through (0=invisible, 1=solid, 0.8=mostly solid) */
+      transition: all 0.3s ease;  /* Smooth changes */
+      display: inline-block;  /* Makes transform work on emojis */
+    }
+    
+    /* When you hover over a principle, the emoji bounces hello! */
+    .principle:hover .principle-icon {
+      transform: translateY(-5px) scale(1.1);  /* Jump up and grow a bit */
+      opacity: 1;  /* Fully visible */
     }
 
     /* The text under the emoji */
@@ -418,8 +523,8 @@
       
       50% {
         /* Halfway through (50%) */
-        transform: translate(-50%, -50%) scale(1.2);  /* 20% bigger */
-        opacity: 0.6;  /* Brighter */
+        transform: translate(-50%, -50%) scale(1.4);  /* Bigger! More welcoming */
+        opacity: 0.7;  /* Brighter! */
       }
     }
 
@@ -448,6 +553,40 @@
                                                     /* 40px = spread out a lot */
       
       margin-bottom: 2rem;  /* Space below the image */
+      
+      animation: device-wakeup 3s ease-out, gentle-breathe 4s ease-in-out infinite 3s;
+      /* First animation: wake up (3 seconds) */
+      /* Second animation: breathe forever (starts after 3 seconds) */
+    }
+    
+    /* Device wakes up gently */
+    @keyframes device-wakeup {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+        filter: blur(10px);
+      }
+      60% {
+        opacity: 1;
+        filter: blur(0);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+    
+    /* Device breathes softly (like it's alive) */
+    @keyframes gentle-breathe {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+      50% {
+        transform: scale(1.02);  /* Grow just a tiny bit */
+        box-shadow: 0 10px 50px rgba(214, 164, 71, 0.3);  /* Glow a bit */
+      }
     }
 
     /* The "Build Your Own CRUMB" box */
@@ -756,7 +895,7 @@
       
       <!-- Description paragraph -->
       <p class="mission">
-        A pocket companion that learns your rhythms. No cloud. No extraction. Just calm technology you can build yourself.
+        A pocket companion that learns your rhythms.
       </p>
 
       <!-- Button container -->
@@ -786,13 +925,13 @@
           <!-- Icon 1 -->
           <div class="principle">
             <div class="principle-icon">🔓</div>  <!-- Unlocked lock emoji -->
-            <div class="principle-text">Fully Open</div>
+            <div class="principle-text"></div>
           </div>
           
           <!-- Icon 2 -->
           <div class="principle">
             <div class="principle-icon">🛠️</div>  <!-- Tools emoji -->
-            <div class="principle-text">You Build It</div>
+            <div class="principle-text">You Build It/Buy one from me </div>
           </div>
           
           <!-- Icon 3 -->
@@ -872,7 +1011,7 @@
       
       <!-- Video placeholder (you'll add real video later) -->
       <div class="video-placeholder">
-        [Video build guide will be embedded here]<br/>
+        [Video build guide will be here soon]<br/>
         Coming soon: Step-by-step assembly, firmware flashing, and first boot.
       </div>
       <!-- <br/> means "line break" = start a new line -->
@@ -882,30 +1021,50 @@
       <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
         <!-- <ul> means "unordered list" = bullet points -->
         <!-- style= lets us add CSS directly here (usually we avoid this, but it's quick) -->
-        
-        <li>ESP32 microcontroller</li>
-        <!-- <li> means "list item" -->
-        <li>Custom PCB (files in repo)</li>
-        <li>LED matrix or RGB LEDs</li>
-        <li>Tactile buttons</li>
-        <li>3D printed case (STL files provided)</li>
-        <li>Basic soldering skills</li>
-      </ul>
-      
-      <!-- What's in the GitHub -->
-      <p><strong>Repository includes:</strong></p>
-      <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-        <li>Complete hardware schematics</li>
-        <li>PCB design files (KiCad)</li>
-        <li>Firmware source code</li>
-        <li>3D printable case designs</li>
-        <li>Assembly instructions</li>
-        <li>Bill of materials with links</li>
-      </ul>
+<!-- The Foundation -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">What CRUMB Actually Is</h3>
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  CRUMB isn't a product—it's a foundation. Think Arduino, but for building companions. 
+  Once you have the physical device, you control what it becomes: a meditation timer, 
+  a focus tool, a gentle reminder system, an offline AI assistant, whatever your crisis needs.
+</p>
+
+<!-- What You Need -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">Build Your Own</h3>
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  The hardware is simple by design. You'll need:
+</p>
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li>ESP32 microcontroller (the brain)</li>
+  <li>Custom PCB—or breadboard it first (instruction on how to build a CRUMB in video)</li>
+  <li>Lights for feedback</li>
+  <li>A few buttons</li>
+  <li>A case (3D print ours or make your own)</li>
+  <li>Basic soldering skills (or find a friend who has them)</li>
+</ul>
+
+<!-- What You Get -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">Everything's Open</h3>
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  Githib repository includes everything you need to build, modify, and improve:
+</p>
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <li>Complete hardware schematics (KiCad files)</li>
+  <li>Firmware source code (flash it as-is or write your own)</li>
+  <li>3D printable cases (STL files)</li>
+  <li>Bill of materials with supplier links</li>
+  <li>Assembly guide for beginners</li>
+</ul>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-top: 2rem;">
+  <strong>The point:</strong> You own it. You fix it. You build on it. 
+  The standard is the gift—what you create with it is yours.
+</p>
       
       <!-- License info -->
       <p style="color: var(--breath); font-weight: 600; margin-top: 2rem;">
         License: GPL-3.0 — You can build, modify, sell, or distribute. The only requirement: keep it open.
+        https://www.gnu.org/licenses/quick-guide-gplv3.html
       </p>
       
       <!-- Button to go to GitHub -->
