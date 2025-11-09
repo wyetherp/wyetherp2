@@ -436,6 +436,8 @@
     .device-image {
       width: 100%;  /* Fill the container */
       height: auto; /* Keep picture proportions (don't squish it) */
+      max-height: 300px;  /* Don't let it get taller than 300 pixels */
+      object-fit: contain;  /* Shrink the whole image to fit, don't crop it */
       
       border-radius: 8px;  /* Rounded corners (8 pixels of rounding) */
       border: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold border */
