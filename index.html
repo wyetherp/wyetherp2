@@ -1307,12 +1307,13 @@
       <!-- "section" is like a chapter in a book -->
       
       <!-- Big headline -->
-      <h1 class="tagline">Technology that adapts to you.</h1>
+      <h1 class="tagline">Learn to build your own computer, Zero experience required</h1>
       <!-- h1 means "heading 1" = most important heading -->
       
       <!-- Description paragraph -->
       <p class="mission">
-        A pocket companion that learns your rhythms.
+        Learn computers by building a companion device. 
+Copy-paste code → Light up an LED → Build whatever you imagine. 
       </p>
 
       <!-- Button container -->
@@ -1320,12 +1321,12 @@
         <!-- CTA = "Call To Action" = buttons that make you do something -->
         
         <!-- Button 1: Opens the build guide pop-up -->
-        <button class="btn btn-primary" onclick="openModal()">How to Build One</button>
+        <button class="btn btn-primary" onclick="openModal()">Start learning</button>
         <!-- onclick means "when someone clicks this, run the openModal() function" -->
         <!-- We write that function at the bottom in JavaScript -->
         
         <!-- Button 2: Goes to GitHub -->
-        <a href="https://github.com/wyetherp/crumb_main" class="btn btn-secondary" target="_blank">View on GitHub</a>
+        <a href="https://github.com/wyetherp/crumb_main" class="btn btn-secondary" target="_blank">See the Code</a>
         <!-- "a" means "link" -->
         <!-- href = where it goes -->
         <!-- target="_blank" = open in new tab -->
@@ -1341,14 +1342,14 @@
           
           <!-- Icon 1 -->
           <div class="principle">
-            <div class="principle-icon">🔓</div>  <!-- Unlocked lock emoji -->
-            <div class="principle-text">Fully local/private</div>
+            <div class="principle-icon">📚</div>  <!-- Unlocked lock emoji -->
+            <div class="principle-text">Learn By Doing - No boring tutorials</div>
           </div>
           
           <!-- Icon 2 -->
           <div class="principle">
-            <div class="principle-icon">🛠️</div>  <!-- Tools emoji -->
-            <div class="principle-text">Build It/Buy one</div>
+            <div class="principle-icon">🎓</div>  <!-- Tools emoji -->
+            <div class="principle-text">Beginner-Friendly - Explains every step</div>
           </div>
           
           <!-- Icon 3 -->
@@ -1577,52 +1578,235 @@
       </div>
       <!-- <br/> means "line break" = start a new line -->
       
-      <!-- What you need list -->
-      <p><strong>What you'll need:</strong></p>
-      <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-        <!-- <ul> means "unordered list" = bullet points -->
-        <!-- style= lets us add CSS directly here (usually we avoid this, but it's quick) -->
-<!-- The Foundation -->
+<!-- ════════════════════════════════════════════════════════
+     BUILD GUIDE MODAL CONTENT
+     This is what appears in the pop-up window when you click
+     "How to Build One" - it explains CRUMB in detail
+     ════════════════════════════════════════════════════════ -->
+
+<!-- ═══ SECTION 1: What CRUMB Actually Is ═══ -->
+<!-- h3 = heading level 3 (like a chapter title) -->
+<!-- style= adds visual styling directly to this element -->
 <h3 style="color: #f2ede7; margin-top: 2rem;">What CRUMB Actually Is</h3>
+<!-- color: #f2ede7 = light cream color for text -->
+<!-- margin-top: 2rem = space above the heading (2x normal text size) -->
+
+<!-- p = paragraph (a block of text) -->
 <p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  CRUMB isn't a product—it's a foundation. Think Arduino, but for building AI companions. 
-  Once you have the physical device, you control what it becomes: a meditation timer, 
-  a focus tool, a gentle reminder system, an offline AI assistant, whatever your heart desires
+  <!-- rgba(242, 237, 231, 0.85) = light color at 85% opacity (slightly see-through) -->
+  <!-- line-height: 1.8 = space between lines (1.8x normal = easy to read) -->
+  <!-- margin-bottom: 1.5rem = space below this paragraph -->
+  CRUMB isn't a product you buy and forget about—it's a learning platform disguised as a fun project.
 </p>
 
-<!-- What You Need -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">Build Your Own</h3>
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  The hardware is simple by design. You'll need:
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  Think <strong>Arduino</strong> (a beginner-friendly circuit board), but specifically designed to teach you 
+  <!-- strong = makes text bold (important words) -->
+  how computers and AI work by building something you actually want to use.
 </p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  Once you understand the basics, you can build practically anything:
+</p>
+
+<!-- ul = unordered list (bullet points) -->
+<!-- This list shows examples of what you can build -->
 <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <li><strong>CRUMB Genesis (Start Here):</strong> ESP32 board + USB-C cable + heartbeat code</li>
-  <li>Cost: ~$12</li>
-  <li>Build time: 5 minutes (plug in, upload, done)</li>
-  <li>Skills needed: None</li>
-  <li><strong>Then Expand:</strong> Add LEDs, buttons, sensors, displays—whatever you need</li>
-  <li>CRUMB for your desk? Sure. CRUMB you can talk to? Why not. CRUMB toothbrush? You bet.</li>
-  <li>The platform grows with you—start simple, build complexity as you learn</li>
-  <li>You don't buy CRUMB, you build it. You don't accept what it does, you define it.</li>
+  <!-- color is slightly dimmer (0.7 instead of 0.85) to make it secondary info -->
+  <!-- margin-left: 1.5rem = indent the list from the left edge -->
+  
+  <!-- li = list item (each bullet point) -->
+  <li>🧘 <strong>Meditation timer</strong> that breathes with you and gently chimes when time's up</li>
+  <!-- Emoji at the start makes it visually interesting -->
+  <!-- <strong> makes the project name bold -->
+  
+  <li>🌱 <strong>Plant monitor</strong> that texts you when your houseplants need water</li>
+  <li>💊 <strong>Medication reminder</strong> that lights up and buzzes at scheduled times</li>
+  <li>🎵 <strong>Music visualizer</strong> that pulses lights to your favorite songs</li>
+  <li>🚪 <strong>Smart doorbell</strong> that sends photos to your phone</li>
+  <li>⏰ <strong>Sunrise alarm</strong> that gradually brightens to wake you naturally</li>
+  <li>🎮 <strong>Custom game controller</strong> with exactly the buttons you want</li>
+  <li>🌡️ <strong>Weather station</strong> that shows temp, humidity, and air quality</li>
+  <li>🐕 <strong>Pet feeder</strong> that dispenses food on schedule</li>
+  <li>🔋 <strong>Battery monitor</strong> for your solar panels or RV</li>
+  <li>🏃 <strong>Workout tracker</strong> that counts reps and tracks your form</li>
+  <li>💡 <strong>Smart lights</strong> that respond to hand gestures or voice</li>
+</ul>
+<!-- End of the examples list -->
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  <strong>The real gift:</strong> By the time you finish CRUMB Genesis, you'll understand how computers work. 
+  And you'll have the skills to build whatever comes next.
+</p>
+
+<!-- ═══ SECTION 2: Your Unfair Advantage ═══ -->
+<!-- This section explains how AI makes learning easier than ever before -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">Your Unfair Advantage: AI Teachers</h3>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  Here's something previous generations of builders didn't have:
+</p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.rem;">
+  <strong style="color: var(--signal);">You have access to the best teacher in human history—AI.</strong>
+  <!-- var(--signal) uses the gold color we defined at the top of the CSS -->
+  <!-- This makes this sentence stand out in gold to emphasize importance -->
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- Another bullet list showing what you can do with AI help -->
+  <li>Stuck on a step? Copy the error message into ChatGPT or Claude.</li>
+  <li>Don't understand a term? Ask.</li>
+  <li>Want to try something different? Describe what you want.</li>
 </ul>
 
-<!-- What You Get -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">Everything's Open</h3>
 <p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  Github repository includes everything you need to build, modify, and improve CRUMB GENESIS:
+  AI teachers are:
 </p>
+
 <ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <li>Complete hardware schematics, Lego like build guide</li>
-  <li>Code (Code needs to be added to the storage, you can either use mine or create your own!)</li>
-  <li>3D printable cases (STL files)</li>
-  <li>Bill of materials with supplier links</li>
-  <li>Assembly guide for beginners</li>
+  <!-- List of AI teacher benefits -->
+  <li><strong>Infinitely patient</strong> — Never judge you for asking "stupid" questions</li>
+  <!-- The — is called an em dash, it's like a fancy hyphen -->
+  <li><strong>Always available</strong> — 3am and confused? No problem</li>
+  <li><strong>Explain everything</strong> — They know you're a beginner and adapt to you</li>
 </ul>
 
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  This changes everything. What used to take weeks of Googling and frustration now takes minutes of conversation. 
+  You're never stuck. You always have help.
+</p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  <strong>That's why now is the best time in history to learn this stuff.</strong>
+</p>
+
+<!-- ═══ SECTION 3: What You'll Need ═══ -->
+<!-- This section explains the two ways to get started: buy kit or source parts -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">What You'll Need</h3>
+
+<!-- OPTION 1: Starter Kit (easiest) -->
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>Option 1: Buy the Starter Kit</strong> (easiest way to start)
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- Details about the starter kit -->
+  <li>I sell complete CRUMB Genesis kits with everything you need</li>
+  <li>Includes: ESP32 board (the tiny computer brain), USB-C cable (to connect to your computer), pre-loaded code (so it works immediately)</li>
+  <li><strong>Cost: $15 shipped</strong></li>
+  <li><strong>Build time: 5 minutes</strong> (plug in, upload, watch it breathe)</li>
+  <li><strong>Skills needed: None</strong> (if you can plug in a phone charger, you can do this)</li>
+  <li><em>Starter kit ordering coming soon!</em></li>
+  <!-- em = emphasis (makes text italic/slanted) -->
+</ul>
+
+<!-- OPTION 2: Source Your Own Parts -->
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>Option 2: Source Your Own Parts</strong> (if you like shopping)
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- Shopping list if you want to buy parts yourself -->
+  <li>ESP32 board (~$12 on Amazon)</li>
+  <!-- The ~ symbol means "approximately" -->
+  <li>USB-C cable (you probably have one)</li>
+  <li>My code (free on GitHub)</li>
+  <li>Follow the assembly guide (we explain every single step)</li>
+</ul>
+
+<!-- Explaining the technical terms in simple language -->
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>What these terms mean:</strong>
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- Definition list - each term is explained in simple words -->
+  <li><strong>ESP32:</strong> A tiny computer chip smaller than a mint. It's the brain that makes CRUMB work. You can program it to do anything.</li>
+  <li><strong>USB-C:</strong> The cable that connects the ESP32 to your laptop, just like your phone charger</li>
+  <li><strong>Code:</strong> Instructions written in a language computers understand. You'll copy-paste it, and we'll explain what every line does.</li>
+</ul>
+
+<!-- ═══ SECTION 4: Then Expand ═══ -->
+<!-- After you learn the basics, here's how to add more features -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">Then Expand (Once You've Mastered the Basics)</h3>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  After Genesis, you'll add <strong>components</strong> (fancy word for "parts") to make CRUMB do more:
+</p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>What you can add:</strong>
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- List of components you can add, with explanations -->
+  <!-- The → arrow shows what each component lets you do -->
+  <li><strong>LEDs</strong> (lights that glow) → Make visual patterns, indicators, mood lighting</li>
+  <li><strong>Buttons</strong> (physical switches) → Create interactions, controls, interfaces</li>
+  <li><strong>Sensors</strong> (devices that detect things) → Respond to temperature, motion, light, sound, touch</li>
+  <li><strong>Displays</strong> (tiny screens) → Show text, images, animations, data</li>
+  <li><strong>Speakers</strong> (for sound) → Play music, give voice feedback, make alerts</li>
+  <li><strong>Motors</strong> (for movement) → Create robots, automatic feeders, moving parts</li>
+</ul>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  The platform grows with you—start simple, build complexity as you learn. You're not locked into one design. 
+  You're learning a skill that works for <em>any</em> project you can imagine.
+  <!-- em = emphasis, makes "any" italic to stress importance -->
+</p>
+
+<!-- ═══ SECTION 5: Everything's Open ═══ -->
+<!-- Explains what you get from GitHub and what you're allowed to do with it -->
+<h3 style="color: #f2ede7; margin-top: 2rem;">Everything's Open (You Own This)</h3>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  The <strong>GitHub repository</strong> (a website where code lives) includes everything you need:
+</p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>You get:</strong>
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- List of files and resources available on GitHub -->
+  <!-- ✅ checkmarks show these are all included -->
+  <li>✅ Complete hardware schematics (diagrams showing how to connect everything)</li>
+  <li>✅ LEGO-style build guide (step-by-step pictures, no experience assumed)</li>
+  <li>✅ All the code (with comments explaining what every line does)</li>
+  <li>✅ 3D printable cases (if you want a fancy enclosure)</li>
+  <!-- Enclosure = a protective box/case around the electronics -->
+  <li>✅ Bill of materials (exact shopping list with supplier links)</li>
+  <li>✅ Assembly guide for absolute beginners</li>
+</ul>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
+  <strong>You can:</strong>
+</p>
+
+<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+  <!-- List of what you're allowed to do with CRUMB (open source freedoms) -->
+  <li>Use my code exactly as-is (easiest)</li>
+  <li>Modify it to work differently (once you understand it)</li>
+  <li>Build your own from scratch (after you've learned)</li>
+  <li>Share your improvements with others</li>
+  <li>Sell your own versions (yes, really—that's what open source means)</li>
+</ul>
+
+<!-- Final message about ownership and community -->
 <p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-top: 2rem;">
+  <!-- margin-top: 2rem adds extra space above to separate this conclusion -->
   <strong>The point:</strong> You own it. You fix it. You build on it. 
   The standard is the gift—what you create with it is yours.
 </p>
+
+<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
+  You're not buying a product. You're joining a community of builders who help each other learn.
+</p>
+
+<!-- ════════════════════════════════════════════════════════
+     END OF BUILD GUIDE CONTENT
+     ════════════════════════════════════════════════════════ -->
       
       <!-- License info -->
       <p style="color: var(--breath); font-weight: 600; margin-top: 2rem;">
