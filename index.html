@@ -1376,86 +1376,152 @@
     <section class="expansion-journey">
       <div class="journey-container">
         
-        <h2 class="journey-title">Your CRUMB Journey</h2>
+<!-- ════════════════════════════════════════════════════════
+     BUILD PATH SECTION
+     Shows the 3-step journey from "never coded" to "can build anything"
+     Step 1: Control built-in LED (learn programming)
+     Step 2: Control external LED (learn GPIO/wiring)
+     Step 3: Realize everything uses the same pattern
+     ════════════════════════════════════════════════════════ -->
+
+<h2 class="journey-title">Your CRUMB Journey</h2>
+<!-- journey-title = centered heading with nice styling -->
+
 <p style="text-align: center; color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-  Start with a heartbeat. Add a light. Build whatever helps you. Each step takes minutes, not hours.
+  <!-- This paragraph explains the core concept: one skill, many applications -->
+  You'll learn one skill: how to connect things to a computer and control them. 
+  Start with a light (easy to see). Then realize: buttons, sensors, motors—they all work the same way.
 </p>
-        
-        <div class="journey-steps">
-          
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <div class="step-icon">💙</div>
-<h3>Genesis Zero</h3>
-<p>
-  Get a tiny computer brain (ESP32)<br/>
-  Plug it into your computer<br/>
-  Copy-paste code to make it pulse<br/>
-  <strong>5 minutes. $12.</strong>
-</p>
-<p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-  Like teaching a pet a trick—you copy the instructions, it learns to breathe.
-</p>
-            <code style="font-size: 0.8rem; color: var(--breath);">
-              void loop() { heartbeat(); }
-            </code>
-          </div>
-          
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <div class="step-icon">💡</div>
-            <h3>Genesis One</h3>
-            <p>
-              Add a bigger, brighter light<br/>
-              Connect two wires (we show you where)<br/>
-              Same heartbeat, cooler glow<br/>
-              <strong>15 minutes. +$1.</strong>
-            </p>
-            <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-              Like giving it a voice—instead of whispering, now it can shout.
-            </p>
-            <code style="font-size: 0.8rem; color: var(--breath);">
-              pinMode(LED_PIN, OUTPUT);
-            </code>
-          </div>
-          
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <div class="step-icon">✨</div>
-<h3>Your CRUMB</h3>
-<p>
-  Add buttons, sensors, screens<br/>
-  Make it respond to touch, heat, movement<br/>
-  Build the companion you need<br/>
-  <strong>Your imagination, your rules.</strong>
-</p>
-<p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-  Like LEGO—once you know the basics, you build anything.
-</p>
-            <code style="font-size: 0.8rem; color: var(--breath);">
-              // Your imagination here
-            </code>
-          </div>
-          
-        </div>
-        
-        <h3>This is Genesis Zero ↓</h3>
-        <div class="heartbeat-led"></div>
-        <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 1rem;">
-          Your first CRUMB. A light that breathes. Lub-dub. Pause. Lub-dub.
-        </p>
-        <p style="color: rgba(242, 237, 231, 0.5); font-size: 0.9rem;">
-          You can make this happen. Five minutes, twelve dollars, zero experience.
-        </p>
-          <div class="heartbeat-code">
-            <div style="color: var(--signal);">// The entire Genesis Zero code:</div>
-            void heartbeat() {<br/>
-            &nbsp;&nbsp;pulse(100, 150); // Lub<br/>
-            &nbsp;&nbsp;delay(150);<br/>
-            &nbsp;&nbsp;pulse(100, 150); // Dub<br/>
-            }
-          </div>
-        </div>
+
+<div class="journey-steps">
+  <!-- journey-steps = grid that displays the 3 cards side by side (or stacked on mobile) -->
+  
+  <!-- ═══ STEP 1: Genesis Zero ═══ -->
+  <!-- First exposure to programming - use the LED that's already on the board -->
+  <div class="step-card">
+    <!-- step-card = individual card with border, hover effects, and step number -->
+    <div class="step-number">1</div>
+    <!-- step-number = the gold circle with "1" inside -->
+    <div class="step-icon">💙</div>
+    <!-- step-icon = the emoji that represents this step -->
+    <h3>Genesis Zero</h3>
+    <p>
+      Get an ESP32 (tiny computer)<br/>
+      <!-- br/ = line break, starts a new line -->
+      Plug it into your laptop<br/>
+      Copy-paste code<br/>
+      Watch the built-in LED blink<br/>
+      <strong>5 minutes. $12.</strong>
+      <!-- strong = makes text bold to emphasize time and cost -->
+    </p>
+    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
+      <!-- Smaller, dimmer text that explains what skill you're learning -->
+      <strong>What you learn:</strong> "I can tell a computer what to do."
+    </p>
+    <code style="font-size: 0.8rem; color: var(--breath);">
+      <!-- code = shows actual programming code in monospace font -->
+      <!-- This is the simplest command: turn LED on -->
+      digitalWrite(LED_PIN, HIGH);
+    </code>
+  </div>
+  
+  <!-- ═══ STEP 2: Genesis One ═══ -->
+  <!-- Learn to connect external components - same code, different LED -->
+  <div class="step-card">
+    <div class="step-number">2</div>
+    <div class="step-icon">💡</div>
+    <h3>Genesis One</h3>
+    <p>
+      Get a separate LED ($1)<br/>
+      Plug it into the ESP32's GPIO pin<br/>
+      <!-- GPIO = General Purpose Input/Output, the pins you connect things to -->
+      Use the same code<br/>
+      Watch YOUR LED blink<br/>
+      <!-- Emphasis: not the built-in one, YOUR own LED that you connected -->
+      <strong>15 minutes. +$1.</strong>
+    </p>
+    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
+      <strong>What you learn:</strong> "I can connect things to the computer and control them."
+    </p>
+    <code style="font-size: 0.8rem; color: var(--breath);">
+      <!-- This command sets up GPIO pin 2 as an output (so you can control it) -->
+      pinMode(GPIO_2, OUTPUT);
+    </code>
+  </div>
+  
+  <!-- ═══ STEP 3: Your CRUMB ═══ -->
+  <!-- The "aha!" moment - everything works the same way -->
+  <div class="step-card">
+    <div class="step-number">3</div>
+    <div class="step-icon">✨</div>
+    <h3>Your CRUMB</h3>
+    <p>
+      Here's the secret: <strong>Everything works like that LED.</strong><br/>
+      <!-- This is the key insight we're teaching -->
+      <br/>
+      Want a button? Plug into GPIO, read it.<br/>
+      Want temperature? Plug into GPIO, read it.<br/>
+      Want a motor? Plug into GPIO, control it.<br/>
+      <br/>
+      <strong>You already know how.</strong>
+      <!-- Confidence boost: you're not learning something new, you already have the skill -->
+    </p>
+    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
+      <strong>What you realize:</strong> "Wait... I can build ANYTHING now."
+    </p>
+    <code style="font-size: 0.8rem; color: var(--breath);">
+      <!-- Comments showing that every component follows the same pattern -->
+      // Button? Same pattern.<br/>
+      // Sensor? Same pattern.<br/>
+      // Display? Same pattern.
+    </code>
+  </div>
+  
+</div>
+
+<!-- ═══ SECTION: The Pattern You Just Learned ═══ -->
+<!-- This explicitly states the insight in case they missed it -->
+<div style="background: rgba(214, 164, 71, 0.08); border: 2px solid rgba(214, 164, 71, 0.3); border-radius: 8px; padding: 2rem; margin-top: 3rem; text-align: center;">
+  <!-- Gold-tinted box that stands out from the rest of the page -->
+  <h3 style="color: var(--signal); font-size: 1.5rem; margin-bottom: 1rem;">The Pattern You Just Learned</h3>
+  <p style="color: rgba(242, 237, 231, 0.85); font-size: 1.1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+    <!-- Larger text, easy to read, centered on page -->
+    The LED was just practice. The real skill is: <strong>"plug something into a GPIO pin, write code to control it."</strong>
+    <br/><br/>
+    That's how ALL electronics work. Buttons, sensors, motors, displays, speakers—they all use the same GPIO pins. 
+    Same pattern. Same code structure. Just different components.
+    <br/><br/>
+    <strong>You don't "build a CRUMB." You build whatever you want, because you understand the pattern.</strong>
+    <!-- This is the payoff: CRUMB isn't the product, the SKILL is the product -->
+  </p>
+</div>
+
+<!-- ═══ SECTION: Heartbeat Demo ═══ -->
+<!-- Visual demonstration of what Genesis Zero looks like -->
+<div style="margin-top: 3rem;">
+  <h3 style="text-align: center; color: var(--illumination); margin-bottom: 1.5rem;">This is Genesis Zero ↓</h3>
+  <div class="heartbeat-led"></div>
+  <!-- heartbeat-led = animated circle that pulses like a heartbeat (defined in CSS) -->
+  <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 1rem; text-align: center;">
+    Your first CRUMB. A light that breathes. Lub-dub. Pause. Lub-dub.
+  </p>
+  <p style="color: rgba(242, 237, 231, 0.5); font-size: 0.9rem; text-align: center;">
+    You can make this happen. Five minutes, twelve dollars, zero experience.
+    <!-- Reassurance: this is achievable RIGHT NOW -->
+  </p>
+  <div class="heartbeat-code">
+    <!-- heartbeat-code = dark box containing the actual code (defined in CSS) -->
+    <div style="color: var(--signal);">// The entire Genesis Zero code:</div>
+    <!-- Comment in gold to stand out -->
+    void heartbeat() {<br/>
+    <!-- Function definition - a reusable piece of code -->
+    &nbsp;&nbsp;pulse(100, 150); // Lub<br/>
+    <!-- &nbsp; = non-breaking space (creates indentation) -->
+    &nbsp;&nbsp;delay(150);<br/>
+    &nbsp;&nbsp;pulse(100, 150); // Dub<br/>
+    }
+  </div>
+</div>
         
       </div>
     </section>
