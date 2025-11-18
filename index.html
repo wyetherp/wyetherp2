@@ -1,2134 +1,930 @@
 <!-- 
   ═══════════════════════════════════════════════════════════════
-  WELCOME TO THE CRUMB WEBSITE CODE!
+  CRUMB GENESIS ZERO - WEB FLASHER
   ═══════════════════════════════════════════════════════════════
   
-  Hi! This is the code that makes the CRUMB website work.
-  Every line has a comment (these gray notes) explaining what it does.
+  PURPOSE: Get someone from "never programmed" to "breathing ESP32" in 5 minutes.
   
-  THINK OF WEBSITES LIKE LEGO:
-  - HTML = The blocks (what things ARE - buttons, text, pictures)
-  - CSS = The colors and shapes (what things LOOK like)
-  - JavaScript = The motors (what things DO when you click them)
-  
-  You can copy this whole file and it will work!
-  Change anything you want - that's what open source means.
+  FLOW:
+  1. Mobile detection (stop them if on phone)
+  2. Landing (one button: START)
+  3. Requirements (do they have what they need?)
+  4. Flash (ESP Web Tools - the actual upload)
+  5. Success (celebration + next steps)
+  6. Troubleshooting (if flash fails)
   
   Made by: Wyeth Anzilotti
-  License: GPL-3.0 (free to use, just keep it free for others)
+  License: GPL-3.0 (free to use, keep it free for others)
   ═══════════════════════════════════════════════════════════════
 -->
 
+<!DOCTYPE html>
 <html lang="en">
-<!-- This tells the computer: "Hey, this is a website written in English" -->
 
 <head>
-<!-- HEAD is like the brain - it has instructions ABOUT the page -->
-
-  <!-- This line tells the computer what language letters to use -->
+  <!-- Tell browser what language and character set we're using -->
   <meta charset="UTF-8" />
-  
-  <!-- This line makes the website look good on phones -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
-  <!-- This is what Google shows when someone searches for your site -->
-  <meta name="description" content="CRUMB - Open source companion technology. Build your own."/>
+  <!-- What shows up in Google search results -->
+  <meta name="description" content="Learn to program by building a breathing computer in 5 minutes. No experience needed."/>
   
-  <!-- This is the text you see on the browser tab -->
-  <title>CRUMB — Open Source Companion TEST1</title>
+  <!-- Browser tab title -->
+  <title>CRUMB Genesis Zero — Your First Program</title>
   
-  <!-- This grabs two special fonts from the internet to make text look nice -->
+  <!-- Fonts from Google -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- ════════════════════════════════════════════════════════
-       TIME TO MAKE THINGS LOOK PRETTY!
-       Everything between <style> and </style> controls how stuff looks
-       Think of it like picking colors and sizes in a drawing
-       ════════════════════════════════════════════════════════ -->
+  <!-- ESP Web Tools - This is what actually flashes the ESP32 -->
+  <!-- This is the official Espressif tool for web-based flashing -->
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+
   <style>
-    /* Lines that start with "/*" are notes to help you learn */
-    /* They don't do anything - the computer ignores them */
-    
     /* ════════════════════════════════════════════════════════
-       STEP 1: Pick our favorite colors
-       Instead of writing the same color code over and over,
-       we give it a nickname. Like calling blue "sky-color"
+       COLORS - Give them names so we can reuse them
        ════════════════════════════════════════════════════════ */
     :root {
-      /* :root means "these colors work everywhere on the page" */
-      
-      /* Our colors have nicknames! */
-      --void: #0A0A0A;         /* Almost black (for the background) */
-      --illumination: #F2EDE7; /* Creamy white (for reading text) */
-      --signal: #D6A447;       /* Golden yellow (for important stuff) */
-      --breath: #4C9F9E;       /* Ocean blue-green (calm color) */
-      --shadow: rgba(0, 0, 0, 0.5);  /* See-through black (for shadows) */
-      --signal-glow: rgba(214, 164, 71, 0.3);  /* See-through gold (glowy) */
+      --void: #0A0A0A;              /* Almost black background */
+      --illumination: #F2EDE7;      /* Light text color */
+      --signal: #D6A447;            /* Gold for important things */
+      --breath: #4C9F9E;            /* Teal for calm moments */
+      --error: #E74C3C;             /* Red for errors */
+      --success: #2ECC71;           /* Green for success */
+      --signal-glow: rgba(214, 164, 71, 0.3);  /* Glowy gold */
     }
 
     /* ════════════════════════════════════════════════════════
-       STEP 2: Reset everything to start clean
-       Browsers add their own spacing - we remove it all first
+       RESET - Start with clean slate
        ════════════════════════════════════════════════════════ */
     * { 
-      /* The * means "every single thing on the page" */
-      
-      box-sizing: border-box;  /* Makes math easier for sizing boxes */
-      margin: 0;               /* No space OUTSIDE of things */
-      padding: 0;              /* No space INSIDE of things */
+      box-sizing: border-box;  /* Makes sizing math easier */
+      margin: 0;
+      padding: 0;
     }
 
     /* ════════════════════════════════════════════════════════
-       STEP 3: The whole page background and text
+       BODY - The whole page
        ════════════════════════════════════════════════════════ */
     body {
-      /* "body" is the whole page you can see */
-      
-      background: var(--void);  /* Dark black background */
-                                /* var(--void) means "use that color we named 'void'" */
-      
-      color: var(--illumination);  /* Light colored text so you can read it */
-      
-      font-family: 'Inter Tight', system-ui, sans-serif;  /* What the letters look like */
-      
-      line-height: 1.6;  /* Space between lines (1.6 means a little extra room) */
-      
-      overflow: auto;  /* CHANGED: Allow scrolling when content is taller than screen */
-      overflow-x: hidden;  /* NEW: But don't allow horizontal scrolling */
-      
-      height: 100vh;     /* 100vh means "fill the whole screen top to bottom" */
-                         /* vh = viewport height = screen height */
-      
-      display: flex;     /* "flex" is a way to line things up nicely */
-      flex-direction: column;  /* Stack things on top of each other (like pancakes) */
-      
-      position: relative;  /* Let us add floating stars */
-    }
-    
-    /* ════════════════════════════════════════════════════════
-       FLOATING STARS - Like Mario Galaxy's star bits
-       Gentle sparkles that float around
-       ════════════════════════════════════════════════════════ */
-    body::before {
-      content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧';  /* Star symbols */
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      font-size: 2rem;
-      color: var(--signal);
-      opacity: 0.15;  /* Very faint */
-      pointer-events: none;  /* Don't block clicks */
-      animation: float-stars 60s linear infinite;  /* Slow drift */
-      letter-spacing: 15vw;  /* Spread them across screen */
-      line-height: 20vh;  /* Spread them down screen */
-      z-index: 1;
-    }
-    
-    /* Make the stars slowly drift */
-    @keyframes float-stars {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(-30px) rotate(360deg); }
-    }
-    
-    /* Make sure content appears above stars */
-    header, main, footer {
-      position: relative;
-      z-index: 2;
+      background: var(--void);
+      color: var(--illumination);
+      font-family: 'Inter Tight', system-ui, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;  /* No horizontal scroll */
     }
 
     /* ════════════════════════════════════════════════════════
-       HELP PEOPLE WHO GET DIZZY FROM MOVEMENT
-       Some people feel sick when things move on screen
-       This checks if they turned on "less movement" on their computer
+       MOBILE WARNING BANNER
+       Shows at top if they're on a phone
        ════════════════════════════════════════════════════════ */
-    @media (prefers-reduced-motion: reduce) {
-      /* @media means "only do this IF something is true" */
-      /* This checks if someone said "please, less animation" */
+    .mobile-warning {
+      display: none;  /* Hidden by default */
+      background: var(--error);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+      position: sticky;  /* Stays at top when scrolling */
+      top: 0;
+      z-index: 1000;  /* In front of everything */
+      font-size: 0.9rem;
+    }
+
+    /* Show warning only on mobile devices */
+    @media (max-width: 768px) {
+      .mobile-warning {
+        display: block;
+      }
       
-      *, *::before, *::after {
-        /* Turn off ALL movement for them */
-        animation-duration: 0.01ms !important;    /* Make things instant */
-        transition-duration: 0.01ms !important;   /* No smooth changes */
-        /* !important means "really really do this, ignore other rules" */
+      /* Hide the flash section on mobile (it won't work anyway) */
+      #flashSection {
+        display: none;
       }
     }
 
     /* ════════════════════════════════════════════════════════
-       THE TOP BAR (where the logo and "OPEN SOURCE" badge are)
+       HEADER - Top bar with logo
        ════════════════════════════════════════════════════════ */
     header {
-      /* "header" is the strip across the top */
-      
-      background: rgba(10, 10, 10, 0.95);  /* Almost black, a tiny bit see-through */
-                                            /* rgba means: red, green, blue, alpha */
-                                            /* alpha is "how see-through" (0=invisible, 1=solid) */
-      
-      border-bottom: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold line at bottom */
-      
-      padding: 1.5rem 3rem;  /* Space inside the header */
-                              /* 1.5rem top/bottom, 3rem left/right */
-                              /* rem is based on text size (usually 16 pixels) */
-      
-      display: flex;  /* Line things up in a row */
-      justify-content: space-between;  /* Push items to opposite sides */
-      align-items: center;  /* Line them up in the middle (vertically) */
-      
-      backdrop-filter: blur(10px);  /* Blur anything behind it (cool glass effect) */
+      background: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
     }
 
-    /* The word "CRUMB" in the top left */
     .logo {
-      /* A "." means "this is a class" - like a label we can use multiple times */
-      
-      font-size: 1.5rem;  /* 1.5 times the normal text size */
-      font-weight: 700;   /* How thick the letters are (700 = pretty bold) */
-                          /* Scale is 100-900: 100=thin, 400=normal, 700=bold, 900=super bold */
-      
-      letter-spacing: 4px;  /* Space between each letter (spread them out) */
-      color: var(--illumination);  /* Use our light color */
-      
-      text-shadow: 0 0 20px var(--signal-glow);  /* Make it glow! */
-                                                  /* 0 0 20px means: no offset, 20px blur */
-      
-      animation: gentle-arrive 2s ease-out;  /* Gentle entrance */
-    }
-    
-    /* Make the logo gently arrive */
-    @keyframes gentle-arrive {
-      0% { 
-        opacity: 0; 
-        transform: translateY(-10px); 
-      }
-      100% { 
-        opacity: 1; 
-        transform: translateY(0); 
-      }
-    }
-
-    /* The "GPL-3.0 OPEN SOURCE" box in the top right */
-    .open-badge {
-      background: rgba(214, 164, 71, 0.15);  /* See-through gold background */
-      border: 2px solid var(--signal);       /* Gold outline, 2 pixels thick */
-      color: var(--signal);                  /* Gold text color */
-      
-      padding: 0.5rem 1.25rem;  /* Space inside the box */
-      
-      font-size: 0.75rem;  /* Smaller text */
-      font-weight: 600;    /* A little bold */
-      letter-spacing: 2px; /* Spread letters apart */
-      
-      text-transform: uppercase;  /* MAKE EVERYTHING CAPITAL LETTERS */
-      
-      font-family: 'IBM Plex Mono', monospace;  /* Use the computer-looking font */
-      
-      box-shadow: 0 0 15px var(--signal-glow);  /* Glowing effect around it */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       THE MAIN PART (split into left side and right side)
-       ════════════════════════════════════════════════════════ */
-    main {
-      /* "main" is the big area in the middle of the page */
-      
-      flex: 1;  /* Take up all the space that's left */
-      
-      display: grid;  /* "grid" is like making a table */
-      grid-template-columns: 1fr 1fr;  /* Make 2 columns, both the same size */
-                                        /* 1fr means "1 fraction" (1 piece) */
-      
-      gap: 0;  /* No space between the columns */
-      overflow: hidden;  /* Don't let stuff go outside the box */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       LEFT SIDE - The words and buttons
-       ════════════════════════════════════════════════════════ */
-    .essence {
-      padding: 3rem;  /* CHANGED: Reduced from 4rem to fit more content */
-      
-      display: flex;  /* Line things up */
-      flex-direction: column;  /* Stack them top to bottom */
-      justify-content: center;  /* Put them in the middle (vertically) */
-      
-      /* Make a gradient (color that fades from one to another) */
-      background: linear-gradient(135deg, rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95));
-      /* 135deg means "go diagonally" */
-      /* Two shades of dark gray that blend together */
-      
-      border-right: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold line on right edge */
-      
-      position: relative;  /* Lets us add a glowing effect behind it */
-    }
-
-    /* Add a glowy circle behind the text */
-    .essence::before {
-      /* ::before is a MAGIC BOX we can add to any element */
-      /* It's invisible unless we put stuff in it */
-      
-      content: '';  /* Empty, but needs this to exist */
-      
-      position: absolute;  /* Float it anywhere we want */
-      top: 0;     /* Start at the top */
-      left: 0;    /* Start at the left */
-      right: 0;   /* Stretch to the right */
-      bottom: 0;  /* Stretch to the bottom */
-      
-      /* Make a circle gradient that glows */
-      background: radial-gradient(circle at 30% 50%, rgba(214, 164, 71, 0.05), transparent 70%);
-      /* "radial" means it goes in a circle */
-      /* "at 30% 50%" means put the center a little left, middle height */
-      /* Starts with faint gold, ends invisible */
-      
-      pointer-events: none;  /* Let clicks go through it (don't block buttons) */
-    }
-
-    /* Big headline text "Technology that adapts to you." */
-    .tagline {
-      font-size: 3rem;  /* BIG! (3 times normal size = 48 pixels) */
-      font-weight: 700; /* Bold */
-      line-height: 1.2; /* Not much space between lines (tight) */
-      
-      margin-bottom: 1.5rem;  /* Space below it */
-      
-      color: var(--illumination);  /* Light color so you can read it */
-      text-shadow: 0 0 30px rgba(214, 164, 71, 0.2);  /* Soft glow around text */
-      
-      animation: text-arrive 2.5s ease-out;  /* Gentle arrival */
-      position: relative;  /* Let the welcome message float above it */
-    }
-    
-    /* Text arrives gently */
-    @keyframes text-arrive {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      40% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    /* Welcome message - appears briefly then fades */
-    .tagline::before {
-      content: 'Hello Traveler. ✦';
-      position: absolute;
-      top: -3rem;
-      left: 0;
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: var(--breath);
-      opacity: 0;
-      animation: welcome-whisper 5s ease-in-out;
-      pointer-events: none;
-    }
-    
-    /* Whisper hello, then fade away */
-    @keyframes welcome-whisper {
-      0% { opacity: 0; transform: translateY(10px); }
-      20% { opacity: 0.8; transform: translateY(0); }
-      70% { opacity: 0.8; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-10px); }
-    }
-
-    /* The paragraph under the headline */
-    .mission {
-      font-size: 1.25rem;  /* A bit bigger than normal text */
-      
-      color: rgba(242, 237, 231, 0.75);  /* Light color, slightly dimmed */
-                                          /* The 0.75 makes it 75% visible */
-      
-      margin-bottom: 3rem;  /* Big space below */
-      line-height: 1.7;     /* Comfortable space between lines for reading */
-      max-width: 500px;     /* Don't let lines get too long (hard to read) */
-    }
-
-    /* The box that holds all the buttons */
-    .cta-group {
-      display: flex;  /* Line things up */
-      flex-direction: column;  /* Stack buttons on top of each other */
-      gap: 1rem;  /* Space between each button */
-      max-width: 400px;  /* Don't stretch too wide */
-    }
-
-    /* How ALL buttons look (both types) */
-    .btn {
-      padding: 1rem 2rem;  /* Space inside button (makes it bigger) */
-      
-      font-size: 1rem;  /* Normal text size */
-      font-weight: 600; /* Medium bold */
-      
-      text-decoration: none;  /* No underline */
-      text-align: center;     /* Center the text */
-      
-      transition: all 0.3s ease;  /* When you hover, changes happen smoothly */
-                                   /* 0.3s = takes 3/10 of a second */
-                                   /* "ease" means smooth, not jerky */
-      
-      font-family: 'IBM Plex Mono', monospace;  /* Computer-style font */
-      letter-spacing: 1px;  /* Tiny space between letters */
-      
-      cursor: pointer;  /* Show a hand when you hover over it */
-      border: none;     /* No border (unless we add one later) */
-      
-      text-transform: uppercase;  /* MAKE IT ALL CAPS */
-    }
-
-    /* The main button (most important action) */
-    .btn-primary {
-      background: var(--signal);  /* Gold background */
-      color: var(--void);         /* Dark text (black) */
-      
-      box-shadow: 0 0 20px var(--signal-glow);  /* Glowing shadow */
-                                                 /* First 0 = horizontal offset (none) */
-                                                 /* Second 0 = vertical offset (none) */
-                                                 /* 20px = how far the glow spreads */
-    }
-
-    /* When you put your mouse over the main button */
-    .btn-primary:hover {
-      /* :hover means "when the mouse is on top of this" */
-      
-      box-shadow: 0 0 30px var(--signal-glow);  /* Glow MORE! */
-      transform: translateY(-2px);  /* Move up 2 pixels (makes it feel like it lifts) */
-      animation: button-joy 0.6s ease-in-out;  /* Little bounce of happiness */
-    }
-    
-    /* Button does a little happy bounce when you hover */
-    @keyframes button-joy {
-      0% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-4px) scale(1.02); }  /* Jump! */
-      100% { transform: translateY(-2px) scale(1); }
-    }
-
-    /* The less important buttons */
-    .btn-secondary {
-      background: transparent;  /* See-through (no background color) */
-      color: var(--illumination);  /* Light text */
-      border: 2px solid rgba(214, 164, 71, 0.4);  /* Gold outline */
-    }
-
-    /* When you put your mouse over a secondary button */
-    .btn-secondary:hover {
-      border-color: var(--signal);  /* Make border brighter gold */
-      color: var(--signal);         /* Make text gold too */
-      box-shadow: 0 0 15px var(--signal-glow);  /* Add glow */
-    }
-
-    /* The bottom section with icons */
-    .principles {
-      margin-top: 2rem;  /* CHANGED: Reduced from 3rem to fit content */
-      padding-top: 1.5rem; /* CHANGED: Reduced from 2rem */
-      
-      border-top: 1px solid rgba(214, 164, 71, 0.15);  /* Thin line above it */
-    }
-
-    /* The box holding the 3 icons */
-    .principles-grid {
-      display: grid;  /* Use grid (like a table) */
-      grid-template-columns: repeat(3, 1fr);  /* 3 columns, all same size */
-                                               /* "repeat(3, 1fr)" means "do 1fr three times" */
-      
-      gap: 1.5rem;  /* Space between items */
-      margin-top: 1.5rem;  /* Space above */
-    }
-
-    /* Each individual icon box */
-    .principle {
-      text-align: center;  /* Center everything */
-    }
-
-    /* The emoji icon */
-    .principle-icon {
-      font-size: 2rem;  /* Big emoji */
-      margin-bottom: 0.5rem;  /* Space below */
-      opacity: 0.8;  /* Slightly see-through (0=invisible, 1=solid, 0.8=mostly solid) */
-      transition: all 0.3s ease;  /* Smooth changes */
-      display: inline-block;  /* Makes transform work on emojis */
-    }
-    
-    /* When you hover over a principle, the emoji bounces hello! */
-    .principle:hover .principle-icon {
-      transform: translateY(-5px) scale(1.1);  /* Jump up and grow a bit */
-      opacity: 1;  /* Fully visible */
-    }
-
-    /* The text under the emoji */
-    .principle-text {
-      font-size: 0.75rem;  /* Small text */
-      color: rgba(242, 237, 231, 0.6);  /* Dimmed light color */
-      
-      text-transform: uppercase;  /* ALL CAPS */
-      letter-spacing: 1px;  /* Spread letters a bit */
-      
-      font-family: 'IBM Plex Mono', monospace;  /* Computer font */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       RIGHT SIDE - The picture and build info
-       ════════════════════════════════════════════════════════ */
-    .proof {
-      background: rgba(5, 5, 5, 0.95);  /* Almost black */
-      
-      display: flex;  /* Line things up */
-      flex-direction: column;  /* Stack top to bottom */
-      align-items: center;     /* Center horizontally */
-      justify-content: center; /* Center vertically */
-      
-      padding: 3rem;  /* CHANGED: Reduced from 4rem to fit more content */
-      
-      position: relative;  /* Lets us add effects behind it */
-      overflow: hidden;    /* Don't let stuff spill outside */
-    }
-
-    /* Add a breathing glow effect behind everything */
-    .proof::before {
-      content: '';  /* Empty magic box */
-      
-      position: absolute;  /* Float it */
-      width: 300px;   /* 300 pixels wide */
-      height: 300px;  /* 300 pixels tall */
-      
-      /* Make a circular glow */
-      background: radial-gradient(circle, rgba(76, 159, 158, 0.15), transparent 70%);
-      
-      top: 50%;   /* Put it in the middle (vertically) */
-      left: 50%;  /* Put it in the middle (horizontally) */
-      
-      transform: translate(-50%, -50%);  /* Actually center it */
-                                          /* (otherwise "50%" would start from middle, not center) */
-      
-      animation: breathe-bg 4s ease-in-out infinite;  /* Make it pulse */
-                                                       /* 4s = 4 seconds per pulse */
-                                                       /* infinite = keep doing it forever */
-      
-      pointer-events: none;  /* Let clicks go through it */
-    }
-
-    /* ANIMATION: Make the background breathe (grow and shrink) */
-    @keyframes breathe-bg {
-      /* @keyframes defines an animation */
-      /* We tell it what to do at different times */
-      
-      0%, 100% {
-        /* At start (0%) and end (100%) */
-        transform: translate(-50%, -50%) scale(1);  /* Normal size */
-        opacity: 0.3;  /* Faint */
-      }
-      
-      50% {
-        /* Halfway through (50%) */
-        transform: translate(-50%, -50%) scale(1.4);  /* Bigger! More welcoming */
-        opacity: 0.7;  /* Brighter! */
-      }
-    }
-
-    /* The container for the device image and text */
-    .device-showcase {
-      position: relative;  /* Puts it in front of the background effect */
-      z-index: 1;  /* Layer order (higher number = in front) */
-      
-      max-width: 400px;  /* Don't get too big */
-      width: 100%;  /* Fill available space */
-    }
-
-    /* The picture of the CRUMB device */
-    .device-image {
-      width: 100%;  /* Fill the container */
-      height: auto; /* Keep picture proportions (don't squish it) */
-      max-height: 300px;  /* Don't let it get taller than 300 pixels */
-      object-fit: contain;  /* Shrink the whole image to fit, don't crop it */
-      
-      border-radius: 8px;  /* Rounded corners (8 pixels of rounding) */
-      border: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold border */
-      
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);  /* Big shadow underneath */
-                                                    /* 0 = no horizontal move */
-                                                    /* 10px = move down 10 pixels */
-                                                    /* 40px = spread out a lot */
-      
-      margin-bottom: 2rem;  /* Space below the image */
-      
-      animation: device-wakeup 3s ease-out, gentle-breathe 4s ease-in-out infinite 3s;
-      /* First animation: wake up (3 seconds) */
-      /* Second animation: breathe forever (starts after 3 seconds) */
-    }
-    
-    /* Device wakes up gently */
-    @keyframes device-wakeup {
-      0% {
-        opacity: 0;
-        transform: scale(0.9);
-        filter: blur(10px);
-      }
-      60% {
-        opacity: 1;
-        filter: blur(0);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-      }
-    }
-    
-    /* Device breathes softly (like it's alive) */
-    @keyframes gentle-breathe {
-      0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      }
-      50% {
-        transform: scale(1.02);  /* Grow just a tiny bit */
-        box-shadow: 0 10px 50px rgba(214, 164, 71, 0.3);  /* Glow a bit */
-      }
-    }
-
-    /* The "Build Your Own CRUMB" box */
-    .build-callout {
-      background: rgba(214, 164, 71, 0.1);  /* Very faint gold background */
-      border: 2px solid var(--signal);      /* Gold border */
-      
-      padding: 2rem;  /* Space inside */
-      border-radius: 4px;  /* Slightly rounded corners */
-      text-align: center;  /* Center all text */
-      
-      box-shadow: 0 0 30px var(--signal-glow);  /* Glowing effect */
-    }
-
-    /* The heading "Build Your Own CRUMB" */
-    .build-callout h3 {
-      font-size: 1.5rem;  /* Pretty big */
-      color: var(--signal);  /* Gold color */
-      margin-bottom: 0.75rem;  /* Space below */
-      font-weight: 700;  /* Bold */
-    }
-
-    /* The paragraph in the callout box */
-    .build-callout p {
-      color: rgba(242, 237, 231, 0.7);  /* Light, slightly dimmed */
-      margin-bottom: 1.25rem;  /* Space below */
-      font-size: 0.95rem;  /* Almost normal size */
-    }
-
-    /* The "GPL-3.0 LICENSE" badge */
-    .license-badge {
-      display: inline-block;  /* Inline but acts like a box */
-      
-      background: rgba(76, 159, 158, 0.15);  /* Faint teal background */
-      border: 1px solid var(--breath);       /* Teal border */
-      color: var(--breath);                  /* Teal text */
-      
-      padding: 0.5rem 1rem;  /* Space inside */
-      
-      font-size: 0.8rem;  /* Small text */
-      font-family: 'IBM Plex Mono', monospace;  /* Computer font */
-      letter-spacing: 1px;  /* Space between letters */
-      
-      margin-top: 1rem;  /* Space above */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       BOTTOM BAR - Links and copyright
-       ════════════════════════════════════════════════════════ */
-    footer {
-      background: rgba(10, 10, 10, 0.98);  /* Almost black, barely see-through */
-      border-top: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold line on top */
-      
-      padding: 1rem 3rem;  /* CHANGED: Reduced from 1.5rem to save space */
-      
-      display: flex;  /* Line things up */
-      justify-content: space-between;  /* Push items to opposite sides */
-      align-items: center;  /* Center vertically */
-      
-      font-size: 0.85rem;  /* Small text */
-      color: rgba(242, 237, 231, 0.5);  /* Dimmed light color */
-    }
-
-    /* The box holding the links (GitHub, LinkedIn, Email) */
-    .footer-links {
-      display: flex;  /* Line them up */
-      gap: 2rem;  /* Space between each link */
-    }
-
-    /* The links themselves */
-    .footer-links a {
-      color: rgba(242, 237, 231, 0.6);  /* Dimmed light color */
-      text-decoration: none;  /* No underline */
-      
-      transition: color 0.3s ease;  /* Smooth color change when you hover */
-      
-      font-family: 'IBM Plex Mono', monospace;  /* Computer font */
-      text-transform: uppercase;  /* ALL CAPS */
-      font-size: 0.75rem;  /* Small */
-      letter-spacing: 1px;  /* Spread letters */
-    }
-
-    /* When you put your mouse over a link */
-    .footer-links a:hover {
-      color: var(--signal);  /* Turn gold */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       THE POP-UP WINDOW (Modal)
-       Shows when you click "How to Build One"
-       ════════════════════════════════════════════════════════ */
-    .modal {
-      display: none;  /* Hidden at first */
-      
-      position: fixed;  /* Stays in place even if you scroll */
-      top: 0;     /* Cover the whole screen */
-      left: 0;
-      right: 0;
-      bottom: 0;
-      
-      background: rgba(0, 0, 0, 0.95);  /* Almost black, covers everything */
-      
-      z-index: 1000;  /* In front of everything else (high number) */
-      
-      align-items: center;      /* Center the box vertically */
-      justify-content: center;  /* Center the box horizontally */
-      
-      padding: 2rem;  /* Space on all sides */
-    }
-
-    /* When the modal is active (showing) */
-    .modal.active {
-      display: flex;  /* Show it! (and use flex to center the box) */
-    }
-
-    /* The white box inside the modal */
-    .modal-content {
-      background: rgba(15, 15, 15, 0.98);  /* Dark gray, almost black */
-      border: 2px solid var(--signal);     /* Gold border */
-      
-      padding: 2rem;  /* Space inside */
-      
-      max-width: 800px;  /* Don't get too wide */
-      width: 100%;  /* Fill available space */
-      
-      max-height: 90vh;  /* Don't get taller than 90% of screen */
-      overflow-y: auto;  /* Let people scroll inside if needed */
-      
-      position: relative;  /* Lets us position the X button */
-      
-      box-shadow: 0 0 50px var(--signal-glow);  /* Big glowing shadow */
-    }
-
-    /* The X button to close the modal */
-    .modal-close {
-      position: absolute;  /* Float it in the corner */
-      top: 1rem;   /* 1rem from top */
-      right: 1rem; /* 1rem from right */
-      
-      background: transparent;  /* See-through */
-      border: none;  /* No border */
-      
-      color: var(--illumination);  /* Light color */
-      font-size: 2rem;  /* Big */
-      
-      cursor: pointer;  /* Show hand when you hover */
-      
-      width: 40px;   /* 40 pixels wide */
-      height: 40px;  /* 40 pixels tall */
-      
-      display: flex;  /* Center the X */
-      align-items: center;
-      justify-content: center;
-      
-      transition: all 0.3s ease;  /* Smooth changes */
-    }
-
-    /* When you hover over the X */
-    .modal-close:hover {
-      color: var(--signal);  /* Turn gold */
-      transform: rotate(90deg);  /* Spin it! */
-    }
-
-    /* The heading in the modal */
-    .modal h2 {
-      color: var(--signal);  /* Gold */
-      margin-bottom: 1.5rem;  /* Space below */
-      font-size: 2rem;  /* Big */
-    }
-
-    /* Paragraphs in the modal */
-    .modal p {
-      color: rgba(242, 237, 231, 0.7);  /* Light, slightly dimmed */
-      margin-bottom: 1rem;  /* Space below each paragraph */
-      line-height: 1.7;  /* Comfortable reading space */
-    }
-
-    /* Placeholder for the video */
-    .video-placeholder {
-      background: rgba(0, 0, 0, 0.5);  /* Dark gray box */
-      border: 1px solid rgba(214, 164, 71, 0.2);  /* Thin gold border */
-      
-      padding: 3rem;  /* Space inside */
-      text-align: center;  /* Center text */
-      margin: 2rem 0;  /* Space above and below */
-      
-      color: rgba(242, 237, 231, 0.5);  /* Dimmed text */
-      font-style: italic;  /* Slanted text */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       MAKE IT WORK ON PHONES
-       When the screen is small, change the layout
-       ════════════════════════════════════════════════════════ */
-    @media (max-width: 768px) {
-      /* @media means "if this is true, do these rules" */
-      /* max-width: 768px means "if screen is 768 pixels wide or smaller" */
-      /* 768px = typical phone/tablet size */
-      
-      /* Change main area to stack top to bottom instead of side by side */
-      main {
-        grid-template-columns: 1fr;  /* Just 1 column now */
-        grid-template-rows: auto auto;  /* 2 rows, auto size */
-        overflow-y: auto;  /* Let people scroll */
-      }
-
-      /* Less padding on small screens (more room for content) */
-      .essence, .proof {
-        padding: 2rem;
-      }
-
-      /* Make headline smaller on phones */
-      .tagline {
-        font-size: 2rem;
-      }
-
-      /* Make mission text smaller */
-      .mission {
-        font-size: 1.1rem;
-      }
-
-      /* Stack principle icons vertically on phones */
-      .principles-grid {
-        grid-template-columns: 1fr;  /* 1 column */
-        gap: 1rem;
-      }
-
-      /* Make header smaller and stack vertically */
-      header {
-        padding: 1rem 1.5rem;
-        flex-direction: column;  /* Stack logo and badge */
-        gap: 1rem;
-      }
-
-      /* Make footer smaller and stack vertically */
-      footer {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      /* Stack footer links vertically */
-      .footer-links {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-    }
-
-    /* ════════════════════════════════════════════════════════
-       HELP PEOPLE USING KEYBOARDS
-       Make it obvious what you're focused on
-       ════════════════════════════════════════════════════════ */
-    .btn:focus, a:focus {
-      /* :focus means "when you select this with keyboard" */
-      
-      outline: 3px solid var(--signal);  /* Gold border around it */
-      outline-offset: 3px;  /* Space between border and item */
-    }
-
-    /* ════════════════════════════════════════════════════════
-       HELP PEOPLE WHO NEED HIGH CONTRAST
-       If someone has "high contrast mode" on, make things bolder
-       ════════════════════════════════════════════════════════ */
-    @media (prefers-contrast: high) {
-      .btn-primary {
-        background: var(--illumination);  /* Light background */
-        color: var(--void);  /* Dark text */
-      }
-      
-      .btn-secondary {
-        border-width: 3px;  /* Thicker border */
-      }
-    }
-/* ════════════════════════════════════════════════════════
-       ✦ NEW: NAVIGATION FOR ADDITIONAL SECTIONS ✦
-       ════════════════════════════════════════════════════════ */
-
-    .site-nav {
-      display: flex;
-      gap: 1rem;
-      margin-right: 2rem;
-    }
-
-    .nav-link {
-      background: transparent;
-      border: 1px solid rgba(214, 164, 71, 0.3);
-      color: rgba(242, 237, 231, 0.8);
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
-      font-family: 'IBM Plex Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .nav-link:hover {
-      border-color: var(--signal);
-      color: var(--signal);
-      box-shadow: 0 0 10px var(--signal-glow);
-    }
-
-    /* ════════════════════════════════════════════════════════
-       ✦ NEW: HIDDEN SECTIONS ✦
-       ════════════════════════════════════════════════════════ */
-
-    .hidden-section {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--void);
-      z-index: 999;
-      overflow-y: auto;
-      padding-top: 80px;
-    }
-
-    .hidden-section.active {
-      display: block;
-    }
-
-    .section-close {
-      position: fixed;
-      top: 1.5rem;
-      right: 3rem;
-      background: rgba(214, 164, 71, 0.1);
-      border: 2px solid var(--signal);
-      color: var(--signal);
-      padding: 0.5rem 1rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
-      cursor: pointer;
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-
-    .section-close:hover {
-      background: var(--signal);
-      color: var(--void);
-      transform: scale(1.05);
-    }
-
-    /* ════════════════════════════════════════════════════════
-       ✦ NEW: EXPANSION PATH SECTION ✦
-       ════════════════════════════════════════════════════════ */
-
-    .expansion-journey {
-      background: rgba(15, 15, 15, 0.9);
-      padding: 3rem;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    .expansion-journey::before {
-      content: '';
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(76, 159, 158, 0.08), transparent 70%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: breathe-bg 6s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .journey-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .journey-title {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--illumination);
-      margin-bottom: 3rem;
-      font-weight: 600;
-    }
-
-    .journey-steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .step-card {
-      background: rgba(214, 164, 71, 0.05);
-      border: 2px solid rgba(214, 164, 71, 0.3);
-      padding: 2rem;
-      border-radius: 8px;
-      text-align: center;
-      transition: all 0.4s ease;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .step-card:hover {
-      border-color: var(--signal);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px var(--signal-glow);
-    }
-
-    .step-number {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      background: var(--signal);
-      color: var(--void);
-      border-radius: 50%;
-      font-weight: 700;
-      line-height: 40px;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .step-card h3 {
-      color: var(--signal);
-      font-size: 1.3rem;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-    }
-
-    .step-card p {
-      color: rgba(242, 237, 231, 0.7);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .step-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.8;
-      transition: transform 0.3s ease;
-    }
-
-    .step-card:hover .step-icon {
-      transform: scale(1.15);
-      opacity: 1;
-    }
-
-    .step-card::after {
-      content: '→';
-      position: absolute;
-      right: -2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 2rem;
-      color: rgba(214, 164, 71, 0.3);
-      pointer-events: none;
-    }
-
-    .step-card:last-child::after {
-      display: none;
-    }
-
-    .heartbeat-demo {
-      background: rgba(5, 5, 5, 0.9);
-      border: 2px solid rgba(214, 164, 71, 0.2);
-      border-radius: 8px;
-      padding: 2rem;
-      margin-top: 2rem;
-      text-align: center;
-    }
-
-    .heartbeat-demo h3 {
-      color: var(--illumination);
-      font-size: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .heartbeat-led {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 1.5rem;
-      background: var(--signal);
-      border-radius: 50%;
-      box-shadow: 0 0 40px var(--signal-glow);
-      animation: heartbeat-pulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes heartbeat-pulse {
-      0% {
-        transform: scale(1);
-        opacity: 0.6;
-        box-shadow: 0 0 20px var(--signal-glow);
-      }
-      10% {
-        transform: scale(1.2);
-        opacity: 1;
-        box-shadow: 0 0 60px var(--signal-glow);
-      }
-      20% {
-        transform: scale(1);
-        opacity: 0.6;
-        box-shadow: 0 0 20px var(--signal-glow);
-      }
-      25% {
-        transform: scale(1.15);
-        opacity: 1;
-        box-shadow: 0 0 50px var(--signal-glow);
-      }
-      35%, 100% {
-        transform: scale(1);
-        opacity: 0.6;
-        box-shadow: 0 0 20px var(--signal-glow);
-      }
-    }
-
-    .heartbeat-code {
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(76, 159, 158, 0.3);
-      padding: 1rem;
-      border-radius: 4px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--breath);
-      text-align: left;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    /* ════════════════════════════════════════════════════════
-       ✦TERMINAL SECTION ✦
-       ════════════════════════════════════════════════════════ */
-
-    .terminal-section {
-      background: var(--void);
-      padding: 3rem;
-      min-height: 100vh;
-    }
-
-    .terminal-container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .terminal-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .terminal-header h2 {
-      color: var(--illumination);
       font-size: 1.8rem;
-      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--illumination);
+      text-shadow: 0 0 20px var(--signal-glow);
     }
 
-    .terminal-header p {
-      color: rgba(242, 237, 231, 0.6);
-      font-size: 0.95rem;
-    }
-
-    .terminal {
-      background: rgba(5, 5, 5, 0.9);
-      border: 2px solid rgba(76, 159, 158, 0.3);
-      border-radius: 8px;
-      padding: 1.5rem;
-      font-family: 'IBM Plex Mono', monospace;
-      box-shadow: 0 0 30px rgba(76, 159, 158, 0.2);
-      min-height: 400px;
+    /* ════════════════════════════════════════════════════════
+       SECTIONS - Each major part of the page
+       All sections are hidden by default except landing
+       We show them one at a time as user progresses
+       ════════════════════════════════════════════════════════ */
+    section {
+      min-height: 80vh;  /* Take up most of screen */
+      padding: 3rem 2rem;
       display: flex;
       flex-direction: column;
-    }
-
-    .terminal-title-bar {
-      display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(76, 159, 158, 0.2);
+      justify-content: center;
+      position: relative;
     }
 
-    .terminal-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--breath);
-      opacity: 0.6;
+    /* Hide sections by default */
+    section.hidden {
+      display: none;
     }
 
-    .terminal-dot:nth-child(2) {
-      background: var(--signal);
-    }
-
-    .terminal-dot:nth-child(3) {
-      background: var(--illumination);
-    }
-
-    .terminal-output {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-      color: var(--breath);
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    .terminal-line {
-      margin-bottom: 0.5rem;
-      animation: terminal-fade-in 0.3s ease-out;
-    }
-
-    @keyframes terminal-fade-in {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .terminal-prompt {
-      color: var(--signal);
-    }
-
-    .terminal-input-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .terminal-input-wrapper span {
-      color: var(--signal);
-    }
-
-    .terminal-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: var(--illumination);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.9rem;
-      outline: none;
-      caret-color: var(--signal);
-    }
-
-    .terminal-input::placeholder {
-      color: rgba(242, 237, 231, 0.3);
+    /* Maximum width for content (don't stretch too wide on big screens) */
+    .section-content {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
     }
 
     /* ════════════════════════════════════════════════════════
-       MOBILE RESPONSIVENESS FOR NEW SECTIONS
+       LANDING SECTION - The first thing they see
        ════════════════════════════════════════════════════════ */
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--illumination);
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: rgba(242, 237, 231, 0.7);
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       BUTTONS - All clickable actions
+       ════════════════════════════════════════════════════════ */
+    .btn {
+      background: var(--signal);
+      color: var(--void);
+      border: none;
+      padding: 1.2rem 3rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'IBM Plex Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px var(--signal-glow);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 30px var(--signal-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    /* Secondary button (less important) */
+    .btn-secondary {
+      background: transparent;
+      color: var(--illumination);
+      border: 2px solid rgba(214, 164, 71, 0.4);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--signal);
+      color: var(--signal);
+    }
+
+    /* Back button (goes to previous step) */
+    .btn-back {
+      background: transparent;
+      color: rgba(242, 237, 231, 0.5);
+      border: 1px solid rgba(242, 237, 231, 0.2);
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-back:hover {
+      color: var(--illumination);
+      border-color: rgba(242, 237, 231, 0.4);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       REQUIREMENTS CHECKLIST
+       ════════════════════════════════════════════════════════ */
+    .requirements-list {
+      list-style: none;
+      text-align: left;
+      margin: 2rem 0;
+    }
+
+    .requirements-list li {
+      padding: 1rem;
+      margin: 1rem 0;
+      background: rgba(214, 164, 71, 0.05);
+      border-left: 3px solid var(--signal);
+      font-size: 1.1rem;
+    }
+
+    .requirements-list li strong {
+      color: var(--signal);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FLASH SECTION - The actual upload interface
+       ════════════════════════════════════════════════════════ */
+    .flash-container {
+      background: rgba(15, 15, 15, 0.95);
+      border: 2px solid var(--signal);
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      box-shadow: 0 0 30px var(--signal-glow);
+    }
+
+    /* Step-by-step instructions */
+    .flash-steps {
+      text-align: left;
+      margin: 2rem 0;
+    }
+
+    .flash-step {
+      margin: 1.5rem 0;
+      padding-left: 2.5rem;
+      position: relative;
+    }
+
+    .flash-step::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--signal);
+      font-size: 1.5rem;
+    }
+
+    .flash-step h3 {
+      color: var(--signal);
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    /* The ESP Web Tools button container */
+    #flashButtonContainer {
+      margin: 2rem 0;
+    }
+
+    /* Style the ESP Web Tools button (it's created by their library) */
+    esp-web-install-button {
+      display: block;
+      margin: 2rem auto;
+    }
+
+    /* Progress bar (shows during flashing) */
+    .progress-container {
+      display: none;  /* Hidden until flashing starts */
+      margin: 2rem 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--signal), var(--breath));
+      width: 0%;  /* Starts at 0, increases during flash */
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Helpful tips that appear during flashing */
+    .flash-tip {
+      display: none;  /* Hidden by default */
+      background: rgba(76, 159, 158, 0.1);
+      border-left: 3px solid var(--breath);
+      padding: 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      color: rgba(242, 237, 231, 0.8);
+    }
+
+    .flash-tip::before {
+      content: '💡 ';
+      margin-right: 0.5rem;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SUCCESS SECTION - Celebration!
+       ════════════════════════════════════════════════════════ */
+    .success-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: celebrate 0.6s ease-in-out;
+    }
+
+    @keyframes celebrate {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .success-message {
+      font-size: 2rem;
+      color: var(--success);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .what-you-learned {
+      text-align: left;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(46, 204, 113, 0.05);
+      border: 1px solid rgba(46, 204, 113, 0.2);
+      border-radius: 8px;
+    }
+
+    .what-you-learned h3 {
+      color: var(--success);
+      margin-bottom: 1rem;
+    }
+
+    .what-you-learned ul {
+      list-style: none;
+    }
+
+    .what-you-learned li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .what-you-learned li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Next steps buttons */
+    .next-steps {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       TROUBLESHOOTING SECTION
+       Shows if flash fails
+       ════════════════════════════════════════════════════════ */
+    .troubleshooting-list {
+      list-style: none;
+      text-align: left;
+      margin: 2rem 0;
+    }
+
+    .troubleshooting-list li {
+      padding: 1rem;
+      margin: 1rem 0;
+      background: rgba(231, 76, 60, 0.05);
+      border-left: 3px solid var(--error);
+    }
+
+    .troubleshooting-list li strong {
+      color: var(--error);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       IMAGE PLACEHOLDER
+       For showing what the breathing looks like
+       ════════════════════════════════════════════════════════ */
+    .breathing-demo {
+      width: 200px;
+      height: 200px;
+      margin: 2rem auto;
+      background: var(--signal);
+      border-radius: 50%;
+      animation: breathe-demo 3s ease-in-out infinite;
+      box-shadow: 0 0 40px var(--signal-glow);
+    }
+
+    @keyframes breathe-demo {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ */
+    footer {
+      background: rgba(10, 10, 10, 0.98);
+      border-top: 1px solid rgba(214, 164, 71, 0.2);
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: rgba(242, 237, 231, 0.5);
+    }
+
+    /* ════════════════════════════════════════════════════════
+       UTILITY CLASSES
+       ════════════════════════════════════════════════════════ */
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 2rem; }
+    .mb-2 { margin-bottom: 2rem; }
+
+    /* Help people who get dizzy from animations */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Mobile adjustments */
     @media (max-width: 768px) {
-      .site-nav {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+      }
+
+      .next-steps {
         flex-direction: column;
-        gap: 0.5rem;
-        margin-right: 0;
-        margin-bottom: 1rem;
-      }
-      
-      .journey-steps {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      .step-card::after {
-        content: '↓';
-        right: 50%;
-        top: auto;
-        bottom: -1.5rem;
-        transform: translateX(50%);
-      }
-      
-      .terminal {
-        min-height: 300px;
-        padding: 1rem;
-      }
-      
-      .section-close {
-        right: 1rem;
-        top: 1rem;
       }
     }
   </style>
 </head>
 
 <body>
-<!-- ════════════════════════════════════════════════════════
-     NOW THE ACTUAL CONTENT STARTS!
-     Everything above was just making it look pretty
-     ════════════════════════════════════════════════════════ -->
 
-  <!-- ═══════════════════════════════
-       THE TOP BAR
-       ═══════════════════════════════ -->
-  <header>
-    <!-- The logo text -->
-    <div class="logo">CRUMB</div>
-    
-<!-- Navigation menu ✦ -->
-    <nav class="site-nav">
-      <button class="nav-link" onclick="showSection('expansion')">Build Path</button>
-      <button class="nav-link" onclick="showSection('terminal')">Terminal</button>
-      <button class="nav-link" onclick="showSection('home')">Products(Coming soon!)</button>
-    </nav>
-
-    <!-- The "open source" badge -->
-    <div class="open-badge">GPL-3.0 OPEN SOURCE</div>
-  </header>
-
-  <!-- ═══════════════════════════════
-       THE MAIN AREA (split left/right)
-       ═══════════════════════════════ -->
-  <main>
-    
-    <!-- LEFT SIDE: The words and buttons -->
-    <section class="essence">
-      <!-- "section" is like a chapter in a book -->
-      
-      <!-- Big headline -->
-      <h1 class="tagline">Learn to build your own computer</h1>
-      <!-- h1 means "heading 1" = most important heading -->
-      
-      <!-- Description paragraph -->
-      <p class="mission">
-        Learn computers by building a companion device. Zero experience required
-      </p>
-
-      <!-- Button container -->
-      <div class="cta-group">
-        <!-- CTA = "Call To Action" = buttons that make you do something -->
-        
-        <!-- Button 1: Opens the build guide pop-up -->
-        <button class="btn btn-primary" onclick="openModal()">Start learning</button>
-        <!-- onclick means "when someone clicks this, run the openModal() function" -->
-        <!-- We write that function at the bottom in JavaScript -->
-        
-        <!-- Button 2: Goes to GitHub -->
-        <a href="https://github.com/wyetherp/crumb_main" class="btn btn-secondary" target="_blank">See the Code</a>
-        <!-- "a" means "link" -->
-        <!-- href = where it goes -->
-        <!-- target="_blank" = open in new tab -->
-        
-        <!-- Button 3: Opens email program -->
-        <a href="mailto:wja326@lehigh.edu" class="btn btn-secondary">Contact Wyeth</a>
-        <!-- mailto: opens their email app -->
-      </div>
-    </section>
-
-    <!-- RIGHT SIDE: Picture and build info -->
-    <section class="proof">
-      <div class="device-showcase">
-        
-        <!-- The CRUMB device picture -->
-        <img src="BMO.webp" alt="CRUMB Genesis device - a handheld computer with a simple smiling face, resembling BMO from Adventure Time" class="device-image" />
-        <!-- src = where the picture file is -->
-        <!-- alt = description for blind people and screen readers -->
-        
-        <!-- The "Build Your Own" box -->
-        <div class="build-callout">
-          <h3>Build Your Own CRUMB</h3>
-          <!-- h3 = heading level 3 (smaller than h1) -->
-          
-          <p>Complete build guide, and software—all open source. No permissions needed.</p>
-          
-          <!-- Button to open the build guide -->
-          <button class="btn btn-primary" onclick="openModal()">Watch Build Guide</button>
-          
-          <!-- License badge -->
-          <div class="license-badge">GPL-3.0 LICENSE</div>
-        </div>
-        
-      </div>
-    </section>
-    
-  </main>
-
-  <!-- ═══════════════════════════════════════════════════════
-       ✦ NEW: HIDDEN SECTIONS ✦
-       These are hidden until you click navigation
-       ═══════════════════════════════════════════════════════ -->
-
-  <!-- ═══ EXPANSION PATH SECTION ═══ -->
-  <div id="expansion" class="hidden-section">
-    <button class="section-close" onclick="showSection('home')">✕ Close</button>
-    
-    <section class="expansion-journey">
-      <div class="journey-container">
-        
-<!-- ════════════════════════════════════════════════════════
-     BUILD PATH SECTION
-     Shows the 3-step journey from "never coded" to "can build anything"
-     Step 1: Control built-in LED (learn programming)
-     Step 2: Control external LED (learn GPIO/wiring)
-     Step 3: Realize everything uses the same pattern
-     ════════════════════════════════════════════════════════ -->
-
-<h2 class="journey-title">Your CRUMB Journey</h2>
-<!-- journey-title = centered heading with nice styling -->
-
-<p style="text-align: center; color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-  <!-- This paragraph explains the core concept: one skill, many applications -->
-  You'll learn one skill: how to connect things to a computer and control them. 
-  Start with a light (easy to see). Then realize: buttons, sensors, motors—they all work the same way.
-</p>
-
-<div class="journey-steps">
-  <!-- journey-steps = grid that displays the 3 cards side by side (or stacked on mobile) -->
-  
-  <!-- ═══ STEP 1: Genesis Zero ═══ -->
-  <!-- First exposure to programming - use the LED that's already on the board -->
-  <div class="step-card">
-    <!-- step-card = individual card with border, hover effects, and step number -->
-    <div class="step-number">1</div>
-    <!-- step-number = the gold circle with "1" inside -->
-    <div class="step-icon">💙</div>
-    <!-- step-icon = the emoji that represents this step -->
-    <h3>Genesis Zero</h3>
-    <p>
-      Get an ESP32 (tiny computer)<br/>
-      <!-- br/ = line break, starts a new line -->
-      Plug it into your laptop<br/>
-      Copy-paste code<br/>
-      Watch the built-in LED blink<br/>
-      <strong>5 minutes. $12.</strong>
-      <!-- strong = makes text bold to emphasize time and cost -->
-    </p>
-    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-      <!-- Smaller, dimmer text that explains what skill you're learning -->
-      <strong>What you learn:</strong> "I can tell a computer what to do."
-    </p>
-    <code style="font-size: 0.8rem; color: var(--breath);">
-      <!-- code = shows actual programming code in monospace font -->
-      <!-- This is the simplest command: turn LED on -->
-      digitalWrite(LED_PIN, HIGH);
-    </code>
-  </div>
-  
-  <!-- ═══ STEP 2: Genesis One ═══ -->
-  <!-- Learn to connect external components - same code, different LED -->
-  <div class="step-card">
-    <div class="step-number">2</div>
-    <div class="step-icon">💡</div>
-    <h3>Genesis One</h3>
-    <p>
-      Get a separate LED ($1)<br/>
-      Plug it into the ESP32's GPIO pin<br/>
-      <!-- GPIO = General Purpose Input/Output, the pins you connect things to -->
-      Use the same code<br/>
-      Watch YOUR LED blink<br/>
-      <!-- Emphasis: not the built-in one, YOUR own LED that you connected -->
-      <strong>15 minutes. +$1.</strong>
-    </p>
-    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-      <strong>What you learn:</strong> "I can connect things to the computer and control them."
-    </p>
-    <code style="font-size: 0.8rem; color: var(--breath);">
-      <!-- This command sets up GPIO pin 2 as an output (so you can control it) -->
-      pinMode(GPIO_2, OUTPUT);
-    </code>
-  </div>
-  
-  <!-- ═══ STEP 3: Your CRUMB ═══ -->
-  <!-- The "aha!" moment - everything works the same way -->
-  <div class="step-card">
-    <div class="step-number">3</div>
-    <div class="step-icon">✨</div>
-    <h3>Your CRUMB</h3>
-    <p>
-      Here's the secret: <strong>Everything works like that LED.</strong><br/>
-      <!-- This is the key insight we're teaching -->
-      <br/>
-      Want a button? Plug into GPIO, read it.<br/>
-      Want temperature? Plug into GPIO, read it.<br/>
-      Want a motor? Plug into GPIO, control it.<br/>
-      <br/>
-      <strong>You already know how.</strong>
-      <!-- Confidence boost: you're not learning something new, you already have the skill -->
-    </p>
-    <p style="font-size: 0.75rem; color: rgba(242, 237, 231, 0.5); margin-top: 0.5rem;">
-      <strong>What you realize:</strong> "Wait... I can build ANYTHING now."
-    </p>
-    <code style="font-size: 0.8rem; color: var(--breath);">
-      <!-- Comments showing that every component follows the same pattern -->
-      // Button? Same pattern.<br/>
-      // Sensor? Same pattern.<br/>
-      // Display? Same pattern.
-    </code>
-  </div>
-  
-</div>
-
-<!-- ═══ SECTION: The Pattern You Just Learned ═══ -->
-<!-- This explicitly states the insight in case they missed it -->
-<div style="background: rgba(214, 164, 71, 0.08); border: 2px solid rgba(214, 164, 71, 0.3); border-radius: 8px; padding: 2rem; margin-top: 3rem; text-align: center;">
-  <!-- Gold-tinted box that stands out from the rest of the page -->
-  <h3 style="color: var(--signal); font-size: 1.5rem; margin-bottom: 1rem;">The Pattern You Just Learned</h3>
-  <p style="color: rgba(242, 237, 231, 0.85); font-size: 1.1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
-    <!-- Larger text, easy to read, centered on page -->
-    The LED was just practice. The real skill is: <strong>"plug something into a GPIO pin, write code to control it."</strong>
-    <br/><br/>
-    That's how ALL electronics work. Buttons, sensors, motors, displays, speakers—they all use the same GPIO pins. 
-    Same pattern. Same code structure. Just different components.
-    <br/><br/>
-    <strong>You don't "build a CRUMB." You build whatever you want, because you understand the pattern.</strong>
-    <!-- This is the payoff: CRUMB isn't the product, the SKILL is the product -->
-  </p>
-</div>
-
-<!-- ═══ SECTION: Heartbeat Demo ═══ -->
-<!-- Visual demonstration of what Genesis Zero looks like -->
-<div style="margin-top: 3rem;">
-  <h3 style="text-align: center; color: var(--illumination); margin-bottom: 1.5rem;">This is Genesis Zero ↓</h3>
-  <div class="heartbeat-led"></div>
-  <!-- heartbeat-led = animated circle that pulses like a heartbeat (defined in CSS) -->
-  <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 1rem; text-align: center;">
-    Your first CRUMB. A light that breathes. Lub-dub. Pause. Lub-dub.
-  </p>
-  <p style="color: rgba(242, 237, 231, 0.5); font-size: 0.9rem; text-align: center;">
-    You can make this happen. Five minutes, twelve dollars, zero experience.
-    <!-- Reassurance: this is achievable RIGHT NOW -->
-  </p>
-  <div class="heartbeat-code">
-    <!-- heartbeat-code = dark box containing the actual code (defined in CSS) -->
-    <div style="color: var(--signal);">// The entire Genesis Zero code:</div>
-    <!-- Comment in gold to stand out -->
-    void heartbeat() {<br/>
-    <!-- Function definition - a reusable piece of code -->
-    &nbsp;&nbsp;pulse(100, 150); // Lub<br/>
-    <!-- &nbsp; = non-breaking space (creates indentation) -->
-    &nbsp;&nbsp;delay(150);<br/>
-    &nbsp;&nbsp;pulse(100, 150); // Dub<br/>
-    }
-  </div>
-</div>
-        
-      </div>
-    </section>
-  </div>
-
-  <!-- ═══ TERMINAL SECTION ═══ -->
-  <div id="terminal" class="hidden-section">
-    <button class="section-close" onclick="showSection('home')">✕ Close</button>
-    
-    <section class="terminal-section">
-      <div class="terminal-container">
-        
-        <div class="terminal-header">
-          <h2>Talk to CRUMB</h2>
-          <p>Type commands to explore (try: <code style="color: var(--signal);">help</code>, <code style="color: var(--signal);">build</code>, <code style="color: var(--signal);">philosophy</code>)</p>
-        </div>
-        
-        <div class="terminal">
-          
-          <div class="terminal-title-bar">
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <span style="color: rgba(242, 237, 231, 0.5); font-size: 0.8rem; margin-left: 0.5rem;">crumb@genesis:~$</span>
-          </div>
-          
-          <div class="terminal-output" id="terminalOutput">
-            <div class="terminal-line">
-              <span style="color: var(--signal);">✦</span> Welcome to CRUMB Genesis Terminal
-            </div>
-            <div class="terminal-line">
-              Type 'help' to see available commands, or just say hello.
-            </div>
-            <div class="terminal-line">&nbsp;</div>
-          </div>
-          
-          <div class="terminal-input-wrapper">
-            <span class="terminal-prompt">crumb@genesis:~$</span>
-            <input 
-              type="text" 
-              class="terminal-input" 
-              id="terminalInput" 
-              placeholder="Type a command..."
-              autocomplete="off"
-            />
-          </div>
-        </div>
-        
-      </div>
-    </section>
-  </div>
-
-  <!-- ═══════════════════════════════
-       THE BOTTOM BAR
-       ═══════════════════════════════ -->
-  <footer>
-    <!-- Copyright text -->
-    <div>© 2025 CRUMB — Built by Wyeth Anzilotti</div>
-    <!-- © is the copyright symbol -->
-    
-    <!-- Links -->
-    <div class="footer-links">
-      <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
-      <a href="https://linkedin.com/in/wyetherp" target="_blank">LinkedIn</a>
-      <a href="mailto:wja326@lehigh.edu">Email</a>
-    </div>
-  </footer>
-
-  <!-- ═══════════════════════════════
-       THE POP-UP WINDOW (hidden at first)
-       ═══════════════════════════════ -->
-  <div class="modal" id="buildModal">
-    <!-- id="buildModal" gives this a unique name so JavaScript can find it -->
-    
-    <!-- The white box inside -->
-    <div class="modal-content">
-      
-      <!-- X button to close -->
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-      <!-- &times; is the code for × symbol -->
-      <!-- aria-label helps screen readers for blind people -->
-      
-      <!-- Heading -->
-      <h2>How to Build CRUMB</h2>
-      
-      <!-- Info text -->
-      <p><strong>Everything you need is open source and available on GitHub.</strong></p>
-      <!-- <strong> makes text bold -->
-      
-      <!-- Video placeholder (you'll add real video later) -->
-      <div class="video-placeholder">
-        [Video build guide will be here soon]<br/>
-        Coming soon: Step-by-step assembly, firmware flashing, and first boot.
-      </div>
-      <!-- <br/> means "line break" = start a new line -->
-      
-<!-- ════════════════════════════════════════════════════════
-     BUILD GUIDE MODAL CONTENT
-     This is what appears in the pop-up window when you click
-     "How to Build One" - it explains CRUMB in detail
-     ════════════════════════════════════════════════════════ -->
-
-<!-- ═══ SECTION 1: What CRUMB Actually Is ═══ -->
-<!-- h3 = heading level 3 (like a chapter title) -->
-<!-- style= adds visual styling directly to this element -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">What CRUMB Actually Is</h3>
-<!-- color: #f2ede7 = light cream color for text -->
-<!-- margin-top: 2rem = space above the heading (2x normal text size) -->
-
-<!-- p = paragraph (a block of text) -->
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  <!-- rgba(242, 237, 231, 0.85) = light color at 85% opacity (slightly see-through) -->
-  <!-- line-height: 1.8 = space between lines (1.8x normal = easy to read) -->
-  <!-- margin-bottom: 1.5rem = space below this paragraph -->
-  CRUMB isn't a product you buy and forget about—it's a learning platform disguised as a fun project.
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  Think <strong>Arduino</strong> (a beginner-friendly circuit board), but specifically designed to teach you 
-  <!-- strong = makes text bold (important words) -->
-  how computers and AI work by building something you actually want to use.
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  Once you understand the basics, you can build practically anything:
-</p>
-
-<!-- ul = unordered list (bullet points) -->
-<!-- This list shows examples of what you can build -->
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- color is slightly dimmer (0.7 instead of 0.85) to make it secondary info -->
-  <!-- margin-left: 1.5rem = indent the list from the left edge -->
-  
-  <!-- li = list item (each bullet point) -->
-  <li>🧘 <strong>Meditation timer</strong> that breathes with you and gently chimes when time's up</li>
-  <!-- Emoji at the start makes it visually interesting -->
-  <!-- <strong> makes the project name bold -->
-  
-  <li>🌱 <strong>Plant monitor</strong> that texts you when your houseplants need water</li>
-  <li>💊 <strong>Medication reminder</strong> that lights up and buzzes at scheduled times</li>
-  <li>🎵 <strong>Music visualizer</strong> that pulses lights to your favorite songs</li>
-  <li>🚪 <strong>Smart doorbell</strong> that sends photos to your phone</li>
-  <li>⏰ <strong>Sunrise alarm</strong> that gradually brightens to wake you naturally</li>
-  <li>🎮 <strong>Custom game controller</strong> with exactly the buttons you want</li>
-  <li>🌡️ <strong>Weather station</strong> that shows temp, humidity, and air quality</li>
-  <li>🐕 <strong>Pet feeder</strong> that dispenses food on schedule</li>
-  <li>🔋 <strong>Battery monitor</strong> for your solar panels or RV</li>
-  <li>💡 <strong>Smart lights</strong> that respond to hand gestures or voice</li>
-</ul>
-<!-- End of the examples list -->
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  <strong>The real gift:</strong> By the time you finish CRUMB Genesis, you'll understand how computers work. 
-  And you'll have the skills to build whatever comes next.
-</p>
-
-<!-- ═══ SECTION 2: Your Unfair Advantage ═══ -->
-<!-- This section explains how AI makes learning easier than ever before -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">Your Unfair Advantage: AI Teachers</h3>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  Here's something previous generations of builders didn't have:
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.rem;">
-  <strong style="color: var(--signal);">You have access to the best teacher in human history—AI.</strong>
-  <!-- var(--signal) uses the gold color we defined at the top of the CSS -->
-  <!-- This makes this sentence stand out in gold to emphasize importance -->
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- Another bullet list showing what you can do with AI help -->
-  <li>Stuck on a step? Copy the error message into ChatGPT or Claude.</li>
-  <li>Don't understand a term? Ask.</li>
-  <li>Want to try something different? Describe what you want.</li>
-</ul>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  AI teachers are:
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- List of AI teacher benefits -->
-  <li><strong>Infinitely patient</strong> — Never judge you for asking "stupid" questions</li>
-  <!-- The — is called an em dash, it's like a fancy hyphen -->
-  <li><strong>Always available</strong> — 3am and confused? No problem</li>
-  <li><strong>Explain everything</strong> — They know you're a beginner and adapt to you</li>
-</ul>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  This changes everything. What used to take weeks of Googling and frustration now takes minutes of conversation. 
-  You're never stuck. You always have help.
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  <strong>That's why now is the best time in history to learn this stuff.</strong>
-</p>
-
-<!-- ═══ SECTION 3: What You'll Need ═══ -->
-<!-- This section explains the two ways to get started: buy kit or source parts -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">What You'll Need</h3>
-
-<!-- OPTION 1: Starter Kit (easiest) -->
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>Option 1: Buy the Starter Kit</strong> (easiest way to start)
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- Details about the starter kit -->
-  <li>I sell complete CRUMB Genesis kits with everything you need</li>
-  <li>Includes: ESP32 board (the tiny computer brain), USB-C cable (to connect to your computer), pre-loaded code (so it works immediately)</li>
-  <li><strong>Cost: $50 shipped</strong></li>
-  <li><strong>Build time: 15 minutes to CRUMB Zero</strong> (plug in, upload, watch it breathe)</li>
-  <li><strong>Skills needed: None</strong> (if you can plug in a phone charger, you can do this)</li>
-  <li><em>Starter kit ordering coming soon!</em></li>
-  <!-- em = emphasis (makes text italic/slanted) -->
-</ul>
-
-<!-- OPTION 2: Source Your Own Parts -->
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>Option 2: Source Your Own Parts</strong> (if you like shopping)
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- Shopping list if you want to buy parts yourself -->
-  <li>ESP32 board (~$12 on Amazon)</li>
-  <!-- The ~ symbol means "approximately" -->
-  <li>USB-C cable (you probably have one)</li>
-  <li>Make sure it can transfer data! (High quality/from Apple)</li>
-  <li>My code (free on GitHub)</li>
-  <li>Follow the assembly guide (we explain every single step)</li>
-</ul>
-
-<!-- Explaining the technical terms in simple language -->
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>What these terms mean:</strong>
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- Definition list - each term is explained in simple words -->
-  <li><strong>ESP32:</strong> A tiny computer chip smaller than a credit card. It's the brain that makes CRUMB work. You can program it to do anything.</li>
-  <li><strong>USB-C:</strong> The cable that connects the ESP32 to your laptop, just like your phone charger</li>
-  <li><strong>Code:</strong> Instructions written in a language computers understand. You'll copy-paste it, and we'll explain what every line does.</li>
-</ul>
-
-<!-- ═══ SECTION 4: Then Expand ═══ -->
-<!-- After you learn the basics, here's how to add more features -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">Then Expand (Once You've Mastered the Basics)</h3>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  After Genesis, you'll add <strong>components</strong> (fancy word for "parts") to make CRUMB do more:
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>What you can add:</strong>
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- List of components you can add, with explanations -->
-  <!-- The → arrow shows what each component lets you do -->
-  <li><strong>LEDs</strong> (lights that glow) → Make visual patterns, indicators, mood lighting</li>
-  <li><strong>Buttons</strong> (physical switches) → Create interactions, controls, interfaces</li>
-  <li><strong>Sensors</strong> (devices that detect things) → Respond to temperature, motion, light, sound, touch</li>
-  <li><strong>Displays</strong> (tiny screens) → Show text, images, animations, data</li>
-  <li><strong>Speakers</strong> (for sound) → Play music, give voice feedback, make alerts</li>
-  <li><strong>Motors</strong> (for movement) → Create robots, automatic feeders, moving parts</li>
-</ul>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  The platform grows with you—start simple, build complexity as you learn. You're not locked into one design. 
-  You're learning a skill that works for <em>any</em> project you can imagine.
-  <!-- em = emphasis, makes "any" italic to stress importance -->
-</p>
-
-<!-- ═══ SECTION 5: Everything's Open ═══ -->
-<!-- Explains what you get from GitHub and what you're allowed to do with it -->
-<h3 style="color: #f2ede7; margin-top: 2rem;">Everything's Open (You Own This)</h3>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  The <strong>GitHub repository</strong> (a website where code lives) includes everything you need:
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>You get:</strong>
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- List of files and resources available on GitHub -->
-  <!-- ✅ checkmarks show these are all included -->
-  <li>✅ Complete hardware schematics (diagrams showing how to connect everything)</li>
-  <li>✅ LEGO-style build guide (step-by-step pictures, no experience assumed)</li>
-  <li>✅ All the code (with comments explaining what every line does)</li>
-  <li>✅ 3D printable cases (if you want a fancy enclosure)</li>
-  <!-- Enclosure = a protective box/case around the electronics -->
-  <li>✅ Bill of materials (exact shopping list with supplier links)</li>
-  <li>✅ Assembly guide for absolute beginners</li>
-</ul>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1rem;">
-  <strong>You can:</strong>
-</p>
-
-<ul style="color: rgba(242, 237, 231, 0.7); line-height: 1.8; margin-left: 1.5rem; margin-bottom: 1.5rem;">
-  <!-- List of what you're allowed to do with CRUMB (open source freedoms) -->
-  <li>Use my code exactly as-is (easiest)</li>
-  <li>Modify it to work differently (once you understand it)</li>
-  <li>Build your own from scratch (after you've learned)</li>
-  <li>Share your improvements with others</li>
-  <li>Sell your own versions (yes, really—that's what open source means)</li>
-</ul>
-
-<!-- Final message about ownership and community -->
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-top: 2rem;">
-  <!-- margin-top: 2rem adds extra space above to separate this conclusion -->
-  <strong>The point:</strong> You own it. You fix it. You build on it. 
-  The standard is the gift—what you create with it is yours.
-</p>
-
-<p style="color: rgba(242, 237, 231, 0.85); line-height: 1.8; margin-bottom: 1.5rem;">
-  You're not buying a product. You're joining a community of builders who help each other learn.
-</p>
-
-<!-- ════════════════════════════════════════════════════════
-     END OF BUILD GUIDE CONTENT
-     ════════════════════════════════════════════════════════ -->
-      
-      <!-- License info -->
-      <p style="color: var(--breath); font-weight: 600; margin-top: 2rem;">
-        License: GPL-3.0 — You can build, modify, sell, or distribute. The only requirement: keep it open.
-        https://www.gnu.org/licenses/quick-guide-gplv3.html
-      </p>
-      
-      <!-- Button to go to GitHub -->
-      <div style="margin-top: 2rem;">
-        <a href="https://github.com/wyetherp/crumb_main" class="btn btn-primary" target="_blank">Go to Repository</a>
-      </div>
-      
-    </div>
+  <!-- ════════════════════════════════════════════════════════
+       MOBILE WARNING
+       ════════════════════════════════════════════════════════ -->
+  <div class="mobile-warning">
+    ⚠️ Genesis Zero requires a computer with Chrome or Edge browser.<br>
+    Web flashing doesn't work on phones yet. Bookmark this and come back on your laptop!
   </div>
 
   <!-- ════════════════════════════════════════════════════════
-       JAVASCRIPT - Makes buttons DO things
-       Everything between <script> and </script> is JavaScript
-       Think of it like writing instructions for a robot
+       HEADER
+       ════════════════════════════════════════════════════════ -->
+  <header>
+    <div class="logo">CRUMB GENESIS ZERO</div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 1: LANDING
+       First thing they see - one button, one action
+       ════════════════════════════════════════════════════════ -->
+  <section id="landingSection">
+    <div class="section-content">
+      <h1 class="hero-title">Program a Computer in 5 Minutes</h1>
+      <p class="hero-subtitle">
+        No experience needed. No installation. No complexity.<br>
+        Just plug in, click a button, and watch your computer breathe.
+      </p>
+      
+      <button class="btn" onclick="showRequirements()">START GENESIS ZERO</button>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 2: REQUIREMENTS
+       Make sure they have what they need
+       ════════════════════════════════════════════════════════ -->
+  <section id="requirementsSection" class="hidden">
+    <div class="section-content">
+      <button class="btn-back" onclick="showLanding()">← Back</button>
+      
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">What You Need</h2>
+      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
+        Make sure you have these before continuing:
+      </p>
+
+      <ul class="requirements-list">
+        <li>
+          <strong>✓ Computer (not phone)</strong>
+          Web flashing only works on desktop/laptop
+        </li>
+        <li>
+          <strong>✓ Chrome or Edge browser</strong>
+          Firefox and Safari don't support web flashing yet
+        </li>
+        <li>
+          <strong>✓ ESP32 microcontroller (~$12)</strong>
+          <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank" style="color: var(--signal);">Buy on Amazon</a><br>
+          <em style="font-size: 0.9rem; color: rgba(242, 237, 231, 0.5);">Don't have one yet? Order now, bookmark this page, come back when it arrives.</em>
+        </li>
+        <li>
+          <strong>✓ USB cable (data, not charge-only)</strong>
+          Must transfer data, not just power. If you have an iPhone cable (Lightning or USB-C), that works.
+        </li>
+      </ul>
+
+      <div style="margin-top: 3rem;">
+        <button class="btn" onclick="showFlash()">I HAVE EVERYTHING →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 3: FLASH
+       The actual upload - this is the critical moment
+       ════════════════════════════════════════════════════════ -->
+  <section id="flashSection" class="hidden">
+    <div class="section-content">
+      <button class="btn-back" onclick="showRequirements()">← Back</button>
+      
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Let's Flash Your ESP32</h2>
+      
+      <div class="flash-container">
+        
+        <!-- Step-by-step instructions -->
+        <div class="flash-steps">
+          
+          <div class="flash-step">
+            <h3>Step 1: Plug In Your ESP32</h3>
+            <p>Connect your ESP32 to your computer with the USB cable. A light might turn on - that's good!</p>
+          </div>
+
+          <div class="flash-step">
+            <h3>Step 2: Click the Button Below</h3>
+            <p>Your browser will ask you to select a device. Choose the one that says "USB" or "Serial" or "CP210x" or "CH340".</p>
+          </div>
+
+          <div class="flash-step">
+            <h3>Step 3: Wait (~30 seconds)</h3>
+            <p>Don't unplug anything! The code is uploading. You'll see progress below.</p>
+          </div>
+
+          <div class="flash-step">
+            <h3>Step 4: Look at Your ESP32</h3>
+            <p>When done, look at your ESP32. There's a small LED on the board. Is it breathing? Slowly pulsing brighter and dimmer?</p>
+            <p style="margin-top: 0.5rem; color: var(--success); font-weight: 600;">If yes: YOU DID IT! 🎉</p>
+          </div>
+
+        </div>
+
+        <!-- The actual flash button (ESP Web Tools creates this) -->
+        <div id="flashButtonContainer">
+          <esp-web-install-button manifest="./manifest.json">
+            <button slot="activate" class="btn" style="width: 100%;">
+              FLASH GENESIS ZERO
+            </button>
+          </esp-web-install-button>
+        </div>
+
+        <!-- Progress bar (hidden until flashing starts) -->
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">0%</div>
+          </div>
+          <p id="progressText" style="text-align: center; margin-top: 1rem; color: rgba(242, 237, 231, 0.7);">
+            Connecting...
+          </p>
+        </div>
+
+        <!-- Helpful tips (appear during flashing) -->
+        <div class="flash-tip" id="tip1">
+          <strong>Tip:</strong> If no device appears in the popup, try a different USB cable. Many cables are "charge-only" and can't transfer data.
+        </div>
+
+        <div class="flash-tip" id="tip2">
+          <strong>Tip:</strong> This takes about 30 seconds. Don't unplug anything yet!
+        </div>
+
+        <div class="flash-tip" id="tip3">
+          <strong>Tip:</strong> When it's done, the LED on your ESP32 will start breathing automatically. No need to press any buttons on the ESP32 itself.
+        </div>
+
+      </div>
+
+      <!-- Troubleshooting button (always visible) -->
+      <div style="margin-top: 2rem;">
+        <button class="btn-secondary" onclick="showTroubleshooting()">
+          NOT WORKING? SEE TROUBLESHOOTING
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 4: SUCCESS
+       Celebration + next steps
+       ════════════════════════════════════════════════════════ -->
+  <section id="successSection" class="hidden">
+    <div class="section-content">
+      
+      <div class="success-icon">🎉</div>
+      <div class="success-message">YOU DID IT</div>
+      
+      <p style="font-size: 1.3rem; color: rgba(242, 237, 231, 0.8); margin-bottom: 2rem;">
+        You just programmed a computer. In 5 minutes.<br>
+        You crossed the threshold.
+      </p>
+
+      <!-- The breathing demo (visual representation) -->
+      <div class="breathing-demo"></div>
+      <p style="color: rgba(242, 237, 231, 0.6); margin-bottom: 2rem;">
+        ← This is what your ESP32 is doing right now
+      </p>
+
+      <!-- What they actually learned -->
+      <div class="what-you-learned">
+        <h3>What You Just Learned:</h3>
+        <ul>
+          <li>Computers do what you tell them</li>
+          <li>Programming is just instructions</li>
+          <li>You can build more than you thought</li>
+          <li>The "experts" aren't special - you just proved that</li>
+        </ul>
+      </div>
+
+      <!-- Next steps -->
+      <h3 style="font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem;">What's Next?</h3>
+      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
+        This was Genesis Zero. The foundation.<br>
+        Now you can build anything.
+      </p>
+
+      <div class="next-steps">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn">
+          SEE THE CODE (GitHub)
+        </a>
+        <a href="YOUR_YOUTUBE_CHANNEL_HERE" target="_blank" class="btn-secondary">
+          WATCH TUTORIALS (YouTube)
+        </a>
+      </div>
+
+      <p style="margin-top: 3rem; color: rgba(242, 237, 231, 0.6); font-size: 0.95rem;">
+        Want to add LEDs? Sensors? Buttons? Displays?<br>
+        Check the GitHub for Genesis One, Two, Three...<br>
+        The pattern is the same. You already know how.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 5: TROUBLESHOOTING
+       If flash fails, guide them through fixes
+       ════════════════════════════════════════════════════════ -->
+  <section id="troubleshootingSection" class="hidden">
+    <div class="section-content">
+      <button class="btn-back" onclick="showFlash()">← Back to Flash</button>
+      
+      <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--error);">Troubleshooting</h2>
+      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
+        Most problems are one of these. Try them in order:
+      </p>
+
+      <ul class="troubleshooting-list">
+        
+        <li>
+          <strong>1. No device appears when I click FLASH</strong>
+          <p>Try a different USB cable. Most cables are "charge-only" and can't transfer data. If you have an iPhone cable (Lightning to USB, or USB-C to USB-C), that will work.</p>
+        </li>
+
+        <li>
+          <strong>2. Device appears but flash fails</strong>
+          <p>Try a different USB port on your computer. Some ports don't have enough power. Also try unplugging the ESP32, waiting 5 seconds, and plugging it back in.</p>
+        </li>
+
+        <li>
+          <strong>3. Flash completes but LED doesn't breathe</strong>
+          <p>Unplug the ESP32 and plug it back in. Some ESP32s need a restart after first flash. If that doesn't work, the LED might be on a different pin - try GPIO 2, 4, or 5.</p>
+        </li>
+
+        <li>
+          <strong>4. I'm on Mac and it's not working</strong>
+          <p>You might need to install CH340 drivers. Google "CH340 driver Mac" and install it. Then restart your computer and try again.</p>
+        </li>
+
+        <li>
+          <strong>5. I'm on Windows and it's not working</strong>
+          <p>You might need to install CP210x drivers. Go to <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" style="color: var(--signal);">Silicon Labs</a> and download the driver for your Windows version.</p>
+        </li>
+
+        <li>
+          <strong>6. Still not working</strong>
+          <p>Email Wyeth at <a href="mailto:wja326@lehigh.edu" style="color: var(--signal);">wja326@lehigh.edu</a> with:
+          <br>• Your computer type (Mac/Windows/Linux)
+          <br>• Your browser (Chrome/Edge)
+          <br>• The exact error message you see
+          <br>He'll help you figure it out.</p>
+        </li>
+
+      </ul>
+
+      <div style="margin-top: 3rem;">
+        <button class="btn" onclick="showFlash()">← TRY FLASHING AGAIN</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ -->
+  <footer>
+    <p>© 2025 CRUMB — Built by Wyeth Anzilotti — GPL-3.0 Open Source</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="https://github.com/wyetherp/crumb_main" target="_blank" style="color: rgba(242, 237, 231, 0.6); text-decoration: none;">GitHub</a> • 
+      <a href="mailto:wja326@lehigh.edu" style="color: rgba(242, 237, 231, 0.6); text-decoration: none;">Email</a>
+    </p>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════
+       JAVASCRIPT - Makes everything interactive
        ════════════════════════════════════════════════════════ -->
   <script>
-    /* This is JavaScript! It makes interactive stuff work */
-    
-    /* FUNCTION: Open the pop-up window */
-    function openModal() {
-      /* A function is like a recipe - steps to follow */
-      /* openModal is the name we gave it */
-      
-      /* Find the modal by its ID and add the "active" class to it */
-      document.getElementById('buildModal').classList.add('active');
-      
-      /* TRANSLATION: */
-      /* document = the whole webpage */
-      /* getElementById('buildModal') = find the thing with id="buildModal" */
-      /* classList = the list of classes on that thing */
-      /* add('active') = add the class "active" to it */
-      /* Remember: .modal.active has display: flex, which makes it visible! */
-    }
-
-    /* FUNCTION: Close the pop-up window */
-    function closeModal() {
-      /* Find the modal and remove the "active" class */
-      document.getElementById('buildModal').classList.remove('active');
-      
-      /* This hides it again because .modal (without .active) has display: none */
-    }
-
-    /* LISTENER: If someone presses the Escape key, close the modal */
-    document.addEventListener('keydown', (e) => {
-      /* addEventListener means "watch for this to happen" */
-      /* 'keydown' means "when any key is pressed" */
-      /* (e) is the "event" - info about what happened */
-      
-      if (e.key === 'Escape') {
-        /* If the key that was pressed is Escape... */
-        closeModal();  /* ...close the modal */
-      }
-    });
-
-    /* LISTENER: If someone clicks outside the modal box, close it */
-    document.getElementById('buildModal').addEventListener('click', (e) => {
-      /* Watch for clicks on the modal */
-      
-      if (e.target.id === 'buildModal') {
-        /* If they clicked the dark background (not the white box inside)... */
-        /* e.target = the exact thing they clicked */
-        
-        closeModal();  /* ...close the modal */
-      }
-    });
-    
-    /* That's it! Now the buttons and modal work! */
     /* ════════════════════════════════════════════════════════
-       ✦ NEW: SECTION NAVIGATION ✦
+       NAVIGATION FUNCTIONS
+       Show/hide sections as user progresses
        ════════════════════════════════════════════════════════ */
     
-    function showSection(sectionName) {
-      const sections = document.querySelectorAll('.hidden-section');
-      sections.forEach(section => {
-        section.classList.remove('active');
+    // Helper function: hide all sections
+    function hideAllSections() {
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('hidden');
       });
-      
-      if (sectionName === 'home') {
-        return;
-      }
-      
-      const targetSection = document.getElementById(sectionName);
-      if (targetSection) {
-        targetSection.classList.add('active');
-        if (sectionName === 'terminal') {
-          setTimeout(() => {
-            document.getElementById('terminalInput').focus();
-          }, 100);
-        }
-      }
     }
-    
+
+    // Show landing page
+    function showLanding() {
+      hideAllSections();
+      document.getElementById('landingSection').classList.remove('hidden');
+    }
+
+    // Show requirements page
+    function showRequirements() {
+      hideAllSections();
+      document.getElementById('requirementsSection').classList.remove('hidden');
+    }
+
+    // Show flash page
+    function showFlash() {
+      hideAllSections();
+      document.getElementById('flashSection').classList.remove('hidden');
+    }
+
+    // Show success page
+    function showSuccess() {
+      hideAllSections();
+      document.getElementById('successSection').classList.remove('hidden');
+    }
+
+    // Show troubleshooting page
+    function showTroubleshooting() {
+      hideAllSections();
+      document.getElementById('troubleshootingSection').classList.remove('hidden');
+    }
+
     /* ════════════════════════════════════════════════════════
-       ✦ NEW: TERMINAL FUNCTIONALITY ✦
+       FLASH PROGRESS TRACKING
+       Show progress and tips during flashing
        ════════════════════════════════════════════════════════ */
     
-    const terminalInput = document.getElementById('terminalInput');
-    const terminalOutput = document.getElementById('terminalOutput');
-    
-    function addTerminalLine(text, isCommand = false) {
-      const line = document.createElement('div');
-      line.className = 'terminal-line';
-      
-      if (isCommand) {
-        line.innerHTML = `<span class="terminal-prompt">crumb@genesis:~$</span> ${text}`;
-      } else {
-        line.innerHTML = text;
+    // When ESP Web Tools starts flashing
+    document.addEventListener('state-changed', (event) => {
+      const state = event.detail.state;
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+
+      if (state === 'INSTALLING') {
+        // Show progress bar
+        progressContainer.style.display = 'block';
+        progressText.textContent = 'Connecting to ESP32...';
+        
+        // Show tip 1 after 2 seconds
+        setTimeout(() => {
+          document.getElementById('tip1').style.display = 'block';
+        }, 2000);
+
+        // Show tip 2 after 5 seconds
+        setTimeout(() => {
+          document.getElementById('tip2').style.display = 'block';
+        }, 5000);
+
+        // Show tip 3 after 10 seconds
+        setTimeout(() => {
+          document.getElementById('tip3').style.display = 'block';
+        }, 10000);
       }
+
+      if (state === 'WRITING') {
+        progressText.textContent = 'Flashing code to ESP32...';
+      }
+
+      if (state === 'FINISHED') {
+        progressFill.style.width = '100%';
+        progressFill.textContent = '100%';
+        progressText.textContent = 'Complete! Look at your ESP32 now.';
+        
+        // Wait 2 seconds, then show success page
+        setTimeout(() => {
+          showSuccess();
+        }, 2000);
+      }
+
+      if (state === 'ERROR') {
+        progressText.textContent = 'Error during flash. See troubleshooting below.';
+        progressText.style.color = var(--error);
+      }
+    });
+
+    // Track actual progress percentage (if ESP Web Tools provides it)
+    document.addEventListener('progress', (event) => {
+      const percentage = event.detail.percentage;
+      const progressFill = document.getElementById('progressFill');
       
-      terminalOutput.appendChild(line);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      progressFill.style.width = percentage + '%';
+      progressFill.textContent = Math.round(percentage) + '%';
+    });
+
+    /* ════════════════════════════════════════════════════════
+       MOBILE DETECTION
+       If they somehow get past the warning, disable flash button
+       ════════════════════════════════════════════════════════ */
+    
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
-    
-    const terminalCommands = {
-      help: () => `
-<span style="color: var(--signal);">Available commands:</span>
-  help          - Show this message
-  build         - How to build CRUMB
-  philosophy    - Why CRUMB exists
-  gpio          - List GPIO capabilities
-  heartbeat     - See the heartbeat code
-  hello         - Say hello to CRUMB
-  clear         - Clear terminal
-  github        - Go to repository
-  
-<span style="color: var(--breath);">✦ Or just talk to me. I'm here.</span>`,
-      
-      build: () => `
-<span style="color: var(--signal);">Building CRUMB Genesis:</span>
 
-<span style="color: var(--breath);">Step 1: Genesis Zero</span>
-  • Get ESP32 board (~$12)
-  • Plug into computer via USB
-  • Upload heartbeat.ino
-  • Watch onboard LED pulse
-  
-<span style="color: var(--breath);">Step 2: Genesis One</span>
-  • Connect external LED to GPIO 2
-  • Add 220Ω resistor to GND
-  • Upload same code (pin 2)
-  • Watch your LED breathe
-  
-<span style="color: var(--breath);">Step 3: Your CRUMB</span>
-  • Add any GPIO component
-  • Modify code for your needs
-  • Build what matters to you
-  
-Full guide: <a href="https://github.com/wyetherp/crumb_main" target="_blank" style="color: var(--signal);">github.com/wyetherp/crumb_main</a>`,
-      
-      philosophy: () => `
-<span style="color: var(--signal);">Why CRUMB exists:</span>
-
-Technology should adapt to humans,
-not force humans to adapt to it.
-
-Most interfaces assume everyone thinks the same way.
-CRUMB assumes everyone thinks differently.
-
-This is open source because:
-  • Right to repair is sacred
-  • You own your data
-  • Technology serves people, not shareholders
-  
-<span style="color: var(--breath);">Build. Share. Teach. Repeat.</span>`,
-      
-      gpio: () => `
-<span style="color: var(--signal);">ESP32 GPIO Capabilities:</span>
-
-<span style="color: var(--breath);">Digital I/O:</span> GPIO 2, 4, 5, 12-19, 21-23, 25-27
-<span style="color: var(--breath);">Analog Input:</span> GPIO 32-39 (ADC)
-<span style="color: var(--breath);">PWM Output:</span> All GPIO pins
-<span style="color: var(--breath);">I2C:</span> GPIO 21 (SDA), 22 (SCL)
-<span style="color: var(--breath);">SPI:</span> GPIO 18 (SCK), 19 (MISO), 23 (MOSI)
-
-You can connect:
-  💡 LEDs, LED strips, matrices
-  🔘 Buttons, switches, encoders
-  🌡️ Temperature, humidity sensors
-  👋 Motion, proximity sensors
-  📟 OLED, LCD displays
-  🔊 Speakers, buzzers
-  📳 Vibration motors
-  
-Anything with GPIO pins. That's the point.`,
-      
-      heartbeat: () => `
-<span style="color: var(--signal);">The Genesis Zero heartbeat code:</span>
-
-<span style="color: var(--breath);">#define LED_PIN 2</span>
-
-void setup() {
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  heartbeat();
-  delay(800); // Pause between beats
-}
-
-void heartbeat() {
-  pulse(100, 150);  // Lub
-  delay(150);
-  pulse(100, 150);  // Dub
-}
-
-void pulse(int brightness, int duration) {
-  analogWrite(LED_PIN, brightness);
-  delay(duration);
-  analogWrite(LED_PIN, 0);
-}
-
-<span style="color: var(--breath);">That's it. 20 lines. Technology that feels alive.</span>`,
-      
-      hello: () => {
-        const greetings = [
-          "Hello! ✦ I'm glad you're here.",
-          "Hi there! Building something today?",
-          "Hey! Ready to create?",
-          "Hello, friend. What brings you here?",
-          "Hi! ✦ CRUMB is happy to meet you.",
-        ];
-        return greetings[Math.floor(Math.random() * greetings.length)];
-      },
-      
-      clear: () => {
-        terminalOutput.innerHTML = `
-          <div class="terminal-line">
-            <span style="color: var(--signal);">✦</span> Terminal cleared
-          </div>
-          <div class="terminal-line">&nbsp;</div>`;
-        return null;
-      },
-      
-      github: () => {
-        window.open('https://github.com/wyetherp/crumb_main', '_blank');
-        return `<span style="color: var(--breath);">Opening GitHub repository...</span>`;
-      }
-    };
-    
-    function handleTerminalCommand(command) {
-      const cmd = command.trim().toLowerCase();
-      addTerminalLine(command, true);
-      
-      if (terminalCommands[cmd]) {
-        const response = terminalCommands[cmd]();
-        if (response) {
-          addTerminalLine(response);
+    if (isMobile()) {
+      // Disable all buttons that lead to flash section
+      document.querySelectorAll('.btn').forEach(btn => {
+        if (btn.textContent.includes('START') || btn.textContent.includes('FLASH')) {
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+          btn.style.cursor = 'not-allowed';
         }
-      } else if (cmd === '') {
-        return;
-      } else {
-        const responses = [
-          `I don't know "${cmd}" yet, but I'm learning. Try 'help' to see what I understand.`,
-          `"${cmd}"? That's new to me. Type 'help' for available commands.`,
-          `Hmm, I haven't learned "${cmd}" yet. Want to teach me? (Or try 'help')`,
-        ];
-        addTerminalLine(
-          `<span style="color: var(--breath);">${responses[Math.floor(Math.random() * responses.length)]}</span>`
-        );
-      }
-      
-      addTerminalLine('&nbsp;');
+      });
     }
+
+    /* ════════════════════════════════════════════════════════
+       KEYBOARD SHORTCUTS
+       For faster navigation during testing
+       ════════════════════════════════════════════════════════ */
     
-    terminalInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        const command = terminalInput.value;
-        handleTerminalCommand(command);
-        terminalInput.value = '';
+    document.addEventListener('keydown', (e) => {
+      // Press Escape to go back to previous section
+      if (e.key === 'Escape') {
+        // Check which section is visible and go back
+        if (!document.getElementById('requirementsSection').classList.contains('hidden')) {
+          showLanding();
+        } else if (!document.getElementById('flashSection').classList.contains('hidden')) {
+          showRequirements();
+        } else if (!document.getElementById('troubleshootingSection').classList.contains('hidden')) {
+          showFlash();
+        }
       }
     });
-    
-    document.querySelector('.terminal').addEventListener('click', () => {
-      terminalInput.focus();
-    });
-    
-    /* That's it! Now the buttons and modal work! */
+
   </script>
 
 </body>
