@@ -1,549 +1,295 @@
-<!-- 
-  ═══════════════════════════════════════════════════════════════
-  CRUMB GENESIS ZERO - WEB FLASHER
-  ═══════════════════════════════════════════════════════════════
-  
-  PURPOSE: Get someone from "never programmed" to "breathing ESP32" in 5 minutes.
-  
-  FLOW:
-  1. Mobile detection (stop them if on phone)
-  2. Landing (one button: START)
-  3. Requirements (do they have what they need?)
-  4. Flash (ESP Web Tools - the actual upload)
-  5. Success (celebration + next steps)
-  6. Troubleshooting (if flash fails)
-  
-  Made by: Wyeth Anzilotti
-  License: GPL-3.0 (free to use, keep it free for others)
-  ═══════════════════════════════════════════════════════════════
--->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Tell browser what language and character set we're using -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUMB Genesis Zero</title>
   
-  <!-- What shows up in Google search results -->
-  <meta name="description" content="Learn to program by building a breathing computer in 5 minutes. No experience needed."/>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Browser tab title -->
-  <title>CRUMB Genesis Zero — Your First Program</title>
-  
-  <!-- Fonts from Google -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- ESP Web Tools - This is what actually flashes the ESP32 -->
-  <!-- This is the official Espressif tool for web-based flashing -->
+  <!-- ESP Web Tools - For flashing ESP32 -->
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
-
+  
   <style>
-    /* ════════════════════════════════════════════════════════
-       COLORS - Give them names so we can reuse them
-       ════════════════════════════════════════════════════════ */
+    /* Colors */
     :root {
-      --void: #0A0A0A;              /* Almost black background */
-      --illumination: #F2EDE7;      /* Light text color */
-      --signal: #D6A447;            /* Gold for important things */
-      --breath: #4C9F9E;            /* Teal for calm moments */
-      --error: #E74C3C;             /* Red for errors */
-      --success: #2ECC71;           /* Green for success */
-      --signal-glow: rgba(214, 164, 71, 0.3);  /* Glowy gold */
+      --bg: #0A0A0A;
+      --text: #F2EDE7;
+      --accent: #D6A447;
+      --accent-dim: rgba(214, 164, 71, 0.3);
+      --success: #2ECC71;
+      --error: #E74C3C;
     }
-
-    /* ════════════════════════════════════════════════════════
-       RESET - Start with clean slate
-       ════════════════════════════════════════════════════════ */
-    * { 
-      box-sizing: border-box;  /* Makes sizing math easier */
+    
+    /* Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-
-    /* ════════════════════════════════════════════════════════
-       BODY - The whole page
-       ════════════════════════════════════════════════════════ */
+    
     body {
-      background: var(--void);
-      color: var(--illumination);
-      font-family: 'Inter Tight', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
       line-height: 1.6;
-      overflow-x: hidden;  /* No horizontal scroll */
     }
-
-    /* ════════════════════════════════════════════════════════
-       MOBILE WARNING BANNER
-       Shows at top if they're on a phone
-       ════════════════════════════════════════════════════════ */
-    .mobile-warning {
-      display: none;  /* Hidden by default */
-      background: var(--error);
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-weight: 600;
-      position: sticky;  /* Stays at top when scrolling */
-      top: 0;
-      z-index: 1000;  /* In front of everything */
-      font-size: 0.9rem;
-    }
-
-    /* Show warning only on mobile devices */
-    @media (max-width: 768px) {
-      .mobile-warning {
-        display: block;
-      }
-      
-      /* Hide the flash section on mobile (it won't work anyway) */
-      #flashSection {
-        display: none;
-      }
-    }
-
-    /* ════════════════════════════════════════════════════════
-       HEADER - Top bar with logo
-       ════════════════════════════════════════════════════════ */
+    
+    /* Header */
     header {
       background: rgba(10, 10, 10, 0.95);
-      border-bottom: 1px solid rgba(214, 164, 71, 0.2);
-      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--accent-dim);
+      padding: 1.5rem;
       text-align: center;
-      backdrop-filter: blur(10px);
     }
-
+    
     .logo {
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: 4px;
-      color: var(--illumination);
-      text-shadow: 0 0 20px var(--signal-glow);
+      color: var(--text);
     }
-
-    /* ════════════════════════════════════════════════════════
-       SECTIONS - Each major part of the page
-       All sections are hidden by default except landing
-       We show them one at a time as user progresses
-       ════════════════════════════════════════════════════════ */
+    
+    /* Sections */
     section {
-      min-height: 80vh;  /* Take up most of screen */
+      min-height: 80vh;
       padding: 3rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
     }
-
-    /* Hide sections by default */
-    section.hidden {
+    
+    .hidden {
       display: none;
     }
-
-    /* Maximum width for content (don't stretch too wide on big screens) */
-    .section-content {
+    
+    .container {
       max-width: 700px;
       width: 100%;
+    }
+    
+    /* Typography */
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
       text-align: center;
     }
-
-    /* ════════════════════════════════════════════════════════
-       LANDING SECTION - The first thing they see
-       ════════════════════════════════════════════════════════ */
-    .hero-title {
-      font-size: 3rem;
-      font-weight: 700;
+    
+    h2 {
+      font-size: 2rem;
       margin-bottom: 1rem;
-      color: var(--illumination);
-      line-height: 1.2;
+      text-align: center;
     }
-
-    .hero-subtitle {
-      font-size: 1.3rem;
-      color: rgba(242, 237, 231, 0.7);
-      margin-bottom: 3rem;
-      line-height: 1.6;
-    }
-
-    /* ════════════════════════════════════════════════════════
-       BUTTONS - All clickable actions
-       ════════════════════════════════════════════════════════ */
-    .btn {
-      background: var(--signal);
-      color: var(--void);
-      border: none;
-      padding: 1.2rem 3rem;
+    
+    p {
       font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: rgba(242, 237, 231, 0.8);
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
       font-weight: 600;
       font-family: 'IBM Plex Mono', monospace;
       text-transform: uppercase;
       letter-spacing: 2px;
+      border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px var(--signal-glow);
       text-decoration: none;
-      display: inline-block;
+      transition: transform 0.2s;
+      margin: 0.5rem;
     }
-
+    
     .btn:hover {
-      box-shadow: 0 0 30px var(--signal-glow);
       transform: translateY(-2px);
     }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    /* Secondary button (less important) */
+    
     .btn-secondary {
       background: transparent;
-      color: var(--illumination);
-      border: 2px solid rgba(214, 164, 71, 0.4);
+      color: var(--text);
+      border: 2px solid var(--accent);
     }
-
-    .btn-secondary:hover {
-      border-color: var(--signal);
-      color: var(--signal);
-    }
-
-    /* Back button (goes to previous step) */
+    
     .btn-back {
       background: transparent;
       color: rgba(242, 237, 231, 0.5);
-      border: 1px solid rgba(242, 237, 231, 0.2);
-      padding: 0.8rem 1.5rem;
+      border: 1px solid rgba(242, 237, 231, 0.3);
       font-size: 0.9rem;
+      padding: 0.7rem 1.5rem;
       margin-bottom: 2rem;
     }
-
-    .btn-back:hover {
-      color: var(--illumination);
-      border-color: rgba(242, 237, 231, 0.4);
-    }
-
-    /* ════════════════════════════════════════════════════════
-       REQUIREMENTS CHECKLIST
-       ════════════════════════════════════════════════════════ */
-    .requirements-list {
+    
+    /* Requirements List */
+    .requirements {
       list-style: none;
       text-align: left;
       margin: 2rem 0;
     }
-
-    .requirements-list li {
+    
+    .requirements li {
       padding: 1rem;
       margin: 1rem 0;
       background: rgba(214, 164, 71, 0.05);
-      border-left: 3px solid var(--signal);
-      font-size: 1.1rem;
+      border-left: 3px solid var(--accent);
     }
-
-    .requirements-list li strong {
-      color: var(--signal);
+    
+    .requirements strong {
+      color: var(--accent);
       display: block;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.5rem;
     }
-
-    /* ════════════════════════════════════════════════════════
-       FLASH SECTION - The actual upload interface
-       ════════════════════════════════════════════════════════ */
-    .flash-container {
-      background: rgba(15, 15, 15, 0.95);
-      border: 2px solid var(--signal);
+    
+    /* Flash Container */
+    .flash-box {
+      background: rgba(20, 20, 20, 0.8);
+      border: 2px solid var(--accent);
       padding: 2rem;
-      border-radius: 8px;
       margin: 2rem 0;
-      box-shadow: 0 0 30px var(--signal-glow);
+      text-align: center;
     }
-
-    /* Step-by-step instructions */
-    .flash-steps {
-      text-align: left;
-      margin: 2rem 0;
-    }
-
+    
     .flash-step {
+      text-align: left;
       margin: 1.5rem 0;
-      padding-left: 2.5rem;
+      padding-left: 2rem;
       position: relative;
     }
-
+    
     .flash-step::before {
       content: '→';
       position: absolute;
       left: 0;
-      color: var(--signal);
+      color: var(--accent);
       font-size: 1.5rem;
     }
-
+    
     .flash-step h3 {
-      color: var(--signal);
+      color: var(--accent);
+      font-size: 1.1rem;
       margin-bottom: 0.5rem;
-      font-size: 1.2rem;
     }
-
-    /* The ESP Web Tools button container */
-    #flashButtonContainer {
-      margin: 2rem 0;
-    }
-
-    /* Style the ESP Web Tools button (it's created by their library) */
+    
+    /* ESP Web Tools Button Styling */
     esp-web-install-button {
       display: block;
       margin: 2rem auto;
     }
-
-    /* Progress bar (shows during flashing) */
-    .progress-container {
-      display: none;  /* Hidden until flashing starts */
-      margin: 2rem 0;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--signal), var(--breath));
-      width: 0%;  /* Starts at 0, increases during flash */
-      transition: width 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    /* Helpful tips that appear during flashing */
-    .flash-tip {
-      display: none;  /* Hidden by default */
-      background: rgba(76, 159, 158, 0.1);
-      border-left: 3px solid var(--breath);
-      padding: 1rem;
-      margin: 1rem 0;
-      font-size: 0.95rem;
-      color: rgba(242, 237, 231, 0.8);
-    }
-
-    .flash-tip::before {
-      content: '💡 ';
-      margin-right: 0.5rem;
-    }
-
-    /* ════════════════════════════════════════════════════════
-       SUCCESS SECTION - Celebration!
-       ════════════════════════════════════════════════════════ */
+    
+    /* Success Section */
     .success-icon {
-      font-size: 5rem;
+      font-size: 4rem;
       margin-bottom: 1rem;
-      animation: celebrate 0.6s ease-in-out;
     }
-
-    @keyframes celebrate {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-
-    .success-message {
-      font-size: 2rem;
+    
+    .success-title {
+      font-size: 2.5rem;
       color: var(--success);
       font-weight: 700;
       margin-bottom: 1rem;
     }
-
-    .what-you-learned {
-      text-align: left;
-      margin: 2rem 0;
-      padding: 1.5rem;
+    
+    .learned-box {
       background: rgba(46, 204, 113, 0.05);
-      border: 1px solid rgba(46, 204, 113, 0.2);
-      border-radius: 8px;
+      border: 1px solid rgba(46, 204, 113, 0.3);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: left;
     }
-
-    .what-you-learned h3 {
+    
+    .learned-box h3 {
       color: var(--success);
       margin-bottom: 1rem;
     }
-
-    .what-you-learned ul {
+    
+    .learned-box ul {
       list-style: none;
     }
-
-    .what-you-learned li {
+    
+    .learned-box li {
       padding: 0.5rem 0;
       padding-left: 1.5rem;
       position: relative;
     }
-
-    .what-you-learned li::before {
+    
+    .learned-box li::before {
       content: '✓';
       position: absolute;
       left: 0;
       color: var(--success);
-      font-weight: 700;
     }
-
-    /* Next steps buttons */
-    .next-steps {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* ════════════════════════════════════════════════════════
-       TROUBLESHOOTING SECTION
-       Shows if flash fails
-       ════════════════════════════════════════════════════════ */
-    .troubleshooting-list {
+    
+    /* Troubleshooting */
+    .troubleshooting {
       list-style: none;
       text-align: left;
       margin: 2rem 0;
     }
-
-    .troubleshooting-list li {
+    
+    .troubleshooting li {
       padding: 1rem;
       margin: 1rem 0;
       background: rgba(231, 76, 60, 0.05);
       border-left: 3px solid var(--error);
     }
-
-    .troubleshooting-list li strong {
+    
+    .troubleshooting strong {
       color: var(--error);
       display: block;
       margin-bottom: 0.5rem;
     }
-
-    /* ════════════════════════════════════════════════════════
-       IMAGE PLACEHOLDER
-       For showing what the breathing looks like
-       ════════════════════════════════════════════════════════ */
-    .breathing-demo {
-      width: 200px;
-      height: 200px;
-      margin: 2rem auto;
-      background: var(--signal);
-      border-radius: 50%;
-      animation: breathe-demo 3s ease-in-out infinite;
-      box-shadow: 0 0 40px var(--signal-glow);
-    }
-
-    @keyframes breathe-demo {
-      0%, 100% {
-        transform: scale(1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: scale(1.1);
-        opacity: 1;
-      }
-    }
-
-    /* ════════════════════════════════════════════════════════
-       FOOTER
-       ════════════════════════════════════════════════════════ */
+    
+    /* Footer */
     footer {
-      background: rgba(10, 10, 10, 0.98);
-      border-top: 1px solid rgba(214, 164, 71, 0.2);
-      padding: 1rem 2rem;
+      background: rgba(10, 10, 10, 0.95);
+      border-top: 1px solid var(--accent-dim);
+      padding: 1rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: rgba(242, 237, 231, 0.5);
     }
-
-    /* ════════════════════════════════════════════════════════
-       UTILITY CLASSES
-       ════════════════════════════════════════════════════════ */
-    .text-center { text-align: center; }
-    .mt-2 { margin-top: 2rem; }
-    .mb-2 { margin-bottom: 2rem; }
-
-    /* Help people who get dizzy from animations */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-
-    /* Mobile adjustments */
+    
+    /* Mobile */
     @media (max-width: 768px) {
-      .hero-title {
-        font-size: 2rem;
-      }
-      
-      .hero-subtitle {
-        font-size: 1.1rem;
-      }
-      
-      .btn {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-      }
-
-      .next-steps {
-        flex-direction: column;
-      }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+      .btn { padding: 0.9rem 2rem; font-size: 0.9rem; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- ════════════════════════════════════════════════════════
-       MOBILE WARNING
-       ════════════════════════════════════════════════════════ -->
-  <div class="mobile-warning">
-    ⚠️ Genesis Zero requires a computer with Chrome or Edge browser.<br>
-    Web flashing doesn't work on phones yet. Bookmark this and come back on your laptop!
-  </div>
-
-  <!-- ════════════════════════════════════════════════════════
-       HEADER
-       ════════════════════════════════════════════════════════ -->
+  <!-- HEADER -->
   <header>
     <div class="logo">CRUMB GENESIS ZERO</div>
   </header>
 
-  <!-- ════════════════════════════════════════════════════════
-       SECTION 1: LANDING
-       First thing they see - one button, one action
-       ════════════════════════════════════════════════════════ -->
-  <section id="landingSection">
-    <div class="section-content">
-      <h1 class="hero-title">Program a Computer in 5 Minutes</h1>
-      <p class="hero-subtitle">
-        No experience needed. No installation. No complexity.<br>
-        Just plug in, click a button, and watch your computer breathe.
-      </p>
-      
-      <button class="btn" onclick="showRequirements()">START GENESIS ZERO</button>
+  <!-- SECTION 1: LANDING -->
+  <section id="landing">
+    <div class="container">
+      <h1>Program a Computer in 5 Minutes</h1>
+      <p>No experience needed. No installation. No complexity.<br>
+      Just plug in, click a button, and watch your computer breathe.</p>
+      <button class="btn" onclick="goToRequirements()">START GENESIS ZERO</button>
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════
-       SECTION 2: REQUIREMENTS
-       Make sure they have what they need
-       ════════════════════════════════════════════════════════ -->
-  <section id="requirementsSection" class="hidden">
-    <div class="section-content">
-      <button class="btn-back" onclick="showLanding()">← Back</button>
+  <!-- SECTION 2: REQUIREMENTS -->
+  <section id="requirements" class="hidden">
+    <div class="container">
+      <button class="btn-back" onclick="goToLanding()">← Back</button>
       
-      <h2 style="font-size: 2rem; margin-bottom: 1rem;">What You Need</h2>
-      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
-        Make sure you have these before continuing:
-      </p>
-
-      <ul class="requirements-list">
+      <h2>What You Need</h2>
+      <p>Make sure you have these before continuing:</p>
+      
+      <ul class="requirements">
         <li>
           <strong>✓ Computer (not phone)</strong>
           Web flashing only works on desktop/laptop
@@ -554,126 +300,72 @@
         </li>
         <li>
           <strong>✓ ESP32 microcontroller (~$12)</strong>
-          <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank" style="color: var(--signal);">Buy on Amazon</a><br>
-          <em style="font-size: 0.9rem; color: rgba(242, 237, 231, 0.5);">Don't have one yet? Order now, bookmark this page, come back when it arrives.</em>
+          <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank" style="color: var(--accent);">Buy on Amazon</a><br>
+          <em style="font-size: 0.9rem; color: rgba(242, 237, 231, 0.5);">Don't have one? Order now, bookmark this page, come back when it arrives.</em>
         </li>
         <li>
           <strong>✓ USB cable (data, not charge-only)</strong>
-          Must transfer data, not just power. If you have an iPhone cable (Lightning or USB-C), that works.
+          Must transfer data. iPhone cables work.
         </li>
       </ul>
-
-      <div style="margin-top: 3rem;">
-        <button class="btn" onclick="showFlash()">I HAVE EVERYTHING →</button>
-      </div>
+      
+      <button class="btn" onclick="goToFlash()">I HAVE EVERYTHING →</button>
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════
-       SECTION 3: FLASH
-       The actual upload - this is the critical moment
-       ════════════════════════════════════════════════════════ -->
-  <section id="flashSection" class="hidden">
-    <div class="section-content">
-      <button class="btn-back" onclick="showRequirements()">← Back</button>
+  <!-- SECTION 3: FLASH -->
+  <section id="flash" class="hidden">
+    <div class="container">
+      <button class="btn-back" onclick="goToRequirements()">← Back</button>
       
-      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Let's Flash Your ESP32</h2>
+      <h2>Let's Flash Your ESP32</h2>
       
-      <div class="flash-container">
+      <div class="flash-box">
         
-        <!-- Step-by-step instructions -->
-        <div class="flash-steps">
-          
-          <div class="flash-step">
-            <h3>Step 1: Plug In Your ESP32</h3>
-            <p>Connect your ESP32 to your computer with the USB cable. A light might turn on - that's good!</p>
-          </div>
-
-          <div class="flash-step">
-            <h3>Step 2: Click the Button Below</h3>
-            <p>Your browser will ask you to select a device. Choose the one that says "USB" or "Serial" or "CP210x" or "CH340".</p>
-          </div>
-
-          <div class="flash-step">
-            <h3>Step 3: Wait (~30 seconds)</h3>
-            <p>Don't unplug anything! The code is uploading. You'll see progress below.</p>
-          </div>
-
-          <div class="flash-step">
-            <h3>Step 4: Look at Your ESP32</h3>
-            <p>When done, look at your ESP32. There's a small LED on the board. Is it breathing? Slowly pulsing brighter and dimmer?</p>
-            <p style="margin-top: 0.5rem; color: var(--success); font-weight: 600;">If yes: YOU DID IT! 🎉</p>
-          </div>
-
+        <div class="flash-step">
+          <h3>Step 1: Plug In Your ESP32</h3>
+          <p>Connect your ESP32 to your computer with the USB cable.</p>
         </div>
-
-        <!-- The actual flash button (ESP Web Tools creates this) -->
-        <div id="flashButtonContainer">
-          <esp-web-install-button manifest="./manifest.json">
-            <button slot="activate" class="btn" style="width: 100%;">
-              FLASH GENESIS ZERO
-            </button>
-          </esp-web-install-button>
+        
+        <div class="flash-step">
+          <h3>Step 2: Click the Button Below</h3>
+          <p>Your browser will ask you to select a device. Choose the one that says "USB" or "Serial" or "CP210x" or "CH340".</p>
         </div>
-
-        <!-- Progress bar (hidden until flashing starts) -->
-        <div class="progress-container" id="progressContainer">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill">0%</div>
-          </div>
-          <p id="progressText" style="text-align: center; margin-top: 1rem; color: rgba(242, 237, 231, 0.7);">
-            Connecting...
-          </p>
+        
+        <div class="flash-step">
+          <h3>Step 3: Wait (~30 seconds)</h3>
+          <p>Don't unplug anything! The code is uploading.</p>
         </div>
-
-        <!-- Helpful tips (appear during flashing) -->
-        <div class="flash-tip" id="tip1">
-          <strong>Tip:</strong> If no device appears in the popup, try a different USB cable. Many cables are "charge-only" and can't transfer data.
+        
+        <div class="flash-step">
+          <h3>Step 4: Look at Your ESP32</h3>
+          <p>When done, look at your ESP32. There's a small LED on the board. Is it breathing?</p>
+          <p style="margin-top: 0.5rem; color: var(--success); font-weight: 600;">If yes: YOU DID IT! 🎉</p>
         </div>
-
-        <div class="flash-tip" id="tip2">
-          <strong>Tip:</strong> This takes about 30 seconds. Don't unplug anything yet!
-        </div>
-
-        <div class="flash-tip" id="tip3">
-          <strong>Tip:</strong> When it's done, the LED on your ESP32 will start breathing automatically. No need to press any buttons on the ESP32 itself.
-        </div>
-
+        
+        <!-- ESP Web Tools Button -->
+        <esp-web-install-button manifest="./manifest.json">
+          <button slot="activate" class="btn" style="width: 100%; max-width: 400px;">
+            FLASH GENESIS ZERO
+          </button>
+        </esp-web-install-button>
+        
       </div>
-
-      <!-- Troubleshooting button (always visible) -->
-      <div style="margin-top: 2rem;">
-        <button class="btn-secondary" onclick="showTroubleshooting()">
-          NOT WORKING? SEE TROUBLESHOOTING
-        </button>
-      </div>
-
+      
+      <button class="btn-secondary" onclick="goToTroubleshooting()">NOT WORKING? TROUBLESHOOTING</button>
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════
-       SECTION 4: SUCCESS
-       Celebration + next steps
-       ════════════════════════════════════════════════════════ -->
-  <section id="successSection" class="hidden">
-    <div class="section-content">
+  <!-- SECTION 4: SUCCESS -->
+  <section id="success" class="hidden">
+    <div class="container">
       
       <div class="success-icon">🎉</div>
-      <div class="success-message">YOU DID IT</div>
+      <div class="success-title">YOU DID IT</div>
       
-      <p style="font-size: 1.3rem; color: rgba(242, 237, 231, 0.8); margin-bottom: 2rem;">
-        You just programmed a computer. In 5 minutes.<br>
-        You crossed the threshold.
-      </p>
-
-      <!-- The breathing demo (visual representation) -->
-      <div class="breathing-demo"></div>
-      <p style="color: rgba(242, 237, 231, 0.6); margin-bottom: 2rem;">
-        ← This is what your ESP32 is doing right now
-      </p>
-
-      <!-- What they actually learned -->
-      <div class="what-you-learned">
+      <p style="font-size: 1.3rem;">You just programmed a computer. In 5 minutes.<br>You crossed the threshold.</p>
+      
+      <div class="learned-box">
         <h3>What You Just Learned:</h3>
         <ul>
           <li>Computers do what you tell them</li>
@@ -682,239 +374,139 @@
           <li>The "experts" aren't special - you just proved that</li>
         </ul>
       </div>
-
-      <!-- Next steps -->
-      <h3 style="font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem;">What's Next?</h3>
-      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
-        This was Genesis Zero. The foundation.<br>
-        Now you can build anything.
-      </p>
-
-      <div class="next-steps">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn">
-          SEE THE CODE (GitHub)
-        </a>
-        <a href="YOUR_YOUTUBE_CHANNEL_HERE" target="_blank" class="btn-secondary">
-          WATCH TUTORIALS (YouTube)
-        </a>
+      
+      <h3 style="margin-top: 2rem;">What's Next?</h3>
+      <p>This was Genesis Zero. The foundation. Now you can build anything.</p>
+      
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn">SEE THE CODE (GitHub)</a>
+        <a href="https://youtube.com/@wyetherp" target="_blank" class="btn-secondary">WATCH TUTORIALS (YouTube)</a>
       </div>
-
-      <p style="margin-top: 3rem; color: rgba(242, 237, 231, 0.6); font-size: 0.95rem;">
+      
+      <p style="margin-top: 2rem; font-size: 0.95rem;">
         Want to add LEDs? Sensors? Buttons? Displays?<br>
         Check the GitHub for Genesis One, Two, Three...<br>
         The pattern is the same. You already know how.
       </p>
-
+      
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════
-       SECTION 5: TROUBLESHOOTING
-       If flash fails, guide them through fixes
-       ════════════════════════════════════════════════════════ -->
-  <section id="troubleshootingSection" class="hidden">
-    <div class="section-content">
-      <button class="btn-back" onclick="showFlash()">← Back to Flash</button>
+  <!-- SECTION 5: TROUBLESHOOTING -->
+  <section id="troubleshooting" class="hidden">
+    <div class="container">
+      <button class="btn-back" onclick="goToFlash()">← Back to Flash</button>
       
-      <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--error);">Troubleshooting</h2>
-      <p style="color: rgba(242, 237, 231, 0.7); margin-bottom: 2rem;">
-        Most problems are one of these. Try them in order:
-      </p>
-
-      <ul class="troubleshooting-list">
-        
+      <h2 style="color: var(--error);">Troubleshooting</h2>
+      <p>Most problems are one of these. Try them in order:</p>
+      
+      <ul class="troubleshooting">
         <li>
           <strong>1. No device appears when I click FLASH</strong>
-          <p>Try a different USB cable. Most cables are "charge-only" and can't transfer data. If you have an iPhone cable (Lightning to USB, or USB-C to USB-C), that will work.</p>
+          <p>Try a different USB cable. Most cables are "charge-only" and can't transfer data. iPhone cables work.</p>
         </li>
-
+        
         <li>
           <strong>2. Device appears but flash fails</strong>
-          <p>Try a different USB port on your computer. Some ports don't have enough power. Also try unplugging the ESP32, waiting 5 seconds, and plugging it back in.</p>
+          <p>Try a different USB port. Some ports don't have enough power. Also try unplugging the ESP32, waiting 5 seconds, and plugging it back in.</p>
         </li>
-
+        
         <li>
           <strong>3. Flash completes but LED doesn't breathe</strong>
-          <p>Unplug the ESP32 and plug it back in. Some ESP32s need a restart after first flash. If that doesn't work, the LED might be on a different pin - try GPIO 2, 4, or 5.</p>
+          <p>Unplug the ESP32 and plug it back in. Some ESP32s need a restart after first flash.</p>
         </li>
-
+        
         <li>
           <strong>4. I'm on Mac and it's not working</strong>
-          <p>You might need to install CH340 drivers. Google "CH340 driver Mac" and install it. Then restart your computer and try again.</p>
+          <p>You might need CH340 drivers. Google "CH340 driver Mac" and install it. Then restart and try again.</p>
         </li>
-
+        
         <li>
           <strong>5. I'm on Windows and it's not working</strong>
-          <p>You might need to install CP210x drivers. Go to <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" style="color: var(--signal);">Silicon Labs</a> and download the driver for your Windows version.</p>
+          <p>You might need CP210x drivers. Go to <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" style="color: var(--accent);">Silicon Labs</a> and download the driver.</p>
         </li>
-
+        
         <li>
           <strong>6. Still not working</strong>
-          <p>Email Wyeth at <a href="/cdn-cgi/l/email-protection#b2c5d8d3818084f2ded7dadbd5da9cd7d6c7" style="color: var(--signal);"><span class="__cf_email__" data-cfemail="46312c27757470062a232e2f212e68232233">[email&#160;protected]</span></a> with:
+          <p>Email Wyeth at <a href="mailto:wja326@lehigh.edu" style="color: var(--accent);">wja326@lehigh.edu</a> with:
           <br>• Your computer type (Mac/Windows/Linux)
           <br>• Your browser (Chrome/Edge)
-          <br>• The exact error message you see
-          <br>He'll help you figure it out.</p>
+          <br>• The exact error message
+          </p>
         </li>
-
       </ul>
-
-      <div style="margin-top: 3rem;">
-        <button class="btn" onclick="showFlash()">← TRY FLASHING AGAIN</button>
-      </div>
-
+      
+      <button class="btn" onclick="goToFlash()">← TRY FLASHING AGAIN</button>
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════
-       FOOTER
-       ════════════════════════════════════════════════════════ -->
+  <!-- FOOTER -->
   <footer>
     <p>© 2025 CRUMB — Built by Wyeth Anzilotti — GPL-3.0 Open Source</p>
     <p style="margin-top: 0.5rem;">
-      <a href="https://github.com/wyetherp/crumb_main" target="_blank" style="color: rgba(242, 237, 231, 0.6); text-decoration: none;">GitHub</a> • 
-      <a href="/cdn-cgi/l/email-protection#0d7a676c3e3f3b4d616865646a6523686978" style="color: rgba(242, 237, 231, 0.6); text-decoration: none;">Email</a>
+      <a href="https://github.com/wyetherp/crumb_main" target="_blank" style="color: rgba(242, 237, 231, 0.6);">GitHub</a> • 
+      <a href="mailto:wja326@lehigh.edu" style="color: rgba(242, 237, 231, 0.6);">Email</a>
     </p>
   </footer>
 
-  <!-- ════════════════════════════════════════════════════════
-       JAVASCRIPT - Makes everything interactive
-       ════════════════════════════════════════════════════════ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    /* ════════════════════════════════════════════════════════
-       NAVIGATION FUNCTIONS
-       Show/hide sections as user progresses
-       ════════════════════════════════════════════════════════ */
-    
-    // Helper function: hide all sections
-    function hideAllSections() {
-      document.querySelectorAll('section').forEach(section => {
+  <!-- JAVASCRIPT -->
+  <script>
+    // Hide all sections
+    function hideAll() {
+      document.querySelectorAll('section').forEach(function(section) {
         section.classList.add('hidden');
       });
     }
-
-    // Show landing page
-    function showLanding() {
-      hideAllSections();
-      document.getElementById('landingSection').classList.remove('hidden');
-    }
-
-    // Show requirements page
-    function showRequirements() {
-      hideAllSections();
-      document.getElementById('requirementsSection').classList.remove('hidden');
-    }
-
-    // Show flash page
-    function showFlash() {
-      hideAllSections();
-      document.getElementById('flashSection').classList.remove('hidden');
-    }
-
-    // Show success page
-    function showSuccess() {
-      hideAllSections();
-      document.getElementById('successSection').classList.remove('hidden');
-    }
-
-    // Show troubleshooting page
-    function showTroubleshooting() {
-      hideAllSections();
-      document.getElementById('troubleshootingSection').classList.remove('hidden');
-    }
-
-    /* ════════════════════════════════════════════════════════
-       FLASH PROGRESS TRACKING
-       Show progress and tips during flashing
-       ════════════════════════════════════════════════════════ */
     
-    // When ESP Web Tools starts flashing
-    document.addEventListener('state-changed', (event) => {
-      const state = event.detail.state;
-      const progressContainer = document.getElementById('progressContainer');
-      const progressFill = document.getElementById('progressFill');
-      const progressText = document.getElementById('progressText');
-
-      if (state === 'INSTALLING') {
-        // Show progress bar
-        progressContainer.style.display = 'block';
-        progressText.textContent = 'Connecting to ESP32...';
-        
-        // Show tip 1 after 2 seconds
-        setTimeout(() => {
-          document.getElementById('tip1').style.display = 'block';
-        }, 2000);
-
-        // Show tip 2 after 5 seconds
-        setTimeout(() => {
-          document.getElementById('tip2').style.display = 'block';
-        }, 5000);
-
-        // Show tip 3 after 10 seconds
-        setTimeout(() => {
-          document.getElementById('tip3').style.display = 'block';
-        }, 10000);
-      }
-
-      if (state === 'WRITING') {
-        progressText.textContent = 'Flashing code to ESP32...';
-      }
-
-      if (state === 'FINISHED') {
-        progressFill.style.width = '100%';
-        progressFill.textContent = '100%';
-        progressText.textContent = 'Complete! Look at your ESP32 now.';
-        
-        // Wait 2 seconds, then show success page
-        setTimeout(() => {
-          showSuccess();
+    // Show landing
+    function goToLanding() {
+      hideAll();
+      document.getElementById('landing').classList.remove('hidden');
+    }
+    
+    // Show requirements
+    function goToRequirements() {
+      hideAll();
+      document.getElementById('requirements').classList.remove('hidden');
+    }
+    
+    // Show flash
+    function goToFlash() {
+      hideAll();
+      document.getElementById('flash').classList.remove('hidden');
+    }
+    
+    // Show success
+    function goToSuccess() {
+      hideAll();
+      document.getElementById('success').classList.remove('hidden');
+    }
+    
+    // Show troubleshooting
+    function goToTroubleshooting() {
+      hideAll();
+      document.getElementById('troubleshooting').classList.remove('hidden');
+    }
+    
+    // Listen for ESP Web Tools events
+    document.addEventListener('state-changed', function(event) {
+      if (event.detail.state === 'FINISHED') {
+        setTimeout(function() {
+          goToSuccess();
         }, 2000);
       }
-
-      if (state === 'ERROR') {
-        progressText.textContent = 'Error during flash. See troubleshooting below.';
-        progressText.style.color = '#E74C3C';  // Red color for errors
-      }
     });
-
-    // Track actual progress percentage (if ESP Web Tools provides it)
-    document.addEventListener('progress', (event) => {
-      const percentage = event.detail.percentage;
-      const progressFill = document.getElementById('progressFill');
-      
-      progressFill.style.width = percentage + '%';
-      progressFill.textContent = Math.round(percentage) + '%';
-    });
-
-    /* ════════════════════════════════════════════════════════
-       MOBILE DETECTION
-       If they somehow get past the warning, disable flash button
-       ════════════════════════════════════════════════════════ */
     
-    function isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-
-    if (isMobile()) {
-      // Disable all buttons that lead to flash section
-      document.querySelectorAll('.btn').forEach(btn => {
-        if (btn.textContent.includes('START') || btn.textContent.includes('FLASH')) {
-          btn.disabled = true;
-          btn.style.opacity = '0.5';
-          btn.style.cursor = 'not-allowed';
-        }
-      });
-    }
-
-    /* ════════════════════════════════════════════════════════
-       KEYBOARD SHORTCUTS
-       For faster navigation during testing
-       ════════════════════════════════════════════════════════ */
-    
-    document.addEventListener('keydown', (e) => {
-      // Press Escape to go back to previous section
+    // Keyboard shortcut: Escape to go back
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-        // Check which section is visible and go back
-        if (!document.getElementById('requirementsSection').classList.contains('hidden')) {
-          showLanding();
-        } else if (!doc
+        var current = document.querySelector('section:not(.hidden)').id;
+        if (current === 'requirements') goToLanding();
+        if (current === 'flash') goToRequirements();
+        if (current === 'troubleshooting') goToFlash();
+      }
+    });
+  </script>
+
+</body>
+</html>
