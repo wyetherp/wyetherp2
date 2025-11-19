@@ -7,15 +7,15 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/bootloader.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp2/wyetherp2@main/Firmware/Bootloader.bin",
           "offset": 4096
         },
         {
-          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/partitions.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp2/wyetherp2@main/Firmware/Partitions.bin",
           "offset": 32768
         },
         {
-          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/genesis_zero.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp2/wyetherp2@main/Firmware/Genesis_zero.bin",
           "offset": 65536
         }
       ]
