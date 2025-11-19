@@ -34,6 +34,7 @@
       color: var(--text);
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
+      overflow-x: hidden;
     }
     
     /* Header */
@@ -59,6 +60,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
     
     .hidden {
@@ -68,6 +70,8 @@
     .container {
       max-width: 700px;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
     
     /* Typography */
@@ -127,6 +131,47 @@
       margin-bottom: 2rem;
     }
     
+    /* === NEW: ANIMATED BREATHING LED DEMO === */
+    .breathing-demo {
+      width: 80px;
+      height: 80px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin: 2rem auto;
+      animation: breathe 6s ease-in-out infinite;
+      box-shadow: 0 0 20px var(--accent);
+    }
+    
+    @keyframes breathe {
+      0%, 100% { opacity: 0.1; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    
+    .demo-label {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-top: 1rem;
+    }
+    
+    /* === NEW: LANDING PAGE LAYOUT === */
+    .landing-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 2rem;
+    }
+    
+    .social-proof {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.95rem;
+      color: rgba(242, 237, 231, 0.5);
+      font-style: italic;
+    }
+    
     /* Requirements List */
     .requirements {
       list-style: none;
@@ -177,23 +222,105 @@
       margin-bottom: 0.5rem;
     }
     
+    /* === NEW: FLASHING PROGRESS INDICATOR === */
+    .progress-indicator {
+      display: none;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(214, 164, 71, 0.05);
+      border: 1px solid var(--accent-dim);
+      border-radius: 4px;
+    }
+    
+    .progress-indicator.active {
+      display: block;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(214, 164, 71, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    
+    .progress-text {
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    
+    .heartbeat {
+      display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    
     /* ESP Web Tools Button Styling */
     esp-web-install-button {
       display: block;
       margin: 2rem auto;
     }
     
-    /* Success Section */
+    /* === NEW: CONFETTI ANIMATION === */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      position: absolute;
+      animation: confetti-fall 3s ease-out forwards;
+    }
+    
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* === NEW: SUCCESS PAGE ENHANCEMENTS === */
     .success-icon {
-      font-size: 4rem;
+      font-size: 5rem;
       margin-bottom: 1rem;
+      animation: bounce-in 0.8s ease-out;
+    }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
     
     .success-title {
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: var(--success);
       font-weight: 700;
       margin-bottom: 1rem;
+      animation: slide-up 0.6s ease-out 0.3s both;
+    }
+    
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .success-subtitle {
+      font-size: 1.3rem;
+      animation: slide-up 0.6s ease-out 0.5s both;
     }
     
     .learned-box {
@@ -202,11 +329,13 @@
       padding: 1.5rem;
       margin: 2rem 0;
       text-align: left;
+      animation: slide-up 0.6s ease-out 0.7s both;
     }
     
     .learned-box h3 {
       color: var(--success);
       margin-bottom: 1rem;
+      font-size: 1.3rem;
     }
     
     .learned-box ul {
@@ -217,6 +346,7 @@
       padding: 0.5rem 0;
       padding-left: 1.5rem;
       position: relative;
+      font-size: 1.05rem;
     }
     
     .learned-box li::before {
@@ -224,6 +354,85 @@
       position: absolute;
       left: 0;
       color: var(--success);
+      font-weight: bold;
+    }
+    
+    /* === NEW: NEXT STEPS PREVIEW === */
+    .next-steps {
+      background: rgba(214, 164, 71, 0.05);
+      border: 1px solid var(--accent-dim);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      animation: slide-up 0.6s ease-out 0.9s both;
+    }
+    
+    .next-steps h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .genesis-path {
+      display: flex;
+      justify-content: space-around;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .genesis-step {
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    
+    .genesis-step-number {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--accent);
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    .genesis-step-label {
+      font-size: 0.9rem;
+      color: rgba(242, 237, 231, 0.7);
+    }
+    
+    /* === NEW: ABOUT/CONTEXT PAGE === */
+    .about-section {
+      text-align: left;
+      margin: 2rem 0;
+    }
+    
+    .about-section h3 {
+      color: var(--accent);
+      margin: 2rem 0 1rem 0;
+      font-size: 1.5rem;
+    }
+    
+    .about-section p {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    
+    .journey-path {
+      list-style: none;
+      margin: 1.5rem 0;
+      padding-left: 0;
+    }
+    
+    .journey-path li {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: rgba(214, 164, 71, 0.05);
+      border-left: 3px solid var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.95rem;
+    }
+    
+    .journey-path strong {
+      color: var(--accent);
     }
     
     /* Troubleshooting */
@@ -260,7 +469,9 @@
     @media (max-width: 768px) {
       h1 { font-size: 2rem; }
       h2 { font-size: 1.5rem; }
+      .success-title { font-size: 2rem; }
       .btn { padding: 0.9rem 2rem; font-size: 0.9rem; }
+      .genesis-path { flex-direction: column; }
     }
   </style>
 </head>
@@ -277,7 +488,53 @@
       <h1>Program a Computer in 5 Minutes</h1>
       <p>No experience needed. No installation. No complexity.<br>
       Just plug in, click a button, and watch your computer breathe.</p>
-      <button class="btn" onclick="goToRequirements()">START GENESIS ZERO</button>
+      
+      <!-- NEW: Animated LED Demo -->
+      <div class="breathing-demo"></div>
+      <div class="demo-label">← This is what you'll create</div>
+      
+      <!-- NEW: Two-button approach -->
+      <div class="landing-buttons">
+        <button class="btn" onclick="goToRequirements()">START GENESIS ZERO</button>
+        <button class="btn-secondary" onclick="goToAbout()">WHAT IS CRUMB?</button>
+      </div>
+      
+      <!-- NEW: Social proof -->
+      <div class="social-proof">
+        "I didn't think I could program. This proved me wrong." — First-time builder
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW SECTION: ABOUT / WHAT IS CRUMB -->
+  <section id="about" class="hidden">
+    <div class="container">
+      <button class="btn-back" onclick="goToLanding()">← Back</button>
+      
+      <h2>What Is CRUMB?</h2>
+      
+      <div class="about-section">
+        <h3>What</h3>
+        <p>CRUMB is a learning platform disguised as an electronics kit. Genesis Zero teaches you that programming isn't magic — it's just telling computers what to do. Takes 5 minutes. No prior experience needed.</p>
+        
+        <h3>Why</h3>
+        <p>They told you programming was hard. They lied. You'll prove it in 5 minutes by making a computer breathe. After that, you'll realize: sensors, buttons, displays — they all work the same way. <strong>You already know how.</strong></p>
+        
+        <h3>The Path</h3>
+        <ul class="journey-path">
+          <li><strong>Genesis Zero:</strong> Control onboard LED (5 minutes) ← You are here</li>
+          <li><strong>Genesis One:</strong> Wire external LED (15 minutes)</li>
+          <li><strong>Genesis Two:</strong> Add sensors (30 minutes)</li>
+          <li><strong>Genesis Three:</strong> Add displays & buttons (1 hour)</li>
+          <li><strong>Genesis Infinity:</strong> Build whatever you want</li>
+        </ul>
+        
+        <p style="text-align: center; margin-top: 2rem;">The pattern is simple. You learn it once. Then you can build anything.</p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" onclick="goToRequirements()">START GENESIS ZERO →</button>
+      </div>
     </div>
   </section>
 
@@ -350,6 +607,16 @@
           </button>
         </esp-web-install-button>
         
+        <!-- NEW: Progress Indicator (hidden until flashing starts) -->
+        <div class="progress-indicator" id="progressIndicator">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span class="heartbeat">💛</span> <span id="progressText">Waking up your ESP32...</span>
+          </div>
+        </div>
+        
       </div>
       
       <button class="btn-secondary" onclick="goToTroubleshooting()">NOT WORKING? TROUBLESHOOTING</button>
@@ -361,32 +628,52 @@
     <div class="container">
       
       <div class="success-icon">🎉</div>
-      <div class="success-title">YOU DID IT</div>
+      <div class="success-title">YOU'RE A BUILDER NOW</div>
       
-      <p style="font-size: 1.3rem;">You just programmed a computer. In 5 minutes.<br>You crossed the threshold.</p>
+      <p class="success-subtitle">You just programmed a computer. In 5 minutes.<br>You crossed the threshold. You're not the same person you were 5 minutes ago.</p>
       
       <div class="learned-box">
-        <h3>What You Just Learned:</h3>
+        <h3>What You Just Proved:</h3>
         <ul>
-          <li>Computers do what you tell them</li>
-          <li>Programming is just instructions</li>
+          <li>Programming isn't magic — it's just instructions</li>
+          <li>Computers do exactly what you tell them</li>
           <li>You can build more than you thought</li>
-          <li>The "experts" aren't special - you just proved that</li>
         </ul>
       </div>
       
-      <h3 style="margin-top: 2rem;">What's Next?</h3>
-      <p>This was Genesis Zero. The foundation. Now you can build anything.</p>
+      <div class="next-steps">
+        <h3>The Journey Ahead</h3>
+        <div class="genesis-path">
+          <div class="genesis-step">
+            <span class="genesis-step-number">0</span>
+            <div class="genesis-step-label">Onboard LED<br>(You just did this)</div>
+          </div>
+          <div class="genesis-step">
+            <span class="genesis-step-number">1</span>
+            <div class="genesis-step-label">External LED<br>(15 minutes)</div>
+          </div>
+          <div class="genesis-step">
+            <span class="genesis-step-number">2</span>
+            <div class="genesis-step-label">Sensors<br>(30 minutes)</div>
+          </div>
+          <div class="genesis-step">
+            <span class="genesis-step-number">∞</span>
+            <div class="genesis-step-label">Anything<br>(You decide)</div>
+          </div>
+        </div>
+        <p style="text-align: center; font-size: 0.95rem; margin-top: 1rem;">
+          The pattern is the same. You already know how.
+        </p>
+      </div>
       
       <div style="text-align: center; margin-top: 2rem;">
         <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn">SEE THE CODE (GitHub)</a>
-        <a href="https://youtube.com/@wyetherp" target="_blank" class="btn-secondary">WATCH TUTORIALS (YouTube)</a>
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">WATCH TUTORIALS (YouTube)</a>
       </div>
       
-      <p style="margin-top: 2rem; font-size: 0.95rem;">
-        Want to add LEDs? Sensors? Buttons? Displays?<br>
-        Check the GitHub for Genesis One, Two, Three...<br>
-        The pattern is the same. You already know how.
+      <p style="margin-top: 2rem; font-size: 0.95rem; text-align: center;">
+        Want to share this moment?<br>
+        <a href="https://twitter.com/intent/tweet?text=I%20just%20programmed%20a%20computer%20in%205%20minutes%20with%20CRUMB%20Genesis%20Zero%21%20%23CRUMB%20%23Electronics%20%23Programming" target="_blank" style="color: var(--accent);">Tweet: "I just programmed a computer in 5 minutes"</a>
       </p>
       
     </div>
@@ -476,10 +763,18 @@
       document.getElementById('flash').classList.remove('hidden');
     }
     
+    // NEW: Show about page
+    function goToAbout() {
+      hideAll();
+      document.getElementById('about').classList.remove('hidden');
+    }
+    
     // Show success
     function goToSuccess() {
       hideAll();
       document.getElementById('success').classList.remove('hidden');
+      // NEW: Trigger confetti
+      createConfetti();
     }
     
     // Show troubleshooting
@@ -488,12 +783,63 @@
       document.getElementById('troubleshooting').classList.remove('hidden');
     }
     
+    // NEW: Confetti animation
+    function createConfetti() {
+      const colors = ['#D6A447', '#2ECC71', '#F2EDE7'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(function() {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 0.5 + 's';
+          document.getElementById('success').appendChild(confetti);
+          
+          setTimeout(function() {
+            confetti.remove();
+          }, 3000);
+        }, i * 30);
+      }
+    }
+    
+    // NEW: Progress indicator during flash
+    let progressInterval;
+    
     // Listen for ESP Web Tools events
     document.addEventListener('state-changed', function(event) {
-      if (event.detail.state === 'FINISHED') {
+      const state = event.detail.state;
+      const progressIndicator = document.getElementById('progressIndicator');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      
+      if (state === 'WRITING') {
+        // Show progress indicator
+        progressIndicator.classList.add('active');
+        progressText.textContent = 'Writing firmware to ESP32...';
+        
+        // Simulate progress
+        let progress = 0;
+        progressInterval = setInterval(function() {
+          progress += Math.random() * 10;
+          if (progress > 90) progress = 90;
+          progressFill.style.width = progress + '%';
+        }, 300);
+        
+      } else if (state === 'FINISHED') {
+        // Complete progress
+        clearInterval(progressInterval);
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Complete! Your ESP32 is breathing 🎉';
+        
+        // Redirect to success after 2 seconds
         setTimeout(function() {
+          progressIndicator.classList.remove('active');
           goToSuccess();
         }, 2000);
+        
+      } else if (state === 'ERROR') {
+        progressIndicator.classList.remove('active');
+        clearInterval(progressInterval);
       }
     });
     
@@ -502,6 +848,7 @@
       if (e.key === 'Escape') {
         var current = document.querySelector('section:not(.hidden)').id;
         if (current === 'requirements') goToLanding();
+        if (current === 'about') goToLanding();
         if (current === 'flash') goToRequirements();
         if (current === 'troubleshooting') goToFlash();
       }
