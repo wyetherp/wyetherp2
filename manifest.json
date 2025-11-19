@@ -7,15 +7,15 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "https://wyetherp.github.io/crumb_main/firmware/bootloader.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/bootloader.bin",
           "offset": 4096
         },
         {
-          "path": "https://wyetherp.github.io/crumb_main/firmware/partitions.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/partitions.bin",
           "offset": 32768
         },
         {
-          "path": "https://wyetherp.github.io/crumb_main/firmware/genesis_zero.bin",
+          "path": "https://cdn.jsdelivr.net/gh/wyetherp/crumb_main@main/firmware/genesis_zero.bin",
           "offset": 65536
         }
       ]
