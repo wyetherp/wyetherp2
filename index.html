@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CRUMB Genesis Zero</title>
   
   <!-- Fonts -->
@@ -12,7 +12,7 @@
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   
   <style>
-    /* === SACRED PALETTE === */
+    /* === PALETTE === */
     :root {
       --bg-deep: #0A0A0A;
       --bg-surface: #111111;
@@ -33,18 +33,16 @@
       box-sizing: border-box;
     }
     
-    html {
-      font-size: 18px;
-      scroll-behavior: smooth;
+    html, body {
+      height: 100%;
+      overflow: hidden;
     }
     
     body {
       background: var(--bg-deep);
       color: var(--text-primary);
       font-family: 'JetBrains Mono', monospace;
-      line-height: 1.6;
-      overflow-x: hidden;
-      min-height: 100vh;
+      line-height: 1.5;
     }
     
     /* === ATMOSPHERIC BACKGROUND === */
@@ -71,22 +69,31 @@
     }
     
     /* === LAYOUT === */
-    .hidden { display: none; }
+    .hidden { display: none !important; }
     
     section {
-      min-height: 100vh;
-      padding: 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
+      padding: 1rem;
       z-index: 1;
+      overflow: hidden;
     }
     
     .container {
-      max-width: 640px;
+      max-width: 500px;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
     
     /* === HEADER === */
@@ -95,17 +102,15 @@
       top: 0;
       left: 0;
       right: 0;
-      padding: 1.5rem 2rem;
+      padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 100;
-      background: linear-gradient(to bottom, var(--bg-deep) 0%, transparent 100%);
     }
     
     .logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       letter-spacing: 0.3em;
       color: var(--text-muted);
@@ -113,7 +118,7 @@
     }
     
     .header-link {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-decoration: none;
       letter-spacing: 0.1em;
@@ -127,10 +132,10 @@
     /* === ESCAPE HINT === */
     .escape-hint {
       position: fixed;
-      bottom: 2rem;
+      bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       opacity: 0.4;
       letter-spacing: 0.1em;
@@ -139,124 +144,108 @@
     
     .escape-hint kbd {
       background: var(--bg-surface);
-      padding: 0.2rem 0.5rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 3px;
       border: 1px solid rgba(242, 237, 231, 0.1);
     }
     
     /* ============================================
-       LANDING - THE REVELATION
+       LANDING
        ============================================ */
     
-    #landing {
-      text-align: center;
-    }
-    
     .breathing-orb {
-      width: 120px;
-      height: 120px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: var(--amber);
-      margin: 0 auto 2rem;
+      margin-bottom: 1.25rem;
       animation: breathe 10s ease-in-out infinite;
       box-shadow: 
-        0 0 60px var(--amber-glow),
-        0 0 120px var(--amber-dim);
+        0 0 40px var(--amber-glow),
+        0 0 80px var(--amber-dim);
     }
     
     @keyframes breathe {
       0%, 100% { 
         opacity: 0.3; 
         transform: scale(0.92);
-        box-shadow: 
-          0 0 30px var(--amber-dim),
-          0 0 60px transparent;
+        box-shadow: 0 0 20px var(--amber-dim);
       }
       50% { 
         opacity: 1; 
         transform: scale(1);
-        box-shadow: 
-          0 0 60px var(--amber-glow),
-          0 0 120px var(--amber-dim);
+        box-shadow: 0 0 40px var(--amber-glow), 0 0 80px var(--amber-dim);
       }
     }
     
     .hero-label {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--amber);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
     
     .hero-title {
-      font-size: 2.6rem;
-      margin-bottom: 1.5rem;
-      color: var(--text-primary);
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
     }
     
-    .hero-explanation {
-      font-size: 1rem;
+    .hero-text {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      max-width: 440px;
-      margin: 0 auto 1rem;
-      line-height: 1.8;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
     }
     
     .hero-highlight {
       color: var(--text-primary);
     }
     
-    /* Pattern reveal box */
     .pattern-box {
       background: var(--bg-surface);
       border: 1px solid var(--amber-dim);
-      padding: 1.5rem 2rem;
-      margin: 2rem auto;
-      max-width: 400px;
-      text-align: center;
+      padding: 0.75rem 1.25rem;
+      margin: 0.75rem 0;
     }
     
     .pattern-box p {
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
-      margin-bottom: 1rem;
+      margin-bottom: 0.4rem;
     }
     
     .pattern-flow {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       color: var(--amber);
-      letter-spacing: 0.05em;
     }
     
     .pattern-flow span {
       color: var(--text-muted);
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
     
-    /* Two-path choice */
     .choice-prompt {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: var(--text-primary);
-      margin: 2.5rem 0 1.5rem;
+      margin: 1rem 0 0.75rem;
       font-family: 'Cormorant Garamond', serif;
     }
     
     .choice-buttons {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-      max-width: 360px;
-      margin: 0 auto;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 280px;
     }
     
     .btn-choice {
       width: 100%;
-      padding: 1.1rem 2rem;
+      padding: 0.8rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.1em;
       border: none;
@@ -270,8 +259,7 @@
     }
     
     .btn-choice-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--amber-glow);
+      box-shadow: 0 6px 24px var(--amber-glow);
     }
     
     .btn-choice-secondary {
@@ -285,83 +273,59 @@
     }
     
     .choice-note {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       opacity: 0.6;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
     }
     
     /* ============================================
-       GET HARDWARE - THE PREPARATION
+       GET HARDWARE
        ============================================ */
     
-    #get-hardware .container {
-      max-width: 560px;
-    }
-    
     .section-title {
-      font-size: 2.2rem;
-      text-align: center;
-      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
     }
     
     .section-subtitle {
-      text-align: center;
       color: var(--text-muted);
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
     }
     
     .hardware-card {
       background: var(--bg-surface);
       border: 1px solid var(--amber-dim);
-      padding: 2rem;
-      margin: 2rem 0;
+      padding: 1.25rem;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1rem;
     }
     
     .hardware-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
     }
     
     .hardware-name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: var(--amber);
     }
     
     .hardware-price {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: var(--text-primary);
     }
     
     .hardware-description {
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-    
-    .hardware-specs {
-      list-style: none;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-    
-    .hardware-specs li {
-      padding: 0.4rem 0;
-      padding-left: 1.2rem;
-      position: relative;
-    }
-    
-    .hardware-specs li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--amber);
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
     
     .btn-amazon {
@@ -369,9 +333,9 @@
       width: 100%;
       background: var(--amber);
       color: var(--bg-deep);
-      padding: 1rem;
+      padding: 0.75rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.1em;
       text-align: center;
@@ -380,129 +344,109 @@
     }
     
     .btn-amazon:hover {
-      box-shadow: 0 8px 30px var(--amber-glow);
-    }
-    
-    .also-need {
-      margin: 2rem 0;
-    }
-    
-    .also-need h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-    }
-    
-    .also-need p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.7;
+      box-shadow: 0 6px 24px var(--amber-glow);
     }
     
     .waiting-message {
       text-align: center;
-      margin-top: 3rem;
-      padding: 2rem;
+      padding: 1rem;
       background: var(--amber-dim);
       border: 1px solid var(--amber-dim);
+      margin-bottom: 1rem;
     }
     
     .waiting-message h3 {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       color: var(--amber);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.4rem;
     }
     
     .waiting-message p {
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
     
-    .waiting-message .bookmark-hint {
-      font-size: 0.8rem;
-      margin-top: 1rem;
-      opacity: 0.7;
+    .btn-back {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid rgba(242, 237, 231, 0.15);
+      padding: 0.6rem 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-back:hover {
+      color: var(--text-primary);
+      border-color: rgba(242, 237, 231, 0.3);
     }
     
     /* ============================================
        REQUIREMENTS
        ============================================ */
     
-    #requirements .container {
-      max-width: 580px;
-    }
-    
     .requirements-list {
       list-style: none;
-      margin: 2rem 0;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 1rem;
     }
     
     .requirements-list li {
-      padding: 1.25rem 1.5rem;
-      margin: 0.75rem 0;
+      padding: 0.75rem 1rem;
+      margin: 0.4rem 0;
       background: var(--bg-surface);
       border-left: 2px solid var(--amber-dim);
-      transition: border-color 0.3s ease;
-    }
-    
-    .requirements-list li:hover {
-      border-left-color: var(--amber);
     }
     
     .requirements-list strong {
       color: var(--amber);
       display: block;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.2rem;
+      font-size: 0.8rem;
       font-weight: 500;
     }
     
     .requirements-list span {
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
     
-    .requirements-list a {
-      color: var(--amber);
-      text-decoration: underline;
-      text-underline-offset: 3px;
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     
-    /* Buttons */
     .btn-primary {
-      display: inline-block;
       background: var(--amber);
       color: var(--bg-deep);
-      padding: 1.1rem 2.5rem;
+      padding: 0.8rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+      letter-spacing: 0.1em;
       border: none;
       cursor: pointer;
-      text-decoration: none;
       transition: all 0.3s ease;
     }
     
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--amber-glow);
+      box-shadow: 0 6px 24px var(--amber-glow);
     }
     
     .btn-secondary {
-      display: inline-block;
       background: transparent;
       color: var(--text-primary);
       border: 1px solid var(--amber);
-      padding: 1rem 2rem;
+      padding: 0.8rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
       cursor: pointer;
       text-decoration: none;
       transition: all 0.3s ease;
@@ -512,61 +456,54 @@
       background: var(--amber-dim);
     }
     
-    .action-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    
     /* ============================================
-       FLASH - THE RITUAL
+       FLASH
        ============================================ */
     
     .flash-container {
       background: var(--bg-surface);
       border: 1px solid var(--amber-dim);
-      padding: 2.5rem;
-      margin: 2rem 0;
+      padding: 1.25rem;
+      width: 100%;
+      margin-bottom: 0.75rem;
     }
     
     .flash-steps {
       text-align: left;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
     
     .flash-step {
       display: flex;
-      gap: 1rem;
-      margin: 1.5rem 0;
+      gap: 0.75rem;
+      margin: 0.6rem 0;
       align-items: flex-start;
     }
     
     .step-number {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       color: var(--amber);
       line-height: 1;
-      min-width: 1.5rem;
+      min-width: 1rem;
     }
     
     .step-content h3 {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.15rem;
       color: var(--text-primary);
     }
     
     .step-content p {
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
     
     esp-web-install-button {
       display: block;
-      margin: 2rem auto;
+      width: 100%;
     }
     
     esp-web-install-button button,
@@ -574,53 +511,41 @@
       width: 100%;
       background: var(--amber);
       color: var(--bg-deep);
-      padding: 1.2rem 2rem;
+      padding: 0.9rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       border: none;
       cursor: pointer;
       transition: all 0.3s ease;
-    }
-    
-    esp-web-install-button button:hover,
-    .btn-flash:hover {
-      box-shadow: 0 8px 30px var(--amber-glow);
     }
     
     .btn-success-trigger {
       width: 100%;
       background: var(--success);
       color: var(--bg-deep);
-      padding: 1.3rem 2rem;
+      padding: 0.9rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
       border: none;
       cursor: pointer;
-      margin-top: 2rem;
       animation: gentle-pulse 3s ease-in-out infinite;
       transition: all 0.3s ease;
     }
     
     @keyframes gentle-pulse {
-      0%, 100% { box-shadow: 0 0 20px var(--success-glow); }
-      50% { box-shadow: 0 0 40px var(--success-glow); }
-    }
-    
-    .btn-success-trigger:hover {
-      transform: translateY(-2px);
+      0%, 100% { box-shadow: 0 0 15px var(--success-glow); }
+      50% { box-shadow: 0 0 30px var(--success-glow); }
     }
     
     .success-hint {
-      text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       opacity: 0.7;
     }
     
@@ -628,20 +553,16 @@
        SUCCESS
        ============================================ */
     
-    #success {
-      text-align: center;
-    }
-    
     .success-orb {
-      width: 100px;
-      height: 100px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       background: var(--success);
-      margin: 0 auto 2rem;
+      margin-bottom: 1rem;
       animation: 
         success-breathe 10s ease-in-out infinite,
         success-enter 0.8s ease-out;
-      box-shadow: 0 0 60px var(--success-glow);
+      box-shadow: 0 0 40px var(--success-glow);
     }
     
     @keyframes success-breathe {
@@ -656,41 +577,34 @@
     }
     
     .success-title {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       color: var(--success);
-      margin-bottom: 1rem;
-      animation: fade-up 0.6s ease-out 0.3s both;
+      margin-bottom: 0.5rem;
     }
     
     .success-subtitle {
-      font-size: 1rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      max-width: 400px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.8;
-      animation: fade-up 0.6s ease-out 0.5s both;
-    }
-    
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      max-width: 360px;
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
     
     .learned-box {
       background: rgba(127, 176, 105, 0.08);
       border: 1px solid rgba(127, 176, 105, 0.2);
-      padding: 2rem;
+      padding: 1rem;
       text-align: left;
-      margin: 2rem 0;
-      animation: fade-up 0.6s ease-out 0.7s both;
+      width: 100%;
+      margin-bottom: 0.75rem;
     }
     
     .learned-box h3 {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       font-weight: 500;
       color: var(--success);
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       letter-spacing: 0.1em;
     }
     
@@ -699,10 +613,10 @@
     }
     
     .learned-box li {
-      padding: 0.5rem 0;
-      padding-left: 1.5rem;
+      padding: 0.25rem 0;
+      padding-left: 1rem;
       position: relative;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: var(--text-primary);
     }
     
@@ -716,25 +630,24 @@
     .path-preview {
       background: var(--bg-surface);
       border: 1px solid var(--amber-dim);
-      padding: 2rem;
-      margin: 2rem 0;
-      animation: fade-up 0.6s ease-out 0.9s both;
+      padding: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
     }
     
     .path-preview h3 {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       font-weight: 500;
       color: var(--amber);
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.75rem;
       letter-spacing: 0.1em;
-      text-align: center;
     }
     
     .path-steps {
       display: flex;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 0.5rem;
     }
     
     .path-step {
@@ -744,7 +657,7 @@
     
     .path-step-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: var(--amber);
     }
     
@@ -753,41 +666,37 @@
     }
     
     .path-step-label {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
-      margin-top: 0.5rem;
-    }
-    
-    .path-note {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 1.5rem;
-      font-style: italic;
+      margin-top: 0.25rem;
     }
     
     .success-links {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-      animation: fade-up 0.6s ease-out 1.1s both;
     }
     
     /* ============================================
        TROUBLESHOOTING
        ============================================ */
     
+    #troubleshooting .container {
+      max-width: 480px;
+    }
+    
     .troubleshooting-list {
       list-style: none;
+      width: 100%;
       text-align: left;
-      margin: 2rem 0;
+      margin-bottom: 1rem;
+      max-height: 55vh;
+      overflow-y: auto;
     }
     
     .troubleshooting-list li {
-      padding: 1.25rem 1.5rem;
-      margin: 0.75rem 0;
+      padding: 0.6rem 0.8rem;
+      margin: 0.3rem 0;
       background: var(--bg-surface);
       border-left: 2px solid var(--error);
     }
@@ -795,12 +704,13 @@
     .troubleshooting-list strong {
       color: var(--error);
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.2rem;
+      font-size: 0.75rem;
       font-weight: 500;
     }
     
     .troubleshooting-list p {
-      font-size: 0.85rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
     
@@ -813,17 +723,20 @@
        ============================================ */
     
     #about .container {
-      max-width: 600px;
+      max-width: 480px;
     }
     
     .about-content {
       text-align: left;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 0.5rem;
     }
     
     .about-content h3 {
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       color: var(--amber);
-      margin: 2.5rem 0 1rem;
+      margin: 1rem 0 0.5rem;
     }
     
     .about-content h3:first-of-type {
@@ -831,23 +744,23 @@
     }
     
     .about-content p {
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-bottom: 1rem;
-      line-height: 1.8;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
     }
     
     .journey-list {
       list-style: none;
-      margin: 1.5rem 0;
+      margin: 0.75rem 0;
     }
     
     .journey-list li {
-      padding: 1rem 1.25rem;
-      margin: 0.5rem 0;
+      padding: 0.5rem 0.75rem;
+      margin: 0.25rem 0;
       background: var(--bg-surface);
       border-left: 2px solid var(--amber-dim);
-      font-size: 0.85rem;
+      font-size: 0.75rem;
     }
     
     .journey-list strong {
@@ -860,26 +773,26 @@
     }
     
     /* ============================================
-       FOOTER
+       FOOTER (minimal)
        ============================================ */
     
     footer {
-      padding: 2rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem;
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
-      opacity: 0.6;
-      border-top: 1px solid rgba(242, 237, 231, 0.05);
+      opacity: 0.4;
+      z-index: 50;
     }
     
     footer a {
       color: var(--text-muted);
       text-decoration: none;
-      margin: 0 0.5rem;
-    }
-    
-    footer a:hover {
-      color: var(--amber);
+      margin: 0 0.3rem;
     }
     
     /* ============================================
@@ -904,25 +817,31 @@
     }
     
     /* ============================================
-       RESPONSIVE
+       RESPONSIVE - Smaller screens
        ============================================ */
     
-    @media (max-width: 640px) {
-      html { font-size: 16px; }
-      
-      .hero-title { font-size: 2.2rem; }
-      .section-title { font-size: 1.8rem; }
-      .success-title { font-size: 2rem; }
-      
-      .breathing-orb { width: 100px; height: 100px; }
-      
-      .path-steps { flex-direction: column; gap: 1.5rem; }
-      
-      .flash-container { padding: 1.5rem; }
-      
-      header { padding: 1rem; }
-      
-      .escape-hint { display: none; }
+    @media (max-height: 700px) {
+      .breathing-orb { width: 60px; height: 60px; margin-bottom: 1rem; }
+      .hero-title { font-size: 1.6rem; }
+      .hero-text { font-size: 0.75rem; margin-bottom: 0.5rem; }
+      .pattern-box { padding: 0.5rem 1rem; margin: 0.5rem 0; }
+      .pattern-flow { font-size: 1rem; }
+      .choice-prompt { margin: 0.75rem 0 0.5rem; }
+      .choice-buttons { gap: 0.4rem; }
+      .btn-choice { padding: 0.7rem 1.25rem; }
+    }
+    
+    @media (max-height: 600px) {
+      .hero-label { display: none; }
+      .breathing-orb { width: 50px; height: 50px; margin-bottom: 0.75rem; }
+      .hero-title { font-size: 1.4rem; margin-bottom: 0.5rem; }
+      .hero-text { font-size: 0.7rem; }
+      .pattern-box { display: none; }
+    }
+    
+    @media (max-width: 400px) {
+      .btn-row { flex-direction: column; width: 100%; }
+      .btn-primary, .btn-secondary { width: 100%; }
     }
   </style>
 </head>
@@ -934,26 +853,33 @@
     <a href="#" class="header-link" onclick="goToAbout(); return false;">What is this?</a>
   </header>
 
-  <!-- ESCAPE HINT (shows on inner pages) -->
+  <!-- ESCAPE HINT -->
   <div class="escape-hint" id="escapeHint" style="display: none;">
     Press <kbd>ESC</kbd> to go back
   </div>
 
+  <!-- FOOTER -->
+  <footer>
+    <span>GPL-3.0</span>
+    <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
+    <a href="mailto:wja326@lehigh.edu">Contact</a>
+  </footer>
+
   <!-- ==========================================
-       LANDING - THE REVELATION
+       LANDING
        ========================================== -->
   <section id="landing">
     <div class="container">
       
       <div class="hero-label">You're watching code run</div>
       
-      <!-- The breathing orb -->
       <div class="breathing-orb"></div>
       
       <h1 class="hero-title">This is a program.</h1>
       
-      <p class="hero-explanation">
-        Not a video. Not an animation. <span class="hero-highlight">Code, running in your browser right now.</span>
+      <p class="hero-text">
+        Not a video. <span class="hero-highlight">Code, running in your browser.</span><br>
+        In five minutes, this can be breathing on a device in your hands.
       </p>
       
       <div class="pattern-box">
@@ -962,10 +888,6 @@
           Input <span>→</span> Process <span>→</span> Output
         </div>
       </div>
-      
-      <p class="hero-explanation">
-        In five minutes, you can have this same code running on a <span class="hero-highlight">physical device in your hands</span>—a tiny $12 computer you own forever.
-      </p>
       
       <p class="choice-prompt">Ready to make it real?</p>
       
@@ -976,7 +898,7 @@
         <button class="btn-choice btn-choice-secondary" onclick="goToGetHardware()">
           I need to get one
         </button>
-        <p class="choice-note">Most people need to order one first—that's okay</p>
+        <p class="choice-note">Most people need to order one first</p>
       </div>
       
     </div>
@@ -989,7 +911,7 @@
     <div class="container">
       
       <h2 class="section-title">What You Need</h2>
-      <p class="section-subtitle">One small computer. One cable. That's it.</p>
+      <p class="section-subtitle">One small computer. One cable.</p>
       
       <div class="hardware-card">
         <div class="hardware-header">
@@ -997,42 +919,19 @@
           <div class="hardware-price">~$12</div>
         </div>
         <p class="hardware-description">
-          A tiny computer the size of your thumb. It has WiFi, Bluetooth, and dozens of 
-          pins you can connect to sensors, lights, motors—anything. This is what 
-          professionals use to prototype real products.
+          A tiny computer with WiFi & Bluetooth. This is what professionals use to prototype real products. Yours forever to keep and modify.
         </p>
-        <ul class="hardware-specs">
-          <li>Runs the same code as your browser preview</li>
-          <li>Programmable over USB—no special tools</li>
-          <li>Yours forever to keep, modify, expand</li>
-        </ul>
         <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank" class="btn-amazon">
           Get it on Amazon →
         </a>
       </div>
       
-      <div class="also-need">
-        <h3>YOU ALSO NEED</h3>
-        <p>
-          <strong style="color: var(--amber);">A USB data cable.</strong> 
-          Most phone charger cables only carry power, not data. If your cable came 
-          with an iPhone, it probably works. When in doubt, try it—if the device 
-          isn't recognized, that's usually the cable.
-        </p>
-      </div>
-      
       <div class="waiting-message">
         <h3>The threshold will be here.</h3>
-        <p>
-          Order your ESP32. Bookmark this page. When it arrives, come back and 
-          we'll turn that simulation into something you can hold.
-        </p>
-        <p class="bookmark-hint">Press Ctrl+D (or ⌘+D on Mac) to bookmark</p>
+        <p>Bookmark this page. Come back when it arrives.</p>
       </div>
       
-      <div class="action-row" style="margin-top: 2rem;">
-        <button class="btn-secondary" onclick="goToLanding()">← Back to demo</button>
-      </div>
+      <button class="btn-back" onclick="goToLanding()">← Back</button>
       
     </div>
   </section>
@@ -1049,19 +948,19 @@
       <ul class="requirements-list">
         <li>
           <strong>Computer (not phone)</strong>
-          <span>Web flashing needs a desktop or laptop browser.</span>
+          <span>Web flashing needs a desktop or laptop.</span>
         </li>
         <li>
-          <strong>Chrome or Edge</strong>
-          <span>Firefox and Safari don't support web flashing yet.</span>
+          <strong>Chrome or Edge browser</strong>
+          <span>Firefox and Safari don't support this yet.</span>
         </li>
         <li>
           <strong>ESP32 plugged in</strong>
-          <span>Connect it now with your USB data cable.</span>
+          <span>Connect it now with a USB data cable.</span>
         </li>
       </ul>
       
-      <div class="action-row">
+      <div class="btn-row">
         <button class="btn-primary" onclick="goToFlash()">I'm ready</button>
         <button class="btn-secondary" onclick="goToGetHardware()">I need an ESP32</button>
       </div>
@@ -1069,13 +968,12 @@
   </section>
 
   <!-- ==========================================
-       FLASH - THE RITUAL
+       FLASH
        ========================================== -->
   <section id="flash" class="hidden">
     <div class="container">
       
       <h2 class="section-title">The Ritual</h2>
-      <p class="section-subtitle">Four steps. Thirty seconds.</p>
       
       <div class="flash-container">
         <div class="flash-steps">
@@ -1083,50 +981,41 @@
             <span class="step-number">1</span>
             <div class="step-content">
               <h3>Plug in your ESP32</h3>
-              <p>Connect it to your computer with the USB cable.</p>
+              <p>USB cable to computer.</p>
             </div>
           </div>
-          
           <div class="flash-step">
             <span class="step-number">2</span>
             <div class="step-content">
-              <h3>Click the button below</h3>
-              <p>Select the device that says USB, Serial, CP210x, or CH340.</p>
+              <h3>Click Flash below</h3>
+              <p>Select the USB/Serial device.</p>
             </div>
           </div>
-          
           <div class="flash-step">
             <span class="step-number">3</span>
             <div class="step-content">
-              <h3>Wait</h3>
-              <p>Don't unplug anything. The code is uploading.</p>
+              <h3>Wait ~30 seconds</h3>
+              <p>Don't unplug anything.</p>
             </div>
           </div>
-          
           <div class="flash-step">
             <span class="step-number">4</span>
             <div class="step-content">
-              <h3>Watch your ESP32</h3>
-              <p>Find the small LED on the board. Is it breathing?</p>
+              <h3>Watch the LED</h3>
+              <p>Is it breathing?</p>
             </div>
           </div>
         </div>
         
         <esp-web-install-button manifest="./manifest.json">
-          <button slot="activate" class="btn-flash">
-            Flash Genesis Zero
-          </button>
+          <button slot="activate" class="btn-flash">Flash Genesis Zero</button>
         </esp-web-install-button>
       </div>
       
-      <button class="btn-success-trigger" onclick="goToSuccess()">
-        My LED is breathing
-      </button>
-      <p class="success-hint">Press this once you see the light</p>
+      <button class="btn-success-trigger" onclick="goToSuccess()">My LED is breathing</button>
+      <p class="success-hint">Press once you see the light</p>
       
-      <div class="action-row" style="margin-top: 2rem;">
-        <button class="btn-secondary" onclick="goToTroubleshooting()">Something's wrong</button>
-      </div>
+      <button class="btn-secondary" style="margin-top: 0.75rem;" onclick="goToTroubleshooting()">Something's wrong</button>
     </div>
   </section>
 
@@ -1141,15 +1030,14 @@
       <h2 class="success-title">You're a builder now.</h2>
       
       <p class="success-subtitle">
-        The code that was running in your browser is now running on physical hardware 
-        in your hands. Same pattern. Different substrate.
+        The code from your browser is now running on physical hardware in your hands.
       </p>
       
       <div class="learned-box">
-        <h3>WHAT YOU JUST PROVED</h3>
+        <h3>WHAT YOU PROVED</h3>
         <ul>
-          <li>Programming isn't magic—it's instructions</li>
-          <li>The pattern is always the same: Input → Process → Output</li>
+          <li>Programming is just instructions</li>
+          <li>The pattern: Input → Process → Output</li>
           <li>You can make digital things physical</li>
         </ul>
       </div>
@@ -1159,27 +1047,26 @@
         <div class="path-steps">
           <div class="path-step">
             <div class="path-step-num completed">0</div>
-            <div class="path-step-label">Onboard LED<br><em>Complete</em></div>
+            <div class="path-step-label">Done</div>
           </div>
           <div class="path-step">
             <div class="path-step-num">1</div>
-            <div class="path-step-label">External LED<br>15 min</div>
+            <div class="path-step-label">LED</div>
           </div>
           <div class="path-step">
             <div class="path-step-num">2</div>
-            <div class="path-step-label">Sensors<br>30 min</div>
+            <div class="path-step-label">Sensors</div>
           </div>
           <div class="path-step">
             <div class="path-step-num">∞</div>
-            <div class="path-step-label">Anything<br>You decide</div>
+            <div class="path-step-label">Anything</div>
           </div>
         </div>
-        <p class="path-note">The pattern repeats. You already know how.</p>
       </div>
       
       <div class="success-links">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See the code</a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Watch tutorials</a>
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See code</a>
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Tutorials</a>
       </div>
       
     </div>
@@ -1192,38 +1079,35 @@
     <div class="container">
       
       <h2 class="section-title" style="color: var(--error);">Troubleshooting</h2>
-      <p class="section-subtitle">Try these in order. Most problems are simple.</p>
       
       <ul class="troubleshooting-list">
         <li>
           <strong>No device appears</strong>
-          <p>Try a different USB cable. Most are charge-only and can't transfer data.</p>
+          <p>Try a different USB cable—most are charge-only.</p>
         </li>
         <li>
-          <strong>Device appears but flash fails</strong>
-          <p>Try a different USB port. Unplug, wait 5 seconds, plug back in.</p>
+          <strong>Flash fails</strong>
+          <p>Try a different USB port. Unplug, wait 5s, replug.</p>
         </li>
         <li>
-          <strong>Flash completes but LED doesn't breathe</strong>
-          <p>Unplug and replug the ESP32. Some need a restart after first flash.</p>
+          <strong>LED doesn't breathe</strong>
+          <p>Unplug and replug the ESP32.</p>
         </li>
         <li>
-          <strong>Mac not working</strong>
-          <p>You may need CH340 drivers. Search "CH340 driver Mac" and install.</p>
+          <strong>Mac issues</strong>
+          <p>Search "CH340 driver Mac" and install.</p>
         </li>
         <li>
-          <strong>Windows not working</strong>
-          <p>You may need CP210x drivers from <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">Silicon Labs</a>.</p>
+          <strong>Windows issues</strong>
+          <p>Get CP210x drivers from <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">Silicon Labs</a>.</p>
         </li>
         <li>
           <strong>Still stuck</strong>
-          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> with your computer type, browser, and the error message.</p>
+          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a></p>
         </li>
       </ul>
       
-      <div class="action-row">
-        <button class="btn-primary" onclick="goToFlash()">Try again</button>
-      </div>
+      <button class="btn-primary" onclick="goToFlash()">Try again</button>
     </div>
   </section>
 
@@ -1238,47 +1122,31 @@
       <div class="about-content">
         <h3>The Idea</h3>
         <p>
-          CRUMB teaches electronics through doing, not reading. Genesis Zero 
-          proves a truth most people never discover: if you can click a button, 
-          you can program a computer. The barriers were never real.
+          CRUMB teaches electronics through doing. Genesis Zero proves you can program a computer in 5 minutes. The barriers were never real.
         </p>
         
         <h3>The Pattern</h3>
         <p>
-          Every computer follows the same pattern: Input → Process → Output. 
-          Your phone. Your car. This ESP32 chip. Once you see it, you can build anything.
+          Every computer: Input → Process → Output. Your phone. Your car. This chip. Once you see it, you can build anything.
         </p>
         
         <h3>The Path</h3>
         <ul class="journey-list">
-          <li class="current"><strong>Genesis Zero:</strong> Control the onboard LED — 5 minutes</li>
-          <li><strong>Genesis One:</strong> Wire an external LED — 15 minutes</li>
-          <li><strong>Genesis Two:</strong> Add sensors — 30 minutes</li>
-          <li><strong>Genesis Three:</strong> Displays & buttons — 1 hour</li>
-          <li><strong>Genesis ∞:</strong> Build whatever you imagine</li>
+          <li class="current"><strong>Genesis Zero:</strong> Onboard LED — 5 min</li>
+          <li><strong>Genesis One:</strong> External LED — 15 min</li>
+          <li><strong>Genesis Two:</strong> Sensors — 30 min</li>
+          <li><strong>Genesis ∞:</strong> Whatever you imagine</li>
         </ul>
         
-        <h3>The Philosophy</h3>
+        <h3>Philosophy</h3>
         <p>
-          Open source. GPL-3.0. Everything here is yours to fork, modify, improve. 
-          We believe technology should adapt to humans, not the other way around.
+          Open source. GPL-3.0. Technology should adapt to humans.
         </p>
       </div>
       
-      <div class="action-row">
-        <button class="btn-primary" onclick="goToLanding()">← Back to demo</button>
-      </div>
+      <button class="btn-primary" style="margin-top: 1rem;" onclick="goToLanding()">← Back</button>
     </div>
   </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>CRUMB — Built by Wyeth Anzilotti — GPL-3.0</p>
-    <p style="margin-top: 0.5rem;">
-      <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
-      <a href="mailto:wja326@lehigh.edu">Contact</a>
-    </p>
-  </footer>
 
   <!-- JAVASCRIPT -->
   <script>
@@ -1296,42 +1164,36 @@
       hideAll();
       document.getElementById('landing').classList.remove('hidden');
       showEscapeHint(false);
-      window.scrollTo(0, 0);
     }
     
     function goToAbout() {
       hideAll();
       document.getElementById('about').classList.remove('hidden');
       showEscapeHint(true);
-      window.scrollTo(0, 0);
     }
     
     function goToGetHardware() {
       hideAll();
       document.getElementById('get-hardware').classList.remove('hidden');
       showEscapeHint(true);
-      window.scrollTo(0, 0);
     }
     
     function goToRequirements() {
       hideAll();
       document.getElementById('requirements').classList.remove('hidden');
       showEscapeHint(true);
-      window.scrollTo(0, 0);
     }
     
     function goToFlash() {
       hideAll();
       document.getElementById('flash').classList.remove('hidden');
       showEscapeHint(true);
-      window.scrollTo(0, 0);
     }
     
     function goToSuccess() {
       hideAll();
       document.getElementById('success').classList.remove('hidden');
       showEscapeHint(false);
-      window.scrollTo(0, 0);
       createConfetti();
     }
     
@@ -1339,7 +1201,6 @@
       hideAll();
       document.getElementById('troubleshooting').classList.remove('hidden');
       showEscapeHint(true);
-      window.scrollTo(0, 0);
     }
     
     function createConfetti() {
@@ -1358,7 +1219,6 @@
       }
     }
     
-    // Escape to go back
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         const current = document.querySelector('section:not(.hidden)')?.id;
