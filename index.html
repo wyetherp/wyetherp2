@@ -5,303 +5,510 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRUMB Genesis Zero</title>
   
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts: Distinctive display + clean mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- ESP Web Tools - For flashing ESP32 -->
+  <!-- ESP Web Tools -->
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   
   <style>
-    /* Colors */
+    /* === SACRED PALETTE === */
     :root {
-      --bg: #0A0A0A;
-      --text: #F2EDE7;
-      --accent: #D6A447;
-      --accent-dim: rgba(214, 164, 71, 0.3);
-      --success: #2ECC71;
-      --error: #E74C3C;
+      --bg-deep: #0A0A0A;
+      --bg-surface: #111111;
+      --text-primary: #F2EDE7;
+      --text-muted: rgba(242, 237, 231, 0.6);
+      --amber: #D4A373;
+      --amber-glow: rgba(212, 163, 115, 0.4);
+      --amber-dim: rgba(212, 163, 115, 0.15);
+      --success: #7FB069;
+      --success-glow: rgba(127, 176, 105, 0.4);
+      --error: #C45B4A;
     }
     
-    /* Reset */
-    * {
+    /* === RESET === */
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     
+    html {
+      font-size: 18px;
+      scroll-behavior: smooth;
+    }
+    
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
       line-height: 1.6;
       overflow-x: hidden;
+      min-height: 100vh;
     }
     
-    /* Header */
-    header {
-      background: rgba(10, 10, 10, 0.95);
-      border-bottom: 1px solid var(--accent-dim);
-      padding: 1.5rem;
-      text-align: center;
+    /* === ATMOSPHERIC BACKGROUND === */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212, 163, 115, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(127, 176, 105, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
     }
     
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 4px;
-      color: var(--text);
+    /* === TYPOGRAPHY === */
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
     }
     
-    /* Sections */
+    /* === LAYOUT === */
+    .hidden { display: none; }
+    
     section {
-      min-height: 80vh;
-      padding: 3rem 2rem;
+      min-height: 100vh;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-    }
-    
-    .hidden {
-      display: none;
-    }
-    
-    .container {
-      max-width: 700px;
-      width: 100%;
-      position: relative;
       z-index: 1;
     }
     
-    /* Typography */
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
+    .container {
+      max-width: 640px;
+      width: 100%;
     }
     
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      color: rgba(242, 237, 231, 0.8);
-    }
-    
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--bg);
-      padding: 1rem 2.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      font-family: 'IBM Plex Mono', monospace;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      margin: 0.5rem;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(214, 164, 71, 0.4);
-    }
-    
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 2px solid var(--accent);
-    }
-    
-    .btn-success {
-      background: var(--success);
-      color: #fff;
-      font-size: 1.1rem;
-      animation: pulse-glow 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(46, 204, 113, 0.5); }
-      50% { box-shadow: 0 0 40px rgba(46, 204, 113, 0.8); }
-    }
-    
-    .btn-back {
-      background: transparent;
-      color: rgba(242, 237, 231, 0.5);
-      border: 1px solid rgba(242, 237, 231, 0.3);
-      font-size: 0.9rem;
-      padding: 0.7rem 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    /* === ANIMATED BREATHING LED DEMO === */
-    .breathing-demo {
-      width: 80px;
-      height: 80px;
-      background: var(--accent);
-      border-radius: 50%;
-      margin: 2rem auto;
-      animation: breathe 6s ease-in-out infinite;
-      box-shadow: 0 0 20px var(--accent);
-    }
-    
-    @keyframes breathe {
-      0%, 100% { opacity: 0.1; transform: scale(0.95); }
-      50% { opacity: 1; transform: scale(1.05); }
-    }
-    
-    .demo-label {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--accent);
-      font-family: 'IBM Plex Mono', monospace;
-      margin-top: 1rem;
-    }
-    
-    /* === LANDING PAGE LAYOUT === */
-    .landing-buttons {
+    /* === HEADER (minimal) === */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      justify-content: space-between;
       align-items: center;
-      margin-top: 2rem;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg-deep) 0%, transparent 100%);
     }
     
-    .social-proof {
-      text-align: center;
-      margin-top: 3rem;
-      font-size: 0.95rem;
-      color: rgba(242, 237, 231, 0.5);
-      font-style: italic;
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      color: var(--text-muted);
+      text-transform: uppercase;
     }
     
-    /* Requirements List */
-    .requirements {
-      list-style: none;
-      text-align: left;
-      margin: 2rem 0;
+    .header-link {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.3s ease;
     }
     
-    .requirements li {
-      padding: 1rem;
-      margin: 1rem 0;
-      background: rgba(214, 164, 71, 0.05);
-      border-left: 3px solid var(--accent);
+    .header-link:hover {
+      color: var(--amber);
     }
     
-    .requirements strong {
-      color: var(--accent);
-      display: block;
-      margin-bottom: 0.5rem;
-    }
+    /* ============================================
+       HERO / LANDING - THE THRESHOLD
+       ============================================ */
     
-    /* Flash Container */
-    .flash-box {
-      background: rgba(20, 20, 20, 0.8);
-      border: 2px solid var(--accent);
-      padding: 2rem;
-      margin: 2rem 0;
+    #landing {
       text-align: center;
     }
     
-    .flash-step {
-      text-align: left;
-      margin: 1.5rem 0;
-      padding-left: 2rem;
+    /* The breathing LED is the hero */
+    .breathing-orb {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--amber);
+      margin: 0 auto 3rem;
+      animation: breathe 10s ease-in-out infinite;
+      box-shadow: 
+        0 0 60px var(--amber-glow),
+        0 0 120px var(--amber-dim);
       position: relative;
     }
     
-    .flash-step::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-size: 1.5rem;
+    /* 6 breaths per minute = 10 second cycle */
+    @keyframes breathe {
+      0%, 100% { 
+        opacity: 0.3; 
+        transform: scale(0.92);
+        box-shadow: 
+          0 0 30px var(--amber-dim),
+          0 0 60px transparent;
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1);
+        box-shadow: 
+          0 0 60px var(--amber-glow),
+          0 0 120px var(--amber-dim);
+      }
     }
     
-    .flash-step h3 {
-      color: var(--accent);
-      font-size: 1.1rem;
+    .hero-title {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin: 0 auto 3rem;
+      line-height: 1.8;
+    }
+    
+    /* Single primary action */
+    .btn-primary {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--bg-deep);
+      padding: 1.1rem 2.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--amber-glow);
+    }
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .hero-footnote {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    
+    .hero-footnote a {
+      color: var(--amber);
+      text-decoration: none;
+    }
+    
+    /* ============================================
+       REQUIREMENTS - PREPARATION
+       ============================================ */
+    
+    #requirements .container {
+      max-width: 580px;
+    }
+    
+    .section-title {
+      font-size: 2.2rem;
+      text-align: center;
       margin-bottom: 0.5rem;
     }
     
-    /* ESP Web Tools Button Styling */
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .requirements-list {
+      list-style: none;
+      margin: 2rem 0;
+    }
+    
+    .requirements-list li {
+      padding: 1.25rem 1.5rem;
+      margin: 0.75rem 0;
+      background: var(--bg-surface);
+      border-left: 2px solid var(--amber-dim);
+      transition: border-color 0.3s ease;
+    }
+    
+    .requirements-list li:hover {
+      border-left-color: var(--amber);
+    }
+    
+    .requirements-list strong {
+      color: var(--amber);
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    
+    .requirements-list span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .requirements-list a {
+      color: var(--amber);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    
+    /* Navigation buttons */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid rgba(242, 237, 231, 0.15);
+      padding: 0.6rem 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-back:hover {
+      color: var(--text-primary);
+      border-color: rgba(242, 237, 231, 0.3);
+    }
+    
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--amber);
+      padding: 1rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: var(--amber-dim);
+    }
+    
+    .action-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    /* ============================================
+       FLASH - THE RITUAL
+       ============================================ */
+    
+    .flash-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--amber-dim);
+      padding: 2.5rem;
+      margin: 2rem 0;
+    }
+    
+    .flash-steps {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    
+    .flash-step {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      align-items: flex-start;
+    }
+    
+    .step-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--amber);
+      line-height: 1;
+      min-width: 1.5rem;
+    }
+    
+    .step-content h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      color: var(--text-primary);
+    }
+    
+    .step-content p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    /* ESP Web Tools styling */
     esp-web-install-button {
       display: block;
       margin: 2rem auto;
     }
     
-    /* === CONFETTI ANIMATION === */
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background: var(--accent);
-      animation: confetti-fall 3s ease-out forwards;
-      pointer-events: none;
+    esp-web-install-button button,
+    .btn-flash {
+      width: 100%;
+      background: var(--amber);
+      color: var(--bg-deep);
+      padding: 1.2rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
     
-    @keyframes confetti-fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+    esp-web-install-button button:hover,
+    .btn-flash:hover {
+      box-shadow: 0 8px 30px var(--amber-glow);
     }
     
-    /* === SUCCESS PAGE ENHANCEMENTS === */
-    .success-icon {
-      font-size: 5rem;
-      margin-bottom: 1rem;
-      animation: bounce-in 0.8s ease-out;
+    /* Success trigger button */
+    .btn-success-trigger {
+      width: 100%;
+      background: var(--success);
+      color: var(--bg-deep);
+      padding: 1.3rem 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      margin-top: 2rem;
+      animation: gentle-pulse 3s ease-in-out infinite;
+      transition: all 0.3s ease;
     }
     
-    @keyframes bounce-in {
-      0% { transform: scale(0); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
+    @keyframes gentle-pulse {
+      0%, 100% { box-shadow: 0 0 20px var(--success-glow); }
+      50% { box-shadow: 0 0 40px var(--success-glow); }
+    }
+    
+    .btn-success-trigger:hover {
+      transform: translateY(-2px);
+    }
+    
+    .success-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+    
+    /* ============================================
+       SUCCESS - TRANSFORMATION
+       ============================================ */
+    
+    #success {
+      text-align: center;
+    }
+    
+    .success-orb {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--success);
+      margin: 0 auto 2rem;
+      animation: 
+        success-breathe 10s ease-in-out infinite,
+        success-enter 0.8s ease-out;
+      box-shadow: 0 0 60px var(--success-glow);
+    }
+    
+    @keyframes success-breathe {
+      0%, 100% { opacity: 0.4; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes success-enter {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
     }
     
     .success-title {
-      font-size: 3rem;
+      font-size: 2.5rem;
       color: var(--success);
-      font-weight: 700;
       margin-bottom: 1rem;
-      animation: slide-up 0.6s ease-out 0.3s both;
+      animation: fade-up 0.6s ease-out 0.3s both;
     }
     
-    @keyframes slide-up {
+    .success-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+      animation: fade-up 0.6s ease-out 0.5s both;
+    }
+    
+    @keyframes fade-up {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
-    .success-subtitle {
-      font-size: 1.3rem;
-      animation: slide-up 0.6s ease-out 0.5s both;
-    }
-    
     .learned-box {
-      background: rgba(46, 204, 113, 0.05);
-      border: 1px solid rgba(46, 204, 113, 0.3);
-      padding: 1.5rem;
-      margin: 2rem 0;
+      background: rgba(127, 176, 105, 0.08);
+      border: 1px solid rgba(127, 176, 105, 0.2);
+      padding: 2rem;
       text-align: left;
-      animation: slide-up 0.6s ease-out 0.7s both;
+      margin: 2rem 0;
+      animation: fade-up 0.6s ease-out 0.7s both;
     }
     
     .learned-box h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
       color: var(--success);
       margin-bottom: 1rem;
-      font-size: 1.3rem;
+      letter-spacing: 0.1em;
     }
     
     .learned-box ul {
@@ -312,132 +519,226 @@
       padding: 0.5rem 0;
       padding-left: 1.5rem;
       position: relative;
-      font-size: 1.05rem;
+      font-size: 0.9rem;
+      color: var(--text-primary);
     }
     
     .learned-box li::before {
-      content: '✓';
+      content: '→';
       position: absolute;
       left: 0;
       color: var(--success);
-      font-weight: bold;
     }
     
-    /* === NEXT STEPS PREVIEW === */
-    .next-steps {
-      background: rgba(214, 164, 71, 0.05);
-      border: 1px solid var(--accent-dim);
-      padding: 1.5rem;
+    /* Path preview */
+    .path-preview {
+      background: var(--bg-surface);
+      border: 1px solid var(--amber-dim);
+      padding: 2rem;
       margin: 2rem 0;
-      animation: slide-up 0.6s ease-out 0.9s both;
+      animation: fade-up 0.6s ease-out 0.9s both;
     }
     
-    .next-steps h3 {
-      color: var(--accent);
-      margin-bottom: 1rem;
+    .path-preview h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.1em;
       text-align: center;
     }
     
-    .genesis-path {
+    .path-steps {
       display: flex;
-      justify-content: space-around;
-      margin: 1.5rem 0;
-      flex-wrap: wrap;
+      justify-content: space-between;
       gap: 1rem;
     }
     
-    .genesis-step {
+    .path-step {
       text-align: center;
       flex: 1;
-      min-width: 120px;
     }
     
-    .genesis-step-number {
-      display: block;
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--accent);
+    .path-step-num {
+      font-family: 'Cormorant Garamond', serif;
       font-size: 2rem;
-      font-weight: bold;
+      color: var(--amber);
     }
     
-    .genesis-step-label {
-      font-size: 0.9rem;
-      color: rgba(242, 237, 231, 0.7);
+    .path-step-num.completed {
+      color: var(--success);
     }
     
-    /* === ABOUT/CONTEXT PAGE === */
-    .about-section {
-      text-align: left;
-      margin: 2rem 0;
+    .path-step-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
     }
     
-    .about-section h3 {
-      color: var(--accent);
-      margin: 2rem 0 1rem 0;
-      font-size: 1.5rem;
+    .path-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+      font-style: italic;
     }
     
-    .about-section p {
-      text-align: left;
-      margin-bottom: 1rem;
+    .success-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      animation: fade-up 0.6s ease-out 1.1s both;
     }
     
-    .journey-path {
-      list-style: none;
-      margin: 1.5rem 0;
-      padding-left: 0;
-    }
+    /* ============================================
+       TROUBLESHOOTING
+       ============================================ */
     
-    .journey-path li {
-      padding: 1rem;
-      margin: 0.5rem 0;
-      background: rgba(214, 164, 71, 0.05);
-      border-left: 3px solid var(--accent);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.95rem;
-    }
-    
-    .journey-path strong {
-      color: var(--accent);
-    }
-    
-    /* Troubleshooting */
-    .troubleshooting {
+    .troubleshooting-list {
       list-style: none;
       text-align: left;
       margin: 2rem 0;
     }
     
-    .troubleshooting li {
-      padding: 1rem;
-      margin: 1rem 0;
-      background: rgba(231, 76, 60, 0.05);
-      border-left: 3px solid var(--error);
+    .troubleshooting-list li {
+      padding: 1.25rem 1.5rem;
+      margin: 0.75rem 0;
+      background: var(--bg-surface);
+      border-left: 2px solid var(--error);
     }
     
-    .troubleshooting strong {
+    .troubleshooting-list strong {
       color: var(--error);
       display: block;
       margin-bottom: 0.5rem;
+      font-weight: 500;
     }
     
-    /* Footer */
+    .troubleshooting-list p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .troubleshooting-list a {
+      color: var(--amber);
+    }
+    
+    /* ============================================
+       ABOUT (accessed via header)
+       ============================================ */
+    
+    #about .container {
+      max-width: 600px;
+    }
+    
+    .about-content {
+      text-align: left;
+    }
+    
+    .about-content h3 {
+      font-size: 1.4rem;
+      color: var(--amber);
+      margin: 2.5rem 0 1rem;
+    }
+    
+    .about-content h3:first-of-type {
+      margin-top: 0;
+    }
+    
+    .about-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    
+    .journey-list {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+    
+    .journey-list li {
+      padding: 1rem 1.25rem;
+      margin: 0.5rem 0;
+      background: var(--bg-surface);
+      border-left: 2px solid var(--amber-dim);
+      font-size: 0.85rem;
+    }
+    
+    .journey-list strong {
+      color: var(--amber);
+    }
+    
+    .journey-list .current {
+      border-left-color: var(--amber);
+      background: var(--amber-dim);
+    }
+    
+    /* ============================================
+       FOOTER
+       ============================================ */
+    
     footer {
-      background: rgba(10, 10, 10, 0.95);
-      border-top: 1px solid var(--accent-dim);
-      padding: 1rem;
+      padding: 2rem;
       text-align: center;
-      font-size: 0.9rem;
-      color: rgba(242, 237, 231, 0.5);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+      border-top: 1px solid rgba(242, 237, 231, 0.05);
     }
     
-    /* Mobile */
-    @media (max-width: 768px) {
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.5rem; }
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+    
+    footer a:hover {
+      color: var(--amber);
+    }
+    
+    /* ============================================
+       CONFETTI
+       ============================================ */
+    
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+      animation: confetti-fall 3s ease-out forwards;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    
+    @media (max-width: 640px) {
+      html { font-size: 16px; }
+      
+      .hero-title { font-size: 2.2rem; }
+      .section-title { font-size: 1.8rem; }
       .success-title { font-size: 2rem; }
-      .btn { padding: 0.9rem 2rem; font-size: 0.9rem; }
-      .genesis-path { flex-direction: column; }
+      
+      .breathing-orb { width: 100px; height: 100px; }
+      
+      .path-steps { flex-direction: column; gap: 1.5rem; }
+      
+      .flash-container { padding: 1.5rem; }
+      
+      header { padding: 1rem; }
     }
   </style>
 </head>
@@ -445,335 +746,354 @@
 
   <!-- HEADER -->
   <header>
-    <div class="logo">CRUMB GENESIS ZERO</div>
+    <div class="logo">CRUMB</div>
+    <a href="#" class="header-link" onclick="goToAbout(); return false;">What is this?</a>
   </header>
 
-  <!-- SECTION 1: LANDING -->
+  <!-- ==========================================
+       LANDING - THE THRESHOLD
+       ========================================== -->
   <section id="landing">
     <div class="container">
-      <h1>Program a Computer in 5 Minutes</h1>
-      <p>No experience needed. No installation. No complexity.<br>
-      Just plug in, click a button, and watch your computer breathe.</p>
       
-      <!-- Animated LED Demo -->
-      <div class="breathing-demo"></div>
-      <div class="demo-label">← This is what you'll create</div>
+      <!-- The breathing orb IS the hero -->
+      <div class="breathing-orb"></div>
       
-      <!-- Two-button approach -->
-      <div class="landing-buttons">
-        <button class="btn" onclick="goToRequirements()">START GENESIS ZERO</button>
-        <button class="btn-secondary" onclick="goToAbout()">WHAT IS CRUMB?</button>
-      </div>
+      <h1 class="hero-title">You can build this.</h1>
       
-      <!-- Social proof -->
-      <div class="social-proof">
-        "I didn't think I could program. This proved me wrong." — First-time builder
-      </div>
+      <p class="hero-subtitle">
+        A breathing light. Your first program.<br>
+        Five minutes. No experience required.
+      </p>
+      
+      <button class="btn-primary" onclick="goToRequirements()">
+        Cross the threshold
+      </button>
+      
+      <p class="hero-footnote">
+        $12 in parts. Forever yours to keep, modify, rebuild.<br>
+        <a href="#" onclick="goToAbout(); return false;">Learn more about CRUMB →</a>
+      </p>
+      
     </div>
   </section>
 
-  <!-- SECTION: ABOUT / WHAT IS CRUMB -->
+  <!-- ==========================================
+       ABOUT
+       ========================================== -->
   <section id="about" class="hidden">
     <div class="container">
       <button class="btn-back" onclick="goToLanding()">← Back</button>
       
-      <h2>What Is CRUMB?</h2>
+      <h2 class="section-title">What Is CRUMB?</h2>
       
-      <div class="about-section">
-        <h3>What</h3>
-        <p>CRUMB is a learning platform that teaches electronics through doing, not reading. Genesis Zero proves a simple truth: if you can click a button, you can program a computer. No gatekeeping. No prerequisites. Just you and a chip, creating something alive.</p>
+      <div class="about-content">
+        <h3>The Idea</h3>
+        <p>
+          CRUMB teaches electronics through doing, not reading. Genesis Zero 
+          proves a truth most people never discover: if you can click a button, 
+          you can program a computer. The barriers were never real.
+        </p>
         
-        <h3>Why</h3>
-        <p>Most people never try electronics because it feels mysterious. "I'm not technical." "I don't know math." "I'm not smart enough." But those barriers? They were never real. Programming is just conversations with machines. You already know how to give instructions. You already understand cause and effect. Genesis Zero shows you that you've had these skills all along.</p>
+        <h3>The Pattern</h3>
+        <p>
+          Every computer follows the same pattern: Input → Process → Output. 
+          Your phone. Your car. This ESP32 chip. Once you see it, you can build anything.
+        </p>
         
         <h3>The Path</h3>
-        <ul class="journey-path">
-          <li><strong>Genesis Zero:</strong> Control onboard LED (5 minutes) ← You are here</li>
-          <li><strong>Genesis One:</strong> Wire external LED (15 minutes)</li>
-          <li><strong>Genesis Two:</strong> Add sensors (30 minutes)</li>
-          <li><strong>Genesis Three:</strong> Add displays & buttons (1 hour)</li>
-          <li><strong>Genesis Infinity:</strong> Build whatever you want</li>
+        <ul class="journey-list">
+          <li class="current"><strong>Genesis Zero:</strong> Control the onboard LED — 5 minutes</li>
+          <li><strong>Genesis One:</strong> Wire an external LED — 15 minutes</li>
+          <li><strong>Genesis Two:</strong> Add sensors — 30 minutes</li>
+          <li><strong>Genesis Three:</strong> Displays & buttons — 1 hour</li>
+          <li><strong>Genesis ∞:</strong> Build whatever you imagine</li>
         </ul>
         
-        <p style="text-align: center; margin-top: 2rem;">The pattern is simple. You learn it once. Then you can build anything.</p>
+        <h3>The Philosophy</h3>
+        <p>
+          Open source. GPL-3.0. Everything here is yours to fork, modify, improve. 
+          We believe technology should adapt to humans, not the other way around.
+        </p>
       </div>
       
-      <div style="text-align: center; margin-top: 2rem;">
-        <button class="btn" onclick="goToRequirements()">START GENESIS ZERO →</button>
+      <div class="action-row">
+        <button class="btn-primary" onclick="goToRequirements()">Begin Genesis Zero</button>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 2: REQUIREMENTS -->
+  <!-- ==========================================
+       REQUIREMENTS - PREPARATION
+       ========================================== -->
   <section id="requirements" class="hidden">
     <div class="container">
       <button class="btn-back" onclick="goToLanding()">← Back</button>
       
-      <h2>What You Need</h2>
-      <p>Make sure you have these before continuing:</p>
+      <h2 class="section-title">Before You Begin</h2>
+      <p class="section-subtitle">Gather these. It takes 30 seconds.</p>
       
-      <ul class="requirements">
+      <ul class="requirements-list">
         <li>
-          <strong>✓ Computer (not phone)</strong>
-          Web flashing only works on desktop/laptop
+          <strong>A computer</strong>
+          <span>Desktop or laptop. Not a phone—web flashing needs a real browser.</span>
         </li>
         <li>
-          <strong>✓ Chrome or Edge browser</strong>
-          Firefox and Safari don't support web flashing yet
+          <strong>Chrome or Edge</strong>
+          <span>Firefox and Safari don't support web flashing yet.</span>
         </li>
         <li>
-          <strong>✓ ESP32 microcontroller (~$12)</strong>
-          <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank" style="color: var(--accent);">Buy on Amazon</a><br>
-          <em style="font-size: 0.9rem; color: rgba(242, 237, 231, 0.5);">Don't have one? Order now, bookmark this page, come back when it arrives.</em>
+          <strong>ESP32 microcontroller</strong>
+          <span>~$12. <a href="https://www.amazon.com/SDATEKIT-ESP32-DevKitC-32E-Development-ESP32-WROOM-32E-Microcontroller/dp/B0D6BH4K9B/" target="_blank">Get one here</a>. Don't have one? Order now, come back when it arrives.</span>
         </li>
         <li>
-          <strong>✓ USB cable (data, not charge-only)</strong>
-          Must transfer data. iPhone cables work.
+          <strong>USB data cable</strong>
+          <span>Must transfer data, not just charge. iPhone cables work.</span>
         </li>
       </ul>
       
-      <button class="btn" onclick="goToFlash()">I HAVE EVERYTHING →</button>
+      <div class="action-row">
+        <button class="btn-primary" onclick="goToFlash()">I have everything</button>
+      </div>
     </div>
   </section>
 
-  <!-- SECTION 3: FLASH -->
+  <!-- ==========================================
+       FLASH - THE RITUAL
+       ========================================== -->
   <section id="flash" class="hidden">
     <div class="container">
       <button class="btn-back" onclick="goToRequirements()">← Back</button>
       
-      <h2>Let's Flash Your ESP32</h2>
+      <h2 class="section-title">The Ritual</h2>
+      <p class="section-subtitle">Four steps. Thirty seconds.</p>
       
-      <div class="flash-box">
-        
-        <div class="flash-step">
-          <h3>Step 1: Plug In Your ESP32</h3>
-          <p>Connect your ESP32 to your computer with the USB cable.</p>
+      <div class="flash-container">
+        <div class="flash-steps">
+          <div class="flash-step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h3>Plug in your ESP32</h3>
+              <p>Connect it to your computer with the USB cable.</p>
+            </div>
+          </div>
+          
+          <div class="flash-step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h3>Click the button below</h3>
+              <p>Select the device that says USB, Serial, CP210x, or CH340.</p>
+            </div>
+          </div>
+          
+          <div class="flash-step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h3>Wait</h3>
+              <p>Don't unplug anything. The code is uploading.</p>
+            </div>
+          </div>
+          
+          <div class="flash-step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h3>Watch your ESP32</h3>
+              <p>Find the small LED on the board. Is it breathing?</p>
+            </div>
+          </div>
         </div>
         
-        <div class="flash-step">
-          <h3>Step 2: Click the Button Below</h3>
-          <p>Your browser will ask you to select a device. Choose the one that says "USB" or "Serial" or "CP210x" or "CH340".</p>
-        </div>
-        
-        <div class="flash-step">
-          <h3>Step 3: Wait (~30 seconds)</h3>
-          <p>Don't unplug anything! The code is uploading.</p>
-        </div>
-        
-        <div class="flash-step">
-          <h3>Step 4: Look at Your ESP32</h3>
-          <p>When done, look at your ESP32. There's a small LED on the board. Is it breathing?</p>
-        </div>
-        
-        <!-- ESP Web Tools Button -->
         <esp-web-install-button manifest="./manifest.json">
-          <button slot="activate" class="btn" style="width: 100%; max-width: 400px;">
-            FLASH GENESIS ZERO
+          <button slot="activate" class="btn-flash">
+            Flash Genesis Zero
           </button>
         </esp-web-install-button>
-        
       </div>
       
-      <!-- BIG SUCCESS BUTTON (Manual trigger) -->
-      <div style="text-align: center; margin: 2rem 0;">
-        <button class="btn btn-success" onclick="goToSuccess()" style="width: 100%; max-width: 500px; padding: 1.5rem;">
-          Press me once the LED is breathing
-        </button>
-        <p style="font-size: 0.9rem; color: rgba(242, 237, 231, 0.6); margin-top: 1rem;">
-          After flash completes, click above to celebrate your success!
-        </p>
-      </div>
+      <button class="btn-success-trigger" onclick="goToSuccess()">
+        My LED is breathing
+      </button>
+      <p class="success-hint">Press this once you see the light</p>
       
-      <button class="btn-secondary" onclick="goToTroubleshooting()">NOT WORKING? TROUBLESHOOTING</button>
+      <div class="action-row" style="margin-top: 2rem;">
+        <button class="btn-secondary" onclick="goToTroubleshooting()">Something's wrong</button>
+      </div>
     </div>
   </section>
 
-  <!-- SECTION 4: SUCCESS -->
+  <!-- ==========================================
+       SUCCESS - TRANSFORMATION
+       ========================================== -->
   <section id="success" class="hidden">
     <div class="container">
       
-      <div class="success-icon">🎉</div>
-      <div class="success-title">YOU'RE A BUILDER NOW</div>
+      <div class="success-orb"></div>
       
-      <p class="success-subtitle">You just programmed a computer. In 5 minutes.<br>You crossed the threshold. You're not the same person you were 5 minutes ago.</p>
+      <h2 class="success-title">You're a builder now.</h2>
+      
+      <p class="success-subtitle">
+        You just programmed a computer. In five minutes.<br>
+        The threshold is behind you. What comes next is up to you.
+      </p>
       
       <div class="learned-box">
-        <h3>What You Just Proved:</h3>
+        <h3>WHAT YOU PROVED</h3>
         <ul>
-          <li>Programming isn't magic — it's just instructions</li>
+          <li>Programming isn't magic—it's instructions</li>
           <li>Computers do exactly what you tell them</li>
           <li>You can build more than you thought</li>
         </ul>
       </div>
       
-      <div class="next-steps">
-        <h3>The Journey Ahead</h3>
-        <div class="genesis-path">
-          <div class="genesis-step">
-            <span class="genesis-step-number">0</span>
-            <div class="genesis-step-label">Onboard LED<br>(You just did this)</div>
+      <div class="path-preview">
+        <h3>THE PATH AHEAD</h3>
+        <div class="path-steps">
+          <div class="path-step">
+            <div class="path-step-num completed">0</div>
+            <div class="path-step-label">Onboard LED<br><em>Complete</em></div>
           </div>
-          <div class="genesis-step">
-            <span class="genesis-step-number">1</span>
-            <div class="genesis-step-label">External LED<br>(15 minutes)</div>
+          <div class="path-step">
+            <div class="path-step-num">1</div>
+            <div class="path-step-label">External LED<br>15 min</div>
           </div>
-          <div class="genesis-step">
-            <span class="genesis-step-number">2</span>
-            <div class="genesis-step-label">Sensors<br>(30 minutes)</div>
+          <div class="path-step">
+            <div class="path-step-num">2</div>
+            <div class="path-step-label">Sensors<br>30 min</div>
           </div>
-          <div class="genesis-step">
-            <span class="genesis-step-number">∞</span>
-            <div class="genesis-step-label">Anything<br>(You decide)</div>
+          <div class="path-step">
+            <div class="path-step-num">∞</div>
+            <div class="path-step-label">Anything<br>You decide</div>
           </div>
         </div>
-        <p style="text-align: center; font-size: 0.95rem; margin-top: 1rem;">
-          The pattern is the same. You already know how.
-        </p>
+        <p class="path-note">The pattern repeats. You already know how.</p>
       </div>
       
-      <div style="text-align: center; margin-top: 2rem;">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn">SEE THE CODE (GitHub)</a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">WATCH TUTORIALS (YouTube)</a>
+      <div class="success-links">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See the code</a>
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Watch tutorials</a>
       </div>
-      
       
     </div>
   </section>
 
-  <!-- SECTION 5: TROUBLESHOOTING -->
+  <!-- ==========================================
+       TROUBLESHOOTING
+       ========================================== -->
   <section id="troubleshooting" class="hidden">
     <div class="container">
-      <button class="btn-back" onclick="goToFlash()">← Back to Flash</button>
+      <button class="btn-back" onclick="goToFlash()">← Back</button>
       
-      <h2 style="color: var(--error);">Troubleshooting</h2>
-      <p>Most problems are one of these. Try them in order:</p>
+      <h2 class="section-title" style="color: var(--error);">Troubleshooting</h2>
+      <p class="section-subtitle">Try these in order. Most problems are simple.</p>
       
-      <ul class="troubleshooting">
+      <ul class="troubleshooting-list">
         <li>
-          <strong>1. No device appears when I click FLASH</strong>
-          <p>Try a different USB cable. Most cables are "charge-only" and can't transfer data. iPhone cables work.</p>
+          <strong>No device appears</strong>
+          <p>Try a different USB cable. Most are charge-only and can't transfer data.</p>
         </li>
-        
         <li>
-          <strong>2. Device appears but flash fails</strong>
-          <p>Try a different USB port. Some ports don't have enough power. Also try unplugging the ESP32, waiting 5 seconds, and plugging it back in.</p>
+          <strong>Device appears but flash fails</strong>
+          <p>Try a different USB port. Unplug, wait 5 seconds, plug back in.</p>
         </li>
-        
         <li>
-          <strong>3. Flash completes but LED doesn't breathe</strong>
-          <p>Unplug the ESP32 and plug it back in. Some ESP32s need a restart after first flash.</p>
+          <strong>Flash completes but LED doesn't breathe</strong>
+          <p>Unplug and replug the ESP32. Some need a restart after first flash.</p>
         </li>
-        
         <li>
-          <strong>4. I'm on Mac and it's not working</strong>
-          <p>You might need CH340 drivers. Google "CH340 driver Mac" and install it. Then restart and try again.</p>
+          <strong>Mac not working</strong>
+          <p>You may need CH340 drivers. Search "CH340 driver Mac" and install.</p>
         </li>
-        
         <li>
-          <strong>5. I'm on Windows and it's not working</strong>
-          <p>You might need CP210x drivers. Go to <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" style="color: var(--accent);">Silicon Labs</a> and download the driver.</p>
+          <strong>Windows not working</strong>
+          <p>You may need CP210x drivers from <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">Silicon Labs</a>.</p>
         </li>
-        
         <li>
-          <strong>6. Still not working</strong>
-          <p>Email Wyeth at <a href="mailto:wja326@lehigh.edu" style="color: var(--accent);">wja326@lehigh.edu</a> with:
-          <br>• Your computer type (Mac/Windows/Linux)
-          <br>• Your browser (Chrome/Edge)
-          <br>• The exact error message
-          </p>
+          <strong>Still stuck</strong>
+          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> with your computer type, browser, and the error message.</p>
         </li>
       </ul>
       
-      <button class="btn" onclick="goToFlash()">← TRY FLASHING AGAIN</button>
+      <div class="action-row">
+        <button class="btn-primary" onclick="goToFlash()">Try again</button>
+      </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 CRUMB — Built by Wyeth Anzilotti — GPL-3.0 Open Source</p>
+    <p>CRUMB — Built by Wyeth Anzilotti — GPL-3.0</p>
     <p style="margin-top: 0.5rem;">
-      <a href="https://github.com/wyetherp/crumb_main" target="_blank" style="color: rgba(242, 237, 231, 0.6);">GitHub</a> • 
-      <a href="mailto:wja326@lehigh.edu" style="color: rgba(242, 237, 231, 0.6);">Email</a>
+      <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
+      <a href="mailto:wja326@lehigh.edu">Contact</a>
     </p>
   </footer>
 
   <!-- JAVASCRIPT -->
   <script>
-    // Hide all sections
     function hideAll() {
-      document.querySelectorAll('section').forEach(function(section) {
-        section.classList.add('hidden');
-      });
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
     }
     
-    // Show landing
     function goToLanding() {
       hideAll();
       document.getElementById('landing').classList.remove('hidden');
+      window.scrollTo(0, 0);
     }
     
-    // Show requirements
-    function goToRequirements() {
-      hideAll();
-      document.getElementById('requirements').classList.remove('hidden');
-    }
-    
-    // Show flash
-    function goToFlash() {
-      hideAll();
-      document.getElementById('flash').classList.remove('hidden');
-    }
-    
-    // Show about page
     function goToAbout() {
       hideAll();
       document.getElementById('about').classList.remove('hidden');
+      window.scrollTo(0, 0);
     }
     
-    // Show success with confetti!
+    function goToRequirements() {
+      hideAll();
+      document.getElementById('requirements').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+    
+    function goToFlash() {
+      hideAll();
+      document.getElementById('flash').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+    
     function goToSuccess() {
       hideAll();
       document.getElementById('success').classList.remove('hidden');
-      // Trigger confetti
+      window.scrollTo(0, 0);
       createConfetti();
     }
     
-    // Show troubleshooting
     function goToTroubleshooting() {
       hideAll();
       document.getElementById('troubleshooting').classList.remove('hidden');
+      window.scrollTo(0, 0);
     }
     
-    // Confetti animation
     function createConfetti() {
-      const colors = ['#D6A447', '#2ECC71', '#F2EDE7'];
-      const successSection = document.getElementById('success');
-      
-      for (let i = 0; i < 50; i++) {
-        setTimeout(function() {
+      const colors = ['#D4A373', '#7FB069', '#F2EDE7'];
+      for (let i = 0; i < 60; i++) {
+        setTimeout(() => {
           const confetti = document.createElement('div');
           confetti.className = 'confetti';
           confetti.style.left = Math.random() * 100 + '%';
           confetti.style.top = '-10px';
           confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          confetti.style.animationDelay = Math.random() * 0.5 + 's';
-          successSection.appendChild(confetti);
-          
-          setTimeout(function() {
-            confetti.remove();
-          }, 3000);
-        }, i * 30);
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 3000);
+        }, i * 25);
       }
     }
     
-    // Keyboard shortcut: Escape to go back
-    document.addEventListener('keydown', function(e) {
+    // Escape to go back
+    document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        var current = document.querySelector('section:not(.hidden)').id;
-        if (current === 'requirements') goToLanding();
-        if (current === 'about') goToLanding();
-        if (current === 'flash') goToRequirements();
-        if (current === 'troubleshooting') goToFlash();
+        const current = document.querySelector('section:not(.hidden)')?.id;
+        if (current === 'requirements' || current === 'about') goToLanding();
+        else if (current === 'flash') goToRequirements();
+        else if (current === 'troubleshooting') goToFlash();
       }
     });
   </script>
