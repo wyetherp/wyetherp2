@@ -96,20 +96,71 @@
       text-align: center;
     }
     
-    /* === ANIMATED LOGO === */
+    /* === STICK FIGURE LOGO === */
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
+      cursor: pointer;
     }
     
-    .logo-pulse {
-      width: 12px;
-      height: 12px;
+    .stick-figure {
+      position: relative;
+      width: 20px;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    /* Head with pulsing light */
+    .stick-head {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--amber);
+      position: relative;
       animation: logo-breathe 4s ease-in-out infinite;
       box-shadow: 0 0 8px var(--amber-glow);
+    }
+    
+    /* Body */
+    .stick-body {
+      width: 2px;
+      height: 12px;
+      background: var(--text-muted);
+      margin-top: 1px;
+    }
+    
+    /* Arms */
+    .stick-arms {
+      width: 14px;
+      height: 2px;
+      background: var(--text-muted);
+      position: absolute;
+      top: 12px;
+    }
+    
+    /* Legs */
+    .stick-legs {
+      display: flex;
+      gap: 4px;
+      margin-top: 1px;
+    }
+    
+    .stick-leg {
+      width: 2px;
+      height: 8px;
+      background: var(--text-muted);
+      transform-origin: top;
+    }
+    
+    .stick-leg:first-child {
+      transform: rotate(-15deg);
+    }
+    
+    .stick-leg:last-child {
+      transform: rotate(15deg);
     }
     
     @keyframes logo-breathe {
@@ -251,8 +302,8 @@
       font-size: 0.9rem;
     }
     
-    /* === PROOF SECTION === */
-    .proof-section {
+    /* === PROMISE SECTION (replaces fake proof) === */
+    .promise-section {
       background: var(--bg-surface);
       border: 1px solid var(--amber-dim);
       padding: 1rem;
@@ -261,7 +312,7 @@
       max-width: 400px;
     }
     
-    .proof-section h3 {
+    .promise-section h3 {
       font-size: 0.7rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -270,24 +321,24 @@
       font-family: 'JetBrains Mono', monospace;
     }
     
-    .proof-grid {
+    .promise-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
     }
     
-    .proof-item {
+    .promise-item {
       text-align: center;
     }
     
-    .proof-number {
+    .promise-number {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.8rem;
       color: var(--amber);
       margin-bottom: 0.15rem;
     }
     
-    .proof-label {
+    .promise-label {
       font-size: 0.65rem;
       color: var(--text-muted);
     }
@@ -791,6 +842,14 @@
       margin-top: 0.25rem;
     }
     
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
     .success-links {
       display: flex;
       gap: 0.75rem;
@@ -930,7 +989,7 @@
       .hero-title { font-size: 1.6rem; }
       .hero-text { font-size: 0.75rem; margin-bottom: 0.5rem; }
       .pattern-box { padding: 0.5rem 1rem; margin: 0.5rem 0; }
-      .proof-section { padding: 0.75rem; margin: 0.75rem 0; }
+      .promise-section { padding: 0.75rem; margin: 0.75rem 0; }
       .choice-prompt { margin: 0.75rem 0 0.5rem; }
     }
     
@@ -939,12 +998,12 @@
       .breathing-orb { width: 50px; height: 50px; margin-bottom: 0.75rem; }
       .hero-title { font-size: 1.4rem; margin-bottom: 0.5rem; }
       .pattern-box { display: none; }
-      .proof-section { display: none; }
+      .promise-section { display: none; }
     }
     
     @media (max-width: 400px) {
       .btn-row { flex-direction: column; width: 100%; }
-      .proof-grid { grid-template-columns: 1fr 1fr; }
+      .promise-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -952,8 +1011,16 @@
 
   <!-- HEADER -->
   <header>
-    <div class="logo-container">
-      <div class="logo-pulse"></div>
+    <div class="logo-container" onclick="goToLanding()">
+      <div class="stick-figure">
+        <div class="stick-head"></div>
+        <div class="stick-arms"></div>
+        <div class="stick-body"></div>
+        <div class="stick-legs">
+          <div class="stick-leg"></div>
+          <div class="stick-leg"></div>
+        </div>
+      </div>
       <div class="logo-text">CRUMB</div>
     </div>
     <a href="#" class="header-link" onclick="goToAbout(); return false;">What is this?</a>
@@ -993,25 +1060,25 @@
         </div>
       </div>
       
-      <!-- PROOF THIS WORKS -->
-      <div class="proof-section">
-        <h3>Proof this works</h3>
-        <div class="proof-grid">
-          <div class="proof-item">
-            <div class="proof-number">127</div>
-            <div class="proof-label">Builds this week</div>
+      <!-- LAUNCH-ACCURATE PROMISE -->
+      <div class="promise-section">
+        <h3>What you'll build</h3>
+        <div class="promise-grid">
+          <div class="promise-item">
+            <div class="promise-number">15min</div>
+            <div class="promise-label">First build time</div>
           </div>
-          <div class="proof-item">
-            <div class="proof-number">5min</div>
-            <div class="proof-label">Average time</div>
+          <div class="promise-item">
+            <div class="promise-number">$12</div>
+            <div class="promise-label">Total hardware cost</div>
           </div>
-          <div class="proof-item">
-            <div class="proof-number">97%</div>
-            <div class="proof-label">Success rate</div>
+          <div class="promise-item">
+            <div class="promise-number">1</div>
+            <div class="promise-label">Computer you program</div>
           </div>
-          <div class="proof-item">
-            <div class="proof-number">$12</div>
-            <div class="proof-label">Total cost</div>
+          <div class="promise-item">
+            <div class="promise-number">∞</div>
+            <div class="promise-label">Things you can build</div>
           </div>
         </div>
       </div>
@@ -1085,7 +1152,7 @@
       
       <div class="btn-row">
         <button class="btn-primary" onclick="goToFlash()">I'm ready</button>
-        <button class="btn-secondary" onclick="goToGetHardware()">I need an ESP32</button>
+        <button class="btn-secondary" onclick="goToLanding()">← Back</button>
       </div>
     </div>
   </section>
@@ -1197,9 +1264,12 @@
         </div>
       </div>
       
-      <div class="success-links">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See code</a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Tutorials</a>
+      <div class="success-actions">
+        <div class="success-links">
+          <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See code</a>
+          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Tutorials</a>
+        </div>
+        <button class="btn-back" onclick="goToLanding()">← Start over</button>
       </div>
       
     </div>
@@ -1238,7 +1308,7 @@
         </li>
       </ul>
       
-      <button class="btn-primary" onclick="goToFlash()">Try again</button>
+      <button class="btn-primary" onclick="goToFlash()">← Try again</button>
     </div>
   </section>
 
@@ -1407,6 +1477,7 @@
         else if (current === 'requirements') goToLanding();
         else if (current === 'flash') goToRequirements();
         else if (current === 'troubleshooting') goToFlash();
+        else if (current === 'success') goToLanding();
       }
     });
   </script>
