@@ -1,1188 +1,949 @@
 <!DOCTYPE html>
-<!-- 
-  CRUMB Genesis Zero - Web Flasher Interface
+<!--
+  CRUMB Genesis Zero - The Threshold
   
-  This is a single-page application that guides users through flashing
-  an ESP32 microcontroller with CRUMB Genesis Zero firmware.
+  This isn't a tutorial. It's an initiation.
   
-  Philosophy: Every line of code should be understandable.
-  Technology should be transparent, not mysterious.
+  Philosophy: Technology should adapt to humans.
+  Every line of code is a teaching moment.
   
-  License: GPL-3.0 (open source - modify, share, build upon)
+  License: GPL-3.0
   Author: Wyeth Anzilotti
   Year: 2025
 -->
 <html lang="en">
 <head>
-  <!-- Meta tags tell the browser how to display the page -->
-  <meta charset="UTF-8"> <!-- Use UTF-8 encoding (supports all characters) -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- 
-    viewport meta tag makes the site mobile-responsive
-    width=device-width: use the device's actual width
-    initial-scale=1.0: start at 100% zoom
-    maximum-scale=1.0: don't allow zooming beyond 100%
-    user-scalable=no: disable pinch-to-zoom (keeps design consistent)
-  -->
+  <title>CRUMB — Genesis Zero</title>
   
-  <title>CRUMB Genesis Zero</title> <!-- Text shown in browser tab -->
+  <!-- Fonts: Distinctive choices that feel carved, not typed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   
-  <!-- Import fonts from Google Fonts CDN -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- 
-    Cormorant Garamond: Serif font for titles (elegant, readable)
-    JetBrains Mono: Monospace font for code/text (clean, technical)
-    display=swap: Show fallback font while custom fonts load (better UX)
-  -->
-  
-  <!-- Import ESP Web Tools library for flashing ESP32 from browser -->
+  <!-- ESP Web Tools -->
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
-  <!-- 
-    ESP Web Tools: Library that uses Web Serial API to flash ESP32
-    type="module": Load as ES6 module (modern JavaScript)
-    unpkg.com: CDN that serves npm packages directly
-  -->
   
   <style>
-    /* ===================================================================
-       CSS VARIABLES (Color Palette)
-       These define all colors used throughout the site
-       Changing these will update colors everywhere
-       =================================================================== */
+    /* =================================================================
+       DESIGN TOKENS
+       A palette that breathes — warm ember against deep space
+       ================================================================= */
     :root {
-      /* Background colors */
-      --bg-deep: #0A0A0A;        /* Darkest background (almost black) */
-      --bg-surface: #111111;      /* Slightly lighter (for cards/boxes) */
+      /* Depths */
+      --void: #050505;
+      --surface: #0a0a0a;
+      --elevated: #111111;
       
-      /* Text colors */
-      --text-primary: #F2EDE7;    /* Main text (off-white, easier on eyes) */
-      --text-muted: rgba(242, 237, 231, 0.6);  /* Dimmed text (60% opacity) */
+      /* Light spectrum */
+      --ember: #e8a87c;
+      --ember-bright: #f4c4a0;
+      --ember-glow: rgba(232, 168, 124, 0.4);
+      --ember-whisper: rgba(232, 168, 124, 0.08);
       
-      /* Accent colors */
-      --amber: #D4A373;           /* Primary accent (warm, inviting) */
-      --amber-glow: rgba(212, 163, 115, 0.4);   /* Glow effect (40% opacity) */
-      --amber-dim: rgba(212, 163, 115, 0.15);   /* Subtle backgrounds (15% opacity) */
+      /* States */
+      --alive: #8fbc8f;
+      --alive-glow: rgba(143, 188, 143, 0.4);
       
-      /* Success color (green) */
-      --success: #7FB069;         /* Used for completed states */
-      --success-glow: rgba(127, 176, 105, 0.4); /* Success glow effect */
+      /* Text */
+      --text: #e8e4df;
+      --text-dim: rgba(232, 228, 223, 0.5);
+      --text-ghost: rgba(232, 228, 223, 0.25);
       
-      /* Error color (red) */
-      --error: #C45B4A;           /* Used for error messages */
+      /* Typography */
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+      
+      /* Timing */
+      --breath-duration: 8s;
+      --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    /* ===================================================================
-       CSS RESET
-       Remove browser default styles for consistency across browsers
-       =================================================================== */
+    /* =================================================================
+       RESET & BASE
+       ================================================================= */
     *, *::before, *::after {
-      margin: 0;           /* Remove default margins */
-      padding: 0;          /* Remove default padding */
-      box-sizing: border-box;  /* Include padding/border in element width */
-      /* 
-        box-sizing: border-box means:
-        If you set width: 100px and padding: 10px,
-        the total width is still 100px (not 120px)
-      */
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
-    /* Make html and body take full viewport height */
     html, body {
-      height: 100%;        /* 100% of viewport height */
-      overflow: hidden;    /* Hide scrollbars (we'll add them per section) */
+      height: 100%;
+      overflow: hidden;
     }
     
-    /* Body: Base styles for entire page */
     body {
-      background: var(--bg-deep);  /* Dark background */
-      color: var(--text-primary);  /* Light text */
-      font-family: 'JetBrains Mono', monospace;  /* Default font */
-      line-height: 1.5;    /* Space between lines (improves readability) */
+      background: var(--void);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
     
-    /* ===================================================================
-       ATMOSPHERIC BACKGROUND
-       Creates subtle gradient overlays for visual depth
-       =================================================================== */
-    body::before {
-      /* ::before creates a pseudo-element (extra layer) */
-      content: '';         /* Required for pseudo-elements to show */
-      position: fixed;     /* Fixed to viewport (doesn't scroll) */
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      /* Cover entire viewport */
-      
-      background: 
-        /* Two radial gradients layered on top of each other */
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212, 163, 115, 0.08) 0%, transparent 50%),
-        /* 
-          radial-gradient: Color radiates from a center point
-          ellipse 80% 50%: Oval shape (80% wide, 50% tall)
-          at 50% 0%: Position at top center
-          rgba(..., 0.08): Very subtle amber glow at top
-          transparent 50%: Fade to transparent halfway through
-        */
-        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(127, 176, 105, 0.05) 0%, transparent 40%);
-        /* Second gradient: Subtle green glow at bottom right */
-      
-      pointer-events: none;  /* Allow clicking through this layer */
-      z-index: 0;            /* Behind all other content (low z-index) */
-    }
-    
-    /* ===================================================================
-       TYPOGRAPHY
-       Font styles for headings
-       =================================================================== */
-    h1, h2, h3 {
-      font-family: 'Cormorant Garamond', serif;  /* Elegant serif font */
-      font-weight: 600;      /* Semi-bold */
-      letter-spacing: 0.02em;  /* Slight spacing between letters */
-      line-height: 1.2;      /* Tighter line height for headings */
-    }
-    
-    /* ===================================================================
-       LAYOUT UTILITIES
-       =================================================================== */
-    
-    /* Hide elements completely */
-    .hidden { 
-      display: none !important;  /* !important overrides all other styles */
-    }
-    
-    /* Section: Full-screen pages that can be shown/hidden */
-    section {
-      position: fixed;     /* Fixed to viewport */
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      /* Covers entire viewport */
-      
-      display: flex;       /* Use flexbox for centering */
-      flex-direction: column;  /* Stack items vertically */
-      align-items: center;     /* Center horizontally */
-      justify-content: center; /* Center vertically */
-      padding: 1rem;       /* 1rem = 16px padding on all sides */
-      z-index: 1;          /* Above background, below header */
-      overflow-y: auto;    /* Allow vertical scrolling if content is tall */
-    }
-    
-    /* Container: Max width wrapper for content */
-    .container {
-      max-width: 500px;    /* Don't exceed 500px wide */
-      width: 100%;         /* But use full width up to max */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;  /* Center text */
-    }
-    
-    /* ===================================================================
-       STICK FIGURE LOGO
-       CSS-drawn stick figure with pulsing light at head
-       Represents human-centered technology
-       =================================================================== */
-    
-    .logo-container {
-      display: flex;
-      align-items: center;  /* Vertically align items */
-      gap: 0.6rem;          /* Space between figure and text */
-      cursor: pointer;      /* Show hand cursor on hover (clickable) */
-    }
-    
-    .stick-figure {
-      position: relative;  /* Allows absolute positioning of children */
-      width: 20px;
-      height: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    /* Head: Pulsing circle at top (represents the LED) */
-    .stick-head {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;  /* Makes square into circle */
-      background: var(--amber);  /* Amber colored */
-      position: relative;
-      animation: logo-breathe 4s ease-in-out infinite;  /* Pulsing animation */
-      box-shadow: 0 0 8px var(--amber-glow);  /* Glow effect around head */
-      /* 
-        box-shadow: horizontal vertical blur color
-        0 0 8px = no offset, 8px blur radius
-      */
-    }
-    
-    /* Body: Vertical line */
-    .stick-body {
-      width: 2px;
-      height: 12px;
-      background: var(--text-muted);  /* Dimmed color */
-      margin-top: 1px;  /* Small gap between head and body */
-    }
-    
-    /* Arms: Horizontal line */
-    .stick-arms {
-      width: 14px;
-      height: 2px;
-      background: var(--text-muted);
-      position: absolute;  /* Position relative to .stick-figure */
-      top: 12px;  /* 12px from top (at shoulder level) */
-    }
-    
-    /* Legs container */
-    .stick-legs {
-      display: flex;
-      gap: 0px;  /* Space between legs */
-      margin-top: 1px;
-    }
-    
-    /* Individual leg */
-    .stick-leg {
-      width: 2px;
-      height: 8px;
-      background: var(--text-muted);
-      transform-origin: top;  /* Rotate from top of leg */
-    }
-    
-    /* Rotate left leg outward */
-    .stick-leg:first-child {
-      transform: rotate(15deg);  /* Negative = rotate left */
-    }
-    
-    /* Rotate right leg outward */
-    .stick-leg:last-child {
-      transform: rotate(-15deg);   /* Positive = rotate right */
-    }
-    
-    /* Animation: Makes the head pulse like breathing */
-    @keyframes logo-breathe {
-      0%, 100% {  /* At start (0%) and end (100%) */
-        opacity: 0.3;  /* Dim */
-        transform: scale(0.8);  /* Smaller */
-      }
-      50% {  /* Halfway through animation */
-        opacity: 1;  /* Full brightness */
-        transform: scale(1);  /* Normal size */
-        box-shadow: 0 0 12px var(--amber-glow);  /* Stronger glow */
-      }
-      /* 
-        Animation duration: 4s (defined in .stick-head)
-        ease-in-out: Slow at start/end, faster in middle
-        infinite: Loop forever
-      */
-    }
-    
-    /* Logo text next to stick figure */
-    .logo-text {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.3em;  /* Wide letter spacing for aesthetic */
-      color: var(--text-muted);
-      text-transform: uppercase;  /* Force uppercase letters */
-    }
-    
-    /* ===================================================================
-       HEADER
-       Fixed navigation bar at top of page
-       =================================================================== */
-    header {
-      position: fixed;  /* Stays at top when scrolling */
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;  /* Logo left, link right */
-      align-items: center;
-      z-index: 100;  /* Above everything else */
-    }
-    
-    /* "What is this?" link in header */
-    .header-link {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-decoration: none;  /* Remove underline */
-      letter-spacing: 0.1em;
-      transition: color 0.3s ease;  /* Smooth color change on hover */
-      /* 
-        transition: property duration easing
-        0.3s = 300 milliseconds
-        ease = slow at start/end, fast in middle
-      */
-    }
-    
-    /* Change color on hover */
-    .header-link:hover {
-      color: var(--amber);
-    }
-    
-    /* ===================================================================
-       ESCAPE HINT
-       Shows at bottom of screen to indicate ESC key navigation
-       =================================================================== */
-    .escape-hint {
+    /* =================================================================
+       ATMOSPHERIC CANVAS
+       Living background that responds to scroll position
+       ================================================================= */
+    .atmosphere {
       position: fixed;
-      bottom: 1rem;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    /* Radial glow from orb position */
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      top: 30%;
       left: 50%;
-      transform: translateX(-50%);  /* Center horizontally */
-      /* 
-        translateX(-50%): Move left by half its own width
-        This centers elements when left: 50% is used
-      */
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      opacity: 0.8;
-      letter-spacing: 0.1em;
+      width: 600px;
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(
+        circle,
+        var(--ember-whisper) 0%,
+        transparent 70%
+      );
+      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
+    }
+    
+    /* Grain texture for depth */
+    .atmosphere::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      mix-blend-mode: overlay;
+    }
+    
+    @keyframes atmosphere-pulse {
+      0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+    
+    /* =================================================================
+       HEADER — Minimal, Present
+       ================================================================= */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       z-index: 100;
     }
     
-    /* Keyboard key styling (ESC) */
-    .escape-hint kbd {
-      background: var(--bg-surface);
-      padding: 0.15rem 0.4rem;
-      border-radius: 3px;  /* Rounded corners */
-      border: 1px solid rgba(242, 237, 231, 0.1);  /* Subtle border */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: opacity var(--transition-smooth);
     }
     
-    /* ===================================================================
-       BREATHING ORB (Landing Page)
-       Large pulsing circle that demonstrates the LED behavior
-       =================================================================== */
-    .breathing-orb {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;  /* Make it circular */
-      background: var(--amber);
-      margin-bottom: 1.25rem;
-      animation: breathe 10s ease-in-out infinite;  /* Slow breathing */
-      box-shadow: 
-        0 0 40px var(--amber-glow),   /* Inner glow */
-        0 0 80px var(--amber-dim);    /* Outer glow (more diffuse) */
+    .logo:hover { opacity: 0.7; }
+    
+    /* The mark: A simple breathing dot */
+    .logo-mark {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ember);
+      animation: mark-breathe var(--breath-duration) ease-in-out infinite;
     }
     
-    /* Breathing animation for main orb */
-    @keyframes breathe {
-      0%, 100% {  /* Inhale/exhale state */
-        opacity: 0.3;
-        transform: scale(0.92);  /* Slightly smaller */
-        box-shadow: 0 0 20px var(--amber-dim);  /* Dim glow */
-      }
-      50% {  /* Peak state */
-        opacity: 1;
-        transform: scale(1);  /* Full size */
-        box-shadow: 0 0 40px var(--amber-glow), 0 0 80px var(--amber-dim);
-      }
+    @keyframes mark-breathe {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); box-shadow: 0 0 12px var(--ember-glow); }
     }
     
-    /* ===================================================================
-       LANDING PAGE TEXT
-       =================================================================== */
+    .logo-text {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
     
-    .hero-label {
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .header-link {
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color var(--transition-smooth);
+    }
+    
+    .header-link:hover { color: var(--ember); }
+    
+    /* =================================================================
+       NAVIGATION HINT
+       ================================================================= */
+    .nav-hint {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.75rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.1em;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity var(--transition-smooth);
     }
     
-    .hero-title {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
+    .nav-hint.visible { opacity: 1; }
+    
+    .nav-hint kbd {
+      background: var(--elevated);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin: 0 0.25rem;
     }
     
-    .hero-text {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
+    /* =================================================================
+       SECTION LAYOUT
+       ================================================================= */
+    section {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 1;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      overflow-y: auto;
     }
     
-    /* Highlighted text in hero section */
-    .hero-highlight {
-      color: var(--text-primary);  /* Brighter than surrounding text */
+    section.active {
+      opacity: 1;
+      visibility: visible;
     }
     
-    /* Box showing the Input → Process → Output pattern */
-    .pattern-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--amber-dim);
-      padding: 0.75rem 1.25rem;
-      margin: 0.75rem 0;
-    }
-    
-    .pattern-box p {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-    
-    .pattern-flow {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      color: var(--amber);
-    }
-    
-    .pattern-flow span {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-    
-    /* ===================================================================
-       PROMISE SECTION
-       Shows what users will build (launch-accurate, no fake stats)
-       =================================================================== */
-    .promise-section {
-      background: var(--bg-surface);
-      border: 1px solid var(--amber-dim);
-      padding: 1rem;
-      margin: 1rem 0;
+    .container {
+      max-width: 480px;
       width: 100%;
-      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
     
-    .promise-section h3 {
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
+    /* =================================================================
+       THE ORB — The Heart of CRUMB
+       Not decoration. A companion waiting to be born.
+       ================================================================= */
+    .orb-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    
+    .orb {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--ember);
+      position: relative;
+      animation: orb-breathe var(--breath-duration) ease-in-out infinite;
+      cursor: default;
+      transition: transform 0.3s ease;
+    }
+    
+    /* Orb responds to hover — it notices you */
+    .orb:hover {
+      animation-play-state: paused;
+      transform: scale(1.05);
+    }
+    
+    .orb::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--ember-glow), transparent 70%);
+      animation: orb-glow var(--breath-duration) ease-in-out infinite;
+      z-index: -1;
+    }
+    
+    /* Inner light — the core */
+    .orb::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 25%;
+      height: 25%;
+      border-radius: 50%;
+      background: var(--ember-bright);
+      opacity: 0.6;
+      filter: blur(8px);
+    }
+    
+    @keyframes orb-breathe {
+      0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.92);
+        box-shadow: 0 0 20px rgba(232, 168, 124, 0.1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 60px var(--ember-glow), 0 0 120px rgba(232, 168, 124, 0.15);
+      }
+    }
+    
+    @keyframes orb-glow {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+    
+    /* Success state orb */
+    .orb.alive {
+      background: var(--alive);
+      animation-name: orb-alive;
+    }
+    
+    .orb.alive::before {
+      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+    }
+    
+    @keyframes orb-alive {
+      0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.95);
+        box-shadow: 0 0 20px rgba(143, 188, 143, 0.1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 60px var(--alive-glow), 0 0 120px rgba(143, 188, 143, 0.15);
+      }
+    }
+    
+    /* =================================================================
+       TYPOGRAPHY — Carved, Not Typed
+       ================================================================= */
+    .kicker {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--amber);
+      color: var(--ember);
       margin-bottom: 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
+      opacity: 0.9;
     }
     
-    /* Grid layout: 2 columns, 2 rows */
-    .promise-grid {
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+    
+    .title {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    
+    .title em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      max-width: 340px;
+      line-height: 1.7;
+    }
+    
+    .subtitle strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* =================================================================
+       THE PROMISE — What You'll Build
+       ================================================================= */
+    .promise {
       display: grid;
-      grid-template-columns: 1fr 1fr;  /* Two equal columns */
-      gap: 0.75rem;  /* Space between grid items */
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.04);
+      margin: 2rem 0;
+      width: 100%;
+      max-width: 360px;
     }
     
     .promise-item {
+      background: var(--surface);
+      padding: 1.25rem 1rem;
       text-align: center;
     }
     
-    /* Large number (15min, $12, etc.) */
-    .promise-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      color: var(--amber);
-      margin-bottom: 0.15rem;
-    }
-    
-    /* Label under number */
-    .promise-label {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
-    
-    /* ===================================================================
-       CHOICE BUTTONS (Landing Page)
-       "I have an ESP32" vs "I need to get one"
-       =================================================================== */
-    
-    .choice-prompt {
-      font-size: 0.95rem;
-      color: var(--text-primary);
-      margin: 1rem 0 0.75rem;
-      font-family: 'Cormorant Garamond', serif;
-    }
-    
-    .choice-buttons {
-      display: flex;
-      flex-direction: column;  /* Stack vertically */
-      gap: 0.5rem;  /* Space between buttons */
-      width: 100%;
-      max-width: 280px;
-    }
-    
-    /* Base button styles */
-    .btn-choice {
-      width: 100%;
-      padding: 0.8rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;  /* Smooth transitions */
-    }
-    
-    /* Primary button (filled) */
-    .btn-choice-primary {
-      background: var(--amber);
-      color: var(--bg-deep);  /* Dark text on light background */
-    }
-    
-    /* Hover effect: Add glow */
-    .btn-choice-primary:hover {
-      box-shadow: 0 6px 24px var(--amber-glow);
-    }
-    
-    /* Secondary button (outlined) */
-    .btn-choice-secondary {
-      background: transparent;
-      color: var(--text-primary);
-      border: 1px solid var(--amber);
-    }
-    
-    /* Hover effect: Subtle background */
-    .btn-choice-secondary:hover {
-      background: var(--amber-dim);
-    }
-    
-    /* Small note under buttons */
-    .choice-note {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      opacity: 0.6;
-      margin-top: 0.4rem;
-    }
-    
-    /* ===================================================================
-       GET HARDWARE PAGE
-       Helps users buy ESP32 on Amazon
-       =================================================================== */
-    
-    .section-title {
-      font-size: 1.8rem;
+    .promise-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--ember);
       margin-bottom: 0.25rem;
     }
     
-    .section-subtitle {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
+    .promise-label {
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.05em;
     }
     
-    /* Card showing ESP32 product */
-    .hardware-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--amber-dim);
-      padding: 1.25rem;
+    /* =================================================================
+       THRESHOLD PROMPT
+       The moment of decision
+       ================================================================= */
+    .threshold {
+      margin-top: 1.5rem;
       width: 100%;
-      text-align: left;  /* Left-align text inside card */
-      margin-bottom: 1rem;
+      max-width: 320px;
     }
     
-    /* Header row: Name and price */
-    .hardware-header {
-      display: flex;
-      justify-content: space-between;  /* Name left, price right */
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-    
-    .hardware-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      color: var(--amber);
-    }
-    
-    .hardware-price {
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-    
-    .hardware-description {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    
-    /* Amazon button (link styled as button) */
-    .btn-amazon {
-      display: block;
-      width: 100%;
-      background: var(--amber);
-      color: var(--bg-deep);
-      padding: 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-align: center;
-      text-decoration: none;  /* Remove underline from link */
-      transition: all 0.3s ease;
-    }
-    
-    .btn-amazon:hover {
-      box-shadow: 0 6px 24px var(--amber-glow);
-    }
-    
-    /* Message shown while waiting for hardware to arrive */
-    .waiting-message {
-      text-align: center;
-      padding: 1rem;
-      background: var(--amber-dim);
-      border: 1px solid var(--amber-dim);
-      margin-bottom: 1rem;
-    }
-    
-    .waiting-message h3 {
+    .threshold-question {
+      font-family: var(--font-display);
       font-size: 1.1rem;
-      color: var(--amber);
-      margin-bottom: 0.4rem;
-    }
-    
-    .waiting-message p {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    
-    /* Back button (used on multiple pages) */
-    .btn-back {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid rgba(242, 237, 231, 0.15);
-      padding: 0.6rem 1.2rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-back:hover {
-      color: var(--text-primary);
-      border-color: rgba(242, 237, 231, 0.3);
-    }
-    
-    /* ===================================================================
-       REQUIREMENTS CHECK PAGE
-       Ensures user has correct browser, computer, etc.
-       =================================================================== */
-    
-    .requirements-list {
-      list-style: none;  /* Remove bullet points */
-      width: 100%;
-      text-align: left;
+      font-weight: 400;
+      color: var(--text);
       margin-bottom: 1rem;
     }
     
-    .requirements-list li {
-      padding: 0.75rem 1rem;
-      margin: 0.4rem 0;
-      background: var(--bg-surface);
-      border-left: 2px solid var(--amber-dim);  /* Left accent bar */
-    }
-    
-    .requirements-list strong {
-      color: var(--amber);
-      display: block;  /* Put on its own line */
-      margin-bottom: 0.2rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-    
-    .requirements-list span {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-    
-    /* Button row: Multiple buttons side by side */
-    .btn-row {
+    .btn-group {
       display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;  /* Wrap to next line on small screens */
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    /* =================================================================
+       BUTTONS — Intentional, Weighty
+       ================================================================= */
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 1rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
     }
     
-    /* Primary button (amber, solid) */
     .btn-primary {
-      background: var(--amber);
-      color: var(--bg-deep);
-      padding: 0.8rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      background: var(--ember);
+      color: var(--void);
     }
     
     .btn-primary:hover {
-      box-shadow: 0 6px 24px var(--amber-glow);
+      background: var(--ember-bright);
+      box-shadow: 0 8px 32px var(--ember-glow);
+      transform: translateY(-2px);
     }
     
-    /* Secondary button (outlined) */
     .btn-secondary {
       background: transparent;
-      color: var(--text-primary);
-      border: 1px solid var(--amber);
-      padding: 0.8rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
     }
     
     .btn-secondary:hover {
-      background: var(--amber-dim);
+      border-color: var(--ember);
+      color: var(--ember);
     }
     
-    /* ===================================================================
-       FLASH PAGE
-       Where the actual ESP32 flashing happens
-       =================================================================== */
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 0.75rem 1rem;
+    }
     
-    .flash-container {
-      background: var(--bg-surface);
-      border: 1px solid var(--amber-dim);
-      padding: 1.25rem;
+    .btn-ghost:hover {
+      color: var(--text);
+    }
+    
+    .btn-success {
+      background: var(--alive);
+      color: var(--void);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(143, 188, 143, 0.2); }
+      50% { box-shadow: 0 0 40px var(--alive-glow); }
+    }
+    
+    .hint {
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      margin-top: 0.75rem;
+    }
+    
+    /* =================================================================
+       CONTENT CARDS
+       ================================================================= */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.5rem;
       width: 100%;
+      text-align: left;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
       margin-bottom: 0.75rem;
     }
     
-    .flash-steps {
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--ember);
+    }
+    
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+    
+    .card-body {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    .card-action {
+      margin-top: 1rem;
+    }
+    
+    /* =================================================================
+       REQUIREMENTS LIST
+       ================================================================= */
+    .requirements {
+      list-style: none;
+      width: 100%;
       text-align: left;
-      margin-bottom: 1rem;
+      margin: 1.5rem 0;
     }
     
-    /* Individual step in instructions */
-    .flash-step {
+    .requirements li {
       display: flex;
-      gap: 0.75rem;
-      margin: 0.6rem 0;
-      align-items: flex-start;  /* Align items to top */
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--surface);
+      border-left: 2px solid var(--ember-whisper);
+      margin-bottom: 0.5rem;
+      transition: border-color var(--transition-smooth);
     }
     
-    /* Step number (1, 2, 3, 4) */
-    .step-number {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      color: var(--amber);
-      line-height: 1;
-      min-width: 1rem;  /* Ensure consistent width */
+    .requirements li:hover {
+      border-left-color: var(--ember);
     }
     
-    .step-content h3 {
-      font-family: 'JetBrains Mono', monospace;
+    .req-icon {
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+    
+    .req-content h4 {
+      font-family: var(--font-mono);
       font-size: 0.8rem;
       font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    
+    .req-content p {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    
+    /* =================================================================
+       FLASH INTERFACE
+       ================================================================= */
+    .flash-steps {
+      width: 100%;
+      margin: 1.5rem 0;
+    }
+    
+    .flash-step {
+      display: flex;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    
+    .flash-step:last-child { border-bottom: none; }
+    
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--ember);
+      min-width: 1.5rem;
+    }
+    
+    .step-content h4 {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
       margin-bottom: 0.15rem;
-      color: var(--text-primary);
     }
     
     .step-content p {
       font-size: 0.7rem;
-      color: var(--text-muted);
+      color: var(--text-dim);
     }
     
-    /* ===================================================================
-       UPLOAD PROGRESS
-       Shows real-time progress during ESP32 flashing
-       =================================================================== */
-    
-    .upload-progress {
+    /* Progress indicator */
+    .progress-container {
       width: 100%;
       margin: 1rem 0;
-      display: none;  /* Hidden by default */
+      display: none;
     }
     
-    /* Show progress when active */
-    .upload-progress.active {
-      display: block;
+    .progress-container.active { display: block; }
+    
+    .progress-bar-bg {
+      height: 2px;
+      background: var(--elevated);
+      border-radius: 1px;
+      overflow: hidden;
     }
     
-    .progress-orb-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    
-    /* Pulsing orb during upload */
-    .progress-orb {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: var(--amber);
-      animation: upload-pulse 1.5s ease-in-out infinite;
-      box-shadow: 0 0 30px var(--amber-glow);
-      position: relative;
-    }
-    
-    /* Fast pulsing animation for upload */
-    @keyframes upload-pulse {
-      0%, 100% { 
-        opacity: 0.4; 
-        transform: scale(0.9);
-      }
-      50% { 
-        opacity: 1; 
-        transform: scale(1.1);  /* Slightly larger */
-      }
-    }
-    
-    /* Progress bar container (background track) */
-    .progress-bar-container {
-      background: var(--bg-deep);
-      height: 4px;
-      width: 100%;
-      border-radius: 2px;
-      overflow: hidden;  /* Clip progress bar to rounded corners */
-      margin-bottom: 0.5rem;
-    }
-    
-    /* Progress bar fill (animated via JavaScript) */
-    .progress-bar {
-      background: var(--amber);
+    .progress-bar-fill {
       height: 100%;
-      width: 0%;  /* Start at 0%, updated by JS */
-      transition: width 0.3s ease;  /* Smooth width changes */
-      box-shadow: 0 0 8px var(--amber-glow);
+      background: var(--ember);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--ember-glow);
     }
     
-    /* Status text below progress bar */
     .progress-status {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
     }
     
-    /* Percentage in status text (0%, 50%, etc.) */
-    .progress-percentage {
-      color: var(--amber);
-      font-weight: 600;
-    }
+    .progress-percent { color: var(--ember); }
     
-    /* ===================================================================
-       ESP WEB INSTALL BUTTON
-       Custom styling for the ESP Web Tools button
-       =================================================================== */
-    
+    /* ESP Web Tools styling */
     esp-web-install-button {
       display: block;
       width: 100%;
+      margin: 1rem 0;
     }
     
-    /* Style the button inside esp-web-install-button */
     esp-web-install-button button,
     .btn-flash {
       width: 100%;
-      background: var(--amber);
-      color: var(--bg-deep);
-      padding: 0.9rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
+      background: var(--ember);
+      color: var(--void);
+      padding: 1rem;
+      font-family: var(--font-mono);
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all var(--transition-smooth);
     }
     
-    /* Success trigger button (shown after flash completes) */
-    .btn-success-trigger {
-      width: 100%;
-      background: var(--success);  /* Green */
-      color: var(--bg-deep);
-      padding: 0.9rem 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      font-weight: 600;
+    esp-web-install-button button:hover,
+    .btn-flash:hover {
+      box-shadow: 0 8px 32px var(--ember-glow);
+    }
+    
+    /* =================================================================
+       SUCCESS STATE
+       ================================================================= */
+    .success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(143, 188, 143, 0.1);
+      border: 1px solid rgba(143, 188, 143, 0.2);
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.7rem;
+      color: var(--alive);
       letter-spacing: 0.1em;
-      border: none;
-      cursor: pointer;
-      animation: gentle-pulse 3s ease-in-out infinite;  /* Gentle pulsing */
-      transition: all 0.3s ease;
     }
     
-    /* Gentle pulsing glow animation */
-    @keyframes gentle-pulse {
-      0%, 100% { 
-        box-shadow: 0 0 15px var(--success-glow); 
-      }
-      50% { 
-        box-shadow: 0 0 30px var(--success-glow); 
-      }
-    }
-    
-    /* Small hint text under success button */
-    .success-hint {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      margin-top: 0.5rem;
-      opacity: 0.7;
-    }
-    
-    /* ===================================================================
-       SUCCESS PAGE
-       Shown after successful flash
-       =================================================================== */
-    
-    /* Green pulsing orb */
-    .success-orb {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: var(--success);
-      margin-bottom: 1rem;
-      animation: 
-        success-breathe 10s ease-in-out infinite,  /* Breathing */
-        success-enter 0.8s ease-out;  /* Entry animation (plays once) */
-      box-shadow: 0 0 40px var(--success-glow);
-    }
-    
-    /* Breathing animation for success orb */
-    @keyframes success-breathe {
-      0%, 100% { 
-        opacity: 0.4; 
-        transform: scale(0.95); 
-      }
-      50% { 
-        opacity: 1; 
-        transform: scale(1); 
-      }
-    }
-    
-    /* Entry animation (pop in) */
-    @keyframes success-enter {
-      0% { 
-        transform: scale(0);  /* Start at 0 size */
-        opacity: 0; 
-      }
-      50% { 
-        transform: scale(1.1);  /* Overshoot slightly */
-      }
-      100% { 
-        transform: scale(1);  /* Settle at normal size */
-        opacity: 1; 
-      }
-    }
-    
-    .success-title {
-      font-size: 1.8rem;
-      color: var(--success);
-      margin-bottom: 0.5rem;
-    }
-    
-    .success-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      max-width: 360px;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    
-    /* Box showing what the user learned */
-    .learned-box {
-      background: rgba(127, 176, 105, 0.08);  /* Subtle green tint */
-      border: 1px solid rgba(127, 176, 105, 0.2);
-      padding: 1rem;
-      text-align: left;
+    .learned {
+      background: rgba(143, 188, 143, 0.05);
+      border: 1px solid rgba(143, 188, 143, 0.1);
+      padding: 1.25rem;
       width: 100%;
+      text-align: left;
+      margin: 1rem 0;
+    }
+    
+    .learned h4 {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--alive);
       margin-bottom: 0.75rem;
     }
     
-    .learned-box h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--success);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.1em;
+    .learned ul {
+      list-style: none;
     }
     
-    .learned-box ul {
-      list-style: none;  /* Remove default bullets */
+    .learned li {
+      position: relative;
+      padding-left: 1rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      margin: 0.4rem 0;
     }
     
-    .learned-box li {
-      padding: 0.25rem 0;
-      padding-left: 1rem;  /* Space for custom bullet */
-      position: relative;  /* For ::before positioning */
-      font-size: 0.75rem;
-      color: var(--text-primary);
-    }
-    
-    /* Custom arrow bullet */
-    .learned-box li::before {
-      content: '→';  /* Arrow character */
+    .learned li::before {
+      content: '→';
       position: absolute;
       left: 0;
-      color: var(--success);
+      color: var(--alive);
     }
     
-    /* Box showing the path ahead */
-    .path-preview {
-      background: var(--bg-surface);
-      border: 1px solid var(--amber-dim);
-      padding: 1rem;
+    /* Path visualization */
+    .path-ahead {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.25rem;
       width: 100%;
+      margin: 1rem 0;
+    }
+    
+    .path-ahead h4 {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--ember);
       margin-bottom: 1rem;
     }
     
-    .path-preview h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--amber);
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.1em;
-    }
-    
-    /* Four steps shown horizontally */
     .path-steps {
       display: flex;
-      justify-content: space-between;  /* Even spacing */
-      gap: 0.5rem;
+      justify-content: space-between;
     }
     
     .path-step {
+      flex: 1;
       text-align: center;
-      flex: 1;  /* Equal width for all steps */
     }
     
-    /* Step number (0, 1, 2, ∞) */
-    .path-step-num {
-      font-family: 'Cormorant Garamond', serif;
+    .path-num {
+      font-family: var(--font-display);
       font-size: 1.5rem;
-      color: var(--amber);
+      font-weight: 300;
+      color: var(--ember);
     }
     
-    /* Completed step (green) */
-    .path-step-num.completed {
-      color: var(--success);
-    }
+    .path-num.done { color: var(--alive); }
     
-    /* Label under step number */
-    .path-step-label {
+    .path-label {
       font-size: 0.6rem;
-      color: var(--text-muted);
+      color: var(--text-ghost);
       margin-top: 0.25rem;
     }
     
-    /* Container for action buttons */
-    .success-actions {
+    .success-links {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    /* =================================================================
+       TUTORIALS SECTION
+       The cathedral you're building toward
+       ================================================================= */
+    .tutorials-grid {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       width: 100%;
-      margin-top: 1rem;
+      margin: 1.5rem 0;
+      max-height: 50vh;
+      overflow-y: auto;
     }
     
-    /* Links to GitHub and YouTube */
-    .success-links {
+    .tutorial-card {
       display: flex;
-      gap: 0.75rem;
-      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      text-decoration: none;
+      transition: all var(--transition-smooth);
     }
     
-    /* ===================================================================
-       TROUBLESHOOTING PAGE
-       Lists common issues and solutions
-       =================================================================== */
-    
-    #troubleshooting .container {
-      max-width: 480px;
+    .tutorial-card:hover {
+      border-color: var(--ember);
+      transform: translateX(4px);
     }
     
-    .troubleshooting-list {
+    .tutorial-num {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--ember);
+      min-width: 2rem;
+      line-height: 1;
+    }
+    
+    .tutorial-content {
+      flex: 1;
+      text-align: left;
+    }
+    
+    .tutorial-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    
+    .tutorial-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    
+    .tutorial-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+    }
+    
+    .tutorial-card.current {
+      border-color: var(--alive);
+      background: rgba(143, 188, 143, 0.03);
+    }
+    
+    .tutorial-card.current .tutorial-num { color: var(--alive); }
+    
+    .tutorial-card.locked {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    
+    /* =================================================================
+       TROUBLESHOOTING
+       ================================================================= */
+    .trouble-list {
       list-style: none;
       width: 100%;
       text-align: left;
-      margin-bottom: 1rem;
-      max-height: 55vh;  /* Limit height */
-      overflow-y: auto;  /* Scroll if too many items */
+      margin: 1.5rem 0;
+      max-height: 50vh;
+      overflow-y: auto;
     }
     
-    .troubleshooting-list li {
-      padding: 0.6rem 0.8rem;
-      margin: 0.3rem 0;
-      background: var(--bg-surface);
-      border-left: 2px solid var(--error);  /* Red accent */
+    .trouble-list li {
+      padding: 1rem;
+      background: var(--surface);
+      border-left: 2px solid rgba(196, 91, 74, 0.3);
+      margin-bottom: 0.5rem;
     }
     
-    .troubleshooting-list strong {
-      color: var(--error);
+    .trouble-list strong {
       display: block;
-      margin-bottom: 0.2rem;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 500;
+      color: #c45b4a;
+      margin-bottom: 0.25rem;
     }
     
-    .troubleshooting-list p {
-      font-size: 0.7rem;
-      color: var(--text-muted);
+    .trouble-list p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
     }
     
-    .troubleshooting-list a {
-      color: var(--amber);
-    }
+    .trouble-list a { color: var(--ember); }
     
-    /* ===================================================================
+    /* =================================================================
        ABOUT PAGE
-       Explains what CRUMB is
-       =================================================================== */
-    
-    #about .container {
-      max-width: 480px;
-    }
-    
+       ================================================================= */
     .about-content {
       text-align: left;
       max-height: 60vh;
       overflow-y: auto;
-      padding-right: 0.5rem;  /* Space for scrollbar */
+      padding-right: 0.5rem;
     }
     
     .about-content h3 {
-      font-size: 1.1rem;
-      color: var(--amber);
-      margin: 1rem 0 0.5rem;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ember);
+      margin: 1.5rem 0 0.5rem;
     }
     
-    .about-content h3:first-of-type {
-      margin-top: 0;  /* No top margin on first heading */
-    }
+    .about-content h3:first-of-type { margin-top: 0; }
     
     .about-content p {
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: var(--text-dim);
       margin-bottom: 0.75rem;
-      line-height: 1.6;
+      line-height: 1.7;
     }
     
-    /* List showing Genesis path */
-    .journey-list {
+    .philosophy-list {
       list-style: none;
-      margin: 0.75rem 0;
+      margin: 1rem 0;
     }
     
-    .journey-list li {
-      padding: 0.5rem 0.75rem;
-      margin: 0.25rem 0;
-      background: var(--bg-surface);
-      border-left: 2px solid var(--amber-dim);
+    .philosophy-list li {
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-left: 2px solid var(--ember-whisper);
+      margin-bottom: 0.5rem;
       font-size: 0.75rem;
+      color: var(--text-dim);
     }
     
-    .journey-list strong {
-      color: var(--amber);
-    }
+    .philosophy-list strong { color: var(--ember); }
     
-    /* Current step highlighted */
-    .journey-list .current {
-      border-left-color: var(--amber);  /* Brighter border */
-      background: var(--amber-dim);  /* Subtle background */
-    }
-    
-    /* ===================================================================
+    /* =================================================================
        FOOTER
-       Fixed at bottom with links
-       =================================================================== */
+       ================================================================= */
     footer {
       position: fixed;
       bottom: 0;
@@ -1191,733 +952,669 @@
       padding: 0.5rem;
       text-align: center;
       font-size: 0.6rem;
-      color: var(--text-muted);
-      opacity: 0.4;
+      color: var(--text-ghost);
       z-index: 50;
     }
     
     footer a {
-      color: var(--text-muted);
+      color: var(--text-ghost);
       text-decoration: none;
-      margin: 0 0.3rem;
+      margin: 0 0.4rem;
+      transition: color var(--transition-smooth);
     }
     
-    /* ===================================================================
-       CONFETTI ANIMATION
-       Plays on success page
-       =================================================================== */
+    footer a:hover { color: var(--ember); }
+    
+    /* =================================================================
+       CONFETTI
+       ================================================================= */
     .confetti {
       position: fixed;
       width: 8px;
       height: 8px;
-      border-radius: 1px;
+      border-radius: 2px;
       animation: confetti-fall 3s ease-out forwards;
-      pointer-events: none;  /* Don't block clicks */
-      z-index: 1000;  /* Above everything */
+      pointer-events: none;
+      z-index: 1000;
     }
     
-    /* Falling animation */
     @keyframes confetti-fall {
       to {
         transform: translateY(100vh) rotate(720deg);
-        /* 
-          translateY(100vh): Move down full viewport height
-          rotate(720deg): Spin twice (360 * 2)
-        */
-        opacity: 0;  /* Fade out */
+        opacity: 0;
       }
     }
     
-    /* ===================================================================
-       RESPONSIVE DESIGN
-       Adjust styles for different screen sizes
-       =================================================================== */
-    
-    /* Shorter screens (tablets, small laptops) */
+    /* =================================================================
+       RESPONSIVE
+       ================================================================= */
     @media (max-height: 700px) {
-      .breathing-orb { 
-        width: 60px; 
-        height: 60px; 
-        margin-bottom: 1rem; 
-      }
-      .hero-title { font-size: 1.6rem; }
-      .hero-text { 
-        font-size: 0.75rem; 
-        margin-bottom: 0.5rem; 
-      }
-      .pattern-box { 
-        padding: 0.5rem 1rem; 
-        margin: 0.5rem 0; 
-      }
-      .promise-section { 
-        padding: 0.75rem; 
-        margin: 0.75rem 0; 
-      }
-      .choice-prompt { margin: 0.75rem 0 0.5rem; }
+      .orb { width: 70px; height: 70px; }
+      .title { font-size: 1.5rem; }
+      .promise { margin: 1.25rem 0; }
     }
     
-    /* Very short screens (small phones in landscape) */
     @media (max-height: 600px) {
-      .hero-label { display: none; }  /* Hide to save space */
-      .breathing-orb { 
-        width: 50px; 
-        height: 50px; 
-        margin-bottom: 0.75rem; 
-      }
-      .hero-title { 
-        font-size: 1.4rem; 
-        margin-bottom: 0.5rem; 
-      }
-      .pattern-box { display: none; }  /* Hide to save space */
-      .promise-section { display: none; }  /* Hide to save space */
+      .kicker { display: none; }
+      .orb { width: 60px; height: 60px; margin-bottom: 1rem; }
+      .promise { display: none; }
     }
     
-    /* Narrow screens (small phones) */
     @media (max-width: 400px) {
-      .btn-row { 
-        flex-direction: column;  /* Stack buttons vertically */
-        width: 100%; 
-      }
-      .promise-grid { 
-        grid-template-columns: 1fr 1fr;  /* Keep 2-column grid */
-      }
+      .success-links { flex-direction: column; }
+      .header-nav { gap: 1rem; }
     }
+    
+    /* =================================================================
+       SCROLL STYLING
+       ================================================================= */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--ember-whisper); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ember); }
   </style>
 </head>
 <body>
-
-  <!-- =================================================================
-       HEADER
-       Fixed navigation bar at top of every page
-       ================================================================= -->
+  
+  <!-- Atmospheric background layer -->
+  <div class="atmosphere"></div>
+  
+  <!-- Header -->
   <header>
-    <!-- Logo: Stick figure with CRUMB text -->
-    <div class="logo-container" onclick="goToLanding()">
-      <!-- Clickable - returns to home page -->
-      
-      <!-- CSS-drawn stick figure -->
-      <div class="stick-figure">
-        <!-- Head: Pulsing light (represents LED) -->
-        <div class="stick-head"></div>
-        <!-- Arms: Horizontal line -->
-        <div class="stick-arms"></div>
-        <!-- Body: Vertical line -->
-        <div class="stick-body"></div>
-        <!-- Legs: Two angled lines -->
-        <div class="stick-legs">
-          <div class="stick-leg"></div>
-          <div class="stick-leg"></div>
-        </div>
-      </div>
-      
-      <!-- CRUMB text next to figure -->
-      <div class="logo-text">CRUMB</div>
+    <div class="logo" onclick="navigate('landing')">
+      <div class="logo-mark"></div>
+      <span class="logo-text">CRUMB</span>
     </div>
-    
-    <!-- "What is this?" link - opens About page -->
-    <a href="#" class="header-link" onclick="goToAbout(); return false;">What is this?</a>
-    <!-- return false prevents default link behavior -->
+    <nav class="header-nav">
+      <a href="#" class="header-link" onclick="navigate('tutorials'); return false;">Tutorials</a>
+      <a href="#" class="header-link" onclick="navigate('about'); return false;">About</a>
+    </nav>
   </header>
-
-  <!-- Hint shown when on sub-pages (not landing) -->
-  <div class="escape-hint" id="escapeHint" style="display: none;">
+  
+  <!-- Navigation hint -->
+  <div class="nav-hint" id="navHint">
     Press <kbd>ESC</kbd> to go back
   </div>
-
-  <!-- =================================================================
-       FOOTER
-       Fixed at bottom with license and links
-       ================================================================= -->
+  
+  <!-- Footer -->
   <footer>
-    <span>GPL-3.0</span>  <!-- Open source license -->
+    <span>GPL-3.0</span>
     <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
+    <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">YouTube</a>
     <a href="mailto:wja326@lehigh.edu">Contact</a>
   </footer>
-
-  <!-- =================================================================
-       LANDING PAGE
-       First page users see - explains CRUMB and prompts action
-       ================================================================= -->
-  <section id="landing">
+  
+  <!-- ===============================================================
+       LANDING — The Threshold
+       =============================================================== -->
+  <section id="landing" class="active">
     <div class="container">
       
-      <!-- Small label above title -->
-      <div class="hero-label">Learn to program a computer in 15 minutes</div>
+      <div class="kicker">Genesis Zero</div>
       
-      <!-- Large pulsing orb (demonstrates LED behavior) -->
-      <div class="breathing-orb"></div>
+      <div class="orb-container">
+        <div class="orb"></div>
+      </div>
       
-      <!-- Main heading -->
-      <h1 class="hero-title">This is a program.</h1>
+      <h1 class="title">This is <em>code</em>, running.</h1>
       
-      <!-- Explanation text -->
-      <p class="hero-text">
-        Not a video. <span class="hero-highlight">Code, running in your browser.</span><br>
-        In 15 minutes, this can be breathing on a device in your hands.
+      <p class="subtitle">
+        Not a video. Not a simulation.<br>
+        <strong>A real program</strong>, breathing in your browser.<br>
+        In fifteen minutes, it can be breathing in your hands.
       </p>
       
-      
-      <!-- Promise section (replaces fake social proof) -->
-      <div class="promise-section">
-        <h3>What you'll need</h3>
-        <div class="promise-grid">
-          <!-- Grid of 4 items: time, cost, quantity, potential -->
-          <div class="promise-item">
-            <div class="promise-number">15 min</div>
-            <div class="promise-label">First build time</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-number">$12</div>
-            <div class="promise-label">Initial hardware cost</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-number">One</div>
-            <div class="promise-label">ESP32 (Small Computer)</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-number">∞</div>
-            <div class="promise-label">Things you can build</div>
-          </div>
+      <div class="promise">
+        <div class="promise-item">
+          <div class="promise-value">15</div>
+          <div class="promise-label">minutes to build</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">$12</div>
+          <div class="promise-label">total cost</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">1</div>
+          <div class="promise-label">small computer</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">∞</div>
+          <div class="promise-label">possibilities</div>
         </div>
       </div>
       
-      <!-- Call to action -->
-      <p class="choice-prompt">Ready to make it real?</p>
-      
-      <!-- Two buttons: Already have hardware vs need to buy -->
-      <div class="choice-buttons">
-        <button class="btn-choice btn-choice-primary" onclick="goToRequirements()">
-          I have an ESP32
-        </button>
-        <button class="btn-choice btn-choice-secondary" onclick="goToGetHardware()">
-          I need to get one
-        </button>
-        <p class="choice-note">Most people need to order one first</p>
+      <div class="threshold">
+        <p class="threshold-question">Ready to cross the threshold?</p>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="navigate('requirements')">
+            I have an ESP32
+          </button>
+          <button class="btn btn-secondary" onclick="navigate('hardware')">
+            I need to get one
+          </button>
+        </div>
+        <p class="hint">Most people need to order one first — that's normal</p>
       </div>
       
     </div>
   </section>
-
-  <!-- =================================================================
-       GET HARDWARE PAGE
-       Helps users buy ESP32 on Amazon
-       ================================================================= -->
-  <section id="get-hardware" class="hidden">
-    <!-- hidden class hides this page by default -->
+  
+  <!-- ===============================================================
+       HARDWARE — Getting Your ESP32
+       =============================================================== -->
+  <section id="hardware">
     <div class="container">
       
-      <h2 class="section-title">What You Need</h2>
-      <p class="section-subtitle">One small computer. One cable.</p>
+      <h2 class="title">What You Need</h2>
+      <p class="subtitle">One small computer. One cable. That's it.</p>
       
-      <!-- Card showing ESP32 product -->
-      <div class="hardware-card">
-        <div class="hardware-header">
-          <div class="hardware-name">ESP32</div>
-          <div class="hardware-price">~$12</div>
+      <div class="card" style="margin: 1.5rem 0;">
+        <div class="card-header">
+          <span class="card-title">ESP32</span>
+          <span class="card-meta">~$12</span>
         </div>
-        <p class="hardware-description">
-          A tiny computer with WiFi & Bluetooth. This is what professionals use to prototype real products. Yours forever to keep and modify.
+        <p class="card-body">
+          A tiny computer with WiFi and Bluetooth. This is what professionals use to prototype real products. It's yours forever — to keep, modify, and build upon.
         </p>
-        <!-- Link to Amazon product -->
-        <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528/ref=sr_1_3?crid=10R8TEKGBQM39&dib=eyJ2IjoiMSJ9.nLV3gH_uUiv9uyk9-u2Ju1jSnjw-CcllAj37sCnlYNE0XAzXtWxkrnpPvYoaFYKU1jIT2LgE47vmlQ1ykexZPeCQM-Z76-Xv1o4cI5JZYhKqQJ5LHaZhLxQYJt20ivqsTrbesaJW8tInFUtmVYa0fx38yoLnW4iJd_Tr2WnFOzxXkFZOqM6XZmx88kfmPJm6849qBff1m1UtgTBiOlHJsDfbpE51QKK3JgHpQRwdfhg.zfWfynQgwxBD6OQzLSjis78R0bC2FQ8CTJ0DOi9KjO8&dib_tag=se&keywords=esp32%2Bdev%2Bkit&qid=1764861702&sprefix=esp32%2Bdev%2Bk%2Caps%2C324&sr=8-3&th=1" target="_blank" class="btn-amazon">
-          Get it on Amazon →
-        </a>
+        <div class="card-action">
+          <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary" style="width: 100%;">
+            Get it on Amazon →
+          </a>
+        </div>
       </div>
       
-      <!-- Message while waiting for delivery -->
-      <div class="waiting-message">
-        <h3>The threshold will be here.</h3>
-        <p>Bookmark this page. Come back when it arrives.</p>
+      <div class="card" style="background: var(--ember-whisper); border-color: transparent;">
+        <p class="card-body" style="text-align: center; color: var(--text);">
+          <strong style="color: var(--ember);">The threshold will be here.</strong><br>
+          Bookmark this page. Come back when it arrives.
+        </p>
       </div>
       
-      <!-- Back button returns to landing -->
-      <button class="btn-back" onclick="goToLanding()">← Back</button>
+      <button class="btn btn-ghost" onclick="navigate('landing')">← Back</button>
       
     </div>
   </section>
-
-  <!-- =================================================================
-       REQUIREMENTS CHECK PAGE
-       Ensures user has correct setup before flashing
-       ================================================================= -->
-  <section id="requirements" class="hidden">
+  
+  <!-- ===============================================================
+       REQUIREMENTS — Quick Check
+       =============================================================== -->
+  <section id="requirements">
     <div class="container">
       
-      <h2 class="section-title">Quick Check</h2>
-      <p class="section-subtitle">Make sure you're ready.</p>
+      <h2 class="title">Quick Check</h2>
+      <p class="subtitle">Make sure you're ready before we begin.</p>
       
-      <!-- List of requirements -->
-      <ul class="requirements-list">
+      <ul class="requirements">
         <li>
-          <strong>Computer (not phone)</strong>
-          <span>Web flashing needs a desktop or laptop.</span>
+          <span class="req-icon">💻</span>
+          <div class="req-content">
+            <h4>Computer, not phone</h4>
+            <p>Web flashing needs a desktop or laptop</p>
+          </div>
         </li>
         <li>
-          <strong>Chrome or Edge browser</strong>
-          <span>Firefox and Safari don't support this yet.</span>
+          <span class="req-icon">🌐</span>
+          <div class="req-content">
+            <h4>Chrome or Edge</h4>
+            <p>Firefox and Safari don't support this yet</p>
+          </div>
         </li>
         <li>
-          <strong>ESP32 plugged in</strong>
-          <span>Connect it now with a USB data cable.</span>
+          <span class="req-icon">🔌</span>
+          <div class="req-content">
+            <h4>ESP32 plugged in</h4>
+            <p>Connect it now with a USB data cable</p>
+          </div>
         </li>
       </ul>
       
-      <!-- Action buttons -->
-      <div class="btn-row">
-        <button class="btn-primary" onclick="goToFlash()">I'm ready</button>
-        <button class="btn-secondary" onclick="goToLanding()">← Back</button>
+      <div class="btn-group" style="flex-direction: row; gap: 0.75rem;">
+        <button class="btn btn-primary" onclick="navigate('flash')">I'm ready</button>
+        <button class="btn btn-secondary" onclick="navigate('landing')">← Back</button>
       </div>
+      
     </div>
   </section>
-
-  <!-- =================================================================
-       FLASH PAGE
-       Where the actual ESP32 programming happens
-       ================================================================= -->
-  <section id="flash" class="hidden">
+  
+  <!-- ===============================================================
+       FLASH — The Ritual
+       =============================================================== -->
+  <section id="flash">
     <div class="container">
       
-      <h2 class="section-title">Lets make it real!</h2>
-      <p>You're about to write code onto a computer</p>
-      <p>_________<p>
-      <p>"Flashing" means transferring your program to the chip's memory. Once it's there, the chip runs your code forever - no computer needed.</p>
+      <h2 class="title">Make it real.</h2>
+      <p class="subtitle">
+        "Flashing" means writing code onto the chip's memory.<br>
+        Once it's there, the chip runs your code forever.
+      </p>
       
-      <div class="flash-container">
-        <!-- Step-by-step instructions -->
+      <div class="card" style="margin: 1.5rem 0;">
         <div class="flash-steps">
           <div class="flash-step">
-            <span class="step-number">1</span>
+            <span class="step-num">1</span>
             <div class="step-content">
-              <h3>Plug in your ESP32</h3>
-              <p>USB cable to computer.</p>
+              <h4>Plug in your ESP32</h4>
+              <p>USB cable to computer</p>
             </div>
           </div>
           <div class="flash-step">
-            <span class="step-number">2</span>
+            <span class="step-num">2</span>
             <div class="step-content">
-              <h3>Click Flash below</h3>
-              <p>Select the USB/Serial device.</p>
+              <h4>Click Flash below</h4>
+              <p>Select the USB/Serial device</p>
             </div>
           </div>
           <div class="flash-step">
-            <span class="step-number">3</span>
+            <span class="step-num">3</span>
             <div class="step-content">
-              <h3>Wait ~30 seconds</h3>
-              <p>Watch the progress indicator.</p>
+              <h4>Wait ~30 seconds</h4>
+              <p>Watch the progress</p>
             </div>
           </div>
           <div class="flash-step">
-            <span class="step-number">4</span>
+            <span class="step-num">4</span>
             <div class="step-content">
-              <h3>Watch the LED</h3>
+              <h4>Watch the LED</h4>
               <p>Is it breathing?</p>
             </div>
           </div>
         </div>
         
-        <!-- Upload progress indicator (hidden until upload starts) -->
-        <div class="upload-progress" id="uploadProgress">
-          <!-- Pulsing orb shows activity -->
-          <div class="progress-orb-container">
-            <div class="progress-orb"></div>
+        <!-- Progress indicator -->
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
           </div>
-          <!-- Progress bar (0-100%) -->
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-          <!-- Status text (percentage + message) -->
           <div class="progress-status">
-            <span class="progress-percentage" id="progressText">0%</span>
-            <span id="statusText">Preparing...</span>
+            <span class="progress-percent" id="progressPercent">0%</span>
+            <span id="progressStatus">Preparing...</span>
           </div>
         </div>
         
-        <!-- ESP Web Tools button (handles actual flashing) -->
-        <esp-web-install-button manifest="./manifest.json" id="installButton">
-          <!-- Custom button inside ESP Web Tools component -->
+        <!-- ESP Web Tools button -->
+        <esp-web-install-button manifest="./manifest.json" id="installBtn">
           <button slot="activate" class="btn-flash">Flash Genesis Zero</button>
         </esp-web-install-button>
       </div>
       
-      <!-- Button to confirm success (goes to success page) -->
-      <button class="btn-success-trigger" onclick="goToSuccess()">My LED is breathing</button>
-      <p class="success-hint">Press once you see the light</p>
+      <button class="btn btn-success" onclick="navigate('success')">
+        My LED is breathing
+      </button>
+      <p class="hint">Press once you see the light</p>
       
-      <!-- Troubleshooting button if something goes wrong -->
-      <button class="btn-secondary" style="margin-top: 0.75rem;" onclick="goToTroubleshooting()">Something's wrong</button>
+      <button class="btn btn-ghost" style="margin-top: 0.5rem;" onclick="navigate('troubleshooting')">
+        Something's wrong
+      </button>
+      
     </div>
   </section>
-
-  <!-- =================================================================
-       SUCCESS PAGE
-       Shown after successful flash - celebrates completion
-       ================================================================= -->
-  <section id="success" class="hidden">
+  
+  <!-- ===============================================================
+       SUCCESS — You're a Builder Now
+       =============================================================== -->
+  <section id="success">
     <div class="container">
       
-      <!-- Green pulsing orb (success indicator) -->
-      <div class="success-orb"></div>
+      <div class="orb-container">
+        <div class="orb alive"></div>
+      </div>
       
-      <h2 class="success-title">You're a builder now.</h2>
+      <div class="success-badge">
+        <span>✓</span>
+        <span>GENESIS ZERO COMPLETE</span>
+      </div>
       
-      <p class="success-subtitle">
-        The code from your browser is now running on physical hardware in your hands.
+      <h2 class="title" style="color: var(--alive);">You're a builder now.</h2>
+      
+      <p class="subtitle">
+        The code from your browser is now running on physical hardware.<br>
+        No computer needed. It's yours.
       </p>
       
-      <!-- Box showing what they learned -->
-      <div class="learned-box">
-        <h3>WHAT YOU PROVED</h3>
+      <div class="learned">
+        <h4>WHAT YOU JUST PROVED</h4>
         <ul>
-          <li>Programming is just instructions</li>
+          <li>Programming is just instructions, not magic</li>
           <li>The pattern: Input → Process → Output</li>
           <li>You can make digital things physical</li>
         </ul>
       </div>
       
-      <!-- Shows the path forward (Genesis 0, 1, 2, ∞) -->
-      <div class="path-preview">
-        <h3>THE PATH AHEAD</h3>
+      <div class="path-ahead">
+        <h4>THE PATH AHEAD</h4>
         <div class="path-steps">
           <div class="path-step">
-            <div class="path-step-num completed">0</div>
-            <div class="path-step-label">Done</div>
+            <div class="path-num done">0</div>
+            <div class="path-label">Done</div>
           </div>
           <div class="path-step">
-            <div class="path-step-num">1</div>
-            <div class="path-step-label">LED</div>
+            <div class="path-num">1</div>
+            <div class="path-label">LED</div>
           </div>
           <div class="path-step">
-            <div class="path-step-num">2</div>
-            <div class="path-step-label">Sensors</div>
+            <div class="path-num">2</div>
+            <div class="path-label">Sensors</div>
           </div>
           <div class="path-step">
-            <div class="path-step-num">∞</div>
-            <div class="path-step-label">Anything</div>
+            <div class="path-num">∞</div>
+            <div class="path-label">Anything</div>
           </div>
         </div>
       </div>
       
-      <!-- Action buttons and links -->
-      <div class="success-actions">
-        <div class="success-links">
-          <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn-primary">See code</a>
-          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn-secondary">Tutorials</a>
-        </div>
-        <!-- Start over button returns to landing -->
-        <button class="btn-back" onclick="goToLanding()">← Start over</button>
+      <div class="success-links">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-primary">See the code</a>
+        <button class="btn btn-secondary" onclick="navigate('tutorials')">Continue learning</button>
       </div>
+      
+      <button class="btn btn-ghost" style="margin-top: 0.75rem;" onclick="navigate('landing')">
+        ← Start over
+      </button>
       
     </div>
   </section>
-
-  <!-- =================================================================
-       TROUBLESHOOTING PAGE
-       Lists common issues and how to fix them
-       ================================================================= -->
-  <section id="troubleshooting" class="hidden">
+  
+  <!-- ===============================================================
+       TUTORIALS — The Cathedral
+       =============================================================== -->
+  <section id="tutorials">
     <div class="container">
       
-      <h2 class="section-title" style="color: var(--error);">Troubleshooting</h2>
+      <h2 class="title">The Path</h2>
+      <p class="subtitle">
+        Genesis Zero was the threshold.<br>
+        Here's where you go next.
+      </p>
       
-      <!-- List of common problems -->
-      <ul class="troubleshooting-list">
+      <div class="tutorials-grid">
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card current">
+          <span class="tutorial-num">0</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis Zero — Flash Your First Program</div>
+            <p class="tutorial-desc">The onboard LED breathes. You cross the threshold.</p>
+            <div class="tutorial-meta">
+              <span>5 min</span>
+              <span>No hardware mods</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card">
+          <span class="tutorial-num">1</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis One — Control an External LED</div>
+            <p class="tutorial-desc">Wire your first circuit. Understand GPIO pins.</p>
+            <div class="tutorial-meta">
+              <span>15 min</span>
+              <span>LED + resistor</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card">
+          <span class="tutorial-num">2</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis Two — Read a Sensor</div>
+            <p class="tutorial-desc">Input → Process → Output. The complete pattern.</p>
+            <div class="tutorial-meta">
+              <span>30 min</span>
+              <span>Temperature sensor</span>
+            </div>
+          </div>
+        </a>
+        
+        <div class="tutorial-card locked">
+          <span class="tutorial-num">∞</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis ∞ — Build What You Imagine</div>
+            <p class="tutorial-desc">Weather stations. Plant monitors. Whatever you need.</p>
+            <div class="tutorial-meta">
+              <span>Coming soon</span>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-secondary" style="width: 100%;">
+        Watch on YouTube →
+      </a>
+      
+      <button class="btn btn-ghost" onclick="navigate('landing')">← Back</button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       TROUBLESHOOTING
+       =============================================================== -->
+  <section id="troubleshooting">
+    <div class="container">
+      
+      <h2 class="title" style="color: #c45b4a;">Troubleshooting</h2>
+      
+      <ul class="trouble-list">
         <li>
           <strong>No device appears</strong>
-          <p>Try a different USB cable—most are charge-only.</p>
+          <p>Try a different USB cable — most are charge-only, not data cables.</p>
         </li>
         <li>
-          <strong>Flash fails</strong>
-          <p>Try a different USB port. Unplug, wait 5s, replug.</p>
+          <strong>Flash fails or stops</strong>
+          <p>Try a different USB port. Unplug, wait 5 seconds, replug.</p>
         </li>
         <li>
           <strong>LED doesn't breathe</strong>
-          <p>Unplug and replug the ESP32.</p>
+          <p>Unplug and replug the ESP32. If still nothing, try re-flashing.</p>
         </li>
         <li>
-          <strong>Mac issues</strong>
-          <p>Search "CH340 driver Mac" and install.</p>
+          <strong>Mac: No serial port</strong>
+          <p>Search "CH340 driver Mac" and install the driver.</p>
         </li>
         <li>
-          <strong>Windows issues</strong>
+          <strong>Windows: Driver issues</strong>
           <p>Get CP210x drivers from <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">Silicon Labs</a>.</p>
         </li>
         <li>
           <strong>Still stuck</strong>
-          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a></p>
+          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — we'll figure it out together.</p>
         </li>
       </ul>
       
-      <!-- Try again button returns to flash page -->
-      <button class="btn-primary" onclick="goToFlash()">← Try again</button>
+      <button class="btn btn-primary" onclick="navigate('flash')">← Try again</button>
+      
     </div>
   </section>
-
-  <!-- =================================================================
-       ABOUT PAGE
-       Explains CRUMB philosophy and roadmap
-       ================================================================= -->
-  <section id="about" class="hidden">
+  
+  <!-- ===============================================================
+       ABOUT
+       =============================================================== -->
+  <section id="about">
     <div class="container">
       
-      <h2 class="section-title">What Is CRUMB?</h2>
+      <h2 class="title">What Is CRUMB?</h2>
       
-      <!-- Scrollable content area -->
       <div class="about-content">
+        
         <h3>The Idea</h3>
         <p>
-          CRUMB teaches electronics through doing. Genesis Zero proves you can program a computer in 5 minutes. The barriers were never real.
+          CRUMB teaches electronics through doing, not watching. Genesis Zero proves you can program a computer in 5 minutes. The barriers were never real — just badly designed gates.
         </p>
         
         <h3>The Pattern</h3>
         <p>
-          Every computer: Input → Process → Output. Your phone. Your car. This chip. Once you see it, you can build anything.
+          Every computer follows the same pattern: Input → Process → Output. Your phone. Your car. This chip. Once you see it, you can build anything.
         </p>
-        
-        <h3>The Path</h3>
-        <!-- List showing the Genesis journey -->
-        <ul class="journey-list">
-          <li class="current"><strong>Genesis Zero:</strong> Onboard LED — 5 min</li>
-          <li><strong>Genesis One:</strong> External LED — 15 min</li>
-          <li><strong>Genesis Two:</strong> Sensors — 30 min</li>
-          <li><strong>Genesis ∞:</strong> Whatever you imagine</li>
-        </ul>
         
         <h3>Philosophy</h3>
+        <ul class="philosophy-list">
+          <li><strong>Truth as foundation</strong> — Every line of code documented. No gatekeeping.</li>
+          <li><strong>Platform over product</strong> — Like Arduino. Like Linux. Yours to build on.</li>
+          <li><strong>Cathedral thinking</strong> — Built to help people for decades, not months.</li>
+        </ul>
+        
+        <h3>Open Source</h3>
         <p>
-          Open source. GPL-3.0. Technology should adapt to humans.
+          GPL-3.0. Technology should adapt to humans, not the other way around. Fork it. Modify it. Build something better.
         </p>
+        
       </div>
       
-      <!-- Back button returns to landing -->
-      <button class="btn-primary" style="margin-top: 1rem;" onclick="goToLanding()">← Back</button>
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="navigate('landing')">
+        ← Back
+      </button>
+      
     </div>
   </section>
-
-  <!-- =================================================================
+  
+  <!-- ===============================================================
        JAVASCRIPT
-       Handles page navigation and upload progress
-       ================================================================= -->
+       =============================================================== -->
   <script>
-    // ===============================================================
-    // GET REFERENCES TO DOM ELEMENTS
-    // Store references to elements we'll manipulate frequently
-    // ===============================================================
+    // ================================================================
+    // STATE
+    // ================================================================
+    let currentSection = 'landing';
+    const navHint = document.getElementById('navHint');
     
-    const escapeHint = document.getElementById('escapeHint');
-    // The "Press ESC to go back" hint at bottom
+    // Navigation history for back functionality
+    const history = ['landing'];
     
-    const uploadProgress = document.getElementById('uploadProgress');
-    // Container for upload progress indicator
-    
-    const progressBar = document.getElementById('progressBar');
-    // The actual progress bar (width changes 0-100%)
-    
-    const progressText = document.getElementById('progressText');
-    // Text showing percentage (0%, 50%, 100%)
-    
-    const statusText = document.getElementById('statusText');
-    // Status message (Connecting..., Writing firmware..., etc.)
-    
-    const installButton = document.getElementById('installButton');
-    // ESP Web Tools button component
-    
-    // ===============================================================
-    // SIMULATED UPLOAD PROGRESS
-    // Shows visual feedback during ESP32 flashing
-    // ===============================================================
-    
-    function simulateUpload() {
-      // Show the progress indicator
-      uploadProgress.classList.add('active');
+    // ================================================================
+    // NAVIGATION
+    // ================================================================
+    function navigate(sectionId) {
+      // Don't navigate to same section
+      if (sectionId === currentSection) return;
       
-      // Start at 0%
-      let progress = 0;
+      // Hide current
+      document.getElementById(currentSection).classList.remove('active');
       
-      // Define stages with percentage milestones and messages
-      const stages = [
-        { percent: 15, text: 'Connecting to device...' },
-        { percent: 30, text: 'Erasing flash memory...' },
-        { percent: 50, text: 'Writing firmware...' },
-        { percent: 75, text: 'Verifying data...' },
-        { percent: 90, text: 'Finalizing...' },
-        { percent: 100, text: 'Complete! Check your LED.' }
-      ];
+      // Show new
+      document.getElementById(sectionId).classList.add('active');
       
-      // Track which stage we're on
-      let stageIndex = 0;
+      // Update history
+      if (sectionId !== 'landing') {
+        history.push(sectionId);
+      } else {
+        history.length = 1;
+      }
       
-      // Update progress every 150ms
-      const interval = setInterval(() => {
-        // Increment progress by 2%
-        progress += 2;
-        
-        // Update progress bar width
-        progressBar.style.width = progress + '%';
-        
-        // Update percentage text
-        progressText.textContent = progress + '%';
-        
-        // Check if we've reached a stage milestone
-        if (stageIndex < stages.length && progress >= stages[stageIndex].percent) {
-          // Update status text with stage message
-          statusText.textContent = stages[stageIndex].text;
-          // Move to next stage
-          stageIndex++;
-        }
-        
-        // When progress reaches 100%
-        if (progress >= 100) {
-          // Stop the interval
-          clearInterval(interval);
-          
-          // Hide progress after 3 seconds
-          setTimeout(() => {
-            uploadProgress.classList.remove('active');
-            // Reset progress for next use
-            progressBar.style.width = '0%';
-            progressText.textContent = '0%';
-            statusText.textContent = 'Preparing...';
-          }, 3000);
-        }
-      }, 150); 
-      // 150ms * (100/2) = 7.5 seconds for full progress
-      // Actual ESP32 flash takes ~30s, this is just visual feedback
+      // Update state
+      currentSection = sectionId;
+      
+      // Show/hide nav hint
+      navHint.classList.toggle('visible', sectionId !== 'landing' && sectionId !== 'success');
+      
+      // Trigger confetti on success
+      if (sectionId === 'success') {
+        setTimeout(createConfetti, 300);
+      }
     }
     
-    // ===============================================================
-    // ESP WEB TOOLS EVENT LISTENER
-    // Trigger progress animation when install starts
-    // ===============================================================
+    // Go back
+    function goBack() {
+      if (history.length > 1) {
+        history.pop();
+        const prev = history[history.length - 1];
+        navigate(prev);
+      }
+    }
     
-    installButton.addEventListener('state-changed', (ev) => {
-      // When ESP Web Tools state changes to "installing"
-      if (ev.detail === 'installing') {
-        // Start showing progress animation
-        simulateUpload();
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        goBack();
       }
     });
     
-    // ===============================================================
-    // PAGE NAVIGATION FUNCTIONS
-    // Show/hide different sections of the site
-    // ===============================================================
+    // ================================================================
+    // FLASH PROGRESS
+    // ================================================================
+    const installBtn = document.getElementById('installBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressStatus = document.getElementById('progressStatus');
     
-    function hideAll() {
-      // Find all section elements
-      document.querySelectorAll('section').forEach(s => {
-        // Add 'hidden' class to each (hides them)
-        s.classList.add('hidden');
-      });
-    }
-    
-    function showEscapeHint(show) {
-      // Show or hide the ESC hint based on boolean parameter
-      escapeHint.style.display = show ? 'block' : 'none';
-    }
-    
-    // Navigate to landing page
-    function goToLanding() {
-      hideAll(); // Hide all pages
-      document.getElementById('landing').classList.remove('hidden'); // Show landing
-      showEscapeHint(false); // Hide ESC hint (landing is top level)
-    }
-    
-    // Navigate to about page
-    function goToAbout() {
-      hideAll();
-      document.getElementById('about').classList.remove('hidden');
-      showEscapeHint(true); // Show ESC hint (can go back)
-    }
-    
-    // Navigate to get hardware page
-    function goToGetHardware() {
-      hideAll();
-      document.getElementById('get-hardware').classList.remove('hidden');
-      showEscapeHint(true);
-    }
-    
-    // Navigate to requirements check page
-    function goToRequirements() {
-      hideAll();
-      document.getElementById('requirements').classList.remove('hidden');
-      showEscapeHint(true);
-    }
-    
-    // Navigate to flash page
-    function goToFlash() {
-      hideAll();
-      document.getElementById('flash').classList.remove('hidden');
-      showEscapeHint(true);
-    }
-    
-    // Navigate to success page
-    function goToSuccess() {
-      hideAll();
-      document.getElementById('success').classList.remove('hidden');
-      showEscapeHint(false); // No ESC hint (successful completion)
-      createConfetti(); // Celebrate!
-    }
-    
-    // Navigate to troubleshooting page
-    function goToTroubleshooting() {
-      hideAll();
-      document.getElementById('troubleshooting').classList.remove('hidden');
-      showEscapeHint(true);
-    }
-    
-    // ===============================================================
-    // CONFETTI ANIMATION
-    // Creates falling confetti on success page
-    // ===============================================================
-    
-    function createConfetti() {
-      // Array of colors for confetti pieces
-      const colors = ['#D4A373', '#7FB069', '#F2EDE7'];
+    function simulateProgress() {
+      progressContainer.classList.add('active');
       
-      // Create 60 confetti pieces
-      for (let i = 0; i < 60; i++) {
-        // Stagger creation (one every 25ms)
+      let progress = 0;
+      const stages = [
+        { at: 15, msg: 'Connecting...' },
+        { at: 30, msg: 'Erasing flash...' },
+        { at: 50, msg: 'Writing firmware...' },
+        { at: 75, msg: 'Verifying...' },
+        { at: 90, msg: 'Finalizing...' },
+        { at: 100, msg: 'Check your LED!' }
+      ];
+      
+      let stageIdx = 0;
+      
+      const interval = setInterval(() => {
+        progress += 2;
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = progress + '%';
+        
+        if (stageIdx < stages.length && progress >= stages[stageIdx].at) {
+          progressStatus.textContent = stages[stageIdx].msg;
+          stageIdx++;
+        }
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            progressContainer.classList.remove('active');
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+            progressStatus.textContent = 'Preparing...';
+          }, 3000);
+        }
+      }, 150);
+    }
+    
+    installBtn.addEventListener('state-changed', (e) => {
+      if (e.detail === 'installing') {
+        simulateProgress();
+      }
+    });
+    
+    // ================================================================
+    // CONFETTI
+    // ================================================================
+    function createConfetti() {
+      const colors = ['#e8a87c', '#8fbc8f', '#e8e4df'];
+      
+      for (let i = 0; i < 50; i++) {
         setTimeout(() => {
-          // Create a new div element
-          const confetti = document.createElement('div');
-          // Add confetti class (includes animation)
-          confetti.className = 'confetti';
-          // Random horizontal position (0-100%)
-          confetti.style.left = Math.random() * 100 + '%';
-          // Start above viewport
-          confetti.style.top = '-10px';
-          // Random color from array
-          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          // Random rotation (0-360 degrees)
-          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-          // Add to page
-          document.body.appendChild(confetti);
+          const piece = document.createElement('div');
+          piece.className = 'confetti';
+          piece.style.left = Math.random() * 100 + '%';
+          piece.style.top = '-10px';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(piece);
           
-          // Remove confetti after animation completes (3 seconds)
-          setTimeout(() => confetti.remove(), 3000);
-        }, i * 25); // Stagger by 25ms each
+          setTimeout(() => piece.remove(), 3000);
+        }, i * 30);
       }
     }
     
-    // ===============================================================
-    // KEYBOARD NAVIGATION
-    // Allow ESC key to go back
-    // ===============================================================
+    // ================================================================
+    // ORB INTERACTION
+    // Make the orb feel alive — it notices the mouse
+    // ================================================================
+    const orbs = document.querySelectorAll('.orb');
     
-    document.addEventListener('keydown', e => {
-      // If ESC key is pressed
-      if (e.key === 'Escape') {
-        // Find which section is currently visible
-        const current = document.querySelector('section:not(.hidden)')?.id;
-        
-        // Navigate back based on current page
-        if (current === 'about') goToLanding();
-        else if (current === 'get-hardware') goToLanding();
-        else if (current === 'requirements') goToLanding();
-        else if (current === 'flash') goToRequirements();
-        else if (current === 'troubleshooting') goToFlash();
-        else if (current === 'success') goToLanding();
-      }
+    orbs.forEach(orb => {
+      orb.addEventListener('mouseenter', () => {
+        orb.style.animationPlayState = 'paused';
+      });
+      
+      orb.addEventListener('mouseleave', () => {
+        orb.style.animationPlayState = 'running';
+      });
     });
   </script>
 
