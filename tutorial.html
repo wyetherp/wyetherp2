@@ -1,239 +1,197 @@
 <!DOCTYPE html>
-<!--
-  CRUMB Genesis Zero - The Threshold
-  
-  No scrolling. Every screen fits. Every word earns its place.
-  
-  License: GPL-3.0
-  Author: Wyeth Anzilotti
-  Year: 2025
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CRUMB — Your First Program</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wyeth Anzilotti — Builder</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  
-  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --void: #050505;
-      --surface: #0a0a0a;
-      --elevated: #111111;
+      /* Warm paper + charcoal palette */
+      --bg: #f5f0e8;
+      --bg-warm: #ede6db;
+      --surface: #faf7f2;
+      --surface-dark: #1a1915;
+      --surface-darker: #0f0e0c;
+      
+      --text: #2c2a25;
+      --text-dim: #5c5850;
+      --text-ghost: #8a857a;
+      --text-light: #f0ebe3;
+      --text-light-dim: rgba(240, 235, 227, 0.6);
+      
+      --accent: #3d5a47;
+      --accent-light: #4a6b54;
+      --accent-dim: rgba(61, 90, 71, 0.1);
       
       --ember: #e8a87c;
-      --ember-bright: #f4c4a0;
       --ember-glow: rgba(232, 168, 124, 0.4);
-      --ember-whisper: rgba(232, 168, 124, 0.08);
+      --ember-bright: #f4c4a0;
+      --ember-dim: rgba(232, 168, 124, 0.15);
       
-      --alive: #8fbc8f;
-      --alive-glow: rgba(143, 188, 143, 0.4);
-      --alive-whisper: rgba(143, 188, 143, 0.08);
+      /* FIXED: Brighter, more visible green */
+      --alive: #5cb85c;
+      --alive-bright: #6fce6f;
+      --alive-glow: rgba(92, 184, 92, 0.5);
+      --alive-dim: rgba(92, 184, 92, 0.12);
       
-      --text: #e8e4df;
-      --text-dim: rgba(232, 228, 223, 0.6);
-      --text-ghost: rgba(232, 228, 223, 0.35);
-      
-      --caution: #d4a574;
+      --border: #d9d2c7;
+      --border-dark: rgba(240, 235, 227, 0.1);
       
       --font-display: 'Fraunces', Georgia, serif;
-      --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
-      
-      --breath-duration: 8s;
-      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-mono: 'IBM Plex Mono', monospace;
     }
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
-    html, body {
-      height: 100%;
-      overflow: hidden;
+    html {
+      scroll-behavior: smooth;
     }
     
     body {
-      background: var(--void);
-      color: var(--text);
       font-family: var(--font-mono);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
       -webkit-font-smoothing: antialiased;
     }
     
-    /* Atmosphere */
-    .atmosphere {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
     }
     
-    .atmosphere::before {
+    /* =========================================
+       CRUMB CTA HERO
+       ========================================= */
+    .crumb-hero {
+      background: var(--surface-dark);
+      padding: 3.5rem 1.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .crumb-hero::before {
       content: '';
       position: absolute;
-      top: 30%;
+      top: 40%;
       left: 50%;
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--ember-whisper) 0%, transparent 70%);
-      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
+      background: radial-gradient(circle, rgba(232, 168, 124, 0.1) 0%, transparent 70%);
+      pointer-events: none;
     }
     
-    @keyframes atmosphere-pulse {
-      0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    .crumb-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
     }
     
-    /* Header */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      padding: 0 1.25rem;
+    .crumb-hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      background: linear-gradient(to bottom, var(--void) 0%, transparent 100%);
+      gap: 2.5rem;
+      position: relative;
+      z-index: 1;
     }
     
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      transition: opacity var(--transition);
+    .crumb-hero-content {
+      flex: 1;
     }
     
-    .logo:hover { opacity: 0.7; }
-    
-    .logo-mark {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--ember);
-      animation: mark-breathe var(--breath-duration) ease-in-out infinite;
-    }
-    
-    @keyframes mark-breathe {
-      0%, 100% { opacity: 0.3; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--ember-glow); }
-    }
-    
-    .logo-text {
+    .crumb-hero-label {
       font-size: 0.65rem;
       font-weight: 500;
-      letter-spacing: 0.2em;
-      color: var(--text-dim);
+      letter-spacing: 0.25em;
       text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 0.75rem;
     }
     
-    .header-links {
-      display: flex;
-      gap: 1rem;
+    .crumb-hero-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--text-light);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
     }
     
-    .header-link {
-      font-size: 0.65rem;
-      color: var(--text-ghost);
+    .crumb-hero-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-light-dim);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .crumb-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--ember);
+      color: var(--surface-dark);
+      padding: 1rem 1.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
       text-decoration: none;
-      letter-spacing: 0.05em;
-      transition: color var(--transition);
+      transition: all 0.3s ease;
     }
     
-    .header-link:hover { color: var(--ember); }
-    
-    /* Footer nav */
-    .footer-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      padding: 0 1.25rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 100;
-      background: linear-gradient(to top, var(--void) 0%, transparent 100%);
+    .crumb-cta:hover {
+      background: var(--ember-bright);
+      box-shadow: 0 8px 32px var(--ember-glow);
+      transform: translateY(-2px);
     }
     
-    .nav-hint {
-      font-size: 0.6rem;
-      color: var(--text-ghost);
-      letter-spacing: 0.1em;
+    .crumb-cta-arrow {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
     }
     
-    .nav-hint kbd {
-      background: var(--elevated);
-      padding: 0.1rem 0.4rem;
-      border-radius: 3px;
-      border: 1px solid rgba(255,255,255,0.08);
-      margin: 0 0.15rem;
+    .crumb-cta:hover .crumb-cta-arrow {
+      transform: translateX(4px);
     }
     
-    /* Screen container */
-    .screen {
-      position: fixed;
-      top: 50px;
-      left: 0;
-      right: 0;
-      bottom: 50px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem 1.5rem;
-      z-index: 1;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+    /* The breathing orb */
+    .orb-container {
+      flex-shrink: 0;
     }
     
-    .screen.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .content {
-      max-width: 420px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    
-    /* Orb */
     .orb {
-      width: 70px;
-      height: 70px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       background: var(--ember);
-      margin-bottom: 1.25rem;
-      animation: orb-breathe var(--breath-duration) ease-in-out infinite;
+      animation: orb-breathe 8s ease-in-out infinite;
       position: relative;
     }
     
     .orb::before {
       content: '';
       position: absolute;
-      inset: -15px;
+      inset: -18px;
       border-radius: 50%;
       background: radial-gradient(circle, var(--ember-glow), transparent 70%);
-      animation: orb-glow var(--breath-duration) ease-in-out infinite;
+      animation: orb-glow 8s ease-in-out infinite;
       z-index: -1;
     }
     
@@ -241,1057 +199,620 @@
       0%, 100% {
         opacity: 0.3;
         transform: scale(0.92);
-        box-shadow: 0 0 15px rgba(232, 168, 124, 0.1);
+        box-shadow: 0 0 20px rgba(232, 168, 124, 0.1);
       }
       50% {
         opacity: 1;
         transform: scale(1);
-        box-shadow: 0 0 40px var(--ember-glow);
+        box-shadow: 0 0 50px var(--ember-glow);
       }
     }
     
     @keyframes orb-glow {
-      0%, 100% { opacity: 0.2; transform: scale(0.85); }
-      50% { opacity: 0.5; transform: scale(1.1); }
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.5; transform: scale(1.15); }
     }
     
-    .orb.alive {
-      background: var(--alive);
-      animation-name: orb-alive;
+    /* =========================================
+       SCROLL INDICATOR
+       ========================================= */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-light-dim);
+      cursor: pointer;
+      transition: color 0.3s ease;
+      z-index: 10;
     }
     
-    .orb.alive::before {
-      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+    .scroll-indicator:hover {
+      color: var(--ember);
     }
     
-    @keyframes orb-alive {
-      0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.95);
-        box-shadow: 0 0 15px rgba(143, 188, 143, 0.1);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1);
-        box-shadow: 0 0 40px var(--alive-glow);
-      }
-    }
-    
-    .orb.small {
-      width: 35px;
-      height: 35px;
-      margin-bottom: 0;
-    }
-    
-    .orb.small::before { inset: -8px; }
-    
-    /* Typography */
-    .kicker {
-      font-size: 0.6rem;
-      font-weight: 500;
-      letter-spacing: 0.25em;
+    .scroll-indicator span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--ember);
-      margin-bottom: 0.5rem;
     }
     
-    h1, h2 {
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    .scroll-arrow svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    
+    /* =========================================
+       PORTFOLIO SECTION
+       ========================================= */
+    .portfolio {
+      background: var(--bg);
+      padding: 3.5rem 0 4rem;
+    }
+    
+    header {
+      margin-bottom: 2.5rem;
+      padding-top: 0.5rem;
+    }
+    
+    .name {
       font-family: var(--font-display);
-      font-weight: 300;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-    
-    .title {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
+      font-size: 2.25rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
       color: var(--text);
     }
     
-    .title em {
-      font-style: normal;
-      color: var(--ember);
-    }
-    
-    .subtitle {
-      font-size: 0.8rem;
+    .tagline {
+      font-size: 0.9rem;
       color: var(--text-dim);
-      line-height: 1.6;
-      max-width: 340px;
+      margin-bottom: 1.25rem;
     }
     
-    .subtitle strong {
-      color: var(--text);
+    .links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    
+    .links a {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .links a:hover { color: var(--accent-light); }
+    
+    section {
+      margin-bottom: 2.5rem;
+    }
+    
+    h2 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
       font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-ghost);
+      margin-bottom: 1rem;
     }
     
-    /* Promise grid */
-    .promise {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: rgba(255,255,255,0.04);
-      margin: 1.25rem 0;
-      width: 100%;
+    p {
+      color: var(--text-dim);
+      margin-bottom: 1rem;
     }
     
-    .promise-item {
+    p:last-child { margin-bottom: 0; }
+    
+    strong { color: var(--text); font-weight: 500; }
+    
+    /* Featured Project */
+    .featured {
       background: var(--surface);
-      padding: 0.75rem 0.5rem;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .featured-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .featured-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--text);
+    }
+    
+    .featured-badge {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--alive);
+      background: var(--alive-dim);
+      padding: 0.25rem 0.6rem;
+    }
+    
+    .featured p {
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    
+    .featured-links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    
+    .featured-links a {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .featured-links a:hover { color: var(--accent-light); }
+    
+    /* Stats - now 2 columns */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 1.25rem;
+    }
+    
+    .stat {
+      background: var(--surface);
+      padding: 1rem;
       text-align: center;
     }
     
-    .promise-value {
+    .stat-value {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.5rem;
       font-weight: 300;
-      color: var(--ember);
-    }
-    
-    .promise-label {
-      font-size: 0.55rem;
-      color: var(--text-ghost);
-      margin-top: 0.15rem;
-    }
-    
-    /* Buttons */
-    .btn {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      padding: 0.85rem 1.5rem;
-      border: none;
-      cursor: pointer;
-      transition: all var(--transition);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-    }
-    
-    .btn-primary {
-      background: var(--ember);
-      color: var(--void);
-      width: 100%;
-    }
-    
-    .btn-primary:hover {
-      background: var(--ember-bright);
-      box-shadow: 0 6px 24px var(--ember-glow);
-    }
-    
-    .btn-secondary {
-      background: transparent;
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.12);
-      width: 100%;
     }
     
-    .btn-secondary:hover {
-      border-color: var(--ember);
-      color: var(--ember);
-    }
-    
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-dim);
-      padding: 0.6rem 1rem;
-      font-size: 0.7rem;
-    }
-    
-    .btn-ghost:hover { color: var(--text); }
-    
-    .btn-success {
-      background: var(--alive);
-      color: var(--void);
-      width: 100%;
-    }
-    
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      width: 100%;
-      margin-top: 1rem;
-    }
-    
-    .btn-row {
-      display: flex;
-      gap: 0.5rem;
-      width: 100%;
-    }
-    
-    .btn-row .btn { flex: 1; }
-    
-    .hint {
+    .stat-label {
       font-size: 0.65rem;
       color: var(--text-ghost);
-      margin-top: 0.6rem;
-      line-height: 1.4;
+      letter-spacing: 0.05em;
     }
     
-    /* Card */
-    .card {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.04);
-      padding: 1rem;
-      width: 100%;
-      text-align: left;
-      margin: 1rem 0;
+    /* Experience */
+    .experience-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
     }
     
-    .card-header {
+    .experience-item:first-child { padding-top: 0; }
+    .experience-item:last-child { border-bottom: none; }
+    
+    .exp-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.5rem;
-    }
-    
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--ember);
-    }
-    
-    .card-meta {
-      font-size: 0.85rem;
-      color: var(--text);
-    }
-    
-    .card-body {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
-    
-    /* Checklist */
-    .checklist {
-      list-style: none;
-      width: 100%;
-      margin: 1rem 0;
-    }
-    
-    .checklist li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.7rem 0.85rem;
-      background: var(--surface);
-      margin-bottom: 0.4rem;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    
-    .checklist li:hover { background: var(--elevated); }
-    .checklist li.checked { background: var(--alive-whisper); }
-    
-    .check-box {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--text-ghost);
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 0.7rem;
-      transition: all var(--transition);
-    }
-    
-    .checklist li.checked .check-box {
-      background: var(--alive);
-      border-color: var(--alive);
-      color: var(--void);
-    }
-    
-    .check-text {
-      font-size: 0.75rem;
-      color: var(--text);
-    }
-    
-    /* Flash steps */
-    .steps {
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    
-    .step:last-child { border-bottom: none; }
-    
-    .step-num {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--ember);
-      min-width: 1.25rem;
-    }
-    
-    .step-text h4 {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 0.1rem;
-    }
-    
-    .step-text p {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-    }
-    
-    /* Preview box */
-    .preview {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: var(--ember-whisper);
-      padding: 0.75rem 1rem;
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .preview-text {
-      text-align: left;
-      font-size: 0.7rem;
-    }
-    
-    .preview-text strong {
-      color: var(--ember);
-      display: block;
-      margin-bottom: 0.1rem;
-    }
-    
-    .preview-text span { color: var(--text-dim); }
-    
-    /* Progress */
-    .progress {
-      width: 100%;
-      margin: 0.75rem 0;
-      display: none;
-    }
-    
-    .progress.active { display: block; }
-    
-    .progress-bar {
-      height: 3px;
-      background: var(--elevated);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: var(--ember);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-    
-    .progress-status {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.4rem;
-      font-size: 0.65rem;
-      color: var(--text-dim);
-    }
-    
-    .progress-status .pct { color: var(--ember); font-weight: 500; }
-    
-    /* ESP button */
-    esp-web-install-button {
-      display: block;
-      width: 100%;
-    }
-    
-    esp-web-install-button button,
-    .btn-flash {
-      width: 100%;
-      background: var(--ember);
-      color: var(--void);
-      padding: 0.85rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      border: none;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    
-    esp-web-install-button button:hover { box-shadow: 0 6px 24px var(--ember-glow); }
-    
-    /* Success */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(143, 188, 143, 0.1);
-      border: 1px solid rgba(143, 188, 143, 0.2);
-      padding: 0.35rem 0.75rem;
-      margin-bottom: 0.75rem;
-      font-size: 0.6rem;
-      color: var(--alive);
-      letter-spacing: 0.1em;
-    }
-    
-    .learned {
-      background: rgba(143, 188, 143, 0.05);
-      border: 1px solid rgba(143, 188, 143, 0.1);
-      padding: 0.85rem 1rem;
-      width: 100%;
-      text-align: left;
-      margin: 0.75rem 0;
-    }
-    
-    .learned h4 {
-      font-size: 0.55rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      color: var(--alive);
-      margin-bottom: 0.5rem;
-    }
-    
-    .learned ul { list-style: none; }
-    
-    .learned li {
-      position: relative;
-      padding-left: 1rem;
-      font-size: 0.7rem;
-      color: var(--text);
-      margin: 0.3rem 0;
-    }
-    
-    .learned li::before {
-      content: '✓';
-      position: absolute;
-      left: 0;
-      color: var(--alive);
-      font-size: 0.65rem;
-    }
-    
-    /* Path */
-    .path {
-      background: var(--surface);
-      padding: 0.85rem 1rem;
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .path h4 {
-      font-size: 0.55rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      color: var(--ember);
-      margin-bottom: 0.6rem;
-      text-align: center;
-    }
-    
-    .path-steps {
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    .path-step {
-      flex: 1;
-      text-align: center;
-    }
-    
-    .path-num {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--text-ghost);
-    }
-    
-    .path-num.done { color: var(--alive); }
-    .path-num.next { color: var(--ember); }
-    
-    .path-label {
-      font-size: 0.5rem;
-      color: var(--text-ghost);
-      margin-top: 0.15rem;
-    }
-    
-    /* Tutorials */
-    .tutorials {
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .tutorial {
-      display: flex;
-      gap: 0.75rem;
-      padding: 0.7rem;
-      background: var(--surface);
-      margin-bottom: 0.4rem;
-      text-decoration: none;
-      transition: all var(--transition);
-    }
-    
-    .tutorial:hover {
-      background: var(--elevated);
-    }
-    
-    .tutorial-num {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--ember);
-      min-width: 1.25rem;
-    }
-    
-    .tutorial-text {
-      flex: 1;
-      text-align: left;
-    }
-    
-    .tutorial-title {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-    
-    .tutorial-meta {
-      font-size: 0.55rem;
-      color: var(--text-ghost);
-      margin-top: 0.15rem;
-    }
-    
-    .tutorial.done {
-      background: var(--alive-whisper);
-    }
-    
-    .tutorial.done .tutorial-num { color: var(--alive); }
-    
-    .tutorial.locked {
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    
-    /* Trouble */
-    .trouble {
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .trouble-item {
-      padding: 0.6rem 0.85rem;
-      background: var(--surface);
-      border-left: 2px solid rgba(212, 165, 116, 0.3);
       margin-bottom: 0.35rem;
-      text-align: left;
     }
     
-    .trouble-item strong {
-      display: block;
-      font-size: 0.7rem;
+    .exp-title {
       font-weight: 500;
-      color: var(--caution);
-      margin-bottom: 0.15rem;
+      color: var(--text);
     }
     
-    .trouble-item p {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
-    
-    .trouble-item a { color: var(--ember); }
-    
-    /* About */
-    .about-text {
-      text-align: left;
-      width: 100%;
-    }
-    
-    .about-text h3 {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--ember);
-      margin: 1rem 0 0.4rem;
-    }
-    
-    .about-text h3:first-child { margin-top: 0; }
-    
-    .about-text p {
+    .exp-date {
       font-size: 0.75rem;
+      color: var(--text-ghost);
+    }
+    
+    .exp-company {
+      font-size: 0.85rem;
       color: var(--text-dim);
-      line-height: 1.6;
+      margin-bottom: 0.5rem;
     }
     
-    /* Confetti */
-    .confetti {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      border-radius: 1px;
-      animation: fall 2.5s ease-out forwards;
+    .exp-description {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .skill-category h3 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .skill-category ul {
+      list-style: none;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    
+    .skill-category li {
+      padding: 0.2rem 0;
+    }
+    
+    /* Education */
+    .education {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+    }
+    
+    .edu-school {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    
+    .edu-details {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    
+    .edu-extra {
+      font-size: 0.75rem;
+      color: var(--text-ghost);
+      margin-top: 0.5rem;
+    }
+    
+    /* Contact CTA */
+    .contact {
+      background: var(--accent-dim);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .contact p {
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    
+    .contact a {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--surface);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .contact a:hover { 
+      background: var(--accent-light);
+    }
+    
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+    }
+    
+    /* =========================================
+       BOTTOM CTA
+       ========================================= */
+    .bottom-cta {
+      background: var(--surface-dark);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    .bottom-cta::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
       pointer-events: none;
-      z-index: 1000;
     }
     
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(540deg);
-        opacity: 0;
+    .bottom-cta-inner {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .bottom-cta h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 300;
+      color: var(--text-light);
+      margin-bottom: 0.75rem;
+    }
+    
+    .bottom-cta p {
+      font-size: 0.85rem;
+      color: var(--text-light-dim);
+      margin-bottom: 1.5rem;
+    }
+    
+    .bottom-cta .crumb-cta {
+      display: inline-flex;
+    }
+    
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+    @media (max-width: 600px) {
+      .crumb-hero {
+        min-height: 90vh;
+        padding: 3rem 1.5rem 3rem;
+      }
+      
+      .crumb-hero-inner {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 2rem;
+      }
+      
+      .crumb-hero-title {
+        font-size: 1.5rem;
+      }
+      
+      .orb {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .orb::before {
+        inset: -12px;
+      }
+      
+      .scroll-indicator {
+        bottom: 1.5rem;
+      }
+      
+      .skills-grid { 
+        grid-template-columns: 1fr; 
+      }
+      
+      .featured-header { 
+        flex-direction: column; 
+        gap: 0.5rem; 
+      }
+      
+      .name {
+        font-size: 1.85rem;
       }
     }
     
-    /* Responsive - shorter screens */
-    @media (max-height: 600px) {
-      .orb { width: 50px; height: 50px; margin-bottom: 0.75rem; }
-      .orb::before { inset: -10px; }
-      .title { font-size: 1.25rem; margin-bottom: 0.5rem; }
-      .subtitle { font-size: 0.75rem; }
-      .promise { margin: 0.75rem 0; }
-      .promise-item { padding: 0.5rem 0.25rem; }
-      .promise-value { font-size: 0.95rem; }
-      .btn { padding: 0.7rem 1rem; font-size: 0.7rem; }
-      .btn-group { margin-top: 0.75rem; gap: 0.35rem; }
-      .card { padding: 0.75rem; margin: 0.75rem 0; }
-      .checklist li { padding: 0.5rem 0.7rem; }
-      .steps { margin: 0.5rem 0; }
-      .step { padding: 0.35rem 0; }
-      .learned, .path { padding: 0.6rem 0.85rem; margin: 0.5rem 0; }
-    }
-    
-    @media (max-height: 500px) {
-      header, .footer-nav { height: 40px; }
-      .screen { top: 40px; bottom: 40px; padding: 0.5rem 1rem; }
-      .orb { width: 40px; height: 40px; margin-bottom: 0.5rem; }
-      .kicker { display: none; }
-      .title { font-size: 1.1rem; }
-      .promise { display: none; }
+    @media (max-height: 700px) {
+      .crumb-hero {
+        min-height: auto;
+        padding: 2.5rem 1.5rem 4rem;
+      }
     }
   </style>
 </head>
 <body>
   
-  <div class="atmosphere"></div>
-  
-  <header>
-    <div class="logo" onclick="go('landing')">
-      <div class="logo-mark"></div>
-      <span class="logo-text">CRUMB</span>
+  <!-- =========================================
+       CRUMB CTA HERO
+       ========================================= -->
+  <div class="crumb-hero">
+    <div class="crumb-hero-inner">
+      <div class="crumb-hero-content">
+        <div class="crumb-hero-label">CRUMB — Genesis Zero</div>
+        <h2 class="crumb-hero-title">Your first program in 15 minutes.</h2>
+        <p class="crumb-hero-subtitle">No experience needed. $12 in hardware (ships in 2-3 days). Yours forever.</p>
+        <a href="tutorial.html" class="crumb-cta">
+          <span>Start the tutorial</span>
+          <span class="crumb-cta-arrow">→</span>
+        </a>
+      </div>
+      <div class="orb-container">
+        <div class="orb"></div>
+      </div>
     </div>
-    <div class="header-links">
-      <a href="#" class="header-link" onclick="go('tutorials'); return false;">Learn</a>
-      <a href="#" class="header-link" onclick="go('about'); return false;">About</a>
-    </div>
-  </header>
-  
-  <div class="footer-nav">
-    <span class="nav-hint" id="navHint">Press <kbd>ESC</kbd> to go back</span>
+    
+    <a href="#portfolio" class="scroll-indicator">
+      <span>About me</span>
+      <div class="scroll-arrow">
+        <svg viewBox="0 0 24 24">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </a>
   </div>
   
-  <!-- ===============================================================
-       LANDING
-       =============================================================== -->
-  <div class="screen active" id="landing">
-    <div class="content">
-      <div class="kicker">Your First Program</div>
-      <div class="orb"></div>
-      <h1 class="title">This light is <em>code</em>.</h1>
-      <p class="subtitle">
-        That rhythm? A real program running in your browser.<br>
-        In 15 minutes, it can be breathing <strong>in your hands</strong>.
-      </p>
-      <div class="promise">
-        <div class="promise-item">
-          <div class="promise-value">15</div>
-          <div class="promise-label">minutes</div>
+  <!-- =========================================
+       PORTFOLIO
+       ========================================= -->
+  <div class="portfolio" id="portfolio">
+    <div class="container">
+      
+      <header>
+        <h1 class="name">Wyeth Anzilotti</h1>
+        <p class="tagline">Builder · Cognitive Science + CS · Lehigh '26</p>
+        <div class="links">
+          <a href="https://github.com/wyetherp" target="_blank">GitHub</a>
+          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">YouTube</a>
+          <a href="https://www.linkedin.com/in/wyeth-anzilotti" target="_blank">LinkedIn</a>
+          <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a>
         </div>
-        <div class="promise-item">
-          <div class="promise-value">$12</div>
-          <div class="promise-label">cost</div>
+      </header>
+      
+      <section>
+        <h2>Currently Building</h2>
+        
+        <div class="featured">
+          <div class="featured-header">
+            <span class="featured-title">CRUMB</span>
+            <span class="featured-badge">Live</span>
+          </div>
+          <p>
+            Open-source electronics education platform. Takes someone from "I've never programmed" to "I just flashed firmware to a microcontroller" in <strong>15 minutes</strong> — once they have the hardware.
+          </p>
+          <p>
+            Built because I watched my brother struggle with technology that wasn't designed for how his brain works. The problem isn't people — it's that we've made computers harder to understand than they need to be.
+          </p>
+          <div class="featured-links">
+            <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub (GPL-3.0)</a>
+            <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">Tutorial Series</a>
+            <a href="tutorial.html">Try Genesis Zero →</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">$12</div>
+              <div class="stat-label">Hardware cost</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">15 min</div>
+              <div class="stat-label">Time to first program</div>
+            </div>
+          </div>
         </div>
-        <div class="promise-item">
-          <div class="promise-value">Zero</div>
-          <div class="promise-label">experience</div>
+      </section>
+      
+      <section>
+        <h2>Experience</h2>
+        
+        <div class="experience-item">
+          <div class="exp-header">
+            <span class="exp-title">Data Engineering Intern</span>
+            <span class="exp-date">Summer 2025</span>
+          </div>
+          <div class="exp-company">Acellus Health / Labware</div>
+          <p class="exp-description">
+            Built clinical data pipelines for healthcare technology. Processed and transformed medical data at scale, gaining hands-on experience with regulated data environments and healthcare software systems.
+          </p>
         </div>
-        <div class="promise-item">
-          <div class="promise-value">Yours</div>
-          <div class="promise-label">forever</div>
+        
+        <div class="experience-item">
+          <div class="exp-header">
+            <span class="exp-title">Division I Tennis</span>
+            <span class="exp-date">2022–Present</span>
+          </div>
+          <div class="exp-company">Lehigh University</div>
+          <p class="exp-description">
+            Four years competing at the D1 level while maintaining full academic load. Developed discipline, time management, and ability to perform under pressure.
+          </p>
         </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="go('requirements')">I have the hardware</button>
-        <button class="btn btn-secondary" onclick="go('hardware')">What do I need?</button>
-      </div>
-      <p class="hint">Most people need to order a small computer first</p>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       HARDWARE
-       =============================================================== -->
-  <div class="screen" id="hardware">
-    <div class="content">
-      <h2 class="title">What You Need</h2>
-      <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">ESP32 Dev Board</span>
-          <span class="card-meta">~$12</span>
+        
+      </section>
+      
+      <section>
+        <h2>Skills</h2>
+        
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3>Technical</h3>
+            <ul>
+              <li>JavaScript / HTML / CSS</li>
+              <li>Python</li>
+              <li>SQL / Database Design</li>
+              <li>Embedded Systems (ESP32)</li>
+              <li>Git / GitHub</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Other</h3>
+            <ul>
+              <li>Technical Writing</li>
+              <li>Video Production</li>
+              <li>Open Source Development</li>
+              <li>User-Centered Design</li>
+              <li>Teaching / Explaining</li>
+            </ul>
+          </div>
         </div>
-        <p class="card-body">
-          A small computer with WiFi & Bluetooth. Yours to keep forever — reprogram it, build with it, learn from it.
+      </section>
+      
+      <section>
+        <h2>Education</h2>
+        
+        <div class="education">
+          <div class="edu-school">Lehigh University</div>
+          <div class="edu-details">
+            B.A. Cognitive Science · Computer Science Minor · May 2026
+          </div>
+          <div class="edu-extra">
+            Senior Thesis: Tennis analytics using AI
+          </div>
+        </div>
+      </section>
+      
+      <section>
+        <h2>What I'm Looking For</h2>
+        <p>
+          Roles where I can build technology that helps people — not extracts from them. Interested in <strong>solutions engineering</strong>, <strong>developer relations</strong>, <strong>healthcare tech</strong>, and <strong>education technology</strong>.
         </p>
+        <p>
+          I care about: mission-driven work, learning from great engineers, sustainable pace, and building things I'd be proud of in 10 years.
+        </p>
+      </section>
+      
+      <div class="contact">
+        <p>Available May 2026 · East Coast preferred · Open to remote</p>
+        <a href="mailto:wja326@lehigh.edu">Get in touch →</a>
       </div>
-      <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary">
-        Get one on Amazon →
+      
+      <footer>
+        Built with intention · Updated December 2025
+      </footer>
+      
+    </div>
+  </div>
+  
+  <!-- =========================================
+       BOTTOM CTA
+       ========================================= -->
+  <div class="bottom-cta">
+    <div class="bottom-cta-inner">
+      <h3>Want to see what I build?</h3>
+      <p>CRUMB teaches you to program a real computer. 15 minutes of your time, $12 in hardware, no experience needed.</p>
+      <a href="tutorial.html" class="crumb-cta">
+        <span>Try Genesis Zero</span>
+        <span class="crumb-cta-arrow">→</span>
       </a>
-      <p class="hint">Order it, bookmark this page, come back when it arrives</p>
-      <button class="btn btn-ghost" onclick="go('landing')">← Back</button>
     </div>
   </div>
   
-  <!-- ===============================================================
-       REQUIREMENTS
-       =============================================================== -->
-  <div class="screen" id="requirements">
-    <div class="content">
-      <h2 class="title">Quick Check</h2>
-      <p class="subtitle">Tap each item when ready</p>
-      <ul class="checklist">
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Using a computer (not phone)</span>
-        </li>
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Chrome or Edge browser</span>
-        </li>
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">ESP32 plugged in via USB</span>
-        </li>
-      </ul>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="go('flash')">I'm ready →</button>
-        <button class="btn btn-ghost" onclick="go('landing')">← Back</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       FLASH
-       =============================================================== -->
-  <div class="screen" id="flash">
-    <div class="content">
-      <h2 class="title">Let's do this.</h2>
-      
-      <div class="preview">
-        <div class="orb small"></div>
-        <div class="preview-text">
-          <strong>When it works:</strong>
-          <span>The LED on your board will breathe like this</span>
-        </div>
-      </div>
-      
-      <div class="steps">
-        <div class="step">
-          <span class="step-num">1</span>
-          <div class="step-text">
-            <h4>Click the button below</h4>
-            <p>A popup asks to connect to a device</p>
-          </div>
-        </div>
-        <div class="step">
-          <span class="step-num">2</span>
-          <div class="step-text">
-            <h4>Select your ESP32</h4>
-            <p>Look for "USB Serial" or "CP210x"</p>
-          </div>
-        </div>
-        <div class="step">
-          <span class="step-num">3</span>
-          <div class="step-text">
-            <h4>Wait ~30 seconds</h4>
-            <p>Watch the progress bar</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="progress" id="progress">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="progress-status">
-          <span class="pct" id="progressPct">0%</span>
-          <span id="progressMsg">Preparing...</span>
-        </div>
-      </div>
-      
-      <esp-web-install-button manifest="./manifest.json" id="installBtn">
-        <button slot="activate" class="btn-flash">Send Program to ESP32</button>
-      </esp-web-install-button>
-      
-      <div class="btn-row" style="margin-top: 0.5rem;">
-        <button class="btn btn-success" onclick="go('success')">✓ LED is breathing!</button>
-        <button class="btn btn-ghost" onclick="go('trouble')">Help</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       SUCCESS
-       =============================================================== -->
-  <div class="screen" id="success">
-    <div class="content">
-      <div class="orb alive"></div>
-      <div class="badge"><span>✓</span> COMPLETE</div>
-      <h2 class="title" style="color: var(--alive);">You did it.</h2>
-      <p class="subtitle">That light in your hand is your code running. No internet needed. It's yours.</p>
-      
-      <div class="learned">
-        <h4>WHAT YOU PROVED</h4>
-        <ul>
-          <li>Programming is just instructions</li>
-          <li>You can make computers do what you want</li>
-          <li>You're more capable than you thought</li>
-        </ul>
-      </div>
-      
-      <div class="path">
-        <h4>WHAT'S NEXT</h4>
-        <div class="path-steps">
-          <div class="path-step">
-            <div class="path-num done">0</div>
-            <div class="path-label">Done</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num next">1</div>
-            <div class="path-label">LED</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num">2</div>
-            <div class="path-label">Sensors</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num">∞</div>
-            <div class="path-label">Anything</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="btn-row">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
-        <button class="btn btn-primary" onclick="go('tutorials')">Keep learning →</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       TUTORIALS
-       =============================================================== -->
-  <div class="screen" id="tutorials">
-    <div class="content">
-      <h2 class="title">Keep Going</h2>
-      <p class="subtitle">Learn why it works — then build whatever you imagine.</p>
-      
-      <div class="tutorials">
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial done">
-          <span class="tutorial-num">0</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Your First Program</div>
-            <div class="tutorial-meta">✓ Complete</div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-          <span class="tutorial-num">1</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Wire Your First Circuit</div>
-            <div class="tutorial-meta">~15 min · LED + resistor</div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-          <span class="tutorial-num">2</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Read the World</div>
-            <div class="tutorial-meta">~30 min · Temperature sensor</div>
-          </div>
-        </a>
-        <div class="tutorial locked">
-          <span class="tutorial-num">∞</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Build What Matters</div>
-            <div class="tutorial-meta">Coming soon</div>
-          </div>
-        </div>
-      </div>
-      
-      <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">
-        Watch on YouTube →
-      </a>
-      <button class="btn btn-ghost" onclick="go('landing')">← Home</button>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       TROUBLESHOOTING
-       =============================================================== -->
-  <div class="screen" id="trouble">
-    <div class="content">
-      <h2 class="title">Let's Fix It</h2>
-      
-      <div class="trouble">
-        <div class="trouble-item">
-          <strong>No device found</strong>
-          <p>Try a different USB cable — most only charge, can't transfer data.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>Flash fails</strong>
-          <p>Try a different USB port. Unplug, wait 5 sec, replug.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>LED doesn't breathe</strong>
-          <p>Unplug and replug the ESP32. Try flashing again.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>Still stuck?</strong>
-          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — I want to help.</p>
-        </div>
-      </div>
-      
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="go('flash')">← Try again</button>
-        <button class="btn btn-ghost" onclick="go('landing')">Home</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       ABOUT
-       =============================================================== -->
-  <div class="screen" id="about">
-    <div class="content">
-      <h2 class="title">What Is This?</h2>
-      
-      <div class="about-text">
-        <h3>The Idea</h3>
-        <p>CRUMB teaches electronics by doing. Genesis Zero proves you can program a computer in 15 minutes. The barriers were never real.</p>
-        
-        <h3>The Philosophy</h3>
-        <p>Do, then understand. No gatekeeping — all code is public. Yours forever — no subscriptions, no accounts.</p>
-        
-        <h3>Open Source</h3>
-        <p>GPL-3.0. Use it, modify it, share it, build on it.</p>
-      </div>
-      
-      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="go('landing')">← Home</button>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       JAVASCRIPT
-       =============================================================== -->
-  <script>
-    let current = 'landing';
-    const history = ['landing'];
-    const hint = document.getElementById('navHint');
-    
-    function go(id) {
-      if (id === current) return;
-      document.getElementById(current).classList.remove('active');
-      document.getElementById(id).classList.add('active');
-      
-      if (id === 'landing') {
-        history.length = 1;
-      } else {
-        history.push(id);
-      }
-      
-      current = id;
-      hint.style.opacity = (id !== 'landing' && id !== 'success') ? '1' : '0';
-      
-      if (id === 'success') setTimeout(confetti, 200);
-    }
-    
-    function back() {
-      if (history.length > 1) {
-        history.pop();
-        go(history[history.length - 1]);
-      }
-    }
-    
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') back();
-    });
-    
-    function check(li) {
-      li.classList.toggle('checked');
-      li.querySelector('.check-box').textContent = li.classList.contains('checked') ? '✓' : '';
-    }
-    
-    // Flash progress
-    const installBtn = document.getElementById('installBtn');
-    const progress = document.getElementById('progress');
-    const progressFill = document.getElementById('progressFill');
-    const progressPct = document.getElementById('progressPct');
-    const progressMsg = document.getElementById('progressMsg');
-    
-    function simulate() {
-      progress.classList.add('active');
-      let pct = 0;
-      const msgs = [
-        [10, 'Connecting...'],
-        [30, 'Preparing...'],
-        [50, 'Writing...'],
-        [80, 'Almost done...'],
-        [100, 'Check your LED!']
-      ];
-      let i = 0;
-      
-      const iv = setInterval(() => {
-        pct += 2;
-        progressFill.style.width = pct + '%';
-        progressPct.textContent = pct + '%';
-        if (i < msgs.length && pct >= msgs[i][0]) {
-          progressMsg.textContent = msgs[i][1];
-          i++;
-        }
-        if (pct >= 100) {
-          clearInterval(iv);
-          setTimeout(() => {
-            progress.classList.remove('active');
-            progressFill.style.width = '0%';
-            progressPct.textContent = '0%';
-            progressMsg.textContent = 'Preparing...';
-          }, 3000);
-        }
-      }, 120);
-    }
-    
-    installBtn.addEventListener('state-changed', e => {
-      if (e.detail === 'installing') simulate();
-    });
-    
-    function confetti() {
-      const colors = ['#e8a87c', '#8fbc8f', '#e8e4df'];
-      for (let i = 0; i < 40; i++) {
-        setTimeout(() => {
-          const el = document.createElement('div');
-          el.className = 'confetti';
-          el.style.left = Math.random() * 100 + '%';
-          el.style.top = '-8px';
-          el.style.background = colors[Math.floor(Math.random() * colors.length)];
-          el.style.transform = `rotate(${Math.random() * 360}deg)`;
-          document.body.appendChild(el);
-          setTimeout(() => el.remove(), 2500);
-        }, i * 20);
-      }
-    }
-  </script>
-
 </body>
 </html>
