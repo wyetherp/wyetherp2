@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<!--
+  CRUMB Genesis Zero - The Threshold
+  
+  Built for people who've never programmed before.
+  Every word chosen to welcome, not gatekeep.
+  
+  License: GPL-3.0
+  Author: Wyeth Anzilotti
+  Year: 2025
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CRUMB — Your First Program</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  
+  <style>
+    :root {
+      --void: #050505;
+      --surface: #0a0a0a;
+      --elevated: #111111;
+      
+      --ember: #e8a87c;
+      --ember-bright: #f4c4a0;
+      --ember-glow: rgba(232, 168, 124, 0.4);
+      --ember-whisper: rgba(232, 168, 124, 0.08);
+      
+      --alive: #8fbc8f;
+      --alive-glow: rgba(143, 188, 143, 0.4);
+      --alive-whisper: rgba(143, 188, 143, 0.08);
+      
+      --text: #e8e4df;
+      --text-dim: rgba(232, 228, 223, 0.55);
+      --text-ghost: rgba(232, 228, 223, 0.3);
+      
+      --caution: #d4a574;
+      
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+      
+      --breath-duration: 8s;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Atmosphere */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .atmosphere::before {
+      content: '';
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      width: 600px;
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--ember-whisper) 0%, transparent 70%);
+      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
+    }
+    
+    .atmosphere::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      mix-blend-mode: overlay;
+    }
+    
+    @keyframes atmosphere-pulse {
+      0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+    
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+    
+    .logo:hover { opacity: 0.7; }
+    
+    .logo-mark {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ember);
+      animation: mark-breathe var(--breath-duration) ease-in-out infinite;
+    }
+    
+    @keyframes mark-breathe {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); box-shadow: 0 0 12px var(--ember-glow); }
+    }
+    
+    .logo-text {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .header-link {
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color var(--transition);
+    }
+    
+    .header-link:hover { color: var(--ember); }
+    
+    /* Nav hint */
+    .nav-hint {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.1em;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    
+    .nav-hint.visible { opacity: 1; }
+    
+    .nav-hint kbd {
+      background: var(--elevated);
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin: 0 0.25rem;
+    }
+    
+    /* Sections */
+    section {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 1;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+      overflow-y: auto;
+    }
+    
+    section.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .container {
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    /* The Orb */
+    .orb-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    
+    .orb {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--ember);
+      position: relative;
+      animation: orb-breathe var(--breath-duration) ease-in-out infinite;
+      cursor: default;
+      transition: transform 0.3s ease;
+    }
+    
+    .orb:hover {
+      animation-play-state: paused;
+      transform: scale(1.05);
+    }
+    
+    .orb::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--ember-glow), transparent 70%);
+      animation: orb-glow var(--breath-duration) ease-in-out infinite;
+      z-index: -1;
+    }
+    
+    .orb::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 25%;
+      height: 25%;
+      border-radius: 50%;
+      background: var(--ember-bright);
+      opacity: 0.6;
+      filter: blur(8px);
+    }
+    
+    @keyframes orb-breathe {
+      0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.92);
+        box-shadow: 0 0 20px rgba(232, 168, 124, 0.1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 60px var(--ember-glow), 0 0 120px rgba(232, 168, 124, 0.15);
+      }
+    }
+    
+    @keyframes orb-glow {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+    
+    .orb.alive {
+      background: var(--alive);
+      animation-name: orb-alive;
+    }
+    
+    .orb.alive::before {
+      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+    }
+    
+    @keyframes orb-alive {
+      0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.95);
+        box-shadow: 0 0 20px rgba(143, 188, 143, 0.1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 60px var(--alive-glow), 0 0 120px rgba(143, 188, 143, 0.15);
+      }
+    }
+    
+    .orb.small {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .orb.small::before {
+      inset: -12px;
+    }
+    
+    /* Typography */
+    .kicker {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+    
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    
+    .title {
+      font-size: clamp(1.6rem, 5vw, 2.25rem);
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    
+    .title em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      max-width: 380px;
+      line-height: 1.75;
+    }
+    
+    .subtitle strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* Explanation callout - for helping beginners understand */
+    .explainer {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-left: 2px solid var(--ember);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      text-align: left;
+      width: 100%;
+    }
+    
+    .explainer p {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    
+    .explainer p + p {
+      margin-top: 0.75rem;
+    }
+    
+    .explainer strong {
+      color: var(--ember);
+      font-weight: 500;
+    }
+    
+    /* Reassurance box - calms anxiety */
+    .reassurance {
+      background: var(--alive-whisper);
+      border: 1px solid rgba(143, 188, 143, 0.15);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      text-align: left;
+      width: 100%;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    
+    .reassurance-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    
+    .reassurance p {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    .reassurance strong {
+      color: var(--alive);
+      font-weight: 500;
+    }
+    
+    /* Promise grid */
+    .promise {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.04);
+      margin: 1.5rem 0;
+      width: 100%;
+      max-width: 380px;
+    }
+    
+    .promise-item {
+      background: var(--surface);
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .promise-value {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--ember);
+      margin-bottom: 0.2rem;
+    }
+    
+    .promise-label {
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.03em;
+    }
+    
+    /* Threshold prompt */
+    .threshold {
+      margin-top: 1.25rem;
+      width: 100%;
+      max-width: 340px;
+    }
+    
+    .threshold-question {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .btn-group.horizontal {
+      flex-direction: row;
+      justify-content: center;
+    }
+    
+    /* Buttons */
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--ember);
+      color: var(--void);
+    }
+    
+    .btn-primary:hover {
+      background: var(--ember-bright);
+      box-shadow: 0 8px 32px var(--ember-glow);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--ember);
+      color: var(--ember);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 0.75rem 1rem;
+    }
+    
+    .btn-ghost:hover {
+      color: var(--text);
+    }
+    
+    .btn-success {
+      background: var(--alive);
+      color: var(--void);
+      animation: pulse-glow 2.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(143, 188, 143, 0.15); }
+      50% { box-shadow: 0 0 35px var(--alive-glow); }
+    }
+    
+    .hint {
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.25rem;
+      width: 100%;
+      text-align: left;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.75rem;
+    }
+    
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--ember);
+    }
+    
+    .card-meta {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+    
+    .card-body {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    
+    .card-action {
+      margin-top: 1rem;
+    }
+    
+    /* Checklist - gamified requirements */
+    .checklist {
+      list-style: none;
+      width: 100%;
+      margin: 1.25rem 0;
+    }
+    
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--surface);
+      margin-bottom: 0.5rem;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    
+    .checklist li:hover {
+      background: var(--elevated);
+    }
+    
+    .checklist li.checked {
+      background: var(--alive-whisper);
+    }
+    
+    .check-box {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--text-ghost);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--transition);
+      font-size: 0.8rem;
+    }
+    
+    .checklist li.checked .check-box {
+      background: var(--alive);
+      border-color: var(--alive);
+      color: var(--void);
+    }
+    
+    .check-content {
+      flex: 1;
+    }
+    
+    .check-content h4 {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    
+    .check-content p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    
+    .check-content .why {
+      font-size: 0.7rem;
+      color: var(--text-ghost);
+      margin-top: 0.35rem;
+      font-style: italic;
+    }
+    
+    /* Flash steps */
+    .flash-container {
+      width: 100%;
+      margin: 1.25rem 0;
+    }
+    
+    .flash-step {
+      display: flex;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      align-items: flex-start;
+    }
+    
+    .flash-step:last-child { border-bottom: none; }
+    
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--ember);
+      min-width: 1.5rem;
+      line-height: 1;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-content h4 {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    
+    .step-content p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    
+    /* What to expect preview */
+    .preview-box {
+      background: var(--ember-whisper);
+      border: 1px solid rgba(232, 168, 124, 0.15);
+      padding: 1rem;
+      margin: 1rem 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .preview-box .orb {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .preview-box .orb::before {
+      inset: -8px;
+    }
+    
+    .preview-text {
+      text-align: left;
+    }
+    
+    .preview-text strong {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--ember);
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+    
+    .preview-text span {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    
+    /* Progress */
+    .progress-container {
+      width: 100%;
+      margin: 1rem 0;
+      display: none;
+    }
+    
+    .progress-container.active { display: block; }
+    
+    .progress-bar-bg {
+      height: 3px;
+      background: var(--elevated);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--ember);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--ember-glow);
+    }
+    
+    .progress-status {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+    
+    .progress-percent { color: var(--ember); font-weight: 500; }
+    
+    /* ESP button */
+    esp-web-install-button {
+      display: block;
+      width: 100%;
+      margin: 0.75rem 0;
+    }
+    
+    esp-web-install-button button,
+    .btn-flash {
+      width: 100%;
+      background: var(--ember);
+      color: var(--void);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    
+    esp-web-install-button button:hover,
+    .btn-flash:hover {
+      box-shadow: 0 8px 32px var(--ember-glow);
+    }
+    
+    /* Success elements */
+    .success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(143, 188, 143, 0.1);
+      border: 1px solid rgba(143, 188, 143, 0.2);
+      padding: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.7rem;
+      color: var(--alive);
+      letter-spacing: 0.1em;
+    }
+    
+    .celebration {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    
+    .learned {
+      background: rgba(143, 188, 143, 0.05);
+      border: 1px solid rgba(143, 188, 143, 0.1);
+      padding: 1.25rem;
+      width: 100%;
+      text-align: left;
+      margin: 1rem 0;
+    }
+    
+    .learned h4 {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--alive);
+      margin-bottom: 0.75rem;
+    }
+    
+    .learned ul {
+      list-style: none;
+    }
+    
+    .learned li {
+      position: relative;
+      padding-left: 1.25rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+    
+    .learned li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--alive);
+    }
+    
+    /* Path */
+    .path-ahead {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.25rem;
+      width: 100%;
+      margin: 1rem 0;
+    }
+    
+    .path-ahead h4 {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--ember);
+      margin-bottom: 1rem;
+    }
+    
+    .path-steps {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .path-step {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .path-num {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--text-ghost);
+    }
+    
+    .path-num.done { color: var(--alive); }
+    .path-num.next { color: var(--ember); }
+    
+    .path-label {
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      margin-top: 0.25rem;
+    }
+    
+    .success-links {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    /* Tutorials */
+    .tutorials-intro {
+      text-align: left;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    
+    .tutorials-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      margin: 1rem 0;
+      max-height: 45vh;
+      overflow-y: auto;
+    }
+    
+    .tutorial-card {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    
+    .tutorial-card:hover {
+      border-color: var(--ember);
+      transform: translateX(4px);
+    }
+    
+    .tutorial-num {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--ember);
+      min-width: 1.75rem;
+      line-height: 1;
+    }
+    
+    .tutorial-content {
+      flex: 1;
+      text-align: left;
+    }
+    
+    .tutorial-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    
+    .tutorial-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    
+    .tutorial-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.4rem;
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+    }
+    
+    .tutorial-card.current {
+      border-color: var(--alive);
+      background: rgba(143, 188, 143, 0.03);
+    }
+    
+    .tutorial-card.current .tutorial-num { color: var(--alive); }
+    
+    .tutorial-card.locked {
+      opacity: 0.4;
+    }
+    
+    .tutorial-card.locked:hover {
+      transform: none;
+      border-color: rgba(255,255,255,0.04);
+    }
+    
+    /* Troubleshooting */
+    .trouble-intro {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    
+    .trouble-list {
+      list-style: none;
+      width: 100%;
+      text-align: left;
+      margin: 1rem 0;
+      max-height: 45vh;
+      overflow-y: auto;
+    }
+    
+    .trouble-list li {
+      padding: 1rem;
+      background: var(--surface);
+      border-left: 2px solid rgba(212, 165, 116, 0.3);
+      margin-bottom: 0.5rem;
+    }
+    
+    .trouble-list strong {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--caution);
+      margin-bottom: 0.35rem;
+    }
+    
+    .trouble-list p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    .trouble-list a { color: var(--ember); }
+    
+    /* About */
+    .about-content {
+      text-align: left;
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    
+    .about-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ember);
+      margin: 1.5rem 0 0.5rem;
+    }
+    
+    .about-content h3:first-of-type { margin-top: 0; }
+    
+    .about-content p {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      line-height: 1.75;
+    }
+    
+    .philosophy-list {
+      list-style: none;
+      margin: 1rem 0;
+    }
+    
+    .philosophy-list li {
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-left: 2px solid var(--ember-whisper);
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    .philosophy-list strong { color: var(--ember); }
+    
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      z-index: 50;
+    }
+    
+    footer a {
+      color: var(--text-ghost);
+      text-decoration: none;
+      margin: 0 0.4rem;
+      transition: color var(--transition);
+    }
+    
+    footer a:hover { color: var(--ember); }
+    
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      animation: confetti-fall 3s ease-out forwards;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive */
+    @media (max-height: 750px) {
+      .orb { width: 70px; height: 70px; }
+      .promise { margin: 1rem 0; }
+      .explainer { margin: 1rem 0; }
+    }
+    
+    @media (max-height: 650px) {
+      .kicker { display: none; }
+      .orb { width: 60px; height: 60px; margin-bottom: 1rem; }
+      .promise { display: none; }
+      .explainer { display: none; }
+    }
+    
+    @media (max-width: 420px) {
+      .success-links { flex-direction: column; width: 100%; }
+      .success-links .btn { width: 100%; }
+      .header-nav { gap: 1rem; }
+      .btn-group.horizontal { flex-direction: column; }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--ember-whisper); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ember); }
+  </style>
+</head>
+<body>
+  
+  <div class="atmosphere"></div>
+  
+  <header>
+    <div class="logo" onclick="navigate('landing')">
+      <div class="logo-mark"></div>
+      <span class="logo-text">CRUMB</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#" class="header-link" onclick="navigate('tutorials'); return false;">Learn</a>
+      <a href="#" class="header-link" onclick="navigate('about'); return false;">About</a>
+    </nav>
+  </header>
+  
+  <div class="nav-hint" id="navHint">
+    Press <kbd>ESC</kbd> to go back
+  </div>
+  
+  <footer>
+    <span>GPL-3.0</span>
+    <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub</a>
+    <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">YouTube</a>
+  </footer>
+  
+  <!-- ===============================================================
+       LANDING
+       =============================================================== -->
+  <section id="landing" class="active">
+    <div class="container">
+      
+      <div class="kicker">Your First Program</div>
+      
+      <div class="orb-container">
+        <div class="orb"></div>
+      </div>
+      
+      <h1 class="title">This light is <em>code</em>.</h1>
+      
+      <p class="subtitle">
+        Watch it breathe. That rhythm? It's a program running right now, in your browser. <strong>Real code, doing real work.</strong>
+      </p>
+      
+      <div class="explainer">
+        <p>
+          In about fifteen minutes, you can make this same light breathe <strong>on a tiny computer you hold in your hand</strong> — no coding experience needed.
+        </p>
+        <p>
+          That's what programming actually is: telling a computer what to do, step by step. Nothing magical. Just instructions.
+        </p>
+      </div>
+      
+      <div class="promise">
+        <div class="promise-item">
+          <div class="promise-value">15</div>
+          <div class="promise-label">minutes</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">$12</div>
+          <div class="promise-label">one-time cost</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">Zero</div>
+          <div class="promise-label">experience needed</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-value">Yours</div>
+          <div class="promise-label">forever to keep</div>
+        </div>
+      </div>
+      
+      <div class="threshold">
+        <p class="threshold-question">Ready to try?</p>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="navigate('requirements')">
+            I have the hardware
+          </button>
+          <button class="btn btn-secondary" onclick="navigate('hardware')">
+            What do I need?
+          </button>
+        </div>
+        <p class="hint">Most people need to order a small computer first.<br>Takes 2-3 days to arrive — totally normal!</p>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       HARDWARE
+       =============================================================== -->
+  <section id="hardware">
+    <div class="container">
+      
+      <h2 class="title">What You'll Need</h2>
+      <p class="subtitle">Just one thing: a tiny computer called an ESP32.</p>
+      
+      <div class="explainer">
+        <p>
+          An <strong>ESP32</strong> is a small computer about the size of your thumb. It has WiFi, Bluetooth, and can run programs you write. Professional engineers use these to prototype real products.
+        </p>
+        <p>
+          You'll also need a USB cable to connect it to your computer — but most ESP32 kits include one.
+        </p>
+      </div>
+      
+      <div class="card" style="margin: 1rem 0;">
+        <div class="card-header">
+          <span class="card-title">ESP32 Dev Board</span>
+          <span class="card-meta">~$12</span>
+        </div>
+        <p class="card-body">
+          This is yours to keep forever. You can reprogram it as many times as you want, use it for future projects, or just keep it as a reminder of what you built.
+        </p>
+        <div class="card-action">
+          <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary" style="width: 100%;">
+            Get one on Amazon →
+          </a>
+        </div>
+      </div>
+      
+      <div class="reassurance">
+        <span class="reassurance-icon">📦</span>
+        <p>
+          <strong>Order it, then come back.</strong> Bookmark this page. When your ESP32 arrives (usually 2-3 days), we'll pick up right where you left off.
+        </p>
+      </div>
+      
+      <button class="btn btn-ghost" onclick="navigate('landing')">← Back to start</button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       REQUIREMENTS
+       =============================================================== -->
+  <section id="requirements">
+    <div class="container">
+      
+      <h2 class="title">Quick Checklist</h2>
+      <p class="subtitle">Let's make sure everything's ready. Tap each item when it's done.</p>
+      
+      <ul class="checklist" id="checklist">
+        <li onclick="toggleCheck(this)" data-item="computer">
+          <div class="check-box"></div>
+          <div class="check-content">
+            <h4>Using a computer (not a phone)</h4>
+            <p>Desktop or laptop — either works great</p>
+            <p class="why">Why? Your phone can't talk directly to hardware yet</p>
+          </div>
+        </li>
+        <li onclick="toggleCheck(this)" data-item="browser">
+          <div class="check-box"></div>
+          <div class="check-content">
+            <h4>Chrome or Edge browser</h4>
+            <p>Other browsers don't support this yet</p>
+            <p class="why">Why? They haven't added the "Web Serial" feature we need</p>
+          </div>
+        </li>
+        <li onclick="toggleCheck(this)" data-item="plugged">
+          <div class="check-box"></div>
+          <div class="check-content">
+            <h4>ESP32 plugged in via USB</h4>
+            <p>Connect it to your computer now</p>
+            <p class="why">Why? We'll send your program through this cable</p>
+          </div>
+        </li>
+      </ul>
+      
+      <div class="reassurance">
+        <span class="reassurance-icon">💡</span>
+        <p>
+          <strong>Nervous? That's normal.</strong> You can't break anything here. If something doesn't work, we'll figure it out together.
+        </p>
+      </div>
+      
+      <div class="btn-group horizontal">
+        <button class="btn btn-primary" onclick="navigate('flash')" id="readyBtn">
+          I'm ready →
+        </button>
+        <button class="btn btn-ghost" onclick="navigate('landing')">← Back</button>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       FLASH
+       =============================================================== -->
+  <section id="flash">
+    <div class="container">
+      
+      <h2 class="title">Let's do this.</h2>
+      <p class="subtitle">
+        You're about to send a program to your ESP32. This is called "flashing" — it just means copying code onto the chip.
+      </p>
+      
+      <!-- Show what success looks like -->
+      <div class="preview-box">
+        <div class="orb small"></div>
+        <div class="preview-text">
+          <strong>When it works:</strong>
+          <span>The blue LED on your ESP32 will start breathing like this</span>
+        </div>
+      </div>
+      
+      <div class="card" style="margin: 1rem 0; padding: 1rem 1.25rem;">
+        <div class="flash-container">
+          <div class="flash-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <h4>Click the button below</h4>
+              <p>A popup will appear asking to connect to a device</p>
+            </div>
+          </div>
+          <div class="flash-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <h4>Select your ESP32</h4>
+              <p>Look for "USB Serial" or "CP210x" — that's your chip</p>
+            </div>
+          </div>
+          <div class="flash-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <h4>Wait about 30 seconds</h4>
+              <p>The progress bar shows what's happening</p>
+            </div>
+          </div>
+          <div class="flash-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <h4>Watch the LED on your board</h4>
+              <p>When it starts breathing, you did it!</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-status">
+            <span class="progress-percent" id="progressPercent">0%</span>
+            <span id="progressStatus">Preparing...</span>
+          </div>
+        </div>
+        
+        <esp-web-install-button manifest="./manifest.json" id="installBtn">
+          <button slot="activate" class="btn-flash">Send Program to ESP32</button>
+        </esp-web-install-button>
+      </div>
+      
+      <button class="btn btn-success" onclick="navigate('success')">
+        ✓ My LED is breathing!
+      </button>
+      <p class="hint">Only press this when you see the light pulsing</p>
+      
+      <button class="btn btn-ghost" style="margin-top: 0.5rem;" onclick="navigate('troubleshooting')">
+        Something's not working
+      </button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       SUCCESS
+       =============================================================== -->
+  <section id="success">
+    <div class="container">
+      
+      <div class="orb-container">
+        <div class="orb alive"></div>
+      </div>
+      
+      <div class="success-badge">
+        <span>✓</span>
+        <span>COMPLETE</span>
+      </div>
+      
+      <h2 class="title" style="color: var(--alive);">You just programmed a computer.</h2>
+      
+      <p class="celebration">
+        That light breathing in your hand? That's your code running. No internet needed. No computer needed. It's yours.
+      </p>
+      
+      <div class="learned">
+        <h4>WHAT YOU JUST PROVED TO YOURSELF</h4>
+        <ul>
+          <li>Programming isn't magic — it's just instructions</li>
+          <li>You can make computers do what you want</li>
+          <li>The "hard" part was actually pretty quick</li>
+          <li>You're more capable than you thought</li>
+        </ul>
+      </div>
+      
+      <div class="path-ahead">
+        <h4>WHAT'S NEXT (WHEN YOU'RE READY)</h4>
+        <div class="path-steps">
+          <div class="path-step">
+            <div class="path-num done">0</div>
+            <div class="path-label">Today</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num next">1</div>
+            <div class="path-label">Add a light</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">2</div>
+            <div class="path-label">Add sensors</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">∞</div>
+            <div class="path-label">Anything</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="success-links">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">
+          See the code
+        </a>
+        <button class="btn btn-primary" onclick="navigate('tutorials')">
+          Keep learning →
+        </button>
+      </div>
+      
+      <button class="btn btn-ghost" style="margin-top: 0.5rem;" onclick="navigate('landing')">
+        Start over
+      </button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       TUTORIALS
+       =============================================================== -->
+  <section id="tutorials">
+    <div class="container">
+      
+      <h2 class="title">Keep Going</h2>
+      
+      <p class="tutorials-intro">
+        Genesis Zero was about proving you could do it. These tutorials teach you <em>why</em> it works — and how to build whatever you imagine.
+      </p>
+      
+      <div class="tutorials-grid">
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card current">
+          <span class="tutorial-num">0</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis Zero — Your First Program</div>
+            <p class="tutorial-desc">You just did this! The onboard LED breathes.</p>
+            <div class="tutorial-meta">
+              <span>✓ Complete</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card">
+          <span class="tutorial-num">1</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis One — Wire Your First Circuit</div>
+            <p class="tutorial-desc">Connect an external LED and learn how electricity flows through your board.</p>
+            <div class="tutorial-meta">
+              <span>~15 min</span>
+              <span>Need: LED, resistor (~$2)</span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial-card">
+          <span class="tutorial-num">2</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis Two — Read the World</div>
+            <p class="tutorial-desc">Add a sensor that measures temperature. Your first Input → Process → Output.</p>
+            <div class="tutorial-meta">
+              <span>~30 min</span>
+              <span>Need: Temperature sensor (~$5)</span>
+            </div>
+          </div>
+        </a>
+        
+        <div class="tutorial-card locked">
+          <span class="tutorial-num">∞</span>
+          <div class="tutorial-content">
+            <div class="tutorial-title">Genesis ∞ — Build What Matters</div>
+            <p class="tutorial-desc">Weather stations, plant monitors, custom gadgets. Once you understand the pattern, you can build anything.</p>
+            <div class="tutorial-meta">
+              <span>Coming soon</span>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary" style="width: 100%;">
+        Watch tutorials on YouTube →
+      </a>
+      
+      <button class="btn btn-ghost" onclick="navigate('landing')">← Back home</button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       TROUBLESHOOTING
+       =============================================================== -->
+  <section id="troubleshooting">
+    <div class="container">
+      
+      <h2 class="title">Let's Fix It</h2>
+      
+      <p class="trouble-intro">
+        Something not working? That's completely normal — even professionals run into these issues. Let's figure it out together.
+      </p>
+      
+      <ul class="trouble-list">
+        <li>
+          <strong>"No device found" or nothing appears</strong>
+          <p>The most common issue! Try a different USB cable. Most cables only charge and can't transfer data. Look for one that came with a phone or hard drive.</p>
+        </li>
+        <li>
+          <strong>The flash starts but fails partway</strong>
+          <p>Try a different USB port on your computer. Sometimes ports are flaky. Also: unplug the ESP32, wait 5 seconds, and plug it back in.</p>
+        </li>
+        <li>
+          <strong>Flash completes but LED doesn't breathe</strong>
+          <p>Unplug the ESP32 and plug it back in. It needs a fresh start to run the new program. Still nothing? Try flashing again.</p>
+        </li>
+        <li>
+          <strong>Mac: Can't find the serial port</strong>
+          <p>You might need a driver. Search "CH340 driver Mac" and install it. Then restart your browser.</p>
+        </li>
+        <li>
+          <strong>Windows: Driver problems</strong>
+          <p>Get the CP210x driver from <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">Silicon Labs</a>. Install, restart browser, try again.</p>
+        </li>
+        <li>
+          <strong>Still stuck?</strong>
+          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — seriously, I want to help. Include what you tried and what happened.</p>
+        </li>
+      </ul>
+      
+      <div class="btn-group horizontal">
+        <button class="btn btn-primary" onclick="navigate('flash')">← Try again</button>
+        <button class="btn btn-ghost" onclick="navigate('landing')">Start over</button>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       ABOUT
+       =============================================================== -->
+  <section id="about">
+    <div class="container">
+      
+      <h2 class="title">What Is This?</h2>
+      
+      <div class="about-content">
+        
+        <h3>The Short Version</h3>
+        <p>
+          CRUMB is a free, open-source project that teaches electronics by doing, not watching. Genesis Zero is the first step: prove to yourself that you can program a computer.
+        </p>
+        
+        <h3>Why I Built This</h3>
+        <p>
+          I watched my brother struggle with technology that wasn't designed for how his brain works. I realized the problem isn't people — it's that we've made technology harder to understand than it needs to be.
+        </p>
+        <p>
+          Every computer — your phone, your car, the chip in your hand — works the same way: Input → Process → Output. Once you see that pattern, the mystery disappears.
+        </p>
+        
+        <h3>The Philosophy</h3>
+        <ul class="philosophy-list">
+          <li><strong>Do, then understand.</strong> You learn to ride a bike by riding, not by studying physics. Same with programming.</li>
+          <li><strong>No gatekeeping.</strong> All the code is public. Every line is explained. Ask any question.</li>
+          <li><strong>Yours forever.</strong> The hardware is yours. The knowledge is yours. No subscriptions, no accounts.</li>
+        </ul>
+        
+        <h3>Open Source</h3>
+        <p>
+          Everything here is GPL-3.0 licensed. That means you can use it, modify it, share it, build on it. The only rule: keep it open for others too.
+        </p>
+        
+      </div>
+      
+      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="navigate('landing')">
+        ← Back home
+      </button>
+      
+    </div>
+  </section>
+  
+  <!-- ===============================================================
+       JAVASCRIPT
+       =============================================================== -->
+  <script>
+    // State
+    let currentSection = 'landing';
+    const navHint = document.getElementById('navHint');
+    const history = ['landing'];
+    
+    // Navigation
+    function navigate(sectionId) {
+      if (sectionId === currentSection) return;
+      
+      document.getElementById(currentSection).classList.remove('active');
+      document.getElementById(sectionId).classList.add('active');
+      
+      if (sectionId !== 'landing') {
+        history.push(sectionId);
+      } else {
+        history.length = 1;
+      }
+      
+      currentSection = sectionId;
+      navHint.classList.toggle('visible', 
+        sectionId !== 'landing' && sectionId !== 'success'
+      );
+      
+      if (sectionId === 'success') {
+        setTimeout(createConfetti, 300);
+      }
+    }
+    
+    function goBack() {
+      if (history.length > 1) {
+        history.pop();
+        navigate(history[history.length - 1]);
+      }
+    }
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') goBack();
+    });
+    
+    // Checklist interaction
+    function toggleCheck(li) {
+      li.classList.toggle('checked');
+      const box = li.querySelector('.check-box');
+      box.textContent = li.classList.contains('checked') ? '✓' : '';
+    }
+    
+    // Flash progress simulation
+    const installBtn = document.getElementById('installBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressStatus = document.getElementById('progressStatus');
+    
+    function simulateProgress() {
+      progressContainer.classList.add('active');
+      
+      let progress = 0;
+      const stages = [
+        { at: 10, msg: 'Connecting to your ESP32...' },
+        { at: 25, msg: 'Preparing the chip...' },
+        { at: 40, msg: 'Sending your program...' },
+        { at: 70, msg: 'Still writing...' },
+        { at: 85, msg: 'Almost there...' },
+        { at: 100, msg: 'Done! Check your LED!' }
+      ];
+      
+      let stageIdx = 0;
+      
+      const interval = setInterval(() => {
+        progress += 2;
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = progress + '%';
+        
+        if (stageIdx < stages.length && progress >= stages[stageIdx].at) {
+          progressStatus.textContent = stages[stageIdx].msg;
+          stageIdx++;
+        }
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            progressContainer.classList.remove('active');
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+            progressStatus.textContent = 'Preparing...';
+          }, 4000);
+        }
+      }, 150);
+    }
+    
+    installBtn.addEventListener('state-changed', (e) => {
+      if (e.detail === 'installing') simulateProgress();
+    });
+    
+    // Confetti
+    function createConfetti() {
+      const colors = ['#e8a87c', '#8fbc8f', '#e8e4df', '#f4c4a0'];
+      
+      for (let i = 0; i < 60; i++) {
+        setTimeout(() => {
+          const piece = document.createElement('div');
+          piece.className = 'confetti';
+          piece.style.left = Math.random() * 100 + '%';
+          piece.style.top = '-10px';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(piece);
+          setTimeout(() => piece.remove(), 3000);
+        }, i * 25);
+      }
+    }
+    
+    // Orb interaction
+    document.querySelectorAll('.orb').forEach(orb => {
+      orb.addEventListener('mouseenter', () => {
+        orb.style.animationPlayState = 'paused';
+      });
+      orb.addEventListener('mouseleave', () => {
+        orb.style.animationPlayState = 'running';
+      });
+    });
+  </script>
+
+</body>
+</html>
