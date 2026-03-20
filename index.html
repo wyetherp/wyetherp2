@@ -1,81 +1,82 @@
 <!DOCTYPE html>
+<!--
+  CRUMB — Interactive Journey
+  
+  Navigate by clicking. Explore at your pace.
+  Every screen fits. No scrolling required.
+  
+  License: GPL-3.0
+  Author: Wyeth Anzilotti
+  Year: 2025
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wyeth Anzilotti — Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CRUMB — Learn Computers By Building One</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   
   <style>
     :root {
-      /* Warm paper + charcoal palette */
-      --bg: #f5f0e8;
-      --bg-warm: #ede6db;
-      --surface: #faf7f2;
-      --surface-dark: #1a1915;
-      --surface-darker: #0f0e0c;
-      
-      --text: #2c2a25;
-      --text-dim: #5c5850;
-      --text-ghost: #8a857a;
-      --text-light: #f0ebe3;
-      --text-light-dim: rgba(240, 235, 227, 0.6);
-      
-      --accent: #3d5a47;
-      --accent-light: #4a6b54;
-      --accent-dim: rgba(61, 90, 71, 0.1);
+      --void: #050505;
+      --surface: #0a0a0a;
+      --elevated: #111111;
       
       --ember: #e8a87c;
-      --ember-glow: rgba(232, 168, 124, 0.4);
       --ember-bright: #f4c4a0;
-      --ember-dim: rgba(232, 168, 124, 0.15);
+      --ember-glow: rgba(232, 168, 124, 0.4);
+      --ember-whisper: rgba(232, 168, 124, 0.08);
       
-      --border: #d9d2c7;
-      --border-dark: rgba(240, 235, 227, 0.1);
+      --alive: #8fbc8f;
+      --alive-glow: rgba(143, 188, 143, 0.4);
+      --alive-whisper: rgba(143, 188, 143, 0.08);
+      
+      --text: #e8e4df;
+      --text-dim: rgba(232, 228, 223, 0.6);
+      --text-ghost: rgba(232, 228, 223, 0.35);
+      
+      --caution: #d4a574;
       
       --font-display: 'Fraunces', Georgia, serif;
-      --font-mono: 'IBM Plex Mono', monospace;
+      --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+      
+      --breath-duration: 8s;
     }
     
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     
-    html {
-      scroll-behavior: smooth;
+    html, body {
+      height: 100%;
+      overflow: hidden;
     }
     
     body {
+      background: var(--void);
+      color: var(--text);
       font-family: var(--font-mono);
       font-size: 14px;
-      line-height: 1.7;
-      color: var(--text);
-      background: var(--bg);
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
     
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
+    /* Atmosphere */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
     }
     
-    /* =========================================
-       CRUMB CTA HERO - The Big Obvious Button
-       ========================================= */
-    .crumb-hero {
-      background: var(--surface-dark);
-      padding: 3.5rem 1.5rem 2.5rem;
-      position: relative;
-      overflow: hidden;
-      min-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    
-    .crumb-hero::before {
+    .atmosphere::before {
       content: '';
       position: absolute;
       top: 40%;
@@ -83,101 +84,64 @@
       width: 600px;
       height: 600px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(232, 168, 124, 0.1) 0%, transparent 70%);
-      pointer-events: none;
+      background: radial-gradient(circle, var(--ember-whisper) 0%, transparent 70%);
+      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
     }
     
-    /* Subtle noise texture */
-    .crumb-hero::after {
-      content: '';
-      position: absolute;
+    @keyframes atmosphere-pulse {
+      0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.85); }
+      50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15); }
+    }
+    
+    /* Screen system */
+    .screen {
+      position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-    }
-    
-    .crumb-hero-inner {
-      max-width: 720px;
-      margin: 0 auto;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 2.5rem;
-      position: relative;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
       z-index: 1;
     }
     
-    .crumb-hero-content {
-      flex: 1;
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
     }
     
-    .crumb-hero-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--ember);
-      margin-bottom: 0.75rem;
+    .screen.fade-out {
+      opacity: 0;
     }
     
-    .crumb-hero-title {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      font-weight: 300;
-      color: var(--text-light);
-      margin-bottom: 0.75rem;
-      line-height: 1.25;
-    }
-    
-    .crumb-hero-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-light-dim);
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-    
-    .crumb-cta {
-      display: inline-flex;
+    /* Content container */
+    .content {
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+    }
+    
+    /* Orb */
+    .orb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
       background: var(--ember);
-      color: var(--surface-dark);
-      padding: 1rem 1.75rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    
-    .crumb-cta:hover {
-      background: var(--ember-bright);
-      box-shadow: 0 8px 32px var(--ember-glow);
-      transform: translateY(-2px);
-    }
-    
-    .crumb-cta-arrow {
-      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      animation: orb-breathe var(--breath-duration) ease-in-out infinite;
+      position: relative;
+      cursor: pointer;
       transition: transform 0.2s ease;
     }
     
-    .crumb-cta:hover .crumb-cta-arrow {
-      transform: translateX(4px);
-    }
-    
-    /* The breathing orb */
-    .orb-container {
-      flex-shrink: 0;
-    }
-    
-    .orb {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: var(--ember);
-      animation: orb-breathe 8s ease-in-out infinite;
-      position: relative;
+    .orb:hover {
+      transform: scale(1.05);
     }
     
     .orb::before {
@@ -186,15 +150,15 @@
       inset: -18px;
       border-radius: 50%;
       background: radial-gradient(circle, var(--ember-glow), transparent 70%);
-      animation: orb-glow 8s ease-in-out infinite;
+      animation: orb-glow var(--breath-duration) ease-in-out infinite;
       z-index: -1;
     }
     
     @keyframes orb-breathe {
       0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.92);
-        box-shadow: 0 0 20px rgba(232, 168, 124, 0.1);
+        opacity: 0.4;
+        transform: scale(0.9);
+        box-shadow: 0 0 20px rgba(232, 168, 124, 0.15);
       }
       50% {
         opacity: 1;
@@ -205,642 +169,1279 @@
     
     @keyframes orb-glow {
       0%, 100% { opacity: 0.2; transform: scale(0.8); }
-      50% { opacity: 0.5; transform: scale(1.15); }
+      50% { opacity: 0.6; transform: scale(1.2); }
     }
     
-    /* =========================================
-       SCROLL INDICATOR
-       ========================================= */
-    .scroll-indicator {
-      position: absolute;
+    .orb.alive {
+      background: var(--alive);
+    }
+    
+    .orb.alive::before {
+      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+    }
+    
+    .orb.small {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0;
+    }
+    
+    .orb.small::before { inset: -10px; }
+    
+    /* Typography */
+    .kicker {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 0.75rem;
+    }
+    
+    h1, h2 {
+      font-family: var(--font-display);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+    
+    .title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    
+    .title.huge {
+      font-size: 2.5rem;
+    }
+    
+    .title em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 460px;
+      margin-bottom: 0.75rem;
+    }
+    
+    .subtitle strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    /* Platform grid */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 460px;
+      margin: 1.5rem 0;
+    }
+    
+    .platform-item {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .platform-item:hover {
+      background: var(--elevated);
+      border-color: var(--ember-whisper);
+      transform: translateY(-3px);
+    }
+    
+    .platform-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .platform-name {
+      font-size: 0.7rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .platform-desc {
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      line-height: 1.4;
+    }
+    
+    /* Concept visual */
+    .concept {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .concept-box {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    
+    .concept-label {
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    
+    .concept-value {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--ember);
+      font-weight: 300;
+    }
+    
+    .concept-arrow {
+      font-size: 1.5rem;
+      color: var(--text-ghost);
+    }
+    
+    /* Navigation */
+    .nav {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 460px;
+    }
+    
+    .nav.center {
+      justify-content: center;
+    }
+    
+    .nav.spread {
+      justify-content: space-between;
+    }
+    
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+    
+    .btn-primary {
+      background: var(--ember);
+      color: var(--void);
+      flex: 1;
+    }
+    
+    .btn-primary:hover {
+      background: var(--ember-bright);
+      box-shadow: 0 6px 28px var(--ember-glow);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+      flex: 1;
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--ember);
+      color: var(--ember);
+      transform: translateY(-2px);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      padding: 0.7rem 1.25rem;
+      font-size: 0.7rem;
+    }
+    
+    .btn-ghost:hover {
+      color: var(--text);
+    }
+    
+    .btn-success {
+      background: var(--alive);
+      color: var(--void);
+      flex: 1;
+    }
+    
+    .btn-success:hover {
+      box-shadow: 0 6px 28px var(--alive-glow);
+      transform: translateY(-2px);
+    }
+    
+    /* Progress indicator */
+    .progress-dots {
+      position: fixed;
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 0.5rem;
-      color: var(--text-light-dim);
-      cursor: pointer;
-      transition: color 0.3s ease;
-      z-index: 10;
+      z-index: 100;
     }
     
-    .scroll-indicator:hover {
-      color: var(--ember);
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-ghost);
+      transition: all 0.3s ease;
     }
     
-    .scroll-indicator span {
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    
-    .scroll-arrow {
+    .dot.active {
+      background: var(--ember);
       width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: bounce 2s ease-in-out infinite;
+      border-radius: 3px;
     }
     
-    .scroll-arrow svg {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
+    /* Path choices */
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+      max-width: 460px;
+      margin-top: 2rem;
     }
     
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(6px); }
-    }
-    
-    /* =========================================
-       PORTFOLIO SECTION
-       ========================================= */
-    .portfolio {
-      background: var(--bg);
-      padding: 3.5rem 0 4rem;
-    }
-    
-    /* Header */
-    header {
-      margin-bottom: 2.5rem;
-      padding-top: 0.5rem;
-    }
-    
-    .name {
-      font-family: var(--font-display);
-      font-size: 2.25rem;
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-    
-    .tagline {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      margin-bottom: 1.25rem;
-    }
-    
-    .links {
-      display: flex;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
-    
-    .links a {
-      font-size: 0.8rem;
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .links a:hover { color: var(--accent-light); }
-    
-    /* Sections */
-    section {
-      margin-bottom: 2.5rem;
-    }
-    
-    h2 {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-ghost);
-      margin-bottom: 1rem;
-    }
-    
-    p {
-      color: var(--text-dim);
-      margin-bottom: 1rem;
-    }
-    
-    p:last-child { margin-bottom: 0; }
-    
-    strong { color: var(--text); font-weight: 500; }
-    
-    /* Featured Project */
-    .featured {
+    .choice {
       background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      border: 2px solid rgba(255,255,255,0.06);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
     
-    .featured-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
+    .choice:hover {
+      background: var(--elevated);
+      border-color: var(--ember);
+      transform: translateY(-3px);
     }
     
-    .featured-title {
+    .choice-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    
+    .choice-title {
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 400;
       color: var(--text);
+      margin-bottom: 0.5rem;
     }
     
-    .featured-badge {
+    .choice-desc {
       font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ember);
-      background: var(--ember-dim);
-      padding: 0.25rem 0.6rem;
+      color: var(--text-dim);
+      line-height: 1.5;
     }
     
-    .featured p {
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
+    /* Tutorial elements */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.25rem;
+      width: 100%;
+      max-width: 460px;
+      text-align: left;
+      margin: 1rem 0;
     }
     
-    .featured-links {
-      display: flex;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
-    
-    .featured-links a {
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .featured-links a:hover { color: var(--accent-light); }
-    
-    /* Stats */
-    .stats {
-      display: flex;
-      gap: 2rem;
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    .stat {
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 300;
-      color: var(--text);
-    }
-    
-    .stat-label {
-      font-size: 0.65rem;
-      color: var(--text-ghost);
-      letter-spacing: 0.05em;
-    }
-    
-    /* Experience */
-    .experience-item {
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .experience-item:first-child { padding-top: 0; }
-    .experience-item:last-child { border-bottom: none; }
-    
-    .exp-header {
+    .card-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.35rem;
-    }
-    
-    .exp-title {
-      font-weight: 500;
-      color: var(--text);
-    }
-    
-    .exp-date {
-      font-size: 0.75rem;
-      color: var(--text-ghost);
-    }
-    
-    .exp-company {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-bottom: 0.5rem;
-    }
-    
-    .exp-description {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-    
-    /* Skills */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-    
-    .skill-category h3 {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-    
-    .skill-category ul {
-      list-style: none;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-    
-    .skill-category li {
-      padding: 0.2rem 0;
-    }
-    
-    /* Education */
-    .education {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1.25rem;
-    }
-    
-    .edu-school {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 400;
-      color: var(--text);
-      margin-bottom: 0.25rem;
-    }
-    
-    .edu-details {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-    
-    .edu-extra {
-      font-size: 0.75rem;
-      color: var(--text-ghost);
-      margin-top: 0.5rem;
-    }
-    
-    /* Contact CTA */
-    .contact {
-      background: var(--accent-dim);
-      padding: 1.5rem;
-      text-align: center;
-    }
-    
-    .contact p {
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-    
-    .contact a {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--surface);
-      padding: 0.75rem 1.5rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    
-    .contact a:hover { 
-      background: var(--accent-light);
-    }
-    
-    /* Footer */
-    footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-ghost);
-    }
-    
-    /* =========================================
-       BOTTOM CTA - Another chance to click
-       ========================================= */
-    .bottom-cta {
-      background: var(--surface-dark);
-      padding: 3rem 1.5rem;
-      text-align: center;
-      position: relative;
-    }
-    
-    .bottom-cta::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-    }
-    
-    .bottom-cta-inner {
-      max-width: 500px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .bottom-cta h3 {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 300;
-      color: var(--text-light);
       margin-bottom: 0.75rem;
     }
     
-    .bottom-cta p {
-      font-size: 0.85rem;
-      color: var(--text-light-dim);
-      margin-bottom: 1.5rem;
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--ember);
     }
     
-    .bottom-cta .crumb-cta {
+    .card-meta {
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    
+    .card-body {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    .checklist {
+      list-style: none;
+      width: 100%;
+      max-width: 460px;
+      margin: 1.25rem 0;
+    }
+    
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .checklist li:hover { background: var(--elevated); }
+    .checklist li.checked { background: var(--alive-whisper); }
+    
+    .check-box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--text-ghost);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      transition: all 0.3s ease;
+    }
+    
+    .checklist li.checked .check-box {
+      background: var(--alive);
+      border-color: var(--alive);
+      color: var(--void);
+    }
+    
+    .check-text {
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    
+    .steps {
+      width: 100%;
+      max-width: 460px;
+      margin: 1rem 0;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    
+    .step:last-child { border-bottom: none; }
+    
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--ember);
+      min-width: 1.5rem;
+    }
+    
+    .step-text h4 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+    
+    .step-text p {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    
+    .preview {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--ember-whisper);
+      padding: 1rem 1.25rem;
+      width: 100%;
+      max-width: 460px;
+      margin: 1rem 0;
+    }
+    
+    .preview-text {
+      text-align: left;
+      font-size: 0.7rem;
+    }
+    
+    .preview-text strong {
+      color: var(--ember);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+    
+    .preview-text span { color: var(--text-dim); }
+    
+    .progress {
+      width: 100%;
+      max-width: 460px;
+      margin: 1rem 0;
+      display: none;
+    }
+    
+    .progress.active { display: block; }
+    
+    .progress-bar {
+      height: 3px;
+      background: var(--elevated);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--ember);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .progress-status {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+    
+    .progress-status .pct { color: var(--ember); font-weight: 500; }
+    
+    esp-web-install-button {
+      display: block;
+      width: 100%;
+      max-width: 460px;
+    }
+    
+    esp-web-install-button button,
+    .btn-flash {
+      width: 100%;
+      background: var(--ember);
+      color: var(--void);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    esp-web-install-button button:hover {
+      box-shadow: 0 6px 28px var(--ember-glow);
+    }
+    
+    .badge {
       display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(143, 188, 143, 0.12);
+      border: 1px solid rgba(143, 188, 143, 0.25);
+      padding: 0.4rem 0.85rem;
+      margin-bottom: 1rem;
+      font-size: 0.6rem;
+      color: var(--alive);
+      letter-spacing: 0.15em;
     }
     
-    /* =========================================
-       RESPONSIVE
-       ========================================= */
+    .learned {
+      background: rgba(143, 188, 143, 0.06);
+      border: 1px solid rgba(143, 188, 143, 0.12);
+      padding: 1rem 1.25rem;
+      width: 100%;
+      max-width: 460px;
+      text-align: left;
+      margin: 1rem 0;
+    }
+    
+    .learned h4 {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--alive);
+      margin-bottom: 0.65rem;
+    }
+    
+    .learned ul { list-style: none; }
+    
+    .learned li {
+      position: relative;
+      padding-left: 1.15rem;
+      font-size: 0.7rem;
+      color: var(--text);
+      margin: 0.35rem 0;
+    }
+    
+    .learned li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--alive);
+      font-size: 0.7rem;
+    }
+    
+    .path {
+      background: var(--surface);
+      padding: 1rem 1.25rem;
+      width: 100%;
+      max-width: 460px;
+      margin: 1rem 0;
+    }
+    
+    .path h4 {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--ember);
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+    
+    .path-steps {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .path-step {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .path-num {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--text-ghost);
+    }
+    
+    .path-num.done { color: var(--alive); }
+    .path-num.next { color: var(--ember); }
+    
+    .path-label {
+      font-size: 0.55rem;
+      color: var(--text-ghost);
+      margin-top: 0.2rem;
+    }
+    
+    .hint {
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
+    
+    .link-list {
+      width: 100%;
+      max-width: 460px;
+      margin: 1.25rem 0;
+    }
+    
+    .link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .link-item:hover {
+      background: var(--elevated);
+      transform: translateX(4px);
+    }
+    
+    .link-name {
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+    
+    .link-arrow {
+      color: var(--ember);
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive */
     @media (max-width: 600px) {
-      .crumb-hero {
-        min-height: 90vh;
-        padding: 3rem 1.5rem 3rem;
-      }
-      
-      .crumb-hero-inner {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 2rem;
-      }
-      
-      .crumb-hero-title {
-        font-size: 1.5rem;
-      }
-      
-      .orb {
-        width: 70px;
-        height: 70px;
-      }
-      
-      .orb::before {
-        inset: -12px;
-      }
-      
-      .scroll-indicator {
-        bottom: 1.5rem;
-      }
-      
-      .skills-grid { 
-        grid-template-columns: 1fr; 
-      }
-      
-      .stats { 
-        gap: 1.5rem; 
-      }
-      
-      .featured-header { 
-        flex-direction: column; 
-        gap: 0.5rem; 
-      }
-      
-      .name {
-        font-size: 1.85rem;
-      }
+      .title.huge { font-size: 2rem; }
+      .title { font-size: 1.65rem; }
+      .platform-grid { grid-template-columns: repeat(2, 1fr); }
+      .platform-grid .platform-item:nth-child(5),
+      .platform-grid .platform-item:nth-child(6) { grid-column: span 1; }
+      .choices { grid-template-columns: 1fr; }
+      .concept { flex-direction: column; gap: 1rem; }
+      .concept-arrow { transform: rotate(90deg); }
     }
     
-    @media (max-height: 700px) {
-      .crumb-hero {
-        min-height: auto;
-        padding: 2.5rem 1.5rem 4rem;
-      }
+    @media (max-height: 650px) {
+      .orb { width: 60px; height: 60px; margin-bottom: 1rem; }
+      .orb::before { inset: -12px; }
+      .title.huge { font-size: 1.75rem; }
+      .title { font-size: 1.4rem; }
+      .subtitle { font-size: 0.8rem; }
+      .nav { margin-top: 1.25rem; }
+      .platform-grid { gap: 0.5rem; margin: 1rem 0; }
+      .platform-item { padding: 0.75rem 0.5rem; }
+      .platform-icon { font-size: 1.4rem; }
+      .progress-dots { bottom: 1.25rem; }
     }
-
-    .crumb-cta-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-
-.crumb-cta-secondary {
-  font-size: 0.8rem;
-  color: var(--text-light-dim);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.crumb-cta-secondary:hover {
-  color: var(--ember);
-}
   </style>
 </head>
 <body>
   
-  <!-- =========================================
-       CRUMB CTA HERO - Super Obvious
-       ========================================= -->
-  <div class="crumb-hero">
-    <div class="crumb-hero-inner">
-      <div class="crumb-hero-content">
-        <div class="crumb-hero-label">CRUMB — Genesis Zero</div>
-        <h2 class="crumb-hero-title">Learn to program a computer in 15 minutes.</h2>
-        <p class="crumb-hero-subtitle">No experience needed. $12 in hardware. Yours forever.</p>
-        <div class="crumb-cta-group">
-  <a href="tutorial.html" class="crumb-cta">
-    <span>Start the tutorial</span>
-    <span class="crumb-cta-arrow">→</span>
-  </a>
-  <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="crumb-cta-secondary">
-    Watch the tutorials →
-  </a>
-</div>
-      </div>
-      <div class="orb-container">
-        <div class="orb"></div>
-      </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <a href="#portfolio" class="scroll-indicator">
-      <span>About me</span>
-      <div class="scroll-arrow">
-        <svg viewBox="0 0 24 24">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </div>
-    </a>
-  </div>
+  <div class="atmosphere"></div>
   
-  <!-- =========================================
-       PORTFOLIO
-       ========================================= -->
-  <div class="portfolio" id="portfolio">
-    <div class="container">
-      
-      <header>
-        <h1 class="name">Wyeth Anzilotti</h1>
-        <p class="tagline">Builder · Cognitive Science + CS · Lehigh '26</p>
-        <div class="links">
-          <a href="https://github.com/wyetherp" target="_blank">GitHub</a>
-          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">YouTube</a>
-          <a href="https://www.linkedin.com/in/wyeth-anzilotti" target="_blank">LinkedIn</a>
-          <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a>
-        </div>
-      </header>
-      
-      <section>
-        <h2>Currently Building</h2>
-        
-        <div class="featured">
-          <div class="featured-header">
-            <span class="featured-title">CRUMB</span>
-            <span class="featured-badge">Live</span>
-          </div>
-          <p>
-            Open-source electronics education platform that takes someone from "I've never programmed" to "I just flashed firmware to a microcontroller" in <strong>15 minutes</strong>.
-          </p>
-          <p>
-            Built because I watched my brother struggle with technology that wasn't designed for how his brain works. The problem isn't people — it's that we've made computers harder to understand than they need to be.
-          </p>
-          <div class="featured-links">
-            <a href="https://github.com/wyetherp/crumb_main" target="_blank">GitHub (GPL-3.0)</a>
-            <a href="https://www.youtube.com/@Wyetherp-1" target="_blank">Tutorial Series</a>
-            <a href="tutorial.html">Try Genesis Zero →</a>
-          </div>
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-value">$12</div>
-              <div class="stat-label">Total cost</div>
-            </div>
-            <div class="stat">
-              <div class="stat-value">15</div>
-              <div class="stat-label">Minutes to build</div>
-            </div>
-            <div class="stat">
-              <div class="stat-value">Open Source</div>
-              <div class="stat-label">GPL 3.0 Licensed</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      <section>
-        <h2>Experience</h2>
-        
-        <div class="experience-item">
-          <div class="exp-header">
-            <span class="exp-title">Data Engineering Intern</span>
-            <span class="exp-date">Summer 2025</span>
-          </div>
-          <div class="exp-company">Acellus Health / Labware</div>
-          <p class="exp-description">
-            Built clinical data pipelines for healthcare technology. Processed and transformed medical data at scale, gaining hands-on experience with regulated data environments and healthcare software systems.
-          </p>
-        </div>
-        
-        <div class="experience-item">
-          <div class="exp-header">
-            <span class="exp-title">Division I Tennis</span>
-            <span class="exp-date">2022–Present</span>
-          </div>
-          <div class="exp-company">Lehigh University</div>
-          <p class="exp-description">
-            Four years competing at the D1 level while maintaining full academic load. Developed discipline, time management, and ability to perform under pressure.
-          </p>
-        </div>
-        
-      </section>
-      
-      <section>
-        <h2>Skills</h2>
-        
-        <div class="skills-grid">
-          <div class="skill-category">
-            <h3>Technical</h3>
-            <ul>
-              <li>JavaScript / HTML / CSS</li>
-              <li>Python</li>
-              <li>SQL / Database Design</li>
-              <li>Embedded Systems (ESP32)</li>
-              <li>Git / GitHub</li>
-            </ul>
-          </div>
-          <div class="skill-category">
-            <h3>Other</h3>
-            <ul>
-              <li>Technical Writing</li>
-              <li>Video Production</li>
-              <li>Open Source Development</li>
-              <li>User-Centered Design</li>
-              <li>Teaching / Explaining</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-      
-      <section>
-        <h2>Education</h2>
-        
-        <div class="education">
-          <div class="edu-school">Lehigh University</div>
-          <div class="edu-details">
-            B.A. Cognitive Science · Computer Science Minor · May 2026
-          </div>
-          <div class="edu-extra">
-            Senior Thesis: Tennis analytics using AI
-          </div>
-        </div>
-      </section>
-      
-      <section>
-        <h2>What I'm Looking For</h2>
-        <p>
-          Roles where I can build technology that genuinely helps people. Interested in <strong>solutions engineering</strong>, <strong>developer relations</strong>, <strong>healthcare tech</strong>, and <strong>education technology</strong>.
-        </p>
-        <p>
-          I care about: mission-driven work, learning from great engineers, sustainable pace, and building things I'd be proud of in 10 years.
-        </p>
-      </section>
-      
-      <div class="contact">
-        <p>Available May 2026 · East Coast preferred · Open to remote</p>
-        <a href="mailto:wja326@lehigh.edu">Get in touch →</a>
+  <!-- Progress indicator -->
+  <div class="progress-dots" id="progressDots"></div>
+  
+  <!-- ===============================================================
+       SCREEN 1: START
+       =============================================================== -->
+  <div class="screen active" id="start">
+    <div class="content">
+      <div class="orb" onclick="go('intro')"></div>
+      <h1 class="title huge">CRUMB</h1>
+      <p class="subtitle">An interactive journey into computers.</p>
+      <div class="nav center">
+        <button class="btn btn-primary" onclick="go('intro')">
+          Begin →
+        </button>
       </div>
-      
-      <footer>
-        Updated December 2025
-      </footer>
-      
+      <p class="hint">Click the orb or press Space</p>
     </div>
   </div>
   
-  <!-- =========================================
-       BOTTOM CTA - One more chance
-       ========================================= -->
-  <div class="bottom-cta">
-    <div class="bottom-cta-inner">
-      <h3>Want to see what I build?</h3>
-      <p>CRUMB takes you from zero to programming a real computer in 15 minutes. No experience needed.</p>
-      <a href="tutorial.html" class="crumb-cta">
-        <span>Try Genesis Zero</span>
-        <span class="crumb-cta-arrow">→</span>
+  <!-- ===============================================================
+       SCREEN 2: INTRO
+       =============================================================== -->
+  <div class="screen" id="intro">
+    <div class="content">
+      <div class="kicker">What is CRUMB?</div>
+      <h2 class="title">All computers are <em>the same</em>.</h2>
+      <p class="subtitle">
+        Your phone, your laptop, a rocket, a stoplight — they're all running <strong>the exact same thing</strong>: instructions telling electricity where to go.
+      </p>
+      <p class="subtitle">
+        Learn one, understand all.
+      </p>
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('start')">← Back</button>
+        <button class="btn btn-primary" onclick="go('foundation')">Next →</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 3: FOUNDATION
+       =============================================================== -->
+  <div class="screen" id="foundation">
+    <div class="content">
+      <div class="kicker">The Foundation</div>
+      <h2 class="title">CRUMB teaches by <em>building</em>.</h2>
+      <p class="subtitle">
+        No theory first. No textbooks. You <strong>build a computer</strong>, see it work, <em>then</em> we explain why.
+      </p>
+      <p class="subtitle">
+        Because doing is understanding.
+      </p>
+      <div class="concept">
+        <div class="concept-box">
+          <div class="concept-label">Traditional</div>
+          <div class="concept-value">Theory → Build</div>
+        </div>
+        <div class="concept-arrow">→</div>
+        <div class="concept-box">
+          <div class="concept-label">CRUMB</div>
+          <div class="concept-value">Build → Understand</div>
+        </div>
+      </div>
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('intro')">← Back</button>
+        <button class="btn btn-primary" onclick="go('platform')">Next →</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 4: PLATFORM
+       =============================================================== -->
+  <div class="screen" id="platform">
+    <div class="content">
+      <div class="kicker">The Platform</div>
+      <h2 class="title">Build once. <em>Program forever</em>.</h2>
+      <p class="subtitle">
+        You build the computer <strong>once</strong>. Then you program it to do anything. Hardware is the skeleton. Code is the personality.
+      </p>
+      
+      <div class="platform-grid">
+        <div class="platform-item">
+          <span class="platform-icon">💡</span>
+          <div class="platform-name">Lights</div>
+          <div class="platform-desc">Patterns, colors, breathing</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">🌡️</span>
+          <div class="platform-name">Sensors</div>
+          <div class="platform-desc">Read the world</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">🤖</span>
+          <div class="platform-name">Robot</div>
+          <div class="platform-desc">Motors, movement</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">🎮</span>
+          <div class="platform-name">Game</div>
+          <div class="platform-desc">Buttons, screens</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">📡</span>
+          <div class="platform-name">IoT</div>
+          <div class="platform-desc">WiFi, internet</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">∞</span>
+          <div class="platform-name">Anything</div>
+          <div class="platform-desc">You decide</div>
+        </div>
+      </div>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('foundation')">← Back</button>
+        <button class="btn btn-primary" onclick="go('choice')">I get it →</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 5: CHOICE
+       =============================================================== -->
+  <div class="screen" id="choice">
+    <div class="content">
+      <div class="kicker">Choose Your Path</div>
+      <h2 class="title">What brings you here?</h2>
+      <p class="subtitle">
+        Different paths for different goals. Pick what fits you.
+      </p>
+      
+      <div class="choices">
+        <div class="choice" onclick="go('learn')">
+          <span class="choice-icon">📚</span>
+          <div class="choice-title">Learn</div>
+          <div class="choice-desc">I want to understand computers first</div>
+        </div>
+        <div class="choice" onclick="go('genesis')">
+          <span class="choice-icon">🔨</span>
+          <div class="choice-title">Build</div>
+          <div class="choice-desc">I'm ready to build something now</div>
+        </div>
+      </div>
+      
+      <button class="btn btn-ghost" onclick="go('platform')" style="margin-top: 1.5rem;">← Back</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 6A: LEARN PATH
+       =============================================================== -->
+  <div class="screen" id="learn">
+    <div class="content">
+      <div class="kicker">Learning Resources</div>
+      <h2 class="title">Explore at your pace.</h2>
+      <p class="subtitle">
+        Watch tutorials, read code, understand the philosophy. When you're ready, you can build.
+      </p>
+      
+      <div class="link-list">
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="link-item">
+          <span class="link-name">YouTube Tutorials</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="link-item">
+          <span class="link-name">GitHub Repository</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="#" class="link-item" onclick="go('about'); return false;">
+          <span class="link-name">Philosophy & Why</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('choice')">← Back</button>
+        <button class="btn btn-secondary" onclick="go('genesis')">Ready to build</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 6B: GENESIS ZERO
+       =============================================================== -->
+  <div class="screen" id="genesis">
+    <div class="content">
+      <div class="kicker">Genesis Zero</div>
+      <h2 class="title">Your first program.</h2>
+      <p class="subtitle">
+        A breathing light. You'll write zero code. You'll just <strong>prove to yourself</strong> you can make a computer do something.
+      </p>
+      
+      <div class="concept">
+        <div class="concept-box">
+          <div class="concept-label">Time</div>
+          <div class="concept-value">15 min</div>
+        </div>
+        <div class="concept-box">
+          <div class="concept-label">Cost</div>
+          <div class="concept-value">$12</div>
+        </div>
+        <div class="concept-box">
+          <div class="concept-label">Experience</div>
+          <div class="concept-value">Zero</div>
+        </div>
+      </div>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('choice')">← Back</button>
+        <button class="btn btn-primary" onclick="go('hardware-check')">I have hardware →</button>
+      </div>
+      <button class="btn btn-secondary" onclick="go('hardware-need')" style="margin-top: 0.5rem; width: 100%; max-width: 460px;">What do I need?</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 7A: HARDWARE NEED
+       =============================================================== -->
+  <div class="screen" id="hardware-need">
+    <div class="content">
+      <h2 class="title">What You Need</h2>
+      <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">ESP32 Dev Board</span>
+          <span class="card-meta">~$12</span>
+        </div>
+        <p class="card-body">
+          A small computer with WiFi & Bluetooth. Yours forever — reprogram it, build with it, learn from it. Same type of computer in thermostats, doorbells, and IoT devices everywhere.
+        </p>
+      </div>
+      
+      <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary" style="width: 100%; max-width: 460px;">
+        Get one on Amazon →
       </a>
+      <p class="hint">Order it, bookmark this page, come back when it arrives</p>
+      
+      <button class="btn btn-ghost" onclick="go('genesis')" style="margin-top: 1rem;">← Back</button>
     </div>
   </div>
   
+  <!-- ===============================================================
+       SCREEN 7B: HARDWARE CHECK
+       =============================================================== -->
+  <div class="screen" id="hardware-check">
+    <div class="content">
+      <h2 class="title">Quick Check</h2>
+      <p class="subtitle">Tap each when ready</p>
+      
+      <ul class="checklist">
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">Using a computer (not phone)</span>
+        </li>
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">Chrome or Edge browser</span>
+        </li>
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">ESP32 plugged in via USB</span>
+        </li>
+      </ul>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('genesis')">← Back</button>
+        <button class="btn btn-primary" onclick="go('flash')">Ready →</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 8: FLASH
+       =============================================================== -->
+  <div class="screen" id="flash">
+    <div class="content">
+      <h2 class="title">Let's do this.</h2>
+      
+      <div class="preview">
+        <div class="orb small"></div>
+        <div class="preview-text">
+          <strong>When it works:</strong>
+          <span>The LED will breathe like this</span>
+        </div>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <div class="step-text">
+            <h4>Click the button</h4>
+            <p>Popup asks to connect</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <div class="step-text">
+            <h4>Select ESP32</h4>
+            <p>Look for "USB Serial"</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <div class="step-text">
+            <h4>Wait ~30 seconds</h4>
+            <p>Watch the progress</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="progress" id="progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-status">
+          <span class="pct" id="progressPct">0%</span>
+          <span id="progressMsg">Preparing...</span>
+        </div>
+      </div>
+      
+      <esp-web-install-button manifest="./manifest.json" id="installBtn">
+        <button slot="activate" class="btn-flash">Send Program to ESP32</button>
+      </esp-web-install-button>
+      
+      <div class="nav spread" style="margin-top: 0.75rem;">
+        <button class="btn btn-ghost" onclick="go('hardware-check')">← Back</button>
+        <button class="btn btn-success" onclick="go('success')">✓ It's breathing!</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 9: SUCCESS
+       =============================================================== -->
+  <div class="screen" id="success">
+    <div class="content">
+      <div class="orb alive"></div>
+      <div class="badge"><span>✓</span> COMPLETE</div>
+      <h2 class="title" style="color: var(--alive);">You did it.</h2>
+      <p class="subtitle">
+        That light in your hand is <strong>your code</strong> running. No internet needed. It's yours.
+      </p>
+      
+      <div class="learned">
+        <h4>WHAT YOU PROVED</h4>
+        <ul>
+          <li>Programming is just instructions</li>
+          <li>You can make computers do what you want</li>
+          <li>The hard part was believing you could</li>
+        </ul>
+      </div>
+      
+      <div class="path">
+        <h4>WHAT'S NEXT</h4>
+        <div class="path-steps">
+          <div class="path-step">
+            <div class="path-num done">0</div>
+            <div class="path-label">Done</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num next">1</div>
+            <div class="path-label">Circuit</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">2</div>
+            <div class="path-label">Sensor</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">∞</div>
+            <div class="path-label">Build</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav spread">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">Next tutorial →</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 10: ABOUT
+       =============================================================== -->
+  <div class="screen" id="about">
+    <div class="content">
+      <h2 class="title">Why This Exists</h2>
+      <p class="subtitle">
+        Built for my brother Luke, who struggles with technology not designed for how his brain works. If we're building a future full of computers, <strong>people deserve to understand them</strong>.
+      </p>
+      <p class="subtitle">
+        All computers run instructions that move electricity. Learn one, understand all. Complexity is just more instructions.
+      </p>
+      <p class="subtitle">
+        Open source (GPL-3.0). No gatekeeping. No subscriptions. Yours forever.
+      </p>
+      
+      <div class="link-list">
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="link-item">
+          <span class="link-name">YouTube</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="link-item">
+          <span class="link-name">GitHub</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="mailto:wja326@lehigh.edu" class="link-item">
+          <span class="link-name">Email</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+      
+      <button class="btn btn-ghost" onclick="go('learn')" style="margin-top: 1.25rem;">← Back to resources</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       JAVASCRIPT
+       =============================================================== -->
+  <script>
+    // Navigation state
+    let currentScreen = 'start';
+    const history = ['start'];
+    
+    // Screen flow map
+    const screenFlow = {
+      'start': ['intro'],
+      'intro': ['foundation'],
+      'foundation': ['platform'],
+      'platform': ['choice'],
+      'choice': ['learn', 'genesis'],
+      'learn': ['about', 'genesis'],
+      'genesis': ['hardware-need', 'hardware-check'],
+      'hardware-need': ['genesis'],
+      'hardware-check': ['flash'],
+      'flash': ['success'],
+      'success': [],
+      'about': ['learn']
+    };
+    
+    // Navigation function
+    function go(screenId) {
+      if (screenId === currentScreen) return;
+      
+      // Fade out current
+      const current = document.getElementById(currentScreen);
+      current.classList.add('fade-out');
+      
+      setTimeout(() => {
+        current.classList.remove('active', 'fade-out');
+        
+        // Fade in new
+        const next = document.getElementById(screenId);
+        next.classList.add('active');
+        
+        currentScreen = screenId;
+        history.push(screenId);
+        
+        updateProgress();
+      }, 300);
+    }
+    
+    // Back navigation
+    function back() {
+      if (history.length > 1) {
+        history.pop();
+        go(history[history.length - 1]);
+      }
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        back();
+      } else if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
+        // Find next button and click it
+        const activeScreen = document.querySelector('.screen.active');
+        const nextBtn = activeScreen.querySelector('.btn-primary');
+        if (nextBtn) {
+          e.preventDefault();
+          nextBtn.click();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        back();
+      }
+    });
+    
+    // Progress dots
+    const mainFlow = ['start', 'intro', 'foundation', 'platform', 'choice'];
+    
+    function updateProgress() {
+      const dotsContainer = document.getElementById('progressDots');
+      
+      // Only show dots for main flow
+      if (!mainFlow.includes(currentScreen)) {
+        dotsContainer.style.opacity = '0';
+        return;
+      }
+      
+      dotsContainer.style.opacity = '1';
+      dotsContainer.innerHTML = '';
+      
+      mainFlow.forEach((screenId, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        if (screenId === currentScreen) {
+          dot.classList.add('active');
+        }
+        dotsContainer.appendChild(dot);
+      });
+    }
+    
+    updateProgress();
+    
+    // Checklist
+    function check(li) {
+      li.classList.toggle('checked');
+      li.querySelector('.check-box').textContent = li.classList.contains('checked') ? '✓' : '';
+    }
+    
+    // Flash progress
+    const installBtn = document.getElementById('installBtn');
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progressFill');
+    const progressPct = document.getElementById('progressPct');
+    const progressMsg = document.getElementById('progressMsg');
+    
+    function simulate() {
+      progress.classList.add('active');
+      let pct = 0;
+      const msgs = [
+        [10, 'Connecting...'],
+        [30, 'Preparing...'],
+        [50, 'Writing...'],
+        [80, 'Almost done...'],
+        [100, 'Check your LED!']
+      ];
+      let i = 0;
+      
+      const iv = setInterval(() => {
+        pct += 2;
+        progressFill.style.width = pct + '%';
+        progressPct.textContent = pct + '%';
+        if (i < msgs.length && pct >= msgs[i][0]) {
+          progressMsg.textContent = msgs[i][1];
+          i++;
+        }
+        if (pct >= 100) {
+          clearInterval(iv);
+          setTimeout(() => {
+            progress.classList.remove('active');
+            progressFill.style.width = '0%';
+            progressPct.textContent = '0%';
+            progressMsg.textContent = 'Preparing...';
+          }, 3000);
+        }
+      }, 120);
+    }
+    
+    if (installBtn) {
+      installBtn.addEventListener('state-changed', e => {
+        if (e.detail === 'installing') simulate();
+      });
+    }
+    
+    // Confetti
+    function confetti() {
+      const colors = ['#e8a87c', '#8fbc8f', '#e8e4df'];
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.style.position = 'fixed';
+          el.style.width = '6px';
+          el.style.height = '6px';
+          el.style.borderRadius = '1px';
+          el.style.left = Math.random() * 100 + '%';
+          el.style.top = '-8px';
+          el.style.background = colors[Math.floor(Math.random() * colors.length)];
+          el.style.transform = `rotate(${Math.random() * 360}deg)`;
+          el.style.pointerEvents = 'none';
+          el.style.zIndex = '1000';
+          el.style.animation = 'confetti-fall 2.5s ease-out forwards';
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 2500);
+        }, i * 25);
+      }
+    }
+    
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes confetti-fall {
+        to {
+          transform: translateY(100vh) rotate(540deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Trigger confetti when reaching success
+    const observer = new MutationObserver(() => {
+      if (currentScreen === 'success') {
+        setTimeout(confetti, 300);
+      }
+    });
+    
+    observer.observe(document.getElementById('success'), {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  </script>
+
 </body>
 </html>
