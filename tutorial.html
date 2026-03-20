@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!--
-  CRUMB Genesis Zero - The Threshold
+  CRUMB — Computers Are All The Same
   
-  No scrolling. Every screen fits. Every word earns its place.
+  Teaching electronics by showing you: one computer = all computers.
+  Learn the foundation, build anything.
   
   License: GPL-3.0
   Author: Wyeth Anzilotti
@@ -12,7 +13,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CRUMB — Your First Program</title>
+  <title>CRUMB — Learn Computers By Building One</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +57,7 @@
     
     html, body {
       height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     
     body {
@@ -154,66 +155,34 @@
     
     .header-link:hover { color: var(--ember); }
     
-    /* Footer nav */
-    .footer-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      padding: 0 1.25rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      z-index: 100;
-      background: linear-gradient(to top, var(--void) 0%, transparent 100%);
+    /* Container for scrolling sections */
+    .scroll-container {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
     }
     
-    .nav-hint {
-      font-size: 0.6rem;
-      color: var(--text-ghost);
-      letter-spacing: 0.1em;
-    }
-    
-    .nav-hint kbd {
-      background: var(--elevated);
-      padding: 0.1rem 0.4rem;
-      border-radius: 3px;
-      border: 1px solid rgba(255,255,255,0.08);
-      margin: 0 0.15rem;
-    }
-    
-    /* Screen container */
-    .screen {
-      position: fixed;
-      top: 50px;
-      left: 0;
-      right: 0;
-      bottom: 50px;
+    /* Full screen sections */
+    .section {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem 1.5rem;
-      z-index: 1;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-    
-    .screen.active {
-      opacity: 1;
-      visibility: visible;
+      padding: 50px 1.5rem;
+      position: relative;
+      scroll-snap-align: start;
     }
     
     .content {
-      max-width: 420px;
+      max-width: 520px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      z-index: 1;
     }
     
     /* Orb */
@@ -303,9 +272,13 @@
     }
     
     .title {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       margin-bottom: 0.75rem;
       color: var(--text);
+    }
+    
+    .title.large {
+      font-size: 2.25rem;
     }
     
     .title em {
@@ -314,15 +287,96 @@
     }
     
     .subtitle {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text-dim);
-      line-height: 1.6;
-      max-width: 340px;
+      line-height: 1.7;
+      max-width: 440px;
     }
     
     .subtitle strong {
       color: var(--text);
       font-weight: 500;
+    }
+    
+    /* Platform showcase */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      width: 100%;
+      margin: 1.5rem 0;
+      max-width: 480px;
+    }
+    
+    .platform-item {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    
+    .platform-item:hover {
+      background: var(--elevated);
+      border-color: var(--ember-whisper);
+      transform: translateY(-2px);
+    }
+    
+    .platform-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .platform-name {
+      font-size: 0.7rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .platform-desc {
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      line-height: 1.4;
+    }
+    
+    /* Concept visual */
+    .concept {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+      width: 100%;
+      max-width: 480px;
+    }
+    
+    .concept-box {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 1rem;
+      text-align: center;
+    }
+    
+    .concept-label {
+      font-size: 0.6rem;
+      color: var(--text-ghost);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    
+    .concept-value {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--ember);
+    }
+    
+    .concept-arrow {
+      font-size: 1.25rem;
+      color: var(--text-ghost);
     }
     
     /* Promise grid */
@@ -432,7 +486,36 @@
       line-height: 1.4;
     }
     
-    /* Card */
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-ghost);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      animation: fade-bounce 3s ease-in-out infinite;
+    }
+    
+    @keyframes fade-bounce {
+      0%, 100% { opacity: 0.4; transform: translate(-50%, 0); }
+      50% { opacity: 1; transform: translate(-50%, 6px); }
+    }
+    
+    .scroll-hint svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    /* Tutorial sections (keep existing styles) */
     .card {
       background: var(--surface);
       border: 1px solid rgba(255,255,255,0.04);
@@ -828,49 +911,28 @@
       line-height: 1.6;
     }
     
-    /* Confetti */
-    .confetti {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      border-radius: 1px;
-      animation: fall 2.5s ease-out forwards;
-      pointer-events: none;
-      z-index: 1000;
+    /* Responsive */
+    @media (max-width: 600px) {
+      .title.large { font-size: 1.75rem; }
+      .platform-grid { grid-template-columns: repeat(2, 1fr); }
+      .platform-grid .platform-item:last-child { grid-column: 1 / -1; }
+      .concept { flex-direction: column; gap: 1rem; }
+      .concept-arrow { transform: rotate(90deg); }
     }
     
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(540deg);
-        opacity: 0;
-      }
-    }
-    
-    /* Responsive - shorter screens */
     @media (max-height: 600px) {
+      .section { padding: 40px 1rem; }
       .orb { width: 50px; height: 50px; margin-bottom: 0.75rem; }
       .orb::before { inset: -10px; }
-      .title { font-size: 1.25rem; margin-bottom: 0.5rem; }
+      .title { font-size: 1.4rem; }
+      .title.large { font-size: 1.6rem; }
       .subtitle { font-size: 0.75rem; }
       .promise { margin: 0.75rem 0; }
       .promise-item { padding: 0.5rem 0.25rem; }
       .promise-value { font-size: 0.95rem; }
       .btn { padding: 0.7rem 1rem; font-size: 0.7rem; }
       .btn-group { margin-top: 0.75rem; gap: 0.35rem; }
-      .card { padding: 0.75rem; margin: 0.75rem 0; }
-      .checklist li { padding: 0.5rem 0.7rem; }
-      .steps { margin: 0.5rem 0; }
-      .step { padding: 0.35rem 0; }
-      .learned, .path { padding: 0.6rem 0.85rem; margin: 0.5rem 0; }
-    }
-    
-    @media (max-height: 500px) {
-      header, .footer-nav { height: 40px; }
-      .screen { top: 40px; bottom: 40px; padding: 0.5rem 1rem; }
-      .orb { width: 40px; height: 40px; margin-bottom: 0.5rem; }
-      .kicker { display: none; }
-      .title { font-size: 1.1rem; }
-      .promise { display: none; }
+      .scroll-hint { bottom: 1rem; }
     }
   </style>
 </head>
@@ -879,361 +941,426 @@
   <div class="atmosphere"></div>
   
   <header>
-    <div class="logo" onclick="go('landing')">
+    <div class="logo" onclick="scrollToSection('intro')">
       <div class="logo-mark"></div>
       <span class="logo-text">CRUMB</span>
     </div>
     <div class="header-links">
-      <a href="#" class="header-link" onclick="go('tutorials'); return false;">Learn</a>
-      <a href="#" class="header-link" onclick="go('about'); return false;">About</a>
+      <a href="#" class="header-link" onclick="scrollToSection('tutorials'); return false;">Learn</a>
+      <a href="#" class="header-link" onclick="scrollToSection('about'); return false;">About</a>
     </div>
   </header>
   
-  <div class="footer-nav">
-    <span class="nav-hint" id="navHint">Press <kbd>ESC</kbd> to go back</span>
-  </div>
-  
-  <!-- ===============================================================
-       LANDING
-       =============================================================== -->
-  <div class="screen active" id="landing">
-    <div class="content">
-      <div class="kicker">Your First Program</div>
-      <div class="orb"></div>
-      <h1 class="title">This light is <em>code</em>.</h1>
-      <p class="subtitle">
-        This tutorial tries to teach you how to program computers. <br>
-        All you need is an ESP32 and In 15 minutes, it can be breathing <strong>in your hands</strong>.
-      </p>
-      <div class="promise">
-        <div class="promise-item">
-          <div class="promise-value">15</div>
-          <div class="promise-label">minutes</div>
-        </div>
-        <div class="promise-item">
-          <div class="promise-value">$12</div>
-          <div class="promise-label">cost</div>
-        </div>
-        <div class="promise-item">
-          <div class="promise-value">Zero</div>
-          <div class="promise-label">experience</div>
-        </div>
-        <div class="promise-item">
-          <div class="promise-value">Yours</div>
-          <div class="promise-label">forever</div>
-        </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="go('requirements')">I have the hardware</button>
-        <button class="btn btn-secondary" onclick="go('hardware')">What do I need?</button>
-      </div>
-      <p class="hint">Most people need to order a small computer first</p>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       HARDWARE
-       =============================================================== -->
-  <div class="screen" id="hardware">
-    <div class="content">
-      <h2 class="title">What You Need</h2>
-      <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">ESP32 Dev Board</span>
-          <span class="card-meta">~$12</span>
-        </div>
-        <p class="card-body">
-          A small computer with WiFi & Bluetooth. Yours to keep forever — reprogram it, build with it, learn from it.
+  <div class="scroll-container" id="scrollContainer">
+    
+    <!-- ===============================================================
+         INTRO - What is CRUMB?
+         =============================================================== -->
+    <div class="section" id="intro">
+      <div class="content">
+        <div class="kicker">Welcome to CRUMB</div>
+        <div class="orb"></div>
+        <h1 class="title large">All computers are <em>the same</em>.</h1>
+        <p class="subtitle">
+          Your phone, your laptop, a rocket, a stoplight — they're all running <strong>the exact same thing</strong>: instructions telling electricity where to go. Learn one, understand all.
+        </p>
+        <p class="subtitle" style="margin-top: 1rem;">
+          CRUMB teaches you computers by having you <strong>build one</strong>. No theory first. Just: here's a thing, make it work, then we'll explain why.
         </p>
       </div>
-      <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary">
-        Get one on Amazon →
-      </a>
-      <p class="hint">Order it, bookmark this page, come back when it arrives</p>
-      <button class="btn btn-ghost" onclick="go('landing')">← Back</button>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       REQUIREMENTS
-       =============================================================== -->
-  <div class="screen" id="requirements">
-    <div class="content">
-      <h2 class="title">Quick Check</h2>
-      <p class="subtitle">Tap each item when ready</p>
-      <ul class="checklist">
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Using a computer (not phone)</span>
-        </li>
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">Chrome or Edge browser</span>
-        </li>
-        <li onclick="check(this)">
-          <div class="check-box"></div>
-          <span class="check-text">ESP32 plugged in via USB</span>
-        </li>
-      </ul>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="go('flash')">I'm ready →</button>
-        <button class="btn btn-ghost" onclick="go('landing')">← Back</button>
+      <div class="scroll-hint">
+        <span>SCROLL</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
     </div>
-  </div>
-  
-  <!-- ===============================================================
-       FLASH
-       =============================================================== -->
-  <div class="screen" id="flash">
-    <div class="content">
-      <h2 class="title">Let's do this.</h2>
-      
-      <div class="preview">
-        <div class="orb small"></div>
-        <div class="preview-text">
-          <strong>When it works:</strong>
-          <span>The LED on your board will breathe like this</span>
-        </div>
-      </div>
-      
-      <div class="steps">
-        <div class="step">
-          <span class="step-num">1</span>
-          <div class="step-text">
-            <h4>Click the button below</h4>
-            <p>A popup asks to connect to a device</p>
+    
+    <!-- ===============================================================
+         PLATFORM CONCEPT
+         =============================================================== -->
+    <div class="section" id="platform">
+      <div class="content">
+        <div class="kicker">One Foundation</div>
+        <h2 class="title">Same hardware. <em>Infinite programs</em>.</h2>
+        <p class="subtitle">
+          You build the computer <strong>once</strong>. Then you program it to do anything. That's the secret: hardware is just the skeleton. Code is the personality.
+        </p>
+        
+        <div class="platform-grid">
+          <div class="platform-item">
+            <div class="platform-icon">💡</div>
+            <div class="platform-name">Light Show</div>
+            <div class="platform-desc">Breathing LEDs, patterns, colors</div>
+          </div>
+          <div class="platform-item">
+            <div class="platform-icon">🌡️</div>
+            <div class="platform-name">Sensor</div>
+            <div class="platform-desc">Read temperature, light, motion</div>
+          </div>
+          <div class="platform-item">
+            <div class="platform-icon">🤖</div>
+            <div class="platform-name">Robot</div>
+            <div class="platform-desc">Motors, servos, movement</div>
+          </div>
+          <div class="platform-item">
+            <div class="platform-icon">🎮</div>
+            <div class="platform-name">Game</div>
+            <div class="platform-desc">Buttons, screen, interaction</div>
+          </div>
+          <div class="platform-item">
+            <div class="platform-icon">📡</div>
+            <div class="platform-name">IoT Device</div>
+            <div class="platform-desc">WiFi, APIs, internet things</div>
+          </div>
+          <div class="platform-item">
+            <div class="platform-icon">∞</div>
+            <div class="platform-name">Anything</div>
+            <div class="platform-desc">You decide what it does</div>
           </div>
         </div>
-        <div class="step">
-          <span class="step-num">2</span>
-          <div class="step-text">
-            <h4>Select your ESP32</h4>
-            <p>Look for "USB Serial" or "CP210x"</p>
+        
+        <div class="concept">
+          <div class="concept-box">
+            <div class="concept-label">Build Once</div>
+            <div class="concept-value">$12</div>
           </div>
-        </div>
-        <div class="step">
-          <span class="step-num">3</span>
-          <div class="step-text">
-            <h4>Wait ~30 seconds</h4>
-            <p>Watch the progress bar</p>
+          <div class="concept-arrow">→</div>
+          <div class="concept-box">
+            <div class="concept-label">Program Forever</div>
+            <div class="concept-value">∞</div>
           </div>
         </div>
       </div>
-      
-      <div class="progress" id="progress">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="progress-status">
-          <span class="pct" id="progressPct">0%</span>
-          <span id="progressMsg">Preparing...</span>
-        </div>
-      </div>
-      
-      <esp-web-install-button manifest="./manifest.json" id="installBtn">
-        <button slot="activate" class="btn-flash">Send Program to ESP32</button>
-      </esp-web-install-button>
-      
-      <div class="btn-row" style="margin-top: 0.5rem;">
-        <button class="btn btn-success" onclick="go('success')">✓ LED is breathing!</button>
-        <button class="btn btn-ghost" onclick="go('trouble')">Help</button>
+      <div class="scroll-hint">
+        <span>KEEP GOING</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
     </div>
-  </div>
-  
-  <!-- ===============================================================
-       SUCCESS
-       =============================================================== -->
-  <div class="screen" id="success">
-    <div class="content">
-      <div class="orb alive"></div>
-      <div class="badge"><span>✓</span> COMPLETE</div>
-      <h2 class="title" style="color: var(--alive);">You did it.</h2>
-      <p class="subtitle">That light in your hand is your code running. No internet needed. It's yours.</p>
-      
-      <div class="learned">
-        <h4>WHAT YOU PROVED</h4>
-        <ul>
-          <li>Programming is just instructions</li>
-          <li>You can make computers do what you want</li>
-          <li>You're more capable than you thought</li>
+    
+    <!-- ===============================================================
+         GENESIS ZERO - Your first program
+         =============================================================== -->
+    <div class="section" id="genesis">
+      <div class="content">
+        <div class="kicker">Genesis Zero</div>
+        <h2 class="title">Let's build your <em>first one</em>.</h2>
+        <p class="subtitle">
+          We start simple: a breathing light. You'll write zero code (for now). You'll just <strong>prove to yourself</strong> that you can make a computer do something.
+        </p>
+        <div class="promise">
+          <div class="promise-item">
+            <div class="promise-value">15</div>
+            <div class="promise-label">minutes</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-value">$12</div>
+            <div class="promise-label">cost</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-value">Zero</div>
+            <div class="promise-label">experience</div>
+          </div>
+          <div class="promise-item">
+            <div class="promise-value">Yours</div>
+            <div class="promise-label">forever</div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="scrollToSection('requirements')">I have the hardware →</button>
+          <button class="btn btn-secondary" onclick="scrollToSection('hardware')">What do I need?</button>
+        </div>
+        <p class="hint">Most people need to order a small computer first</p>
+      </div>
+      <div class="scroll-hint">
+        <span>OR SCROLL</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+    
+    <!-- ===============================================================
+         HARDWARE
+         =============================================================== -->
+    <div class="section" id="hardware">
+      <div class="content">
+        <h2 class="title">What You Need</h2>
+        <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">ESP32 Dev Board</span>
+            <span class="card-meta">~$12</span>
+          </div>
+          <p class="card-body">
+            A small computer with WiFi & Bluetooth. Yours to keep forever — reprogram it, build with it, learn from it. This is the same type of computer in thermostats, doorbells, and IoT devices everywhere.
+          </p>
+        </div>
+        <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary">
+          Get one on Amazon →
+        </a>
+        <p class="hint">Order it, bookmark this page, come back when it arrives</p>
+        <button class="btn btn-ghost" onclick="scrollToSection('genesis')">← Back</button>
+      </div>
+    </div>
+    
+    <!-- ===============================================================
+         REQUIREMENTS
+         =============================================================== -->
+    <div class="section" id="requirements">
+      <div class="content">
+        <h2 class="title">Quick Check</h2>
+        <p class="subtitle">Tap each item when ready</p>
+        <ul class="checklist">
+          <li onclick="check(this)">
+            <div class="check-box"></div>
+            <span class="check-text">Using a computer (not phone)</span>
+          </li>
+          <li onclick="check(this)">
+            <div class="check-box"></div>
+            <span class="check-text">Chrome or Edge browser</span>
+          </li>
+          <li onclick="check(this)">
+            <div class="check-box"></div>
+            <span class="check-text">ESP32 plugged in via USB</span>
+          </li>
         </ul>
-      </div>
-      
-      <div class="path">
-        <h4>WHAT'S NEXT</h4>
-        <div class="path-steps">
-          <div class="path-step">
-            <div class="path-num done">0</div>
-            <div class="path-label">Done</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num next">1</div>
-            <div class="path-label">LED</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num">2</div>
-            <div class="path-label">Sensors</div>
-          </div>
-          <div class="path-step">
-            <div class="path-num">∞</div>
-            <div class="path-label">Anything</div>
-          </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="scrollToSection('flash')">I'm ready →</button>
+          <button class="btn btn-ghost" onclick="scrollToSection('genesis')">← Back</button>
         </div>
-      </div>
-      
-      <div class="btn-row">
-        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
-        <button class="btn btn-primary" onclick="go('tutorials')">Keep learning →</button>
       </div>
     </div>
-  </div>
-  
-  <!-- ===============================================================
-       TUTORIALS
-       =============================================================== -->
-  <div class="screen" id="tutorials">
-    <div class="content">
-      <h2 class="title">Keep Going</h2>
-      <p class="subtitle">Learn why it works — then build whatever you imagine.</p>
-      
-      <div class="tutorials">
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial done">
-          <span class="tutorial-num">0</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Your First Program</div>
-            <div class="tutorial-meta">✓ Complete</div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-          <span class="tutorial-num">1</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Wire Your First Circuit</div>
-            <div class="tutorial-meta">~15 min · LED + resistor</div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-          <span class="tutorial-num">2</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Read the World</div>
-            <div class="tutorial-meta">~30 min · Temperature sensor</div>
-          </div>
-        </a>
-        <div class="tutorial locked">
-          <span class="tutorial-num">∞</span>
-          <div class="tutorial-text">
-            <div class="tutorial-title">Build What Matters</div>
-            <div class="tutorial-meta">Coming soon</div>
-          </div>
-        </div>
-      </div>
-      
-      <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">
-        Watch on YouTube →
-      </a>
-      <button class="btn btn-ghost" onclick="go('landing')">← Home</button>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       TROUBLESHOOTING
-       =============================================================== -->
-  <div class="screen" id="trouble">
-    <div class="content">
-      <h2 class="title">Let's Fix It</h2>
-      
-      <div class="trouble">
-        <div class="trouble-item">
-          <strong>No device found</strong>
-          <p>Try a different USB cable — most only charge, can't transfer data.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>Flash fails</strong>
-          <p>Try a different USB port. Unplug, wait 5 sec, replug.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>LED doesn't breathe</strong>
-          <p>Unplug and replug the ESP32. Try flashing again.</p>
-        </div>
-        <div class="trouble-item">
-          <strong>Still stuck?</strong>
-          <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — I want to help.</p>
-        </div>
-      </div>
-      
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="go('flash')">← Try again</button>
-        <button class="btn btn-ghost" onclick="go('landing')">Home</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ===============================================================
-       ABOUT
-       =============================================================== -->
-  <div class="screen" id="about">
-    <div class="content">
-      <h2 class="title">What Is This?</h2>
-      
-      <div class="about-text">
-        <h3>The Idea</h3>
-        <p>CRUMB teaches electronics by doing. Genesis Zero proves you can program a computer in 15 minutes. The barriers were never real.</p>
+    
+    <!-- ===============================================================
+         FLASH
+         =============================================================== -->
+    <div class="section" id="flash">
+      <div class="content">
+        <h2 class="title">Let's do this.</h2>
         
-        <h3>The Philosophy</h3>
-        <p>Do, then understand. No gatekeeping — all code is public. Yours forever — no subscriptions, no accounts.</p>
+        <div class="preview">
+          <div class="orb small"></div>
+          <div class="preview-text">
+            <strong>When it works:</strong>
+            <span>The LED on your board will breathe like this</span>
+          </div>
+        </div>
         
-        <h3>Open Source</h3>
-        <p>GPL-3.0. Use it, modify it, share it, build on it.</p>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-text">
+              <h4>Click the button below</h4>
+              <p>A popup asks to connect to a device</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-text">
+              <h4>Select your ESP32</h4>
+              <p>Look for "USB Serial" or "CP210x"</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-text">
+              <h4>Wait ~30 seconds</h4>
+              <p>Watch the progress bar</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="progress" id="progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-status">
+            <span class="pct" id="progressPct">0%</span>
+            <span id="progressMsg">Preparing...</span>
+          </div>
+        </div>
+        
+        <esp-web-install-button manifest="./manifest.json" id="installBtn">
+          <button slot="activate" class="btn-flash">Send Program to ESP32</button>
+        </esp-web-install-button>
+        
+        <div class="btn-row" style="margin-top: 0.5rem;">
+          <button class="btn btn-success" onclick="scrollToSection('success')">✓ LED is breathing!</button>
+          <button class="btn btn-ghost" onclick="scrollToSection('trouble')">Help</button>
+        </div>
       </div>
-      
-      <button class="btn btn-primary" style="margin-top: 1rem;" onclick="go('landing')">← Home</button>
     </div>
+    
+    <!-- ===============================================================
+         SUCCESS
+         =============================================================== -->
+    <div class="section" id="success">
+      <div class="content">
+        <div class="orb alive"></div>
+        <div class="badge"><span>✓</span> COMPLETE</div>
+        <h2 class="title" style="color: var(--alive);">You did it.</h2>
+        <p class="subtitle">That light in your hand is your code running. No internet needed. It's yours.</p>
+        
+        <div class="learned">
+          <h4>WHAT YOU PROVED</h4>
+          <ul>
+            <li>Programming is just instructions</li>
+            <li>You can make computers do what you want</li>
+            <li>The hard part was believing you could</li>
+          </ul>
+        </div>
+        
+        <div class="path">
+          <h4>WHAT'S NEXT</h4>
+          <div class="path-steps">
+            <div class="path-step">
+              <div class="path-num done">0</div>
+              <div class="path-label">Done</div>
+            </div>
+            <div class="path-step">
+              <div class="path-num next">1</div>
+              <div class="path-label">LED</div>
+            </div>
+            <div class="path-step">
+              <div class="path-num">2</div>
+              <div class="path-label">Sensors</div>
+            </div>
+            <div class="path-step">
+              <div class="path-num">∞</div>
+              <div class="path-label">Anything</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="btn-row">
+          <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
+          <button class="btn btn-primary" onclick="scrollToSection('tutorials')">Keep learning →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ===============================================================
+         TUTORIALS
+         =============================================================== -->
+    <div class="section" id="tutorials">
+      <div class="content">
+        <h2 class="title">Keep Going</h2>
+        <p class="subtitle">Learn why it works — then build whatever you imagine.</p>
+        
+        <div class="tutorials">
+          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial done">
+            <span class="tutorial-num">0</span>
+            <div class="tutorial-text">
+              <div class="tutorial-title">Genesis Zero</div>
+              <div class="tutorial-meta">✓ Complete · Your first program</div>
+            </div>
+          </a>
+          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
+            <span class="tutorial-num">1</span>
+            <div class="tutorial-text">
+              <div class="tutorial-title">Wire Your First Circuit</div>
+              <div class="tutorial-meta">~15 min · LED + resistor + breadboard</div>
+            </div>
+          </a>
+          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
+            <span class="tutorial-num">2</span>
+            <div class="tutorial-text">
+              <div class="tutorial-title">Read the World</div>
+              <div class="tutorial-meta">~30 min · Temperature sensor</div>
+            </div>
+          </a>
+          <div class="tutorial locked">
+            <span class="tutorial-num">∞</span>
+            <div class="tutorial-text">
+              <div class="tutorial-title">Build What Matters</div>
+              <div class="tutorial-meta">Coming soon</div>
+            </div>
+          </div>
+        </div>
+        
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">
+          Watch on YouTube →
+        </a>
+        <button class="btn btn-ghost" onclick="scrollToSection('intro')">← Home</button>
+      </div>
+    </div>
+    
+    <!-- ===============================================================
+         TROUBLESHOOTING
+         =============================================================== -->
+    <div class="section" id="trouble">
+      <div class="content">
+        <h2 class="title">Let's Fix It</h2>
+        
+        <div class="trouble">
+          <div class="trouble-item">
+            <strong>No device found</strong>
+            <p>Try a different USB cable — most only charge, can't transfer data.</p>
+          </div>
+          <div class="trouble-item">
+            <strong>Flash fails</strong>
+            <p>Try a different USB port. Unplug, wait 5 sec, replug.</p>
+          </div>
+          <div class="trouble-item">
+            <strong>LED doesn't breathe</strong>
+            <p>Unplug and replug the ESP32. Try flashing again.</p>
+          </div>
+          <div class="trouble-item">
+            <strong>Still stuck?</strong>
+            <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — I want to help.</p>
+          </div>
+        </div>
+        
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="scrollToSection('flash')">← Try again</button>
+          <button class="btn btn-ghost" onclick="scrollToSection('intro')">Home</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ===============================================================
+         ABOUT
+         =============================================================== -->
+    <div class="section" id="about">
+      <div class="content">
+        <h2 class="title">What Is This?</h2>
+        
+        <div class="about-text">
+          <h3>The Idea</h3>
+          <p>CRUMB teaches electronics by doing, not by reading. You build first, understand later. Genesis Zero proves you can program a computer in 15 minutes. The barriers were never real.</p>
+          
+          <h3>The Philosophy</h3>
+          <p>All computers are the same. Your phone, your laptop, a rocket — they all run instructions that move electricity. Learn one, understand all. Complexity is just more instructions.</p>
+          
+          <h3>Why It Exists</h3>
+          <p>Built for my brother Luke, who struggles with technology not designed for how his brain works. If we're going to build a future full of computers, people deserve to understand them.</p>
+          
+          <h3>Open Source</h3>
+          <p>GPL-3.0. Use it, modify it, share it, build on it. No gatekeeping. No subscriptions. Yours forever.</p>
+        </div>
+        
+        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="scrollToSection('intro')">← Home</button>
+      </div>
+    </div>
+    
   </div>
   
   <!-- ===============================================================
        JAVASCRIPT
        =============================================================== -->
   <script>
-    let current = 'landing';
-    const history = ['landing'];
-    const hint = document.getElementById('navHint');
-    
-    function go(id) {
-      if (id === current) return;
-      document.getElementById(current).classList.remove('active');
-      document.getElementById(id).classList.add('active');
-      
-      if (id === 'landing') {
-        history.length = 1;
-      } else {
-        history.push(id);
-      }
-      
-      current = id;
-      hint.style.opacity = (id !== 'landing' && id !== 'success') ? '1' : '0';
-      
-      if (id === 'success') setTimeout(confetti, 200);
-    }
-    
-    function back() {
-      if (history.length > 1) {
-        history.pop();
-        go(history[history.length - 1]);
+    // Smooth scroll to section
+    function scrollToSection(id) {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
     
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') back();
-    });
-    
+    // Checklist
     function check(li) {
       li.classList.toggle('checked');
       li.querySelector('.check-box').textContent = li.classList.contains('checked') ? '✓' : '';
     }
     
-    // Flash progress
+    // Flash progress simulation
     const installBtn = document.getElementById('installBtn');
     const progress = document.getElementById('progress');
     const progressFill = document.getElementById('progressFill');
@@ -1276,21 +1403,51 @@
       if (e.detail === 'installing') simulate();
     });
     
+    // Confetti on success
     function confetti() {
       const colors = ['#e8a87c', '#8fbc8f', '#e8e4df'];
       for (let i = 0; i < 40; i++) {
         setTimeout(() => {
           const el = document.createElement('div');
-          el.className = 'confetti';
+          el.style.position = 'fixed';
+          el.style.width = '6px';
+          el.style.height = '6px';
+          el.style.borderRadius = '1px';
           el.style.left = Math.random() * 100 + '%';
           el.style.top = '-8px';
           el.style.background = colors[Math.floor(Math.random() * colors.length)];
           el.style.transform = `rotate(${Math.random() * 360}deg)`;
+          el.style.pointerEvents = 'none';
+          el.style.zIndex = '1000';
+          el.style.animation = 'confetti-fall 2.5s ease-out forwards';
           document.body.appendChild(el);
           setTimeout(() => el.remove(), 2500);
         }, i * 20);
       }
     }
+    
+    // Add confetti animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes confetti-fall {
+        to {
+          transform: translateY(100vh) rotate(540deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Trigger confetti on success section
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.id === 'success') {
+          setTimeout(confetti, 200);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(document.getElementById('success'));
   </script>
 
 </body>
