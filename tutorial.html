@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-  CRUMB — Computers Are All The Same
+  CRUMB — Interactive Journey
   
-  Teaching electronics by showing you: one computer = all computers.
-  Learn the foundation, build anything.
+  Navigate by clicking. Explore at your pace.
+  Every screen fits. No scrolling required.
   
   License: GPL-3.0
   Author: Wyeth Anzilotti
@@ -23,30 +23,34 @@
   
   <style>
     :root {
-      --void: #050505;
-      --surface: #0a0a0a;
-      --elevated: #111111;
+      /* Video game inspired color scheme - brighter, more contrast */
+      --void: #0d0d14;
+      --surface: #1a1a24;
+      --elevated: #252535;
       
-      --ember: #e8a87c;
-      --ember-bright: #f4c4a0;
-      --ember-glow: rgba(232, 168, 124, 0.4);
-      --ember-whisper: rgba(232, 168, 124, 0.08);
+      --ember: #ff9d5c;
+      --ember-bright: #ffb380;
+      --ember-glow: rgba(255, 157, 92, 0.5);
+      --ember-whisper: rgba(255, 157, 92, 0.12);
       
-      --alive: #8fbc8f;
-      --alive-glow: rgba(143, 188, 143, 0.4);
-      --alive-whisper: rgba(143, 188, 143, 0.08);
+      --alive: #6dd67d;
+      --alive-bright: #8fe89a;
+      --alive-glow: rgba(109, 214, 125, 0.5);
+      --alive-whisper: rgba(109, 214, 125, 0.12);
       
-      --text: #e8e4df;
-      --text-dim: rgba(232, 228, 223, 0.6);
-      --text-ghost: rgba(232, 228, 223, 0.35);
+      --text: #f0ede8;
+      --text-dim: rgba(240, 237, 232, 0.7);
+      --text-ghost: rgba(240, 237, 232, 0.4);
       
-      --caution: #d4a574;
+      --accent: #7aa3ff;
+      --accent-glow: rgba(122, 163, 255, 0.4);
+      
+      --caution: #f4c563;
       
       --font-display: 'Fraunces', Georgia, serif;
       --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
       
       --breath-duration: 8s;
-      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     * {
@@ -57,7 +61,7 @@
     
     html, body {
       height: 100%;
-      overflow-x: hidden;
+      overflow: hidden;
     }
     
     body {
@@ -65,7 +69,7 @@
       color: var(--text);
       font-family: var(--font-mono);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
     
@@ -80,179 +84,253 @@
     .atmosphere::before {
       content: '';
       position: absolute;
-      top: 30%;
+      top: 40%;
       left: 50%;
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--ember-whisper) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 157, 92, 0.15) 0%, transparent 70%);
       animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
     }
     
-    @keyframes atmosphere-pulse {
-      0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    .atmosphere::after {
+      content: '';
+      position: absolute;
+      top: 60%;
+      left: 30%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(122, 163, 255, 0.08) 0%, transparent 70%);
+      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite 2s;
     }
     
-    /* Header */
-    header {
+    @keyframes atmosphere-pulse {
+      0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.85); }
+      50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15); }
+    }
+    
+    /* Top navigation bar */
+    .top-nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 50px;
-      padding: 0 1.25rem;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--void) 0%, rgba(13, 13, 20, 0.95) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      z-index: 100;
-      background: linear-gradient(to bottom, var(--void) 0%, transparent 100%);
+      justify-content: center;
+      padding: 0 1.5rem;
+      z-index: 200;
     }
     
-    .logo {
+    .nav-flow {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      cursor: pointer;
-      transition: opacity var(--transition);
     }
     
-    .logo:hover { opacity: 0.7; }
-    
-    .logo-mark {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--ember);
-      animation: mark-breathe var(--breath-duration) ease-in-out infinite;
-    }
-    
-    @keyframes mark-breathe {
-      0%, 100% { opacity: 0.3; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px var(--ember-glow); }
-    }
-    
-    .logo-text {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-    }
-    
-    .header-links {
+    .nav-step {
       display: flex;
-      gap: 1rem;
-    }
-    
-    .header-link {
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.85rem;
       font-size: 0.65rem;
       color: var(--text-ghost);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
       text-decoration: none;
       letter-spacing: 0.05em;
-      transition: color var(--transition);
     }
     
-    .header-link:hover { color: var(--ember); }
-    
-    /* Container for scrolling sections */
-    .scroll-container {
-      height: 100vh;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
+    .nav-step:hover {
+      color: var(--text);
+      background: var(--surface);
+      border-color: rgba(255, 255, 255, 0.1);
     }
     
-    /* Full screen sections */
-    .section {
-      min-height: 100vh;
+    .nav-step.active {
+      color: var(--ember);
+      background: var(--ember-whisper);
+      border-color: var(--ember-glow);
+      font-weight: 500;
+    }
+    
+    .nav-step.completed {
+      color: var(--alive);
+    }
+    
+    .nav-step-icon {
+      font-size: 0.7rem;
+    }
+    
+    .nav-arrow {
+      color: var(--text-ghost);
+      font-size: 0.6rem;
+    }
+    
+    /* Keyboard hints */
+    .keyboard-hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 1.25rem;
+      background: rgba(13, 13, 20, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      z-index: 150;
+      pointer-events: none;
+    }
+    
+    .hint-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    
+    .hint-key {
+      background: var(--surface);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--ember);
+      min-width: 1.5rem;
+      text-align: center;
+    }
+    
+    .hint-divider {
+      width: 1px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    /* Screen system */
+    .screen {
+      position: fixed;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 50px 1.5rem;
-      position: relative;
-      scroll-snap-align: start;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+      z-index: 1;
     }
     
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .screen.fade-out {
+      opacity: 0;
+    }
+    
+    /* Content container */
     .content {
-      max-width: 520px;
+      max-width: 540px;
       width: 100%;
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      z-index: 1;
     }
     
     /* Orb */
     .orb {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: var(--ember);
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
       animation: orb-breathe var(--breath-duration) ease-in-out infinite;
       position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      box-shadow: 0 0 30px var(--ember-glow), 0 0 60px rgba(255, 157, 92, 0.3);
+    }
+    
+    .orb:hover {
+      transform: scale(1.05);
     }
     
     .orb::before {
       content: '';
       position: absolute;
-      inset: -15px;
+      inset: -20px;
       border-radius: 50%;
-      background: radial-gradient(circle, var(--ember-glow), transparent 70%);
+      background: radial-gradient(circle, var(--ember-glow), transparent 65%);
       animation: orb-glow var(--breath-duration) ease-in-out infinite;
       z-index: -1;
     }
     
     @keyframes orb-breathe {
       0%, 100% {
-        opacity: 0.3;
+        opacity: 0.7;
         transform: scale(0.92);
-        box-shadow: 0 0 15px rgba(232, 168, 124, 0.1);
+        box-shadow: 0 0 25px var(--ember-glow), 0 0 50px rgba(255, 157, 92, 0.25);
       }
       50% {
         opacity: 1;
         transform: scale(1);
-        box-shadow: 0 0 40px var(--ember-glow);
+        box-shadow: 0 0 40px var(--ember-glow), 0 0 80px rgba(255, 157, 92, 0.4);
       }
     }
     
     @keyframes orb-glow {
-      0%, 100% { opacity: 0.2; transform: scale(0.85); }
-      50% { opacity: 0.5; transform: scale(1.1); }
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 0.7; transform: scale(1.15); }
     }
     
     .orb.alive {
       background: var(--alive);
-      animation-name: orb-alive;
+      box-shadow: 0 0 30px var(--alive-glow), 0 0 60px rgba(109, 214, 125, 0.3);
     }
     
     .orb.alive::before {
-      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+      background: radial-gradient(circle, var(--alive-glow), transparent 65%);
+    }
+    
+    .orb.alive {
+      animation-name: orb-alive;
     }
     
     @keyframes orb-alive {
       0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.95);
-        box-shadow: 0 0 15px rgba(143, 188, 143, 0.1);
+        opacity: 0.7;
+        transform: scale(0.92);
+        box-shadow: 0 0 25px var(--alive-glow), 0 0 50px rgba(109, 214, 125, 0.25);
       }
       50% {
         opacity: 1;
         transform: scale(1);
-        box-shadow: 0 0 40px var(--alive-glow);
+        box-shadow: 0 0 40px var(--alive-glow), 0 0 80px rgba(109, 214, 125, 0.4);
       }
     }
     
     .orb.small {
-      width: 35px;
-      height: 35px;
+      width: 40px;
+      height: 40px;
       margin-bottom: 0;
     }
     
-    .orb.small::before { inset: -8px; }
+    .orb.small::before { inset: -10px; }
     
     /* Typography */
     .kicker {
@@ -261,24 +339,24 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--ember);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
     
     h1, h2 {
       font-family: var(--font-display);
       font-weight: 300;
       letter-spacing: -0.01em;
-      line-height: 1.2;
+      line-height: 1.25;
     }
     
     .title {
-      font-size: 1.75rem;
-      margin-bottom: 0.75rem;
+      font-size: 2rem;
+      margin-bottom: 1rem;
       color: var(--text);
     }
     
-    .title.large {
-      font-size: 2.25rem;
+    .title.huge {
+      font-size: 2.5rem;
     }
     
     .title em {
@@ -287,10 +365,11 @@
     }
     
     .subtitle {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-dim);
       line-height: 1.7;
-      max-width: 440px;
+      max-width: 460px;
+      margin-bottom: 0.75rem;
     }
     
     .subtitle strong {
@@ -298,34 +377,50 @@
       font-weight: 500;
     }
     
-    /* Platform showcase */
+    /* Platform grid */
     .platform-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 0.75rem;
       width: 100%;
+      max-width: 460px;
       margin: 1.5rem 0;
-      max-width: 480px;
     }
     
     .platform-item {
       background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.04);
-      padding: 1.25rem 1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 0.75rem;
       text-align: center;
-      transition: all var(--transition);
+      transition: all 0.3s ease;
       cursor: pointer;
+      position: relative;
+    }
+    
+    .platform-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--ember-whisper), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     
     .platform-item:hover {
       background: var(--elevated);
-      border-color: var(--ember-whisper);
-      transform: translateY(-2px);
+      border-color: var(--ember);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 20px rgba(255, 157, 92, 0.15);
+    }
+    
+    .platform-item:hover::after {
+      opacity: 1;
     }
     
     .platform-icon {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       margin-bottom: 0.5rem;
+      display: block;
     }
     
     .platform-name {
@@ -346,181 +441,231 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
       margin: 1.5rem 0;
       width: 100%;
-      max-width: 480px;
+      max-width: 400px;
     }
     
     .concept-box {
       flex: 1;
       background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.04);
-      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 1.25rem 1rem;
       text-align: center;
     }
     
     .concept-label {
       font-size: 0.6rem;
       color: var(--text-ghost);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       margin-bottom: 0.5rem;
     }
     
     .concept-value {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.4rem;
       color: var(--ember);
+      font-weight: 300;
     }
     
     .concept-arrow {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       color: var(--text-ghost);
     }
     
-    /* Promise grid */
-    .promise {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: rgba(255,255,255,0.04);
-      margin: 1.25rem 0;
+    /* Navigation */
+    .nav {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2rem;
       width: 100%;
+      max-width: 460px;
     }
     
-    .promise-item {
-      background: var(--surface);
-      padding: 0.75rem 0.5rem;
-      text-align: center;
+    .nav.center {
+      justify-content: center;
     }
     
-    .promise-value {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--ember);
+    .nav.spread {
+      justify-content: space-between;
     }
     
-    .promise-label {
-      font-size: 0.55rem;
-      color: var(--text-ghost);
-      margin-top: 0.15rem;
-    }
-    
-    /* Buttons */
     .btn {
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.05em;
-      padding: 0.85rem 1.5rem;
+      padding: 0.9rem 1.5rem;
       border: none;
       cursor: pointer;
-      transition: all var(--transition);
+      transition: all 0.3s ease;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
+      position: relative;
     }
     
     .btn-primary {
       background: var(--ember);
       color: var(--void);
-      width: 100%;
+      flex: 1;
+      box-shadow: 0 2px 12px rgba(255, 157, 92, 0.3);
     }
     
     .btn-primary:hover {
       background: var(--ember-bright);
-      box-shadow: 0 6px 24px var(--ember-glow);
+      box-shadow: 0 6px 28px var(--ember-glow), 0 0 40px rgba(255, 157, 92, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
     }
     
     .btn-secondary {
       background: transparent;
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.12);
-      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      flex: 1;
     }
     
     .btn-secondary:hover {
       border-color: var(--ember);
       color: var(--ember);
+      background: var(--ember-whisper);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary:active {
+      transform: translateY(0);
     }
     
     .btn-ghost {
       background: transparent;
       color: var(--text-dim);
-      padding: 0.6rem 1rem;
+      padding: 0.7rem 1.25rem;
       font-size: 0.7rem;
     }
     
-    .btn-ghost:hover { color: var(--text); }
+    .btn-ghost:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
     
     .btn-success {
       background: var(--alive);
       color: var(--void);
-      width: 100%;
+      flex: 1;
+      box-shadow: 0 2px 12px rgba(109, 214, 125, 0.3);
     }
     
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      width: 100%;
-      margin-top: 1rem;
+    .btn-success:hover {
+      background: var(--alive-bright);
+      box-shadow: 0 6px 28px var(--alive-glow), 0 0 40px rgba(109, 214, 125, 0.2);
+      transform: translateY(-2px);
     }
     
-    .btn-row {
-      display: flex;
-      gap: 0.5rem;
-      width: 100%;
+    .btn-success:active {
+      transform: translateY(0);
     }
     
-    .btn-row .btn { flex: 1; }
-    
-    .hint {
-      font-size: 0.65rem;
-      color: var(--text-ghost);
-      margin-top: 0.6rem;
-      line-height: 1.4;
-    }
-    
-    /* Scroll indicator */
-    .scroll-hint {
-      position: absolute;
+    /* Progress indicator */
+    .progress-dots {
+      position: fixed;
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 0.5rem;
-      color: var(--text-ghost);
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      animation: fade-bounce 3s ease-in-out infinite;
+      z-index: 100;
     }
     
-    @keyframes fade-bounce {
-      0%, 100% { opacity: 0.4; transform: translate(-50%, 0); }
-      50% { opacity: 1; transform: translate(-50%, 6px); }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-ghost);
+      transition: all 0.3s ease;
     }
     
-    .scroll-hint svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
+    .dot.active {
+      background: var(--ember);
+      width: 20px;
+      border-radius: 3px;
     }
     
-    /* Tutorial sections (keep existing styles) */
+    /* Path choices */
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+      max-width: 460px;
+      margin-top: 2rem;
+    }
+    
+    .choice {
+      background: var(--surface);
+      border: 2px solid rgba(255,255,255,0.1);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .choice::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--ember-whisper), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .choice:hover {
+      background: var(--elevated);
+      border-color: var(--ember);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 28px rgba(255, 157, 92, 0.2);
+    }
+    
+    .choice:hover::after {
+      opacity: 1;
+    }
+    
+    .choice-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    
+    .choice-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .choice-desc {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    
+    /* Tutorial elements */
     .card {
       background: var(--surface);
       border: 1px solid rgba(255,255,255,0.04);
-      padding: 1rem;
+      padding: 1.25rem;
       width: 100%;
+      max-width: 460px;
       text-align: left;
       margin: 1rem 0;
     }
@@ -529,7 +674,7 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
     
     .card-title {
@@ -540,7 +685,7 @@
     }
     
     .card-meta {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: var(--text);
     }
     
@@ -550,30 +695,30 @@
       line-height: 1.6;
     }
     
-    /* Checklist */
     .checklist {
       list-style: none;
       width: 100%;
-      margin: 1rem 0;
+      max-width: 460px;
+      margin: 1.25rem 0;
     }
     
     .checklist li {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.7rem 0.85rem;
+      padding: 0.75rem 1rem;
       background: var(--surface);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
       cursor: pointer;
-      transition: all var(--transition);
+      transition: all 0.3s ease;
     }
     
     .checklist li:hover { background: var(--elevated); }
     .checklist li.checked { background: var(--alive-whisper); }
     
     .check-box {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border: 2px solid var(--text-ghost);
       border-radius: 3px;
       display: flex;
@@ -581,7 +726,7 @@
       justify-content: center;
       flex-shrink: 0;
       font-size: 0.7rem;
-      transition: all var(--transition);
+      transition: all 0.3s ease;
     }
     
     .checklist li.checked .check-box {
@@ -595,17 +740,17 @@
       color: var(--text);
     }
     
-    /* Flash steps */
     .steps {
       width: 100%;
-      margin: 0.75rem 0;
+      max-width: 460px;
+      margin: 1rem 0;
     }
     
     .step {
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
-      padding: 0.5rem 0;
+      padding: 0.6rem 0;
       border-bottom: 1px solid rgba(255,255,255,0.04);
     }
     
@@ -613,33 +758,34 @@
     
     .step-num {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 300;
       color: var(--ember);
-      min-width: 1.25rem;
+      min-width: 1.5rem;
     }
     
     .step-text h4 {
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--text);
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.15rem;
     }
     
     .step-text p {
       font-size: 0.65rem;
       color: var(--text-dim);
+      line-height: 1.5;
     }
     
-    /* Preview box */
     .preview {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
       background: var(--ember-whisper);
-      padding: 0.75rem 1rem;
+      padding: 1rem 1.25rem;
       width: 100%;
-      margin: 0.75rem 0;
+      max-width: 460px;
+      margin: 1rem 0;
     }
     
     .preview-text {
@@ -650,15 +796,15 @@
     .preview-text strong {
       color: var(--ember);
       display: block;
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.15rem;
     }
     
     .preview-text span { color: var(--text-dim); }
     
-    /* Progress */
     .progress {
       width: 100%;
-      margin: 0.75rem 0;
+      max-width: 460px;
+      margin: 1rem 0;
       display: none;
     }
     
@@ -681,17 +827,17 @@
     .progress-status {
       display: flex;
       justify-content: space-between;
-      margin-top: 0.4rem;
+      margin-top: 0.5rem;
       font-size: 0.65rem;
       color: var(--text-dim);
     }
     
     .progress-status .pct { color: var(--ember); font-weight: 500; }
     
-    /* ESP button */
     esp-web-install-button {
       display: block;
       width: 100%;
+      max-width: 460px;
     }
     
     esp-web-install-button button,
@@ -699,57 +845,59 @@
       width: 100%;
       background: var(--ember);
       color: var(--void);
-      padding: 0.85rem;
+      padding: 1rem;
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.08em;
       border: none;
       cursor: pointer;
-      transition: all var(--transition);
+      transition: all 0.3s ease;
     }
     
-    esp-web-install-button button:hover { box-shadow: 0 6px 24px var(--ember-glow); }
+    esp-web-install-button button:hover {
+      box-shadow: 0 6px 28px var(--ember-glow);
+    }
     
-    /* Success */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: rgba(143, 188, 143, 0.1);
-      border: 1px solid rgba(143, 188, 143, 0.2);
-      padding: 0.35rem 0.75rem;
-      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+      background: rgba(143, 188, 143, 0.12);
+      border: 1px solid rgba(143, 188, 143, 0.25);
+      padding: 0.4rem 0.85rem;
+      margin-bottom: 1rem;
       font-size: 0.6rem;
       color: var(--alive);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
     }
     
     .learned {
-      background: rgba(143, 188, 143, 0.05);
-      border: 1px solid rgba(143, 188, 143, 0.1);
-      padding: 0.85rem 1rem;
+      background: rgba(143, 188, 143, 0.06);
+      border: 1px solid rgba(143, 188, 143, 0.12);
+      padding: 1rem 1.25rem;
       width: 100%;
+      max-width: 460px;
       text-align: left;
-      margin: 0.75rem 0;
+      margin: 1rem 0;
     }
     
     .learned h4 {
-      font-size: 0.55rem;
+      font-size: 0.6rem;
       font-weight: 500;
       letter-spacing: 0.15em;
       color: var(--alive);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.65rem;
     }
     
     .learned ul { list-style: none; }
     
     .learned li {
       position: relative;
-      padding-left: 1rem;
+      padding-left: 1.15rem;
       font-size: 0.7rem;
       color: var(--text);
-      margin: 0.3rem 0;
+      margin: 0.35rem 0;
     }
     
     .learned li::before {
@@ -757,23 +905,23 @@
       position: absolute;
       left: 0;
       color: var(--alive);
-      font-size: 0.65rem;
+      font-size: 0.7rem;
     }
     
-    /* Path */
     .path {
       background: var(--surface);
-      padding: 0.85rem 1rem;
+      padding: 1rem 1.25rem;
       width: 100%;
-      margin: 0.75rem 0;
+      max-width: 460px;
+      margin: 1rem 0;
     }
     
     .path h4 {
-      font-size: 0.55rem;
+      font-size: 0.6rem;
       font-weight: 500;
       letter-spacing: 0.15em;
       color: var(--ember);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
       text-align: center;
     }
     
@@ -789,7 +937,7 @@
     
     .path-num {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 300;
       color: var(--text-ghost);
     }
@@ -798,141 +946,127 @@
     .path-num.next { color: var(--ember); }
     
     .path-label {
-      font-size: 0.5rem;
-      color: var(--text-ghost);
-      margin-top: 0.15rem;
-    }
-    
-    /* Tutorials */
-    .tutorials {
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .tutorial {
-      display: flex;
-      gap: 0.75rem;
-      padding: 0.7rem;
-      background: var(--surface);
-      margin-bottom: 0.4rem;
-      text-decoration: none;
-      transition: all var(--transition);
-    }
-    
-    .tutorial:hover {
-      background: var(--elevated);
-    }
-    
-    .tutorial-num {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--ember);
-      min-width: 1.25rem;
-    }
-    
-    .tutorial-text {
-      flex: 1;
-      text-align: left;
-    }
-    
-    .tutorial-title {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-    
-    .tutorial-meta {
       font-size: 0.55rem;
       color: var(--text-ghost);
-      margin-top: 0.15rem;
+      margin-top: 0.2rem;
     }
     
-    .tutorial.done {
-      background: var(--alive-whisper);
-    }
-    
-    .tutorial.done .tutorial-num { color: var(--alive); }
-    
-    .tutorial.locked {
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    
-    /* Trouble */
-    .trouble {
-      width: 100%;
-      margin: 0.75rem 0;
-    }
-    
-    .trouble-item {
-      padding: 0.6rem 0.85rem;
-      background: var(--surface);
-      border-left: 2px solid rgba(212, 165, 116, 0.3);
-      margin-bottom: 0.35rem;
-      text-align: left;
-    }
-    
-    .trouble-item strong {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--caution);
-      margin-bottom: 0.15rem;
-    }
-    
-    .trouble-item p {
+    .hint {
       font-size: 0.65rem;
-      color: var(--text-dim);
+      color: var(--text-ghost);
+      margin-top: 0.75rem;
       line-height: 1.5;
     }
     
-    .trouble-item a { color: var(--ember); }
-    
-    /* About */
-    .about-text {
-      text-align: left;
+    .link-list {
       width: 100%;
+      max-width: 460px;
+      margin: 1.25rem 0;
     }
     
-    .about-text h3 {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--ember);
-      margin: 1rem 0 0.4rem;
+    .link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
     }
     
-    .about-text h3:first-child { margin-top: 0; }
+    .link-item:hover {
+      background: var(--elevated);
+      transform: translateX(4px);
+    }
     
-    .about-text p {
+    .link-name {
       font-size: 0.75rem;
-      color: var(--text-dim);
-      line-height: 1.6;
+      color: var(--text);
+    }
+    
+    .link-arrow {
+      color: var(--ember);
+      font-size: 0.9rem;
     }
     
     /* Responsive */
     @media (max-width: 600px) {
-      .title.large { font-size: 1.75rem; }
+      .title.huge { font-size: 2rem; }
+      .title { font-size: 1.65rem; }
       .platform-grid { grid-template-columns: repeat(2, 1fr); }
-      .platform-grid .platform-item:last-child { grid-column: 1 / -1; }
+      .platform-grid .platform-item:nth-child(5),
+      .platform-grid .platform-item:nth-child(6) { grid-column: span 1; }
+      .choices { grid-template-columns: 1fr; }
       .concept { flex-direction: column; gap: 1rem; }
       .concept-arrow { transform: rotate(90deg); }
+      
+      .top-nav {
+        height: 55px;
+        padding: 0 1rem;
+      }
+      
+      .nav-step {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.6rem;
+      }
+      
+      .nav-step-icon {
+        font-size: 0.65rem;
+      }
+      
+      .keyboard-hint {
+        bottom: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.6rem;
+      }
+      
+      .hint-key {
+        font-size: 0.55rem;
+        padding: 0.15rem 0.4rem;
+      }
     }
     
-    @media (max-height: 600px) {
-      .section { padding: 40px 1rem; }
-      .orb { width: 50px; height: 50px; margin-bottom: 0.75rem; }
-      .orb::before { inset: -10px; }
+    @media (max-height: 650px) {
+      .orb { width: 60px; height: 60px; margin-bottom: 1rem; }
+      .orb::before { inset: -12px; }
+      .title.huge { font-size: 1.75rem; }
       .title { font-size: 1.4rem; }
-      .title.large { font-size: 1.6rem; }
-      .subtitle { font-size: 0.75rem; }
-      .promise { margin: 0.75rem 0; }
-      .promise-item { padding: 0.5rem 0.25rem; }
-      .promise-value { font-size: 0.95rem; }
-      .btn { padding: 0.7rem 1rem; font-size: 0.7rem; }
-      .btn-group { margin-top: 0.75rem; gap: 0.35rem; }
-      .scroll-hint { bottom: 1rem; }
+      .subtitle { font-size: 0.8rem; }
+      .nav { margin-top: 1.25rem; }
+      .platform-grid { gap: 0.5rem; margin: 1rem 0; }
+      .platform-item { padding: 0.75rem 0.5rem; }
+      .platform-icon { font-size: 1.4rem; }
+      .progress-dots { display: none; }
+      .keyboard-hint { bottom: 0.75rem; }
+      
+      .top-nav {
+        height: 50px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-flow {
+        gap: 0.25rem;
+      }
+      
+      .nav-step span:not(.nav-step-icon) {
+        display: none;
+      }
+      
+      .nav-step {
+        padding: 0.4rem 0.5rem;
+      }
+      
+      .keyboard-hint {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.4rem 0.85rem;
+      }
+      
+      .hint-divider {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -940,419 +1074,621 @@
   
   <div class="atmosphere"></div>
   
-  <header>
-    <div class="logo" onclick="scrollToSection('intro')">
-      <div class="logo-mark"></div>
-      <span class="logo-text">CRUMB</span>
+  <!-- Top Navigation -->
+  <div class="top-nav" id="topNav">
+    <div class="nav-flow" id="navFlow">
+      <!-- Populated by JavaScript -->
     </div>
-    <div class="header-links">
-      <a href="#" class="header-link" onclick="scrollToSection('tutorials'); return false;">Learn</a>
-      <a href="#" class="header-link" onclick="scrollToSection('about'); return false;">About</a>
-    </div>
-  </header>
+  </div>
   
-  <div class="scroll-container" id="scrollContainer">
-    
-    <!-- ===============================================================
-         INTRO - What is CRUMB?
-         =============================================================== -->
-    <div class="section" id="intro">
-      <div class="content">
-        <div class="kicker">Welcome to CRUMB</div>
-        <div class="orb"></div>
-        <h1 class="title large">All computers are <em>the same</em>.</h1>
-        <p class="subtitle">
-          Your phone, your laptop, a rocket, a stoplight — they're all running <strong>the exact same thing</strong>: instructions telling electricity where to go. Learn one, understand all.
-        </p>
-        <p class="subtitle" style="margin-top: 1rem;">
-          CRUMB teaches you computers by having you <strong>build one</strong>. No theory first. Just: here's a thing, make it work, then we'll explain why.
-        </p>
+  <!-- Keyboard hints -->
+  <div class="keyboard-hint" id="keyboardHint">
+    <div class="hint-item">
+      <span class="hint-key">Space</span>
+      <span>Next</span>
+    </div>
+    <div class="hint-divider"></div>
+    <div class="hint-item">
+      <span class="hint-key">Esc</span>
+      <span>Back</span>
+    </div>
+    <div class="hint-divider"></div>
+    <div class="hint-item">
+      <span class="hint-key">←</span>
+      <span class="hint-key">→</span>
+      <span>Navigate</span>
+    </div>
+  </div>
+  
+  <!-- Progress indicator -->
+  <div class="progress-dots" id="progressDots"></div>
+  
+  <!-- ===============================================================
+       SCREEN 1: START
+       =============================================================== -->
+  <div class="screen active" id="start">
+    <div class="content">
+      <div class="orb" onclick="go('intro')"></div>
+      <h1 class="title huge">CRUMB</h1>
+      <p class="subtitle">An interactive journey into computers.</p>
+      <div class="nav center">
+        <button class="btn btn-primary" onclick="go('intro')">
+          Begin →
+        </button>
       </div>
-      <div class="scroll-hint">
-        <span>SCROLL</span>
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      <p class="hint">Click the orb or press Space</p>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 2: INTRO
+       =============================================================== -->
+  <div class="screen" id="intro">
+    <div class="content">
+      <div class="kicker">What is CRUMB?</div>
+      <h2 class="title">All computers are <em>the same</em>.</h2>
+      <p class="subtitle">
+        Your phone, your laptop, a rocket, a stoplight — they're all running <strong>the exact same thing</strong>: instructions telling electricity where to go.
+      </p>
+      <p class="subtitle">
+        Learn one, understand all.
+      </p>
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('start')">← Back</button>
+        <button class="btn btn-primary" onclick="go('foundation')">Next →</button>
       </div>
     </div>
-    
-    <!-- ===============================================================
-         PLATFORM CONCEPT
-         =============================================================== -->
-    <div class="section" id="platform">
-      <div class="content">
-        <div class="kicker">One Foundation</div>
-        <h2 class="title">Same hardware. <em>Infinite programs</em>.</h2>
-        <p class="subtitle">
-          You build the computer <strong>once</strong>. Then you program it to do anything. That's the secret: hardware is just the skeleton. Code is the personality.
-        </p>
-        
-        <div class="platform-grid">
-          <div class="platform-item">
-            <div class="platform-icon">💡</div>
-            <div class="platform-name">Light Show</div>
-            <div class="platform-desc">Breathing LEDs, patterns, colors</div>
-          </div>
-          <div class="platform-item">
-            <div class="platform-icon">🌡️</div>
-            <div class="platform-name">Sensor</div>
-            <div class="platform-desc">Read temperature, light, motion</div>
-          </div>
-          <div class="platform-item">
-            <div class="platform-icon">🤖</div>
-            <div class="platform-name">Robot</div>
-            <div class="platform-desc">Motors, servos, movement</div>
-          </div>
-          <div class="platform-item">
-            <div class="platform-icon">🎮</div>
-            <div class="platform-name">Game</div>
-            <div class="platform-desc">Buttons, screen, interaction</div>
-          </div>
-          <div class="platform-item">
-            <div class="platform-icon">📡</div>
-            <div class="platform-name">IoT Device</div>
-            <div class="platform-desc">WiFi, APIs, internet things</div>
-          </div>
-          <div class="platform-item">
-            <div class="platform-icon">∞</div>
-            <div class="platform-name">Anything</div>
-            <div class="platform-desc">You decide what it does</div>
-          </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 3: FOUNDATION
+       =============================================================== -->
+  <div class="screen" id="foundation">
+    <div class="content">
+      <div class="kicker">The Foundation</div>
+      <h2 class="title">CRUMB teaches by <em>building</em>.</h2>
+      <p class="subtitle">
+        No theory first. No textbooks. You <strong>build a computer</strong>, see it work, <em>then</em> we explain why.
+      </p>
+      <p class="subtitle">
+        Because doing is understanding.
+      </p>
+      <div class="concept">
+        <div class="concept-box">
+          <div class="concept-label">Traditional</div>
+          <div class="concept-value">Theory → Build</div>
         </div>
-        
-        <div class="concept">
-          <div class="concept-box">
-            <div class="concept-label">Build Once</div>
-            <div class="concept-value">$12</div>
-          </div>
-          <div class="concept-arrow">→</div>
-          <div class="concept-box">
-            <div class="concept-label">Program Forever</div>
-            <div class="concept-value">∞</div>
-          </div>
+        <div class="concept-arrow">→</div>
+        <div class="concept-box">
+          <div class="concept-label">CRUMB</div>
+          <div class="concept-value">Build → Understand</div>
         </div>
       </div>
-      <div class="scroll-hint">
-        <span>KEEP GOING</span>
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('intro')">← Back</button>
+        <button class="btn btn-primary" onclick="go('platform')">Next →</button>
       </div>
     </div>
-    
-    <!-- ===============================================================
-         GENESIS ZERO - Your first program
-         =============================================================== -->
-    <div class="section" id="genesis">
-      <div class="content">
-        <div class="kicker">Genesis Zero</div>
-        <h2 class="title">Let's build your <em>first one</em>.</h2>
-        <p class="subtitle">
-          We start simple: a breathing light. You'll write zero code (for now). You'll just <strong>prove to yourself</strong> that you can make a computer do something.
-        </p>
-        <div class="promise">
-          <div class="promise-item">
-            <div class="promise-value">15</div>
-            <div class="promise-label">minutes</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-value">$12</div>
-            <div class="promise-label">cost</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-value">Zero</div>
-            <div class="promise-label">experience</div>
-          </div>
-          <div class="promise-item">
-            <div class="promise-value">Yours</div>
-            <div class="promise-label">forever</div>
-          </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 4: PLATFORM
+       =============================================================== -->
+  <div class="screen" id="platform">
+    <div class="content">
+      <div class="kicker">The Platform</div>
+      <h2 class="title">Build once. <em>Program forever</em>.</h2>
+      <p class="subtitle">
+        You build the computer <strong>once</strong>. Then you program it to do anything. Hardware is the skeleton. Code is the personality.
+      </p>
+      
+      <div class="platform-grid">
+        <div class="platform-item">
+          <span class="platform-icon">💡</span>
+          <div class="platform-name">Lights</div>
+          <div class="platform-desc">Patterns, colors, breathing</div>
         </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="scrollToSection('requirements')">I have the hardware →</button>
-          <button class="btn btn-secondary" onclick="scrollToSection('hardware')">What do I need?</button>
+        <div class="platform-item">
+          <span class="platform-icon">🌡️</span>
+          <div class="platform-name">Sensors</div>
+          <div class="platform-desc">Read the world</div>
         </div>
-        <p class="hint">Most people need to order a small computer first</p>
+        <div class="platform-item">
+          <span class="platform-icon">🤖</span>
+          <div class="platform-name">Robot</div>
+          <div class="platform-desc">Motors, movement</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">🎮</span>
+          <div class="platform-name">Game</div>
+          <div class="platform-desc">Buttons, screens</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">📡</span>
+          <div class="platform-name">IoT</div>
+          <div class="platform-desc">WiFi, internet</div>
+        </div>
+        <div class="platform-item">
+          <span class="platform-icon">∞</span>
+          <div class="platform-name">Anything</div>
+          <div class="platform-desc">You decide</div>
+        </div>
       </div>
-      <div class="scroll-hint">
-        <span>OR SCROLL</span>
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('foundation')">← Back</button>
+        <button class="btn btn-primary" onclick="go('choice')">I get it →</button>
       </div>
     </div>
-    
-    <!-- ===============================================================
-         HARDWARE
-         =============================================================== -->
-    <div class="section" id="hardware">
-      <div class="content">
-        <h2 class="title">What You Need</h2>
-        <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">ESP32 Dev Board</span>
-            <span class="card-meta">~$12</span>
-          </div>
-          <p class="card-body">
-            A small computer with WiFi & Bluetooth. Yours to keep forever — reprogram it, build with it, learn from it. This is the same type of computer in thermostats, doorbells, and IoT devices everywhere.
-          </p>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 5: CHOICE
+       =============================================================== -->
+  <div class="screen" id="choice">
+    <div class="content">
+      <div class="kicker">Choose Your Path</div>
+      <h2 class="title">What brings you here?</h2>
+      <p class="subtitle">
+        Different paths for different goals. Pick what fits you.
+      </p>
+      
+      <div class="choices">
+        <div class="choice" onclick="go('learn')">
+          <span class="choice-icon">📚</span>
+          <div class="choice-title">Learn</div>
+          <div class="choice-desc">I want to understand computers first</div>
         </div>
-        <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary">
-          Get one on Amazon →
+        <div class="choice" onclick="go('genesis')">
+          <span class="choice-icon">🔨</span>
+          <div class="choice-title">Build</div>
+          <div class="choice-desc">I'm ready to build something now</div>
+        </div>
+      </div>
+      
+      <button class="btn btn-ghost" onclick="go('platform')" style="margin-top: 1.5rem;">← Back</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 6A: LEARN PATH
+       =============================================================== -->
+  <div class="screen" id="learn">
+    <div class="content">
+      <div class="kicker">Learning Resources</div>
+      <h2 class="title">Explore at your pace.</h2>
+      <p class="subtitle">
+        Watch tutorials, read code, understand the philosophy. When you're ready, you can build.
+      </p>
+      
+      <div class="link-list">
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="link-item">
+          <span class="link-name">YouTube Tutorials</span>
+          <span class="link-arrow">→</span>
         </a>
-        <p class="hint">Order it, bookmark this page, come back when it arrives</p>
-        <button class="btn btn-ghost" onclick="scrollToSection('genesis')">← Back</button>
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="link-item">
+          <span class="link-name">GitHub Repository</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="#" class="link-item" onclick="go('about'); return false;">
+          <span class="link-name">Philosophy & Why</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('choice')">← Back</button>
+        <button class="btn btn-secondary" onclick="go('genesis')">Ready to build</button>
       </div>
     </div>
-    
-    <!-- ===============================================================
-         REQUIREMENTS
-         =============================================================== -->
-    <div class="section" id="requirements">
-      <div class="content">
-        <h2 class="title">Quick Check</h2>
-        <p class="subtitle">Tap each item when ready</p>
-        <ul class="checklist">
-          <li onclick="check(this)">
-            <div class="check-box"></div>
-            <span class="check-text">Using a computer (not phone)</span>
-          </li>
-          <li onclick="check(this)">
-            <div class="check-box"></div>
-            <span class="check-text">Chrome or Edge browser</span>
-          </li>
-          <li onclick="check(this)">
-            <div class="check-box"></div>
-            <span class="check-text">ESP32 plugged in via USB</span>
-          </li>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 6B: GENESIS ZERO
+       =============================================================== -->
+  <div class="screen" id="genesis">
+    <div class="content">
+      <div class="kicker">Genesis Zero</div>
+      <h2 class="title">Your first program.</h2>
+      <p class="subtitle">
+        A breathing light. You'll write zero code. You'll just <strong>prove to yourself</strong> you can make a computer do something.
+      </p>
+      
+      <div class="concept">
+        <div class="concept-box">
+          <div class="concept-label">Time</div>
+          <div class="concept-value">15 min</div>
+        </div>
+        <div class="concept-box">
+          <div class="concept-label">Cost</div>
+          <div class="concept-value">$12</div>
+        </div>
+        <div class="concept-box">
+          <div class="concept-label">Experience</div>
+          <div class="concept-value">Zero</div>
+        </div>
+      </div>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('choice')">← Back</button>
+        <button class="btn btn-primary" onclick="go('hardware-check')">I have hardware →</button>
+      </div>
+      <button class="btn btn-secondary" onclick="go('hardware-need')" style="margin-top: 0.5rem; width: 100%; max-width: 460px;">What do I need?</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 7A: HARDWARE NEED
+       =============================================================== -->
+  <div class="screen" id="hardware-need">
+    <div class="content">
+      <h2 class="title">What You Need</h2>
+      <p class="subtitle">A tiny computer called an ESP32 (~$12)</p>
+      
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">ESP32 Dev Board</span>
+          <span class="card-meta">~$12</span>
+        </div>
+        <p class="card-body">
+          A small computer with WiFi & Bluetooth. Yours forever — reprogram it, build with it, learn from it. Same type of computer in thermostats, doorbells, and IoT devices everywhere.
+        </p>
+      </div>
+      
+      <a href="https://www.amazon.com/ESP-WROOM-32-Development-Microcontroller-Integrated-Compatible/dp/B08D5ZD528" target="_blank" class="btn btn-primary" style="width: 100%; max-width: 460px;">
+        Get one on Amazon →
+      </a>
+      <p class="hint">Order it, bookmark this page, come back when it arrives</p>
+      
+      <button class="btn btn-ghost" onclick="go('genesis')" style="margin-top: 1rem;">← Back</button>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 7B: HARDWARE CHECK
+       =============================================================== -->
+  <div class="screen" id="hardware-check">
+    <div class="content">
+      <h2 class="title">Quick Check</h2>
+      <p class="subtitle">Tap each when ready</p>
+      
+      <ul class="checklist">
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">Using a computer (not phone)</span>
+        </li>
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">Chrome or Edge browser</span>
+        </li>
+        <li onclick="check(this)">
+          <div class="check-box"></div>
+          <span class="check-text">ESP32 plugged in via USB</span>
+        </li>
+      </ul>
+      
+      <div class="nav spread">
+        <button class="btn btn-ghost" onclick="go('genesis')">← Back</button>
+        <button class="btn btn-primary" onclick="go('flash')">Ready →</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 8: FLASH
+       =============================================================== -->
+  <div class="screen" id="flash">
+    <div class="content">
+      <h2 class="title">Let's do this.</h2>
+      
+      <div class="preview">
+        <div class="orb small"></div>
+        <div class="preview-text">
+          <strong>When it works:</strong>
+          <span>The LED will breathe like this</span>
+        </div>
+      </div>
+      
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <div class="step-text">
+            <h4>Click the button</h4>
+            <p>Popup asks to connect</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <div class="step-text">
+            <h4>Select ESP32</h4>
+            <p>Look for "USB Serial"</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <div class="step-text">
+            <h4>Wait ~30 seconds</h4>
+            <p>Watch the progress</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="progress" id="progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-status">
+          <span class="pct" id="progressPct">0%</span>
+          <span id="progressMsg">Preparing...</span>
+        </div>
+      </div>
+      
+      <esp-web-install-button manifest="./manifest.json" id="installBtn">
+        <button slot="activate" class="btn-flash">Send Program to ESP32</button>
+      </esp-web-install-button>
+      
+      <div class="nav spread" style="margin-top: 0.75rem;">
+        <button class="btn btn-ghost" onclick="go('hardware-check')">← Back</button>
+        <button class="btn btn-success" onclick="go('success')">✓ It's breathing!</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 9: SUCCESS
+       =============================================================== -->
+  <div class="screen" id="success">
+    <div class="content">
+      <div class="orb alive"></div>
+      <div class="badge"><span>✓</span> COMPLETE</div>
+      <h2 class="title" style="color: var(--alive);">You did it.</h2>
+      <p class="subtitle">
+        That light in your hand is <strong>your code</strong> running. No internet needed. It's yours.
+      </p>
+      
+      <div class="learned">
+        <h4>WHAT YOU PROVED</h4>
+        <ul>
+          <li>Programming is just instructions</li>
+          <li>You can make computers do what you want</li>
+          <li>The hard part was believing you could</li>
         </ul>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="scrollToSection('flash')">I'm ready →</button>
-          <button class="btn btn-ghost" onclick="scrollToSection('genesis')">← Back</button>
+      </div>
+      
+      <div class="path">
+        <h4>WHAT'S NEXT</h4>
+        <div class="path-steps">
+          <div class="path-step">
+            <div class="path-num done">0</div>
+            <div class="path-label">Done</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num next">1</div>
+            <div class="path-label">Circuit</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">2</div>
+            <div class="path-label">Sensor</div>
+          </div>
+          <div class="path-step">
+            <div class="path-num">∞</div>
+            <div class="path-label">Build</div>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- ===============================================================
-         FLASH
-         =============================================================== -->
-    <div class="section" id="flash">
-      <div class="content">
-        <h2 class="title">Let's do this.</h2>
-        
-        <div class="preview">
-          <div class="orb small"></div>
-          <div class="preview-text">
-            <strong>When it works:</strong>
-            <span>The LED on your board will breathe like this</span>
-          </div>
-        </div>
-        
-        <div class="steps">
-          <div class="step">
-            <span class="step-num">1</span>
-            <div class="step-text">
-              <h4>Click the button below</h4>
-              <p>A popup asks to connect to a device</p>
-            </div>
-          </div>
-          <div class="step">
-            <span class="step-num">2</span>
-            <div class="step-text">
-              <h4>Select your ESP32</h4>
-              <p>Look for "USB Serial" or "CP210x"</p>
-            </div>
-          </div>
-          <div class="step">
-            <span class="step-num">3</span>
-            <div class="step-text">
-              <h4>Wait ~30 seconds</h4>
-              <p>Watch the progress bar</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="progress" id="progress">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <div class="progress-status">
-            <span class="pct" id="progressPct">0%</span>
-            <span id="progressMsg">Preparing...</span>
-          </div>
-        </div>
-        
-        <esp-web-install-button manifest="./manifest.json" id="installBtn">
-          <button slot="activate" class="btn-flash">Send Program to ESP32</button>
-        </esp-web-install-button>
-        
-        <div class="btn-row" style="margin-top: 0.5rem;">
-          <button class="btn btn-success" onclick="scrollToSection('success')">✓ LED is breathing!</button>
-          <button class="btn btn-ghost" onclick="scrollToSection('trouble')">Help</button>
-        </div>
+      
+      <div class="nav spread">
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">Next tutorial →</a>
       </div>
     </div>
-    
-    <!-- ===============================================================
-         SUCCESS
-         =============================================================== -->
-    <div class="section" id="success">
-      <div class="content">
-        <div class="orb alive"></div>
-        <div class="badge"><span>✓</span> COMPLETE</div>
-        <h2 class="title" style="color: var(--alive);">You did it.</h2>
-        <p class="subtitle">That light in your hand is your code running. No internet needed. It's yours.</p>
-        
-        <div class="learned">
-          <h4>WHAT YOU PROVED</h4>
-          <ul>
-            <li>Programming is just instructions</li>
-            <li>You can make computers do what you want</li>
-            <li>The hard part was believing you could</li>
-          </ul>
-        </div>
-        
-        <div class="path">
-          <h4>WHAT'S NEXT</h4>
-          <div class="path-steps">
-            <div class="path-step">
-              <div class="path-num done">0</div>
-              <div class="path-label">Done</div>
-            </div>
-            <div class="path-step">
-              <div class="path-num next">1</div>
-              <div class="path-label">LED</div>
-            </div>
-            <div class="path-step">
-              <div class="path-num">2</div>
-              <div class="path-label">Sensors</div>
-            </div>
-            <div class="path-step">
-              <div class="path-num">∞</div>
-              <div class="path-label">Anything</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="btn-row">
-          <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="btn btn-secondary">See code</a>
-          <button class="btn btn-primary" onclick="scrollToSection('tutorials')">Keep learning →</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ===============================================================
-         TUTORIALS
-         =============================================================== -->
-    <div class="section" id="tutorials">
-      <div class="content">
-        <h2 class="title">Keep Going</h2>
-        <p class="subtitle">Learn why it works — then build whatever you imagine.</p>
-        
-        <div class="tutorials">
-          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial done">
-            <span class="tutorial-num">0</span>
-            <div class="tutorial-text">
-              <div class="tutorial-title">Genesis Zero</div>
-              <div class="tutorial-meta">✓ Complete · Your first program</div>
-            </div>
-          </a>
-          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-            <span class="tutorial-num">1</span>
-            <div class="tutorial-text">
-              <div class="tutorial-title">Wire Your First Circuit</div>
-              <div class="tutorial-meta">~15 min · LED + resistor + breadboard</div>
-            </div>
-          </a>
-          <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="tutorial">
-            <span class="tutorial-num">2</span>
-            <div class="tutorial-text">
-              <div class="tutorial-title">Read the World</div>
-              <div class="tutorial-meta">~30 min · Temperature sensor</div>
-            </div>
-          </a>
-          <div class="tutorial locked">
-            <span class="tutorial-num">∞</span>
-            <div class="tutorial-text">
-              <div class="tutorial-title">Build What Matters</div>
-              <div class="tutorial-meta">Coming soon</div>
-            </div>
-          </div>
-        </div>
-        
-        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="btn btn-primary">
-          Watch on YouTube →
+  </div>
+  
+  <!-- ===============================================================
+       SCREEN 10: ABOUT
+       =============================================================== -->
+  <div class="screen" id="about">
+    <div class="content">
+      <h2 class="title">Why This Exists</h2>
+      <p class="subtitle">
+        Built for my brother Luke, who struggles with technology not designed for how his brain works. If we're building a future full of computers, <strong>people deserve to understand them</strong>.
+      </p>
+      <p class="subtitle">
+        All computers run instructions that move electricity. Learn one, understand all. Complexity is just more instructions.
+      </p>
+      <p class="subtitle">
+        Open source (GPL-3.0). No gatekeeping. No subscriptions. Yours forever.
+      </p>
+      
+      <div class="link-list">
+        <a href="https://www.youtube.com/@Wyetherp-1" target="_blank" class="link-item">
+          <span class="link-name">YouTube</span>
+          <span class="link-arrow">→</span>
         </a>
-        <button class="btn btn-ghost" onclick="scrollToSection('intro')">← Home</button>
+        <a href="https://github.com/wyetherp/crumb_main" target="_blank" class="link-item">
+          <span class="link-name">GitHub</span>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="mailto:wja326@lehigh.edu" class="link-item">
+          <span class="link-name">Email</span>
+          <span class="link-arrow">→</span>
+        </a>
       </div>
+      
+      <button class="btn btn-ghost" onclick="go('learn')" style="margin-top: 1.25rem;">← Back to resources</button>
     </div>
-    
-    <!-- ===============================================================
-         TROUBLESHOOTING
-         =============================================================== -->
-    <div class="section" id="trouble">
-      <div class="content">
-        <h2 class="title">Let's Fix It</h2>
-        
-        <div class="trouble">
-          <div class="trouble-item">
-            <strong>No device found</strong>
-            <p>Try a different USB cable — most only charge, can't transfer data.</p>
-          </div>
-          <div class="trouble-item">
-            <strong>Flash fails</strong>
-            <p>Try a different USB port. Unplug, wait 5 sec, replug.</p>
-          </div>
-          <div class="trouble-item">
-            <strong>LED doesn't breathe</strong>
-            <p>Unplug and replug the ESP32. Try flashing again.</p>
-          </div>
-          <div class="trouble-item">
-            <strong>Still stuck?</strong>
-            <p>Email <a href="mailto:wja326@lehigh.edu">wja326@lehigh.edu</a> — I want to help.</p>
-          </div>
-        </div>
-        
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="scrollToSection('flash')">← Try again</button>
-          <button class="btn btn-ghost" onclick="scrollToSection('intro')">Home</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- ===============================================================
-         ABOUT
-         =============================================================== -->
-    <div class="section" id="about">
-      <div class="content">
-        <h2 class="title">What Is This?</h2>
-        
-        <div class="about-text">
-          <h3>The Idea</h3>
-          <p>CRUMB teaches electronics by doing, not by reading. You build first, understand later. Genesis Zero proves you can program a computer in 15 minutes. The barriers were never real.</p>
-          
-          <h3>The Philosophy</h3>
-          <p>All computers are the same. Your phone, your laptop, a rocket — they all run instructions that move electricity. Learn one, understand all. Complexity is just more instructions.</p>
-          
-          <h3>Why It Exists</h3>
-          <p>Built for my brother Luke, who struggles with technology not designed for how his brain works. If we're going to build a future full of computers, people deserve to understand them.</p>
-          
-          <h3>Open Source</h3>
-          <p>GPL-3.0. Use it, modify it, share it, build on it. No gatekeeping. No subscriptions. Yours forever.</p>
-        </div>
-        
-        <button class="btn btn-primary" style="margin-top: 1rem;" onclick="scrollToSection('intro')">← Home</button>
-      </div>
-    </div>
-    
   </div>
   
   <!-- ===============================================================
        JAVASCRIPT
        =============================================================== -->
   <script>
-    // Smooth scroll to section
-    function scrollToSection(id) {
-      const section = document.getElementById(id);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Navigation state
+    let currentScreen = 'start';
+    const history = ['start'];
+    
+    // Screen metadata for navigation
+    const screenMeta = {
+      'start': { label: 'Start', icon: '●' },
+      'intro': { label: 'Intro', icon: '✦' },
+      'foundation': { label: 'Foundation', icon: '◆' },
+      'platform': { label: 'Platform', icon: '⬡' },
+      'choice': { label: 'Choose', icon: '⚡' },
+      'learn': { label: 'Learn', icon: '📚' },
+      'genesis': { label: 'Build', icon: '🔨' },
+      'hardware-need': { label: 'Hardware', icon: '⚙' },
+      'hardware-check': { label: 'Check', icon: '✓' },
+      'flash': { label: 'Flash', icon: '⚡' },
+      'success': { label: 'Done', icon: '★' },
+      'about': { label: 'About', icon: 'ℹ' }
+    };
+    
+    // Main navigation flows
+    const navFlows = {
+      'main': ['start', 'intro', 'foundation', 'platform', 'choice'],
+      'learn': ['choice', 'learn', 'about'],
+      'build': ['choice', 'genesis', 'hardware-check', 'flash', 'success']
+    };
+    
+    // Update top navigation
+    function updateTopNav() {
+      const navFlow = document.getElementById('navFlow');
+      
+      // Determine which flow we're in
+      let currentFlow = 'main';
+      if (['learn', 'about'].includes(currentScreen)) {
+        currentFlow = 'learn';
+      } else if (['genesis', 'hardware-need', 'hardware-check', 'flash', 'success'].includes(currentScreen)) {
+        currentFlow = 'build';
+      }
+      
+      const flow = navFlows[currentFlow];
+      navFlow.innerHTML = '';
+      
+      flow.forEach((screenId, index) => {
+        const meta = screenMeta[screenId];
+        const step = document.createElement('button');
+        step.className = 'nav-step';
+        step.onclick = () => go(screenId);
+        
+        // Determine state
+        const historyIndex = history.indexOf(screenId);
+        if (screenId === currentScreen) {
+          step.classList.add('active');
+        } else if (historyIndex !== -1 && historyIndex < history.length - 1) {
+          step.classList.add('completed');
+        }
+        
+        step.innerHTML = `
+          <span class="nav-step-icon">${meta.icon}</span>
+          <span>${meta.label}</span>
+        `;
+        
+        navFlow.appendChild(step);
+        
+        // Add arrow between steps (except last)
+        if (index < flow.length - 1) {
+          const arrow = document.createElement('span');
+          arrow.className = 'nav-arrow';
+          arrow.textContent = '→';
+          navFlow.appendChild(arrow);
+        }
+      });
+    }
+    
+    // Screen flow map
+    const screenFlow = {
+      'start': ['intro'],
+      'intro': ['foundation'],
+      'foundation': ['platform'],
+      'platform': ['choice'],
+      'choice': ['learn', 'genesis'],
+      'learn': ['about', 'genesis'],
+      'genesis': ['hardware-need', 'hardware-check'],
+      'hardware-need': ['genesis'],
+      'hardware-check': ['flash'],
+      'flash': ['success'],
+      'success': [],
+      'about': ['learn']
+    };
+    
+    // Navigation function
+    function go(screenId) {
+      if (screenId === currentScreen) return;
+      
+      // Fade out current
+      const current = document.getElementById(currentScreen);
+      current.classList.add('fade-out');
+      
+      setTimeout(() => {
+        current.classList.remove('active', 'fade-out');
+        
+        // Fade in new
+        const next = document.getElementById(screenId);
+        next.classList.add('active');
+        
+        currentScreen = screenId;
+        history.push(screenId);
+        
+        updateProgress();
+        updateTopNav();
+      }, 300);
+    }
+    
+    // Back navigation
+    function back() {
+      if (history.length > 1) {
+        history.pop();
+        go(history[history.length - 1]);
       }
     }
+    
+    // Initialize navigation
+    updateTopNav();
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        back();
+      } else if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
+        // Find next button and click it
+        const activeScreen = document.querySelector('.screen.active');
+        const nextBtn = activeScreen.querySelector('.btn-primary');
+        if (nextBtn) {
+          e.preventDefault();
+          nextBtn.click();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        back();
+      }
+    });
+    
+    // Progress dots
+    const mainFlow = ['start', 'intro', 'foundation', 'platform', 'choice'];
+    
+    function updateProgress() {
+      const dotsContainer = document.getElementById('progressDots');
+      
+      // Only show dots for main flow
+      if (!mainFlow.includes(currentScreen)) {
+        dotsContainer.style.opacity = '0';
+        return;
+      }
+      
+      dotsContainer.style.opacity = '1';
+      dotsContainer.innerHTML = '';
+      
+      mainFlow.forEach((screenId, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        if (screenId === currentScreen) {
+          dot.classList.add('active');
+        }
+        dotsContainer.appendChild(dot);
+      });
+    }
+    
+    updateProgress();
     
     // Checklist
     function check(li) {
@@ -1360,7 +1696,7 @@
       li.querySelector('.check-box').textContent = li.classList.contains('checked') ? '✓' : '';
     }
     
-    // Flash progress simulation
+    // Flash progress
     const installBtn = document.getElementById('installBtn');
     const progress = document.getElementById('progress');
     const progressFill = document.getElementById('progressFill');
@@ -1399,14 +1735,16 @@
       }, 120);
     }
     
-    installBtn.addEventListener('state-changed', e => {
-      if (e.detail === 'installing') simulate();
-    });
+    if (installBtn) {
+      installBtn.addEventListener('state-changed', e => {
+        if (e.detail === 'installing') simulate();
+      });
+    }
     
-    // Confetti on success
+    // Confetti
     function confetti() {
       const colors = ['#e8a87c', '#8fbc8f', '#e8e4df'];
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < 50; i++) {
         setTimeout(() => {
           const el = document.createElement('div');
           el.style.position = 'fixed';
@@ -1422,11 +1760,10 @@
           el.style.animation = 'confetti-fall 2.5s ease-out forwards';
           document.body.appendChild(el);
           setTimeout(() => el.remove(), 2500);
-        }, i * 20);
+        }, i * 25);
       }
     }
     
-    // Add confetti animation
     const style = document.createElement('style');
     style.textContent = `
       @keyframes confetti-fall {
@@ -1438,16 +1775,17 @@
     `;
     document.head.appendChild(style);
     
-    // Trigger confetti on success section
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.target.id === 'success') {
-          setTimeout(confetti, 200);
-        }
-      });
-    }, { threshold: 0.5 });
+    // Trigger confetti when reaching success
+    const observer = new MutationObserver(() => {
+      if (currentScreen === 'success') {
+        setTimeout(confetti, 300);
+      }
+    });
     
-    observer.observe(document.getElementById('success'));
+    observer.observe(document.getElementById('success'), {
+      attributes: true,
+      attributeFilter: ['class']
+    });
   </script>
 
 </body>
