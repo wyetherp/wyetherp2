@@ -23,24 +23,29 @@
   
   <style>
     :root {
-      --void: #050505;
-      --surface: #0a0a0a;
-      --elevated: #111111;
+      /* Video game inspired color scheme - brighter, more contrast */
+      --void: #0d0d14;
+      --surface: #1a1a24;
+      --elevated: #252535;
       
-      --ember: #e8a87c;
-      --ember-bright: #f4c4a0;
-      --ember-glow: rgba(232, 168, 124, 0.4);
-      --ember-whisper: rgba(232, 168, 124, 0.08);
+      --ember: #ff9d5c;
+      --ember-bright: #ffb380;
+      --ember-glow: rgba(255, 157, 92, 0.5);
+      --ember-whisper: rgba(255, 157, 92, 0.12);
       
-      --alive: #8fbc8f;
-      --alive-glow: rgba(143, 188, 143, 0.4);
-      --alive-whisper: rgba(143, 188, 143, 0.08);
+      --alive: #6dd67d;
+      --alive-bright: #8fe89a;
+      --alive-glow: rgba(109, 214, 125, 0.5);
+      --alive-whisper: rgba(109, 214, 125, 0.12);
       
-      --text: #e8e4df;
-      --text-dim: rgba(232, 228, 223, 0.6);
-      --text-ghost: rgba(232, 228, 223, 0.35);
+      --text: #f0ede8;
+      --text-dim: rgba(240, 237, 232, 0.7);
+      --text-ghost: rgba(240, 237, 232, 0.4);
       
-      --caution: #d4a574;
+      --accent: #7aa3ff;
+      --accent-glow: rgba(122, 163, 255, 0.4);
+      
+      --caution: #f4c563;
       
       --font-display: 'Fraunces', Georgia, serif;
       --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
@@ -84,13 +89,133 @@
       width: 600px;
       height: 600px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--ember-whisper) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 157, 92, 0.15) 0%, transparent 70%);
       animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite;
+    }
+    
+    .atmosphere::after {
+      content: '';
+      position: absolute;
+      top: 60%;
+      left: 30%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(122, 163, 255, 0.08) 0%, transparent 70%);
+      animation: atmosphere-pulse var(--breath-duration) ease-in-out infinite 2s;
     }
     
     @keyframes atmosphere-pulse {
       0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.85); }
       50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.15); }
+    }
+    
+    /* Top navigation bar */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--void) 0%, rgba(13, 13, 20, 0.95) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1.5rem;
+      z-index: 200;
+    }
+    
+    .nav-flow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-step {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.65rem;
+      color: var(--text-ghost);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    
+    .nav-step:hover {
+      color: var(--text);
+      background: var(--surface);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-step.active {
+      color: var(--ember);
+      background: var(--ember-whisper);
+      border-color: var(--ember-glow);
+      font-weight: 500;
+    }
+    
+    .nav-step.completed {
+      color: var(--alive);
+    }
+    
+    .nav-step-icon {
+      font-size: 0.7rem;
+    }
+    
+    .nav-arrow {
+      color: var(--text-ghost);
+      font-size: 0.6rem;
+    }
+    
+    /* Keyboard hints */
+    .keyboard-hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.6rem 1.25rem;
+      background: rgba(13, 13, 20, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      z-index: 150;
+      pointer-events: none;
+    }
+    
+    .hint-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    
+    .hint-key {
+      background: var(--surface);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--ember);
+      min-width: 1.5rem;
+      text-align: center;
+    }
+    
+    .hint-divider {
+      width: 1px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.15);
     }
     
     /* Screen system */
@@ -138,6 +263,7 @@
       position: relative;
       cursor: pointer;
       transition: transform 0.2s ease;
+      box-shadow: 0 0 30px var(--ember-glow), 0 0 60px rgba(255, 157, 92, 0.3);
     }
     
     .orb:hover {
@@ -147,37 +273,55 @@
     .orb::before {
       content: '';
       position: absolute;
-      inset: -18px;
+      inset: -20px;
       border-radius: 50%;
-      background: radial-gradient(circle, var(--ember-glow), transparent 70%);
+      background: radial-gradient(circle, var(--ember-glow), transparent 65%);
       animation: orb-glow var(--breath-duration) ease-in-out infinite;
       z-index: -1;
     }
     
     @keyframes orb-breathe {
       0%, 100% {
-        opacity: 0.4;
-        transform: scale(0.9);
-        box-shadow: 0 0 20px rgba(232, 168, 124, 0.15);
+        opacity: 0.7;
+        transform: scale(0.92);
+        box-shadow: 0 0 25px var(--ember-glow), 0 0 50px rgba(255, 157, 92, 0.25);
       }
       50% {
         opacity: 1;
         transform: scale(1);
-        box-shadow: 0 0 50px var(--ember-glow);
+        box-shadow: 0 0 40px var(--ember-glow), 0 0 80px rgba(255, 157, 92, 0.4);
       }
     }
     
     @keyframes orb-glow {
-      0%, 100% { opacity: 0.2; transform: scale(0.8); }
-      50% { opacity: 0.6; transform: scale(1.2); }
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 0.7; transform: scale(1.15); }
     }
     
     .orb.alive {
       background: var(--alive);
+      box-shadow: 0 0 30px var(--alive-glow), 0 0 60px rgba(109, 214, 125, 0.3);
     }
     
     .orb.alive::before {
-      background: radial-gradient(circle, var(--alive-glow), transparent 70%);
+      background: radial-gradient(circle, var(--alive-glow), transparent 65%);
+    }
+    
+    .orb.alive {
+      animation-name: orb-alive;
+    }
+    
+    @keyframes orb-alive {
+      0%, 100% {
+        opacity: 0.7;
+        transform: scale(0.92);
+        box-shadow: 0 0 25px var(--alive-glow), 0 0 50px rgba(109, 214, 125, 0.25);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 40px var(--alive-glow), 0 0 80px rgba(109, 214, 125, 0.4);
+      }
     }
     
     .orb.small {
@@ -245,17 +389,32 @@
     
     .platform-item {
       background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
       padding: 1rem 0.75rem;
       text-align: center;
       transition: all 0.3s ease;
       cursor: pointer;
+      position: relative;
+    }
+    
+    .platform-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--ember-whisper), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     
     .platform-item:hover {
       background: var(--elevated);
-      border-color: var(--ember-whisper);
-      transform: translateY(-3px);
+      border-color: var(--ember);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 20px rgba(255, 157, 92, 0.15);
+    }
+    
+    .platform-item:hover::after {
+      opacity: 1;
     }
     
     .platform-icon {
@@ -354,25 +513,35 @@
       background: var(--ember);
       color: var(--void);
       flex: 1;
+      box-shadow: 0 2px 12px rgba(255, 157, 92, 0.3);
     }
     
     .btn-primary:hover {
       background: var(--ember-bright);
-      box-shadow: 0 6px 28px var(--ember-glow);
+      box-shadow: 0 6px 28px var(--ember-glow), 0 0 40px rgba(255, 157, 92, 0.2);
       transform: translateY(-2px);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
     }
     
     .btn-secondary {
       background: transparent;
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       flex: 1;
     }
     
     .btn-secondary:hover {
       border-color: var(--ember);
       color: var(--ember);
+      background: var(--ember-whisper);
       transform: translateY(-2px);
+    }
+    
+    .btn-secondary:active {
+      transform: translateY(0);
     }
     
     .btn-ghost {
@@ -384,17 +553,24 @@
     
     .btn-ghost:hover {
       color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
     }
     
     .btn-success {
       background: var(--alive);
       color: var(--void);
       flex: 1;
+      box-shadow: 0 2px 12px rgba(109, 214, 125, 0.3);
     }
     
     .btn-success:hover {
-      box-shadow: 0 6px 28px var(--alive-glow);
+      background: var(--alive-bright);
+      box-shadow: 0 6px 28px var(--alive-glow), 0 0 40px rgba(109, 214, 125, 0.2);
       transform: translateY(-2px);
+    }
+    
+    .btn-success:active {
+      transform: translateY(0);
     }
     
     /* Progress indicator */
@@ -434,17 +610,33 @@
     
     .choice {
       background: var(--surface);
-      border: 2px solid rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.1);
       padding: 1.5rem 1.25rem;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .choice::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--ember-whisper), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     
     .choice:hover {
       background: var(--elevated);
       border-color: var(--ember);
-      transform: translateY(-3px);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 28px rgba(255, 157, 92, 0.2);
+    }
+    
+    .choice:hover::after {
+      opacity: 1;
     }
     
     .choice-icon {
@@ -808,6 +1000,31 @@
       .choices { grid-template-columns: 1fr; }
       .concept { flex-direction: column; gap: 1rem; }
       .concept-arrow { transform: rotate(90deg); }
+      
+      .top-nav {
+        height: 55px;
+        padding: 0 1rem;
+      }
+      
+      .nav-step {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.6rem;
+      }
+      
+      .nav-step-icon {
+        font-size: 0.65rem;
+      }
+      
+      .keyboard-hint {
+        bottom: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.6rem;
+      }
+      
+      .hint-key {
+        font-size: 0.55rem;
+        padding: 0.15rem 0.4rem;
+      }
     }
     
     @media (max-height: 650px) {
@@ -820,13 +1037,68 @@
       .platform-grid { gap: 0.5rem; margin: 1rem 0; }
       .platform-item { padding: 0.75rem 0.5rem; }
       .platform-icon { font-size: 1.4rem; }
-      .progress-dots { bottom: 1.25rem; }
+      .progress-dots { display: none; }
+      .keyboard-hint { bottom: 0.75rem; }
+      
+      .top-nav {
+        height: 50px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-flow {
+        gap: 0.25rem;
+      }
+      
+      .nav-step span:not(.nav-step-icon) {
+        display: none;
+      }
+      
+      .nav-step {
+        padding: 0.4rem 0.5rem;
+      }
+      
+      .keyboard-hint {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.4rem 0.85rem;
+      }
+      
+      .hint-divider {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   
   <div class="atmosphere"></div>
+  
+  <!-- Top Navigation -->
+  <div class="top-nav" id="topNav">
+    <div class="nav-flow" id="navFlow">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+  
+  <!-- Keyboard hints -->
+  <div class="keyboard-hint" id="keyboardHint">
+    <div class="hint-item">
+      <span class="hint-key">Space</span>
+      <span>Next</span>
+    </div>
+    <div class="hint-divider"></div>
+    <div class="hint-item">
+      <span class="hint-key">Esc</span>
+      <span>Back</span>
+    </div>
+    <div class="hint-divider"></div>
+    <div class="hint-item">
+      <span class="hint-key">←</span>
+      <span class="hint-key">→</span>
+      <span>Navigate</span>
+    </div>
+  </div>
   
   <!-- Progress indicator -->
   <div class="progress-dots" id="progressDots"></div>
@@ -1255,6 +1527,75 @@
     let currentScreen = 'start';
     const history = ['start'];
     
+    // Screen metadata for navigation
+    const screenMeta = {
+      'start': { label: 'Start', icon: '●' },
+      'intro': { label: 'Intro', icon: '✦' },
+      'foundation': { label: 'Foundation', icon: '◆' },
+      'platform': { label: 'Platform', icon: '⬡' },
+      'choice': { label: 'Choose', icon: '⚡' },
+      'learn': { label: 'Learn', icon: '📚' },
+      'genesis': { label: 'Build', icon: '🔨' },
+      'hardware-need': { label: 'Hardware', icon: '⚙' },
+      'hardware-check': { label: 'Check', icon: '✓' },
+      'flash': { label: 'Flash', icon: '⚡' },
+      'success': { label: 'Done', icon: '★' },
+      'about': { label: 'About', icon: 'ℹ' }
+    };
+    
+    // Main navigation flows
+    const navFlows = {
+      'main': ['start', 'intro', 'foundation', 'platform', 'choice'],
+      'learn': ['choice', 'learn', 'about'],
+      'build': ['choice', 'genesis', 'hardware-check', 'flash', 'success']
+    };
+    
+    // Update top navigation
+    function updateTopNav() {
+      const navFlow = document.getElementById('navFlow');
+      
+      // Determine which flow we're in
+      let currentFlow = 'main';
+      if (['learn', 'about'].includes(currentScreen)) {
+        currentFlow = 'learn';
+      } else if (['genesis', 'hardware-need', 'hardware-check', 'flash', 'success'].includes(currentScreen)) {
+        currentFlow = 'build';
+      }
+      
+      const flow = navFlows[currentFlow];
+      navFlow.innerHTML = '';
+      
+      flow.forEach((screenId, index) => {
+        const meta = screenMeta[screenId];
+        const step = document.createElement('button');
+        step.className = 'nav-step';
+        step.onclick = () => go(screenId);
+        
+        // Determine state
+        const historyIndex = history.indexOf(screenId);
+        if (screenId === currentScreen) {
+          step.classList.add('active');
+        } else if (historyIndex !== -1 && historyIndex < history.length - 1) {
+          step.classList.add('completed');
+        }
+        
+        step.innerHTML = `
+          <span class="nav-step-icon">${meta.icon}</span>
+          <span>${meta.label}</span>
+        `;
+        
+        navFlow.appendChild(step);
+        
+        // Add arrow between steps (except last)
+        if (index < flow.length - 1) {
+          const arrow = document.createElement('span');
+          arrow.className = 'nav-arrow';
+          arrow.textContent = '→';
+          navFlow.appendChild(arrow);
+        }
+      });
+    }
+    
     // Screen flow map
     const screenFlow = {
       'start': ['intro'],
@@ -1290,6 +1631,7 @@
         history.push(screenId);
         
         updateProgress();
+        updateTopNav();
       }, 300);
     }
     
@@ -1441,6 +1783,21 @@
       attributes: true,
       attributeFilter: ['class']
     });
+    
+    // Initialize navigation on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTopNav();
+      updateProgress();
+    });
+    
+    // Also call immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      // Still loading, wait for DOMContentLoaded
+    } else {
+      // DOM is ready, initialize now
+      updateTopNav();
+      updateProgress();
+    }
   </script>
 
 </body>
