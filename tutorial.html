@@ -1643,9 +1643,6 @@
       }
     }
     
-    // Initialize navigation
-    updateTopNav();
-    
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
@@ -1786,6 +1783,21 @@
       attributes: true,
       attributeFilter: ['class']
     });
+    
+    // Initialize navigation on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTopNav();
+      updateProgress();
+    });
+    
+    // Also call immediately in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      // Still loading, wait for DOMContentLoaded
+    } else {
+      // DOM is ready, initialize now
+      updateTopNav();
+      updateProgress();
+    }
   </script>
 
 </body>
